@@ -10,8 +10,6 @@
 </p>
 
 <p align="center">
-  <a href="https://USERNAME.github.io/bitscriptum/"><b>📖 Baca online / Read online</b></a>
-  &nbsp;·&nbsp;
   <a href="#-bahasa-indonesia">🇮🇩 Bahasa Indonesia</a>
   &nbsp;·&nbsp;
   <a href="#-english">🇬🇧 English</a>
