@@ -1,0 +1,13 @@
+/* ============================================================
+   SHARED · TOPBAR
+============================================================ */
+.topbar { display:flex; align-items:center; justify-content:space-between; padding:20px 40px; border-bottom:0.5px solid rgba(124,58,237,0.15); flex-shrink:0; }
+.topbar-left { display:flex; align-items:center; gap:24px; }
+.topbar-logo { display:flex; align-items:center; gap:10px; cursor:pointer; }
+.topbar-name { font-weight:300; font-size:14px; letter-spacing:0.18em; color:#1A1A18; text-transform:uppercase; }
+.topbar-sep { width:1px; height:16px; background:rgba(124,58,237,0.2); }
+.topbar-back { font-family:'Courier Prime',monospace; font-size:10px; letter-spacing:0.2em; color:#A78BFA; text-transform:uppercase; cursor:pointer; transition:color 0.2s; }
+.topbar-back:hover { color:#7C3AED; }
+.topbar-block { font-family:'Courier Prime',monospace; font-size:9px; letter-spacing:0.2em; color:#C4B5FD; }
+.topbar-block span { color:#7C3AED; }
+

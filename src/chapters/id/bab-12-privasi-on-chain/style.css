@@ -1,0 +1,276 @@
+/* ============================================================
+   PAGE 15 · BAB 12 · Privasi On-chain: CoinJoin dan Teknik Lainnya
+============================================================ */
+
+/* ============================================================
+   PAGE 15 · BAB 12 · 12.1 SIMULATION (Blockchain Analysis)
+============================================================ */
+.b12-s121-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b12-s121-heur { display:flex; flex-direction:column; gap:6px; margin-bottom:10px; }
+.b12-s121-heur-label { font-size:11px; font-weight:500; color:#1A1A18; font-family:'Sora',sans-serif; }
+.b12-s121-heur-btns { display:flex; gap:6px; flex-wrap:wrap; }
+.b12-s121-heur-btn { padding:6px 12px; font-size:11px; font-weight:500; border-radius:99px; border:0.5px solid rgba(124,58,237,0.15); background:transparent; color:#3A3A35; cursor:pointer; font-family:'Sora',sans-serif; transition:all 0.15s; }
+.b12-s121-heur-btn.s121-act { background:#534AB7; color:#fff; border-color:#534AB7; }
+.b12-s121-graph { position:relative; height:240px; background:#F4F4F0; border-radius:var(--border-radius-lg); border:0.5px solid rgba(124,58,237,0.1); overflow:hidden; margin-bottom:10px; }
+.b12-s121-node { position:absolute; display:flex; flex-direction:column; align-items:center; gap:3px; transition:all 0.35s; }
+.b12-s121-node-circle { width:42px; height:42px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:600; font-family:'Courier Prime',monospace; border:2px solid transparent; transition:all 0.35s; }
+.b12-s121-node-circle.addr    { background:#EEEDFE; color:#534AB7; border-color:rgba(83,74,183,0.2); }
+.b12-s121-node-circle.tx      { background:#534AB7; color:#fff; border-color:#534AB7; }
+.b12-s121-node-circle.flagged { background:#FCEBEB; color:#791F1F; border-color:rgba(163,45,45,0.5); }
+.b12-s121-node-circle.linked  { background:#FAEEDA; color:#633806; border-color:rgba(133,79,11,0.4); }
+.b12-s121-node-label { font-size:9px; color:#52524C; font-family:'Sora',sans-serif; text-align:center; max-width:60px; line-height:1.3; }
+.b12-s121-findings { display:flex; flex-direction:column; gap:6px; margin-bottom:10px; }
+.b12-s121-finding { display:flex; gap:10px; align-items:flex-start; padding:8px 12px; border-radius:var(--border-radius-md); background:#FCEBEB; border:0.5px solid rgba(163,45,45,0.25); }
+.b12-s121-finding-icon { font-size:14px; flex-shrink:0; margin-top:1px; }
+.b12-s121-finding-text { font-size:11px; font-family:'Sora',sans-serif; color:#1A1A18; line-height:1.5; flex:1; }
+.b12-s121-finding-label { font-weight:500; color:#791F1F; font-size:10px; margin-bottom:2px; }
+.b12-s121-note { padding:10px 14px; border-radius:var(--border-radius-md); font-size:12px; line-height:1.6; font-family:'Sora',sans-serif; }
+.b12-s121-note.s121-idle { background:#F4F4F0; color:#3A3A35; }
+.b12-s121-note.s121-warn { background:#FCEBEB; color:#791F1F; border:0.5px solid rgba(163,45,45,0.2); }
+
+/* ============================================================
+   PAGE 15 · BAB 12 · 12.2 SIMULATION (CoinJoin)
+============================================================ */
+.b12-s122-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b12-s122-tabs { display:flex; gap:0; border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-md); overflow:hidden; margin-bottom:1rem; }
+.b12-s122-tab { flex:1; padding:8px 12px; font-size:12px; font-weight:500; background:transparent; color:#3A3A35; border:none; cursor:pointer; font-family:'Sora',sans-serif; transition:all 0.15s; }
+.b12-s122-tab.s122-act { background:#534AB7; color:#fff; }
+.b12-s122-pane { display:none; flex-direction:column; gap:10px; }
+.b12-s122-pane.show { display:flex; }
+.b12-s122-hint { font-size:11px; color:#3A3A35; font-family:'Sora',sans-serif; line-height:1.6; }
+.b12-s122-txs { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.b12-s122-tx { border:0.5px solid rgba(124,58,237,0.15); border-radius:var(--border-radius-lg); overflow:hidden; }
+.b12-s122-tx-head { padding:7px 12px; font-size:11px; font-weight:500; font-family:'Sora',sans-serif; }
+.b12-s122-tx-head.s122-alice { background:#EEEDFE; color:#534AB7; }
+.b12-s122-tx-head.s122-bob   { background:#EAF3DE; color:#0F6E56; }
+.b12-s122-tx-body { padding:8px 12px; display:flex; flex-direction:column; gap:4px; }
+.b12-s122-tx-row { display:flex; justify-content:space-between; align-items:center; gap:8px; }
+.b12-s122-tx-label { font-size:10px; color:#52524C; font-family:'Sora',sans-serif; }
+.b12-s122-tx-val { font-size:11px; font-family:'Courier Prime',monospace; font-weight:500; }
+.b12-s122-tx-val.s122-inp { color:#534AB7; }
+.b12-s122-tx-val.s122-out { color:#0F6E56; }
+.b12-s122-tx-val.s122-fee { color:#854F0B; }
+.b12-s122-tx-divider { height:0.5px; background:rgba(124,58,237,0.08); margin:2px 0; }
+.b12-s122-combined { border:0.5px solid #534AB7; border-radius:var(--border-radius-lg); overflow:hidden; }
+.b12-s122-combined-head { padding:8px 14px; background:#534AB7; color:#fff; font-size:11px; font-weight:500; font-family:'Sora',sans-serif; display:flex; justify-content:space-between; align-items:center; }
+.b12-s122-combined-badge { font-size:9px; padding:2px 8px; border-radius:99px; background:rgba(255,255,255,0.2); font-family:'Sora',sans-serif; }
+.b12-s122-combined-body { padding:10px 14px; display:grid; grid-template-columns:1fr auto 1fr; gap:8px; align-items:start; }
+.b12-s122-combined-col { display:flex; flex-direction:column; gap:4px; }
+.b12-s122-combined-col-label { font-size:10px; color:#52524C; font-family:'Sora',sans-serif; }
+.b12-s122-combined-item { padding:5px 8px; border-radius:5px; font-size:10px; font-family:'Courier Prime',monospace; }
+.b12-s122-combined-item.s122-inp-a { background:#EEEDFE; color:#534AB7; }
+.b12-s122-combined-item.s122-inp-b { background:#EAF3DE; color:#0F6E56; }
+.b12-s122-combined-item.s122-out-eq { background:#F4F4F0; color:#3A3A35; }
+.b12-s122-combined-arrow { font-size:16px; color:#52524C; text-align:center; padding-top:18px; }
+.b12-s122-analysis { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-lg); overflow:hidden; }
+.b12-s122-analysis-head { padding:8px 14px; background:#F4F4F0; font-size:11px; font-weight:500; font-family:'Sora',sans-serif; color:#1A1A18; border-bottom:0.5px solid rgba(124,58,237,0.08); }
+.b12-s122-analysis-body { padding:10px 14px; display:flex; flex-direction:column; gap:6px; }
+.b12-s122-analysis-row { font-size:11px; font-family:'Sora',sans-serif; line-height:1.5; }
+.b12-s122-analysis-row.s122-fail { color:#791F1F; }
+.b12-s122-analysis-row.s122-pass { color:#27500A; }
+.b12-s122-note { padding:10px 14px; border-radius:var(--border-radius-md); font-size:12px; line-height:1.6; font-family:'Sora',sans-serif; }
+.b12-s122-note.s122-info { background:#EEEDFE; color:#3C3489; border:0.5px solid rgba(83,74,183,0.2); }
+.b12-s122-note.s122-warn { background:#FAEEDA; color:#633806; border:0.5px solid rgba(133,79,11,0.2); }
+
+/* ============================================================
+   PAGE 15 · BAB 12 · 12.3 SIMULATION (Payjoin)
+============================================================ */
+.b12-s123-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b12-s123-legend { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px; }
+.b12-s123-leg { display:flex; align-items:center; gap:5px; font-size:10px; color:#3A3A35; font-family:'Sora',sans-serif; }
+.b12-s123-leg-dot { width:10px; height:10px; border-radius:3px; flex-shrink:0; }
+.b12-s123-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
+.b12-s123-col { display:flex; flex-direction:column; gap:8px; }
+.b12-s123-col-head { padding:9px 12px; border-radius:var(--border-radius-md); text-align:center; }
+.b12-s123-col-head.s123-normal  { background:#F4F4F0; border:0.5px solid rgba(124,58,237,0.12); }
+.b12-s123-col-head.s123-payjoin { background:#534AB7; color:#fff; }
+.b12-s123-col-head-title { font-size:12px; font-weight:600; font-family:'Sora',sans-serif; }
+.b12-s123-col-head-sub { font-size:10px; opacity:0.75; font-family:'Sora',sans-serif; margin-top:2px; }
+.b12-s123-tx { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-lg); overflow:hidden; }
+.b12-s123-tx-section { padding:8px 12px; }
+.b12-s123-tx-section-label { font-size:10px; color:#52524C; font-family:'Sora',sans-serif; margin-bottom:5px; }
+.b12-s123-tx-item { padding:5px 8px; border-radius:5px; font-size:10px; font-family:'Courier Prime',monospace; margin-bottom:3px; }
+.b12-s123-tx-item.s123-inp-a1  { background:#EEEDFE; color:#534AB7; }
+.b12-s123-tx-item.s123-inp-a2  { background:#E8E6FD; color:#3C3489; }
+.b12-s123-tx-item.s123-inp-b   { background:#EAF3DE; color:#0F6E56; }
+.b12-s123-tx-item.s123-out     { background:#F4F4F0; color:#3A3A35; }
+.b12-s123-tx-item.s123-out-change { background:#FAEEDA; color:#854F0B; }
+.b12-s123-tx-divider { height:0.5px; background:rgba(124,58,237,0.08); }
+.b12-s123-tx-owner { font-size:9px; color:#52524C; font-family:'Sora',sans-serif; padding:3px 12px 6px; font-style:italic; }
+.b12-s123-analyst { border:0.5px solid transparent; border-radius:var(--border-radius-md); padding:8px 12px; display:flex; flex-direction:column; gap:4px; }
+.b12-s123-analyst.s123-correct { background:#EAF3DE; border-color:rgba(59,109,17,0.2); }
+.b12-s123-analyst.s123-wrong   { background:#FCEBEB; border-color:rgba(163,45,45,0.25); }
+.b12-s123-analyst-label { font-size:10px; font-weight:500; font-family:'Sora',sans-serif; }
+.b12-s123-analyst.s123-correct .b12-s123-analyst-label { color:#27500A; }
+.b12-s123-analyst.s123-wrong   .b12-s123-analyst-label { color:#791F1F; }
+.b12-s123-analyst-text { font-size:11px; font-family:'Sora',sans-serif; line-height:1.5; color:#1A1A18; }
+.b12-s123-btn-wrap { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+.b12-s123-btn-primary { padding:6px 14px; font-size:12px; font-weight:500; border-radius:99px; border:none; cursor:pointer; font-family:'Sora',sans-serif; background:#534AB7; color:#fff; }
+.b12-s123-btn-sec { padding:6px 14px; font-size:12px; font-weight:500; border-radius:99px; border:0.5px solid rgba(124,58,237,0.2); background:transparent; color:#534AB7; cursor:pointer; font-family:'Sora',sans-serif; }
+.b12-s123-verdict { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
+.b12-s123-verdict-card { padding:10px 12px; border-radius:var(--border-radius-md); border:0.5px solid transparent; display:flex; flex-direction:column; gap:4px; }
+.b12-s123-verdict-card.s123-v-correct { background:#EAF3DE; border-color:rgba(59,109,17,0.2); }
+.b12-s123-verdict-card.s123-v-wrong   { background:#FCEBEB; border-color:rgba(163,45,45,0.2); }
+.b12-s123-verdict-icon { font-size:18px; }
+.b12-s123-verdict-label { font-size:10px; font-weight:500; font-family:'Sora',sans-serif; }
+.b12-s123-verdict-card.s123-v-correct .b12-s123-verdict-label { color:#27500A; }
+.b12-s123-verdict-card.s123-v-wrong   .b12-s123-verdict-label { color:#791F1F; }
+.b12-s123-verdict-text { font-size:11px; font-family:'Sora',sans-serif; line-height:1.5; color:#1A1A18; }
+.b12-s123-note { padding:10px 14px; border-radius:var(--border-radius-md); font-size:12px; line-height:1.6; font-family:'Sora',sans-serif; }
+.b12-s123-note.s123-idle { background:#F4F4F0; color:#3A3A35; }
+.b12-s123-note.s123-info { background:#EEEDFE; color:#3C3489; border:0.5px solid rgba(83,74,183,0.2); }
+
+/* ============================================================
+   PAGE 15 · BAB 12 · 12.4 SIMULATION (Silent Payments)
+============================================================ */
+.b12-s124-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b12-s124-static { border:1.5px solid #534AB7; border-radius:var(--border-radius-lg); padding:10px 14px; background:#EEEDFE; margin-bottom:12px; display:flex; flex-direction:column; gap:4px; }
+.b12-s124-static-label { font-size:10px; font-weight:500; color:#534AB7; font-family:'Sora',sans-serif; }
+.b12-s124-static-addr { font-size:11px; font-family:'Courier Prime',monospace; color:#3C3489; word-break:break-all; }
+.b12-s124-static-sub { font-size:10px; color:#534AB7; font-family:'Sora',sans-serif; opacity:0.8; }
+.b12-s124-flow-label { font-size:11px; font-weight:500; color:#1A1A18; font-family:'Sora',sans-serif; margin-bottom:8px; }
+.b12-s124-senders { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:12px; }
+.b12-s124-sender { display:flex; flex-direction:column; gap:6px; align-items:center; }
+.b12-s124-sender-box { width:100%; padding:7px 10px; border-radius:var(--border-radius-md); text-align:center; font-size:11px; font-weight:500; font-family:'Sora',sans-serif; }
+.b12-s124-sender-box.s124-alice { background:#EEEDFE; color:#534AB7; border:0.5px solid rgba(83,74,183,0.3); }
+.b12-s124-sender-box.s124-bob   { background:#EAF3DE; color:#0F6E56; border:0.5px solid rgba(15,110,86,0.3); }
+.b12-s124-sender-box.s124-carol { background:#FAEEDA; color:#854F0B; border:0.5px solid rgba(133,79,11,0.3); }
+.b12-s124-sender-arrow { font-size:14px; color:#52524C; text-align:center; }
+.b12-s124-sender-result { width:100%; padding:6px 8px; border-radius:var(--border-radius-md); font-size:9px; font-family:'Courier Prime',monospace; text-align:center; opacity:0; transition:all 0.5s; border:0.5px solid transparent; }
+.b12-s124-sender-result.s124-alice { background:#EEEDFE; color:#534AB7; border-color:rgba(83,74,183,0.2); }
+.b12-s124-sender-result.s124-bob   { background:#EAF3DE; color:#0F6E56; border-color:rgba(15,110,86,0.2); }
+.b12-s124-sender-result.s124-carol { background:#FAEEDA; color:#854F0B; border-color:rgba(133,79,11,0.2); }
+.b12-s124-sender-result.show { opacity:1; }
+.b12-s124-sender-result-label { font-size:9px; color:#52524C; font-family:'Sora',sans-serif; margin-bottom:2px; }
+.b12-s124-blockchain { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-lg); overflow:hidden; opacity:0; transition:all 0.5s; margin-bottom:10px; }
+.b12-s124-blockchain.show { opacity:1; }
+.b12-s124-blockchain-head { padding:8px 14px; background:#F4F4F0; font-size:11px; font-weight:500; font-family:'Sora',sans-serif; color:#1A1A18; border-bottom:0.5px solid rgba(124,58,237,0.08); }
+.b12-s124-blockchain-body { padding:10px 14px; display:flex; flex-direction:column; gap:6px; }
+.b12-s124-chain-item { padding:6px 10px; border-radius:var(--border-radius-md); font-size:10px; font-family:'Courier Prime',monospace; border:0.5px solid rgba(124,58,237,0.1); background:#FAFAF8; opacity:0; transition:all 0.5s; }
+.b12-s124-chain-item.show { opacity:1; }
+.b12-s124-chain-item-label { font-size:9px; color:#52524C; font-family:'Sora',sans-serif; margin-bottom:2px; }
+.b12-s124-chain-badge { font-size:9px; padding:1px 6px; border-radius:99px; font-family:'Sora',sans-serif; background:#F4F4F0; color:#52524C; margin-left:6px; }
+.b12-s124-link-note { font-size:10px; color:#791F1F; font-family:'Sora',sans-serif; padding:6px 10px; background:#FCEBEB; border-radius:var(--border-radius-md); border:0.5px solid rgba(163,45,45,0.2); opacity:0; transition:all 0.5s; }
+.b12-s124-link-note.show { opacity:1; }
+.b12-s124-scan { border:0.5px solid rgba(15,110,86,0.2); border-radius:var(--border-radius-lg); overflow:hidden; opacity:0; transition:all 0.5s; margin-bottom:10px; }
+.b12-s124-scan.show { opacity:1; }
+.b12-s124-scan-head { padding:8px 14px; background:#EAF3DE; font-size:11px; font-weight:500; font-family:'Sora',sans-serif; color:#0F6E56; }
+.b12-s124-scan-body { padding:10px 14px; display:flex; flex-direction:column; gap:6px; }
+.b12-s124-scan-item { padding:6px 10px; border-radius:var(--border-radius-md); font-size:10px; font-family:'Courier Prime',monospace; background:#F4F4F0; border:0.5px solid rgba(15,110,86,0.2); opacity:0; transition:all 0.4s; }
+.b12-s124-scan-item.show { opacity:1; }
+.b12-s124-scan-badge { font-size:9px; padding:1px 6px; border-radius:99px; font-family:'Sora',sans-serif; background:#0F6E56; color:#fff; margin-left:6px; }
+.b12-s124-btn-wrap { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+.b12-s124-btn-primary { padding:6px 14px; font-size:12px; font-weight:500; border-radius:99px; border:none; cursor:pointer; font-family:'Sora',sans-serif; background:#534AB7; color:#fff; }
+.b12-s124-btn-primary:disabled { background:#52524C; cursor:not-allowed; }
+.b12-s124-btn-sec { padding:6px 14px; font-size:12px; font-weight:500; border-radius:99px; border:0.5px solid rgba(124,58,237,0.2); background:transparent; color:#534AB7; cursor:pointer; font-family:'Sora',sans-serif; }
+.b12-s124-note { padding:10px 14px; border-radius:var(--border-radius-md); font-size:12px; line-height:1.6; font-family:'Sora',sans-serif; }
+.b12-s124-note.s124-idle { background:#F4F4F0; color:#3A3A35; }
+.b12-s124-note.s124-run  { background:#EEEDFE; color:#3C3489; border:0.5px solid rgba(83,74,183,0.2); }
+.b12-s124-note.s124-done { background:#EAF3DE; color:#27500A; border:0.5px solid rgba(59,109,17,0.2); }
+
+/* ============================================================
+   PAGE 15 · BAB 12 · 12.5 SIMULATION (Lightning Privacy)
+============================================================ */
+.b12-s125-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b12-s125-tabs { display:flex; gap:0; border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-md); overflow:hidden; margin-bottom:1rem; }
+.b12-s125-tab { flex:1; padding:8px 12px; font-size:12px; font-weight:500; background:transparent; color:#3A3A35; border:none; cursor:pointer; font-family:'Sora',sans-serif; transition:all 0.15s; }
+.b12-s125-tab.s125-act { background:#534AB7; color:#fff; }
+.b12-s125-pane { display:none; flex-direction:column; gap:10px; }
+.b12-s125-pane.show { display:flex; }
+.b12-s125-scenario-label { font-size:11px; color:#3A3A35; font-family:'Sora',sans-serif; line-height:1.6; }
+.b12-s125-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.b12-s125-col { display:flex; flex-direction:column; gap:6px; }
+.b12-s125-col-head { padding:8px 12px; border-radius:var(--border-radius-md); text-align:center; font-size:11px; font-weight:600; font-family:'Sora',sans-serif; }
+.b12-s125-col-head.s125-onchain   { background:#FCEBEB; color:#791F1F; }
+.b12-s125-col-head.s125-lightning { background:#EAF3DE; color:#0F6E56; }
+.b12-s125-col-head-sub { font-size:9px; font-weight:400; opacity:0.8; margin-top:2px; }
+.b12-s125-ledger { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-lg); overflow:hidden; }
+.b12-s125-ledger-head { padding:6px 10px; background:#F4F4F0; font-size:10px; font-weight:500; font-family:'Sora',sans-serif; color:#1A1A18; border-bottom:0.5px solid rgba(124,58,237,0.08); }
+.b12-s125-ledger-body { padding:6px 10px; display:flex; flex-direction:column; gap:3px; min-height:120px; }
+.b12-s125-tx-row { padding:4px 6px; border-radius:4px; font-size:10px; font-family:'Courier Prime',monospace; opacity:0; transition:all 0.3s; display:flex; align-items:center; gap:6px; }
+.b12-s125-tx-row.visible { opacity:1; }
+.b12-s125-tx-row.s125-pub     { background:#FCEBEB; color:#791F1F; }
+.b12-s125-tx-row.s125-priv    { background:#EAF3DE; color:#0F6E56; }
+.b12-s125-tx-row.s125-neutral { background:#F4F4F0; color:#3A3A35; }
+.b12-s125-tx-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+.b12-s125-tx-dot.s125-pub     { background:#A32D2D; }
+.b12-s125-tx-dot.s125-priv    { background:#0F6E56; }
+.b12-s125-tx-dot.s125-neutral { background:#52524C; }
+.b12-s125-btn-wrap { display:flex; gap:8px; flex-wrap:wrap; }
+.b12-s125-btn-primary { padding:6px 14px; font-size:12px; font-weight:500; border-radius:99px; border:none; cursor:pointer; font-family:'Sora',sans-serif; background:#534AB7; color:#fff; }
+.b12-s125-btn-primary:disabled { background:#52524C; cursor:not-allowed; }
+.b12-s125-btn-sec { padding:6px 14px; font-size:12px; font-weight:500; border-radius:99px; border:0.5px solid rgba(124,58,237,0.2); background:transparent; color:#534AB7; cursor:pointer; font-family:'Sora',sans-serif; }
+.b12-s125-summary { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.b12-s125-summary-card { padding:8px 12px; border-radius:var(--border-radius-md); display:flex; flex-direction:column; gap:3px; }
+.b12-s125-summary-card.s125-bad  { background:#FCEBEB; border:0.5px solid rgba(163,45,45,0.2); }
+.b12-s125-summary-card.s125-good { background:#EAF3DE; border:0.5px solid rgba(59,109,17,0.2); }
+.b12-s125-summary-label { font-size:10px; font-weight:500; font-family:'Sora',sans-serif; }
+.b12-s125-summary-card.s125-bad  .b12-s125-summary-label { color:#791F1F; }
+.b12-s125-summary-card.s125-good .b12-s125-summary-label { color:#27500A; }
+.b12-s125-summary-val { font-size:20px; font-weight:700; font-family:'Courier Prime',monospace; }
+.b12-s125-summary-card.s125-bad  .b12-s125-summary-val { color:#A32D2D; }
+.b12-s125-summary-card.s125-good .b12-s125-summary-val { color:#0F6E56; }
+.b12-s125-summary-sub { font-size:10px; font-family:'Sora',sans-serif; color:#3A3A35; line-height:1.4; }
+.b12-s125-nodes { display:flex; align-items:center; justify-content:space-between; padding:16px 8px; background:#F4F4F0; border-radius:var(--border-radius-lg); border:0.5px solid rgba(124,58,237,0.1); }
+.b12-s125-node { display:flex; flex-direction:column; align-items:center; gap:5px; }
+.b12-s125-node-circle { width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; font-family:'Sora',sans-serif; border:2px solid transparent; }
+.b12-s125-node-circle.s125-sender   { background:#EEEDFE; color:#534AB7; border-color:rgba(83,74,183,0.3); }
+.b12-s125-node-circle.s125-relay    { background:#F4F4F0; color:#3A3A35; border-color:rgba(160,160,152,0.3); }
+.b12-s125-node-circle.s125-receiver { background:#EAF3DE; color:#0F6E56; border-color:rgba(15,110,86,0.3); }
+.b12-s125-node-label { font-size:9px; color:#52524C; font-family:'Sora',sans-serif; }
+.b12-s125-node-knows { font-size:9px; font-family:'Sora',sans-serif; text-align:center; line-height:1.3; max-width:60px; min-height:28px; }
+.b12-s125-node-knows.s125-good { color:#0F6E56; }
+.b12-s125-node-knows.s125-warn { color:#854F0B; }
+.b12-s125-arrow-wrap { display:flex; align-items:center; flex:1; justify-content:center; }
+.b12-s125-arrow-line { height:2px; flex:1; background:rgba(124,58,237,0.15); }
+.b12-s125-arrow-head { font-size:12px; color:rgba(124,58,237,0.3); }
+.b12-s125-knows-table { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-lg); overflow:hidden; }
+.b12-s125-knows-head { padding:8px 14px; background:#F4F4F0; font-size:11px; font-weight:500; font-family:'Sora',sans-serif; color:#1A1A18; border-bottom:0.5px solid rgba(124,58,237,0.08); }
+.b12-s125-knows-body { padding:0; }
+.b12-s125-knows-row { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; border-bottom:0.5px solid rgba(124,58,237,0.06); padding:6px 14px; gap:4px; font-size:11px; font-family:'Sora',sans-serif; }
+.b12-s125-knows-row:last-child { border-bottom:none; }
+.b12-s125-knows-row.s125-header { font-size:10px; font-weight:500; color:#52524C; background:#FAFAF8; }
+.b12-s125-knows-cell { color:#1A1A18; }
+.b12-s125-knows-cell.s125-yes { color:#0F6E56; font-weight:500; }
+.b12-s125-knows-cell.s125-no  { color:#A32D2D; font-weight:500; }
+.b12-s125-note { padding:10px 14px; border-radius:var(--border-radius-md); font-size:12px; line-height:1.6; font-family:'Sora',sans-serif; }
+.b12-s125-note.s125-idle { background:#F4F4F0; color:#3A3A35; }
+.b12-s125-note.s125-run  { background:#EEEDFE; color:#3C3489; border:0.5px solid rgba(83,74,183,0.2); }
+.b12-s125-note.s125-done { background:#EAF3DE; color:#27500A; border:0.5px solid rgba(59,109,17,0.2); }
+
+/* ============================================================
+   PAGE 15 · BAB 12 · 12.6 SIMULATION (Threat Model)
+============================================================ */
+.b12-s126-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b12-s126-profiles { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
+.b12-s126-profile { padding:10px 12px; border-radius:var(--border-radius-lg); border:1.5px solid transparent; cursor:pointer; transition:all 0.2s; background:#F4F4F0; }
+.b12-s126-profile:hover { border-color:rgba(124,58,237,0.3); }
+.b12-s126-profile.active { border-color:#534AB7; background:#EEEDFE; }
+.b12-s126-profile-icon { font-size:20px; margin-bottom:5px; }
+.b12-s126-profile-title { font-size:12px; font-weight:600; font-family:'Sora',sans-serif; color:#1A1A18; }
+.b12-s126-profile-sub { font-size:10px; color:#3A3A35; font-family:'Sora',sans-serif; margin-top:2px; line-height:1.4; }
+.b12-s126-detail { border:0.5px solid rgba(124,58,237,0.15); border-radius:var(--border-radius-lg); overflow:hidden; }
+.b12-s126-detail-head { padding:10px 14px; display:flex; align-items:center; gap:10px; }
+.b12-s126-detail-icon { font-size:24px; }
+.b12-s126-detail-title { font-size:13px; font-weight:600; font-family:'Sora',sans-serif; color:#1A1A18; }
+.b12-s126-detail-sub { font-size:10px; color:#3A3A35; font-family:'Sora',sans-serif; margin-top:2px; }
+.b12-s126-detail-body { padding:10px 14px; border-top:0.5px solid rgba(124,58,237,0.08); display:flex; flex-direction:column; gap:10px; }
+.b12-s126-threat { display:flex; flex-direction:column; gap:4px; }
+.b12-s126-threat-label { font-size:10px; color:#52524C; font-family:'Sora',sans-serif; }
+.b12-s126-threat-bar { height:8px; border-radius:99px; overflow:hidden; background:#F4F4F0; }
+.b12-s126-threat-fill { height:100%; border-radius:99px; transition:width 0.4s ease; }
+.b12-s126-recs { display:flex; flex-direction:column; gap:5px; }
+.b12-s126-recs-label { font-size:10px; color:#52524C; font-family:'Sora',sans-serif; }
+.b12-s126-rec { display:flex; align-items:flex-start; gap:8px; padding:7px 10px; border-radius:var(--border-radius-md); border:0.5px solid transparent; }
+.b12-s126-rec.must   { background:#FCEBEB; border-color:rgba(163,45,45,0.2); }
+.b12-s126-rec.should { background:#FAEEDA; border-color:rgba(133,79,11,0.2); }
+.b12-s126-rec.nice   { background:#EAF3DE; border-color:rgba(59,109,17,0.15); }
+.b12-s126-rec-badge { font-size:9px; padding:1px 6px; border-radius:99px; font-family:'Sora',sans-serif; flex-shrink:0; margin-top:1px; }
+.b12-s126-rec.must   .b12-s126-rec-badge { background:#A32D2D; color:#fff; }
+.b12-s126-rec.should .b12-s126-rec-badge { background:#854F0B; color:#fff; }
+.b12-s126-rec.nice   .b12-s126-rec-badge { background:#0F6E56; color:#fff; }
+.b12-s126-rec-text { font-size:11px; font-family:'Sora',sans-serif; color:#1A1A18; line-height:1.5; flex:1; }
+.b12-s126-avoid { display:flex; flex-direction:column; gap:4px; }
+.b12-s126-avoid-label { font-size:10px; color:#52524C; font-family:'Sora',sans-serif; }
+.b12-s126-avoid-item { display:flex; align-items:flex-start; gap:6px; font-size:11px; font-family:'Sora',sans-serif; color:#791F1F; line-height:1.4; }
+

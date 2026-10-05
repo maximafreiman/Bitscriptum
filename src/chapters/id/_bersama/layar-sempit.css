@@ -1,0 +1,45 @@
+/* ============================================================
+   LAYAR SEMPIT: simulasi tidak boleh terpotong.
+   Yang bisa dilipat, dilipat. Yang tidak bisa (tabel, kanvas),
+   diberi wadah yang bisa digeser supaya tetap terjangkau.
+============================================================ */
+@media (max-width:680px){
+  /* Nama class tidak bisa dipercaya untuk menebak display: banyak yang
+     bernama "-row" ternyata grid dengan kolom px tetap. Jadi kedua sifat
+     diterapkan ke daftar yang sama. Yang tidak relevan diabaikan browser. */
+  .p-simulation [class*="-grid"],  .p-simulation [class*="-layout"],
+  .p-simulation [class*="-stage"], .p-simulation [class*="-cols"],
+  .p-simulation [class*="-columns"], .p-simulation [class*="-panes"],
+  .p-simulation [class*="-row"],   .p-simulation [class*="-ctrl"],
+  .p-simulation [class*="-meta"],  .p-simulation [class*="-top"],
+  .p-simulation [class*="-head"],  .p-simulation [class*="-bar"],
+  .p-simulation [class*="-tabs"],  .p-simulation [class*="-btns"],
+  .p-simulation [class*="-actions"], .p-simulation [class*="-bits"],
+  .p-simulation [class*="-list"],  .p-simulation [class*="-items"],
+  .p-simulation [class*="-group"], .p-simulation [class*="-strip"],
+  .p-simulation [class*="-chips"], .p-simulation [class*="-legend"],
+  .p-simulation [class*="-nodes"], .p-simulation [class*="-cells"],
+  .p-simulation [class*="-opts"],  .p-simulation [class*="-field"],
+  .p-simulation [class*="-panel"], .p-simulation [class*="-box"]{
+    flex-wrap:wrap !important;
+    grid-template-columns:1fr !important;
+  }
+
+  /* 3. tidak ada anak yang boleh memaksa lebar minimum,
+        kecuali slider supaya tetap bisa digeser */
+  .p-simulation *{ min-width:0 !important; }
+  .p-simulation input[type=range]{ min-width:130px !important; flex:1 1 130px !important; }
+
+  /* 4. hex, hash, dan alamat boleh patah di mana saja */
+  .p-simulation{ overflow-wrap:anywhere; }
+
+  /* 5. jaring pengaman: apa pun yang tetap lebih lebar dari layar
+        (deret 32 bit, tabel, kanvas) jadi bisa digeser, bukan terpotong */
+  .p-simulation{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
+
+  /* 6. tabel dan kanvas: digeser, bukan dipotong */
+  .p-simulation table{ display:block; overflow-x:auto; max-width:100%; }
+  .p-simulation canvas{ max-width:100%; height:auto; }
+  .p-simulation svg:not([width]){ max-width:100%; }
+}
+

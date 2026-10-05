@@ -1,0 +1,291 @@
+<!-- ============================================================
+     PAGE 23 · BAB 20 · Rangkuman — Seluruh Protokol Bitcoin
+     |-- 20.1 · Fondasi: Kriptografi & Identitas
+     |-- 20.2 · Transaksi & Script
+     |-- 20.3 · Konsensus & Mining
+     |-- 20.4 · Jaringan & Node
+     |-- 20.5 · Layer 2 & Privacy
+     |-- 20.6 · Governance & Masa Depan
+============================================================ -->
+<div class="page" id="page-bab20">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b20">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b20">← Daftar Bab</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab20">
+      <div class="sidebar-heading">Bab 20</div>
+      <div class="sidebar-title">Rangkuman — Seluruh Protokol Bitcoin</div>
+
+      <div class="sidebar-item active" id="sb-20-1">
+        <div class="sb-num">20.1</div>
+        <div class="sb-label">Fondasi: Kriptografi & Identitas</div>
+      </div>
+      <div class="sidebar-item" id="sb-20-2">
+        <div class="sb-num">20.2</div>
+        <div class="sb-label">Transaksi & Script</div>
+      </div>
+      <div class="sidebar-item" id="sb-20-3">
+        <div class="sb-num">20.3</div>
+        <div class="sb-label">Konsensus & Mining</div>
+      </div>
+      <div class="sidebar-item" id="sb-20-4">
+        <div class="sb-num">20.4</div>
+        <div class="sb-label">Jaringan & Node</div>
+      </div>
+      <div class="sidebar-item" id="sb-20-5">
+        <div class="sb-num">20.5</div>
+        <div class="sb-label">Layer 2 & Privacy</div>
+      </div>
+      <div class="sidebar-item" id="sb-20-6">
+        <div class="sb-num">20.6</div>
+        <div class="sb-label">Governance & Masa Depan</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab20-content">
+
+      <!-- ==============================
+           SECTION 20.1 · Fondasi: Kriptografi & Identitas
+      ============================== -->
+      <div class="p-section active" id="section-20-1">
+        <div class="p-eyebrow">Bab 20 · 20.1</div>
+        <div class="p-heading">Seluruh Bitcoin berdiri di atas matematika yang tidak bisa dimanipulasi — dua struktur yang menjadi fondasinya adalah fungsi hash dan kriptografi kurva eliptik</div>
+        <div class="p-title">Fondasi: Kriptografi & Identitas</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p><strong>Fungsi hash</strong></p>
+          <p>Fungsi hash mengambil input berukuran apapun dan menghasilkan output berukuran tetap yang tidak bisa diprediksi dan tidak bisa dibalik. Bitcoin memakai SHA256 secara ekstensif: untuk mining (double SHA256 dari block header), untuk address (SHA256 lalu RIPEMD160), dan untuk Merkle tree (double SHA256 dari setiap pasang hash). Sifat terpenting hash untuk Bitcoin adalah collision resistance (tidak ada dua input berbeda yang menghasilkan hash sama dalam waktu yang wajar) dan avalanche effect (satu bit input yang berubah menghasilkan hash yang sama sekali berbeda).</p>
+
+          <p><strong>Kriptografi kurva eliptik</strong></p>
+          <p>Bitcoin memakai kurva secp256k1. Private key adalah angka acak 256-bit. Public key adalah titik di kurva yang dihasilkan dari perkalian private key dengan generator point G. Operasi ini satu arah: dari private key ke public key mudah, sebaliknya tidak mungkin secara komputasi. Address Bitcoin adalah hash dari public key, bukan public key itu sendiri, menambah lapisan perlindungan ekstra.</p>
+
+          <p><strong>ECDSA dan Schnorr</strong></p>
+          <p>ECDSA adalah skema tanda tangan yang dipakai Bitcoin sejak awal. Ia membuktikan bahwa pengirim memiliki private key yang sesuai dengan public key di UTXO yang dibelanjakan, tanpa mengungkapkan private key itu sendiri. Schnorr signature, diaktifkan bersama Taproot di 2021, lebih efisien dan elegan: tanda tangan linear sehingga bisa diagregasi. MuSig memungkinkan n-of-n multisig yang terlihat identik dengan tanda tangan tunggal di chain, meningkatkan privasi dan efisiensi sekaligus.</p>
+
+          <p><strong>Dari key ke address</strong></p>
+          <p>Private key menghasilkan public key via ECC. Public key di-hash menghasilkan address. Setiap generasi address menggunakan format berbeda: P2PKH (legacy, dimulai dengan 1), P2SH (dimulai dengan 3), P2WPKH (bech32, dimulai dengan bc1q), P2TR (bech32m, dimulai dengan bc1p). Format bukan hanya estetika, melainkan ia menentukan Script yang mengunci UTXO dan bagaimana UTXO tersebut bisa dibelanjakan.</p>
+
+          <p><strong>HD wallet dan seed phrase</strong></p>
+          <p>BIP32 mendefinisikan hierarki deterministik: satu seed menghasilkan seluruh pohon key secara deterministik. BIP39 mendefinisikan representasi seed sebagai 12 atau 24 kata. BIP44 mendefinisikan path derivasi standar. Hasilnya: satu seed phrase bisa memulihkan seluruh wallet di wallet software manapun yang mengikuti standar ini.</p>
+
+          <div class="p-callout">
+            <p>Angka-angka kunci: private key 256-bit dengan sekitar 10^77 kemungkinan. SHA256 menghasilkan output 32 bytes, RIPEMD160 menghasilkan 20 bytes untuk address legacy. Schnorr signature hanya 64 bytes vs ECDSA yang 71-72 bytes. Seed phrase BIP39: 12 kata setara 128-bit entropy, 24 kata setara 256-bit entropy.</p>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-20-2" data-sb="sb-20-2">
+            20.2 — Transaksi & Script →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 20.1 -->
+
+      <!-- ==============================
+           SECTION 20.2 · Transaksi & Script
+      ============================== -->
+      <div class="p-section" id="section-20-2">
+        <div class="p-eyebrow">Bab 20 · 20.2</div>
+        <div class="p-heading">UTXO adalah unit dasar kepemilikan Bitcoin, dan Script adalah bahasa yang menentukan kondisi pengeluarannya</div>
+        <div class="p-title">Transaksi & Script</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p><strong>UTXO dan transaksi</strong></p>
+          <p>UTXO (Unspent Transaction Output) adalah unit dasar kepemilikan Bitcoin. Setiap transaksi mengkonsumsi UTXO lama sebagai input dan menciptakan UTXO baru sebagai output. Tidak ada saldo yang tersimpan di satu tempat, melainkan saldo adalah jumlah semua UTXO yang bisa dibuka dengan key yang kamu miliki. Setiap UTXO dikunci oleh scriptPubKey dan dibuka oleh scriptSig atau witness dari transaksi yang membelanjakannya.</p>
+
+          <p><strong>Fee dan timelock</strong></p>
+          <p>Fee tidak ditulis eksplisit: ia adalah selisih antara total input dan total output. Miner yang memasukkan transaksi ke block mengklaim selisih ini. Fee rate diukur dalam satoshi per virtual byte karena transaksi berbeda ukurannya. Timelocks memungkinkan transaksi yang hanya bisa dieksekusi di masa depan. nLocktime bekerja di level transaksi (waktu absolut), nSequence bekerja di level input (waktu relatif). OP_CLTV dan OP_CSV memindahkan kondisi ini ke dalam Script itu sendiri sehingga berlaku untuk siapapun yang mencoba membelanjakan.</p>
+
+          <p><strong>Bitcoin Script</strong></p>
+          <p>Script adalah bahasa stack-based yang menentukan kondisi pengeluaran UTXO. P2PKH meminta tanda tangan dan public key. P2SH menyembunyikan script sesungguhnya di balik hash. P2WPKH memindahkan data tanda tangan ke witness field. P2TR memungkinkan key path spending yang terlihat seperti tanda tangan biasa, atau script path spending yang mengungkap salah satu dari banyak kondisi tersembunyi via MAST. Tapscript berjalan di dalam path Taproot dengan OP_CHECKSIGADD untuk multisig yang lebih efisien dan OP_SUCCESS untuk upgrade di masa depan. Miniscript adalah bahasa terstruktur di atas Script yang memungkinkan analisis otomatis dan komposisi script yang aman.</p>
+
+          <p><strong>PSBT</strong></p>
+          <p>PSBT (BIP 174) memisahkan peran penyusun transaksi dan penandatangan, memungkinkan workflow multisig dan hardware wallet yang lebih aman. Wallet software menyusun transaksi dan mengekspornya sebagai file PSBT. Hardware wallet membaca, memverifikasi, menandatangani, dan mengembalikannya. Setelah semua tanda tangan terkumpul, PSBT difinalisasi dan di-broadcast.</p>
+
+          <div class="p-callout">
+            <p>Angka-angka kunci: 1 sat/vByte adalah fee minimum relay default. SegWit memberi diskon: witness data dihitung 1/4 weight. P2PKH sekitar 148 vByte per input, P2WPKH sekitar 68 vByte, P2TR key path sekitar 57,5 vByte (paling efisien). Batas data OP_RETURN adalah relay policy per node, bukan aturan konsensus (konvensi lama: 80 bytes).</p>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-20-1" data-sb="sb-20-1">
+            ← 20.1 — Kriptografi & Identitas
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-20-3" data-sb="sb-20-3">
+            20.3 — Konsensus & Mining →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 20.2 -->
+
+      <!-- ==============================
+           SECTION 20.3 · Konsensus & Mining
+      ============================== -->
+      <div class="p-section" id="section-20-3">
+        <div class="p-eyebrow">Bab 20 · 20.3</div>
+        <div class="p-heading">Proof of Work membuat penulisan sejarah transaksi mahal secara komputasi dan murah untuk diverifikasi</div>
+        <div class="p-title">Konsensus & Mining</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p><strong>Proof of Work</strong></p>
+          <p>Miner berulang kali mengubah nonce di block header sampai hash block memenuhi target difficulty. Karena hash tidak bisa diprediksi, tidak ada jalan pintas. Seluruh jaringan bisa memverifikasi bahwa pekerjaan ini dilakukan hanya dengan satu operasi hash, sementara miner harus mencoba miliaran kemungkinan untuk menemukannya.</p>
+
+          <p><strong>Difficulty adjustment</strong></p>
+          <p>Setiap 2.016 block, jaringan menghitung berapa lama block terakhir diselesaikan, membandingkan dengan target 20.160 menit, lalu menyesuaikan secara proporsional. Batas perubahan 4× per epoch mencegah destabilisasi dari lonjakan hashrate yang ekstrem. Setiap node menghitung adjustment secara independen dan deterministik, tidak ada koordinasi.</p>
+
+          <p><strong>Halving dan security budget</strong></p>
+          <p>Halving terjadi setiap 210.000 block, block reward berkurang tepat setengah. Jadwal ini menghasilkan total suplai maksimum 21 juta BTC sebagai deret geometri. Block reward saat ini 3,125 BTC setelah halving keempat April 2024. Security budget adalah total revenue miner yang menentukan seberapa mahal serangan. Pertanyaan terbuka: apakah fee saja cukup saat block reward mendekati nol sekitar tahun 2140.</p>
+
+          <p><strong>Mining pool dan selfish mining</strong></p>
+          <p>Pool menggabungkan hashrate banyak miner untuk mengurangi variance pendapatan. PPS membayar per share valid terlepas dari apakah pool menemukan block. PPLNS membayar berdasarkan share dalam window terakhir, miner ikut menanggung variance. FPPS seperti PPS tapi termasuk estimasi fee transaksi. Selfish mining adalah strategi menyembunyikan block yang ditemukan untuk mendapat keunggulan chain, menguntungkan di atas threshold sekitar 33% hashrate, dibatasi oleh propagasi cepat, deteksi, dan risiko reputasi.</p>
+
+          <div class="p-callout">
+            <p>Angka-angka kunci: target block time 10 menit. Epoch difficulty setiap 2.016 block, sekitar 2 minggu. Batas adjustment maksimum 4× per epoch. Total suplai 21.000.000 BTC. Halving setiap 210.000 block, sekitar 4 tahun. Threshold selfish mining sekitar 33% hashrate jaringan.</p>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-20-2" data-sb="sb-20-2">
+            ← 20.2 — Transaksi & Script
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-20-4" data-sb="sb-20-4">
+            20.4 — Jaringan & Node →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 20.3 -->
+
+      <!-- ==============================
+           SECTION 20.4 · Jaringan & Node
+      ============================== -->
+      <div class="p-section" id="section-20-4">
+        <div class="p-eyebrow">Bab 20 · 20.4</div>
+        <div class="p-heading">Jaringan Bitcoin adalah P2P tanpa server pusat — informasi mengalir melalui ribuan node yang saling terhubung</div>
+        <div class="p-title">Jaringan & Node</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p><strong>P2P dan penemuan peer</strong></p>
+          <p>Jaringan Bitcoin adalah P2P tanpa server pusat. Setiap node terhubung ke sejumlah peer dan meneruskan transaksi dan block ke peer lain. Penemuan peer dimulai dari DNS seeds hardcoded, kemudian berkembang melalui pesan addr dan addrv2. Koneksi default: 8 outbound, hingga 125 total. Handshake antara dua node dimulai dengan pesan version dan verack.</p>
+
+          <p><strong>Propagasi yang efisien</strong></p>
+          <p>Compact blocks (BIP 152) mengurangi bandwidth propagasi block dengan hanya mengirim shortID transaksi, sehingga node yang sudah punya transaksi di mempool tidak perlu download ulang. Erlay (BIP 330) menggunakan set reconciliation untuk propagasi transaksi yang lebih efisien, mengurangi bandwidth hingga 40%. Dandelion (BIP 156) meningkatkan privasi propagasi dengan fase stem (satu jalur) sebelum fase fluff (broadcast normal).</p>
+
+          <p><strong>Full node dan sync</strong></p>
+          <p>Full node mendownload dan memverifikasi seluruh blockchain dari genesis. IBD menggunakan headers-first: download semua header dulu, validasi chain of work, baru download block. assumevalid melewati verifikasi script untuk block lama yang sudah diketahui valid. assumeUTXO memungkinkan node sync dari snapshot UTXO set yang sudah diverifikasi, tanpa mengorbankan security model jangka panjang.</p>
+
+          <p><strong>SPV dan light client</strong></p>
+          <p>SPV hanya menyimpan block header dan memverifikasi transaksi via Merkle proof. Bloom filter (BIP 37) adalah cara lama yang bocorkan privasi ke server. Compact block filter (BIP 157/158) adalah solusi modern: filter per block yang didownload dan diperiksa secara lokal tanpa memberitahu server transaksi mana yang dicari.</p>
+
+          <div class="p-callout">
+            <p>Angka-angka kunci: block header 80 bytes. Seluruh header chain saat ini sekitar 70 MB. Koneksi outbound umumnya 8 full-relay; implementasi modern menambah koneksi khusus block-relay. Compact block filter BIP 158 berukuran belasan KB untuk block penuh modern — tetap jauh lebih ringan daripada mengunduh block utuh. Erlay menghemat bandwidth sekitar 40% vs flooding biasa. Coinbase maturity 100 block sebelum bisa dibelanjakan.</p>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-20-3" data-sb="sb-20-3">
+            ← 20.3 — Konsensus & Mining
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-20-5" data-sb="sb-20-5">
+            20.5 — Layer 2 & Privacy →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 20.4 -->
+
+      <!-- ==============================
+           SECTION 20.5 · Layer 2 & Privacy
+      ============================== -->
+      <div class="p-section" id="section-20-5">
+        <div class="p-eyebrow">Bab 20 · 20.5</div>
+        <div class="p-heading">Lightning Network memungkinkan pembayaran instan off-chain, sementara teknik privacy mempersulit pelacakan transaksi on-chain</div>
+        <div class="p-title">Layer 2 & Privacy</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p><strong>Lightning Network</strong></p>
+          <p>Lightning Network adalah jaringan payment channel di atas Bitcoin. Dua pihak mengunci dana di multisig on-chain (funding transaction), lalu bertukar commitment transaction off-chain yang memperbarui saldo tanpa broadcast ke jaringan. Channel bisa ditutup kooperatif (langsung final) atau unilateral (butuh menunggu CSV timelock untuk memberi waktu pihak lain merespons jika ada kecurangan).</p>
+
+          <p><strong>HTLC dan routing</strong></p>
+          <p>HTLC (Hash Time Locked Contract) memungkinkan pembayaran multi-hop: setiap hop hanya meneruskan pembayaran kalau bisa mengungkap preimage dari hash tertentu, kalau tidak diklaim dalam waktu tertentu dana kembali. Routing di Lightning adalah source routing dengan onion encryption: pengirim menentukan seluruh jalur, setiap hop hanya tahu pendahulu dan penerusnya.</p>
+
+          <p><strong>Privacy on-chain</strong></p>
+          <p>Privacy di Bitcoin sulit karena blockchain publik dan transparan. CoinJoin menggabungkan input dari banyak pengguna dalam satu transaksi besar dengan output berukuran sama, memutus link antara input dan output tanpa kepercayaan. Payjoin menyertakan input dari penerima sehingga analisis chain tidak bisa dengan mudah mengidentifikasi siapa pengirim dan berapa yang dikirim. Silent Payments (BIP 352) memungkinkan alamat statis yang menghasilkan address unik setiap pembayaran tanpa koordinasi, menghilangkan address reuse.</p>
+
+          <div class="p-callout">
+            <p>Angka-angka kunci: Lightning channel adalah 2-of-2 multisig on-chain. HTLC timeout biasanya 40-144 block per hop. Onion routing maksimal 20 hop. CoinJoin output semua berukuran sama untuk anonimity set yang efektif. Silent Payments: satu address statis menghasilkan infinite address unik per pembayar.</p>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-20-4" data-sb="sb-20-4">
+            ← 20.4 — Jaringan & Node
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-20-6" data-sb="sb-20-6">
+            20.6 — Governance & Masa Depan →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 20.5 -->
+
+      <!-- ==============================
+           SECTION 20.6 · Governance & Masa Depan
+      ============================== -->
+      <div class="p-section" id="section-20-6">
+        <div class="p-eyebrow">Bab 20 · 20.6</div>
+        <div class="p-heading">Bitcoin tidak punya CEO — perubahan protokol terjadi melalui proses yang melibatkan banyak pihak dengan veto de facto di setiap layer</div>
+        <div class="p-title">Governance & Masa Depan</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p><strong>BIP dan proses perubahan</strong></p>
+          <p>BIP (Bitcoin Improvement Proposal) adalah dokumen formal yang mendeskripsikan proposal perubahan. Siapapun bisa mengajukan BIP, tapi tidak ada yang bisa memaksanya diimplementasikan. Perubahan yang tidak mendapat dukungan luas dari pengguna, developer, miner, dan bisnis tidak akan berhasil diaktifkan. Ini adalah fitur, bukan bug.</p>
+
+          <p><strong>Soft fork dan hard fork</strong></p>
+          <p>Soft fork adalah perubahan yang memperketat aturan konsensus, di mana node lama tetap menerima block baru sebagai valid. Hard fork memperlunak aturan, sehingga node lama akan menolak block baru dan jaringan terbelah. Bitcoin hanya pernah berhasil melakukan soft fork sejak 2013. SegWit diaktifkan 2017 setelah proses panjang via UASF. Taproot diaktifkan 2021 dengan Speedy Trial, lebih mulus karena ada konsensus luas dari awal.</p>
+
+          <p><strong>Pertanyaan terbuka</strong></p>
+          <p>Apakah fee saja cukup untuk security budget jangka panjang saat block reward mendekati nol? Tidak ada yang bisa menjawab ini dengan pasti, bergantung pada adopsi, harga, volume transaksi, dan struktur ekosistem di masa depan. Proposal aktif yang sedang didiskusikan: OP_CTV untuk covenant sederhana, OP_VAULT untuk self-custody yang lebih aman, ANYPREVOUT untuk eltoo sebagai alternatif Lightning yang lebih sederhana. Semua ini belum diaktifkan.</p>
+
+          <p><strong>Apa yang tidak berubah</strong></p>
+          <p>Di tengah semua perdebatan tentang masa depan, beberapa hal sudah settled: total suplai 21 juta BTC tidak bisa diubah tanpa hard fork yang tidak akan dapat dukungan. Proof of Work adalah mekanisme konsensus yang dipertahankan. Desentralisasi jaringan adalah nilai yang dijaga bersama. Perubahan harus kompatibel ke belakang atau tidak akan terjadi.</p>
+
+          <div class="p-callout">
+            <p>Angka-angka kunci: BIP pertama adalah BIP 1 oleh Amir Taaki (2011). SegWit aktif di block #481.824 (Agustus 2017). Taproot aktif di block #709.632 (November 2021). Block reward mencapai nol sekitar tahun 2140 sebagai konsekuensi matematis dari halving schedule yang sudah ditentukan sejak genesis block.</p>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-20-5" data-sb="sb-20-5">
+            ← 20.5 — Layer 2 & Privacy
+          </button>
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+        </div>
+      </div>
+      <!-- END SECTION 20.6 -->
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 23 · BAB 20 -->
+
+

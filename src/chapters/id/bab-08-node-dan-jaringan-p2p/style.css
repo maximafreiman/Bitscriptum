@@ -1,0 +1,155 @@
+/* ============================================================
+   PAGE 11 · BAB 8 · Node dan Jaringan P2P
+============================================================ */
+
+/* ============================================================
+   PAGE 11 · BAB 8 · 8.1 SIMULATION (P2P Network)
+============================================================ */
+.b08-s81-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b08-s81-legend { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:1rem; }
+.b08-s81-leg { display:flex; align-items:center; gap:6px; font-size:11px; color:#3A3A35; font-family:'Sora',sans-serif; }
+.b08-s81-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+#b08-s81-canvas { width:100%; border-radius:var(--border-radius-lg); background:#F4F4F0; display:block; cursor:pointer; }
+.b08-s81-hint { font-size:11px; color:#52524C; text-align:center; font-family:'Sora',sans-serif; margin-top:6px; margin-bottom:1rem; }
+.b08-s81-detail { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-lg); overflow:hidden; display:none; }
+.b08-s81-dhead { padding:8px 14px; font-size:11px; font-weight:500; font-family:'Sora',sans-serif; color:#fff; }
+.b08-s81-dbody { padding:12px 14px; display:flex; flex-direction:column; gap:8px; }
+.b08-s81-drow { display:flex; gap:10px; align-items:flex-start; }
+.b08-s81-dk { font-size:11px; color:#52524C; min-width:110px; flex-shrink:0; font-family:'Sora',sans-serif; }
+.b08-s81-dv { font-size:11px; font-family:'Courier Prime',monospace; flex:1; word-break:break-word; color:#1A1A18; }
+.b08-s81-dv.p { color:#534AB7; font-weight:500; }
+.b08-s81-dv.g { color:#0F6E56; font-weight:500; }
+.b08-s81-dv.m { color:#854F0B; font-weight:500; }
+.b08-s81-dv.r { color:#A32D2D; font-weight:500; }
+
+/* ============================================================
+   PAGE 11 · BAB 8 · 8.2 SIMULATION (P2P vs Terpusat)
+============================================================ */
+.b08-s82-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b08-s82-tabs { display:flex; gap:0; border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-md); overflow:hidden; margin-bottom:1rem; }
+.b08-s82-tab { flex:1; padding:8px 12px; font-size:12px; font-weight:500; background:transparent; color:#3A3A35; border:none; cursor:pointer; transition:all 0.15s; font-family:'Sora',sans-serif; }
+.b08-s82-tab.active-p2p { background:#534AB7; color:#fff; }
+.b08-s82-tab.active-cl  { background:#A32D2D; color:#fff; }
+.b08-s82-cv { width:100%; border-radius:var(--border-radius-lg); display:block; cursor:crosshair; }
+.b08-s82-pane { display:none; flex-direction:column; gap:10px; }
+.b08-s82-pane.show { display:flex; }
+.b08-s82-hint { font-size:11px; color:#52524C; text-align:center; font-family:'Sora',sans-serif; }
+.b08-s82-ctrl { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.b08-s82-stat { font-size:11px; color:#3A3A35; padding:4px 10px; background:#F4F4F0; border-radius:99px; font-family:'Sora',sans-serif; }
+.b08-s82-note { padding:10px 14px; border-radius:var(--border-radius-md); font-size:12px; line-height:1.6; font-family:'Sora',sans-serif; }
+.b08-s82-note.safe-note { background:#EAF3DE; color:#27500A; border:0.5px solid rgba(59,109,17,0.2); }
+.b08-s82-note.warn-note { background:#FAEEDA; color:#633806; border:0.5px solid rgba(133,79,11,0.2); }
+.b08-s82-note.dead-note { background:#FCEBEB; color:#791F1F; border:0.5px solid rgba(163,45,45,0.2); }
+
+/* ============================================================
+   PAGE 11 · BAB 8 · 8.3 SIMULATION (Propagasi Transaksi)
+============================================================ */
+.b08-s83-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b08-s83-top { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:10px; }
+.b08-s83-btn-primary { padding:7px 16px; font-size:12px; font-weight:500; border-radius:99px; border:none; cursor:pointer; font-family:'Sora',sans-serif; background:#534AB7; color:#fff; transition:all 0.15s; }
+.b08-s83-btn-primary:hover { background:#4338a3; }
+.b08-s83-btn-primary:disabled { background:#52524C; cursor:not-allowed; }
+.b08-s83-btn-reset { padding:7px 14px; font-size:12px; font-weight:500; border-radius:99px; border:0.5px solid rgba(124,58,237,0.2); background:transparent; color:#3A3A35; cursor:pointer; font-family:'Sora',sans-serif; }
+.b08-s83-stat { font-size:11px; color:#3A3A35; padding:4px 10px; background:#F4F4F0; border-radius:99px; font-family:'Sora',sans-serif; }
+.b08-s83-cv { width:100%; border-radius:var(--border-radius-lg); display:block; }
+.b08-s83-log { display:flex; flex-direction:column; gap:4px; max-height:120px; overflow-y:auto; padding:8px 12px; background:#F4F4F0; border-radius:var(--border-radius-md); font-size:11px; font-family:'Courier Prime',monospace; margin-top:8px; }
+.b08-s83-log-row { display:flex; gap:8px; align-items:baseline; }
+.b08-s83-log-t { color:#52524C; flex-shrink:0; min-width:48px; }
+.b08-s83-log-m { color:#1A1A18; }
+.b08-s83-log-m.ok-log  { color:#0F6E56; }
+.b08-s83-log-m.dup-log { color:#854F0B; }
+.b08-s83-note { padding:10px 14px; border-radius:var(--border-radius-md); font-size:12px; line-height:1.6; font-family:'Sora',sans-serif; margin-top:8px; }
+.b08-s83-note.idle-note    { background:#F4F4F0; color:#3A3A35; }
+.b08-s83-note.running-note { background:#EEEDFE; color:#3C3489; border:0.5px solid rgba(83,74,183,0.2); }
+.b08-s83-note.done-note    { background:#EAF3DE; color:#27500A; border:0.5px solid rgba(59,109,17,0.2); }
+
+/* ============================================================
+   PAGE 11 · BAB 8 · 8.4 SIMULATION (Propagasi Block)
+============================================================ */
+.b08-s84-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b08-s84-tabs { display:flex; gap:0; border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-md); overflow:hidden; margin-bottom:1rem; }
+.b08-s84-tab { flex:1; padding:8px 12px; font-size:12px; font-weight:500; background:transparent; color:#3A3A35; border:none; cursor:pointer; font-family:'Sora',sans-serif; transition:all 0.15s; }
+.b08-s84-tab.s84-act { background:#534AB7; color:#fff; }
+.b08-s84-pane { display:none; flex-direction:column; gap:10px; }
+.b08-s84-pane.show { display:flex; }
+.b08-s84-compare { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.b08-s84-col { display:flex; flex-direction:column; gap:6px; }
+.b08-s84-col-head { padding:7px 12px; font-size:11px; font-weight:500; border-radius:var(--border-radius-md); text-align:center; font-family:'Sora',sans-serif; }
+.b08-s84-col-head.s84-full    { background:#854F0B; color:#FAEEDA; }
+.b08-s84-col-head.s84-compact { background:#0F6E56; color:#fff; }
+.b08-s84-cv { width:100%; border-radius:var(--border-radius-md); display:block; }
+.b08-s84-col-stat { font-size:10px; font-family:'Courier Prime',monospace; padding:5px 8px; border-radius:4px; background:#F4F4F0; }
+.b08-s84-col-stat.s84-full-stat span    { color:#854F0B; font-weight:500; }
+.b08-s84-col-stat.s84-compact-stat span { color:#0F6E56; font-weight:500; }
+.b08-s84-ctrl { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.b08-s84-btn-primary { padding:6px 14px; font-size:12px; font-weight:500; border-radius:99px; border:none; cursor:pointer; font-family:'Sora',sans-serif; background:#534AB7; color:#fff; }
+.b08-s84-btn-primary:disabled { background:#52524C; cursor:not-allowed; }
+.b08-s84-btn-sec { padding:6px 14px; font-size:12px; font-weight:500; border-radius:99px; border:0.5px solid rgba(124,58,237,0.2); background:transparent; color:#3A3A35; cursor:pointer; font-family:'Sora',sans-serif; }
+.b08-s84-note { padding:10px 14px; border-radius:var(--border-radius-md); font-size:12px; line-height:1.6; font-family:'Sora',sans-serif; }
+.b08-s84-note.idle-note { background:#F4F4F0; color:#3A3A35; }
+.b08-s84-note.run-note  { background:#EEEDFE; color:#3C3489; border:0.5px solid rgba(83,74,183,0.2); }
+.b08-s84-note.done-note { background:#EAF3DE; color:#27500A; border:0.5px solid rgba(59,109,17,0.2); }
+.b08-s84-chain-label { font-size:11px; font-weight:500; color:#1A1A18; font-family:'Sora',sans-serif; }
+.b08-s84-chain-row { display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+.b08-s84-block { width:56px; height:38px; border-radius:6px; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:9px; font-weight:500; font-family:'Courier Prime',monospace; flex-shrink:0; text-align:center; line-height:1.3; }
+.b08-s84-block.s84-confirmed { background:#534AB7; color:#fff; }
+.b08-s84-block.s84-main      { background:#0F6E56; color:#fff; }
+.b08-s84-block.s84-orphan    { background:#F4F4F0; color:#52524C; border:0.5px solid rgba(124,58,237,0.12); text-decoration:line-through; }
+.b08-s84-arrow { color:#52524C; font-size:12px; flex-shrink:0; }
+.b08-s84-chain-tag { font-size:10px; color:#0F6E56; font-family:'Sora',sans-serif; }
+.b08-s84-chain-tag.s84-tag-orphan { color:#52524C; }
+.b08-s84-orphan-note { padding:8px 12px; border-radius:var(--border-radius-md); font-size:11px; line-height:1.6; font-family:'Sora',sans-serif; background:#FAEEDA; color:#633806; border:0.5px solid rgba(133,79,11,0.2); }
+.b08-s84-sub-label { font-size:11px; font-weight:500; color:#1A1A18; font-family:'Sora',sans-serif; margin-top:4px; }
+
+/* ============================================================
+   PAGE 11 · BAB 8 · 8.5 SIMULATION (Peer Discovery)
+============================================================ */
+.b08-s85-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b08-s85-steps { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:1rem; }
+.b08-s85-step-btn { padding:5px 14px; font-size:11px; font-weight:500; border-radius:99px; border:0.5px solid rgba(124,58,237,0.2); background:transparent; color:#3A3A35; cursor:pointer; font-family:'Sora',sans-serif; transition:all 0.15s; }
+.b08-s85-step-btn:hover { border-color:#534AB7; color:#534AB7; }
+.b08-s85-step-btn.active { background:#534AB7; color:#fff; border-color:#534AB7; }
+.b08-s85-cv { width:100%; border-radius:var(--border-radius-lg); display:block; }
+.b08-s85-detail { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-lg); overflow:hidden; margin-top:8px; }
+.b08-s85-dhead { padding:8px 14px; font-size:11px; font-weight:500; background:#F4F4F0; color:#1A1A18; font-family:'Sora',sans-serif; }
+.b08-s85-dbody { padding:12px 14px; font-size:12px; color:#3A3A35; line-height:1.7; font-family:'Sora',sans-serif; }
+.b08-s85-dbody b { color:#1A1A18; }
+.b08-s85-dbody code { font-family:'Courier Prime',monospace; font-size:11px; background:#F4F4F0; padding:1px 5px; border-radius:3px; color:#534AB7; }
+.b08-s85-note { padding:10px 14px; border-radius:var(--border-radius-md); font-size:12px; line-height:1.6; font-family:'Sora',sans-serif; margin-top:8px; }
+.b08-s85-note.p { background:#EEEDFE; color:#3C3489; border:0.5px solid rgba(83,74,183,0.2); }
+.b08-s85-note.g { background:#EAF3DE; color:#27500A; border:0.5px solid rgba(59,109,17,0.2); }
+.b08-s85-note.m { background:#FAEEDA; color:#633806; border:0.5px solid rgba(133,79,11,0.2); }
+
+/* ============================================================
+   PAGE 11 · BAB 8 · 8.6 SIMULATION (Network Health Dashboard)
+============================================================ */
+.b08-s86-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b08-s86-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
+.b08-s86-card { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-lg); overflow:hidden; }
+.b08-s86-card-head { padding:8px 14px; font-size:11px; font-weight:500; font-family:'Sora',sans-serif; background:#F4F4F0; color:#1A1A18; border-bottom:0.5px solid rgba(124,58,237,0.08); }
+.b08-s86-card-body { padding:12px 14px; display:flex; flex-direction:column; gap:8px; }
+.b08-s86-metric { display:flex; flex-direction:column; gap:2px; }
+.b08-s86-metric-val { font-size:26px; font-weight:700; font-family:'Courier Prime',monospace; line-height:1; }
+.b08-s86-metric-sub { font-size:10px; color:#52524C; font-family:'Sora',sans-serif; }
+.good-val { color:#0F6E56; } .warn-val { color:#854F0B; } .bad-val { color:#A32D2D; }
+.b08-s86-inds { display:flex; flex-direction:column; gap:5px; }
+.b08-s86-ind { display:flex; align-items:center; gap:8px; }
+.b08-s86-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.b08-s86-ind-label { font-size:11px; color:#1A1A18; flex:1; font-family:'Sora',sans-serif; }
+.b08-s86-ind-val { font-size:11px; font-family:'Courier Prime',monospace; }
+.b08-s86-bars { display:flex; flex-direction:column; gap:5px; }
+.b08-s86-bar-row { display:flex; align-items:center; gap:8px; }
+.b08-s86-bar-label { font-size:10px; color:#3A3A35; min-width:80px; flex-shrink:0; font-family:'Sora',sans-serif; }
+.b08-s86-bar-track { flex:1; height:8px; background:#EEEDFE; border-radius:99px; overflow:hidden; }
+.b08-s86-bar-fill { height:100%; border-radius:99px; }
+.b08-s86-bar-pct { font-size:10px; color:#52524C; min-width:28px; text-align:right; font-family:'Courier Prime',monospace; }
+.b08-s86-donut { width:100%; display:block; }
+.b08-s86-footnote { font-size:10px; color:#52524C; line-height:1.5; font-family:'Sora',sans-serif; }
+.b08-s86-social { border:0.5px solid rgba(83,74,183,0.2); border-radius:var(--border-radius-lg); background:#EEEDFE; padding:12px 14px; display:flex; flex-direction:column; gap:8px; }
+.b08-s86-social-head { font-size:11px; font-weight:500; color:#3C3489; font-family:'Sora',sans-serif; }
+.b08-s86-social-items { display:flex; flex-direction:column; gap:6px; }
+.b08-s86-social-item { display:flex; gap:10px; align-items:flex-start; }
+.b08-s86-social-icon { font-size:14px; flex-shrink:0; line-height:1.4; }
+.b08-s86-social-text { font-size:11px; color:#3C3489; line-height:1.5; font-family:'Sora',sans-serif; }
+.b08-s86-social-text b { color:#1A1A6E; }
+

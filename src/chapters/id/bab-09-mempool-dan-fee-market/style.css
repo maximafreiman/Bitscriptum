@@ -1,0 +1,255 @@
+/* ============================================================
+   PAGE 12 · BAB 9 · Mempool dan Fee Market
+============================================================ */
+
+/* ============================================================
+   PAGE 12 · BAB 9 · 9.1 SIMULATION (Mempool)
+============================================================ */
+.b09-s91-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b09-s91-top { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:10px; }
+.b09-s91-step-label { font-size:11px; color:#52524C; font-family:'Sora',sans-serif; }
+.b09-s91-btn-add { padding:6px 14px; font-size:12px; font-weight:500; border-radius:99px; border:none; cursor:pointer; font-family:'Sora',sans-serif; background:#534AB7; color:#fff; transition:all 0.15s; }
+.b09-s91-btn-add:hover { background:#4338a3; }
+.b09-s91-btn-mine { padding:6px 14px; font-size:12px; font-weight:500; border-radius:99px; border:0.5px solid rgba(124,58,237,0.3); background:transparent; color:#534AB7; cursor:pointer; font-family:'Sora',sans-serif; }
+.b09-s91-btn-mine:hover { background:#EEEDFE; }
+.b09-s91-btn-reset { padding:6px 14px; font-size:12px; font-weight:500; border-radius:99px; border:0.5px solid rgba(124,58,237,0.12); background:transparent; color:#3A3A35; cursor:pointer; font-family:'Sora',sans-serif; }
+.b09-s91-stat { font-size:11px; color:#3A3A35; padding:4px 10px; background:#F4F4F0; border-radius:99px; font-family:'Sora',sans-serif; }
+.b09-s91-legend { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:10px; }
+.b09-s91-leg { display:flex; align-items:center; gap:5px; font-size:10px; color:#3A3A35; font-family:'Sora',sans-serif; }
+.b09-s91-leg-dot { width:8px; height:8px; border-radius:50%; }
+.b09-s91-body { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
+.b09-s91-col { display:flex; flex-direction:column; gap:6px; }
+.b09-s91-col-head { font-size:11px; font-weight:500; color:#1A1A18; font-family:'Sora',sans-serif; padding:0 2px; }
+.b09-s91-col-sub { font-size:10px; color:#52524C; font-family:'Sora',sans-serif; padding:0 2px; }
+.b09-s91-pool { display:flex; flex-direction:column; gap:4px; min-height:200px; padding:8px; background:#F4F4F0; border-radius:var(--border-radius-md); border:0.5px solid rgba(124,58,237,0.1); }
+.b09-s91-block { display:flex; flex-direction:column; gap:4px; min-height:200px; padding:8px; background:#F4F4F0; border-radius:var(--border-radius-md); border:0.5px solid rgba(124,58,237,0.1); }
+.b09-s91-empty { font-size:11px; color:#52524C; text-align:center; padding:20px 0; font-family:'Sora',sans-serif; }
+.b09-s91-tx { display:flex; align-items:center; gap:8px; padding:5px 8px; border-radius:6px; }
+.b09-s91-tx.high { background:rgba(15,110,86,0.12); }
+.b09-s91-tx.med  { background:rgba(83,74,183,0.08); }
+.b09-s91-tx.low  { background:rgba(133,79,11,0.08); }
+.b09-s91-tx-num { font-size:10px; color:#52524C; min-width:18px; font-family:'Courier Prime',monospace; }
+.b09-s91-tx-bar { width:4px; border-radius:99px; flex-shrink:0; }
+.b09-s91-tx-bar.high { background:#0F6E56; height:28px; }
+.b09-s91-tx-bar.med  { background:#534AB7; height:22px; }
+.b09-s91-tx-bar.low  { background:#854F0B; height:16px; }
+.b09-s91-tx-id { font-size:10px; font-family:'Courier Prime',monospace; color:#3A3A35; flex:1; }
+.b09-s91-tx-fee { font-size:10px; font-family:'Courier Prime',monospace; font-weight:500; }
+.b09-s91-tx-fee.high { color:#0F6E56; }
+.b09-s91-tx-fee.med  { color:#534AB7; }
+.b09-s91-tx-fee.low  { color:#854F0B; }
+.b09-s91-tx-size { font-size:10px; color:#52524C; font-family:'Courier Prime',monospace; }
+.b09-s91-cap { display:flex; flex-direction:column; gap:3px; }
+.b09-s91-cap-label { font-size:10px; color:#52524C; font-family:'Sora',sans-serif; }
+.b09-s91-cap-track { height:6px; background:#EEEDFE; border-radius:99px; overflow:hidden; }
+.b09-s91-cap-fill { height:100%; border-radius:99px; transition:width 0.4s ease; background:#534AB7; }
+.b09-s91-note { padding:10px 14px; border-radius:var(--border-radius-md); font-size:12px; line-height:1.6; font-family:'Sora',sans-serif; }
+.b09-s91-note.idle-note { background:#F4F4F0; color:#3A3A35; }
+.b09-s91-note.done-note { background:#EAF3DE; color:#27500A; border:0.5px solid rgba(59,109,17,0.2); }
+
+/* ============================================================
+   PAGE 12 · BAB 9 · 9.2 SIMULATION (Fee Rate Kalkulator)
+============================================================ */
+.b09-s92-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b09-s92-tabs { display:flex; gap:0; border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-md); overflow:hidden; margin-bottom:1rem; }
+.b09-s92-tab { flex:1; padding:8px 12px; font-size:12px; font-weight:500; background:transparent; color:#3A3A35; border:none; cursor:pointer; font-family:'Sora',sans-serif; transition:all 0.15s; }
+.b09-s92-tab.s92-act { background:#534AB7; color:#fff; }
+.b09-s92-pane { display:none; flex-direction:column; gap:10px; }
+.b09-s92-pane.show { display:flex; }
+.b09-s92-inputs { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.b09-s92-field { display:flex; flex-direction:column; gap:5px; }
+.b09-s92-label { font-size:11px; font-weight:500; color:#1A1A18; font-family:'Sora',sans-serif; }
+.b09-s92-label-sub { font-size:10px; color:#52524C; font-weight:400; }
+.b09-s92-input { padding:8px 12px; font-size:13px; font-family:'Courier Prime',monospace; border:0.5px solid rgba(124,58,237,0.2); border-radius:var(--border-radius-md); background:#F4F4F0; color:#1A1A18; width:100%; }
+.b09-s92-input:focus { outline:none; border-color:#534AB7; }
+.b09-s92-result { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-lg); overflow:hidden; }
+.b09-s92-result-head { padding:10px 14px; display:flex; align-items:baseline; gap:10px; }
+.b09-s92-result-val { font-size:32px; font-weight:700; font-family:'Courier Prime',monospace; line-height:1; }
+.b09-s92-result-unit { font-size:13px; color:#3A3A35; font-family:'Sora',sans-serif; }
+.b09-s92-result-body { padding:10px 14px; display:flex; flex-direction:column; gap:8px; border-top:0.5px solid rgba(124,58,237,0.08); }
+.b09-s92-zone-wrap { display:flex; flex-direction:column; gap:4px; }
+.b09-s92-zone-bar { height:12px; border-radius:99px; display:flex; overflow:hidden; position:relative; }
+.b09-s92-zone-low  { flex:3; background:#FAEEDA; }
+.b09-s92-zone-med  { flex:3; background:#EEEDFE; }
+.b09-s92-zone-high { flex:4; background:#EAF3DE; }
+.b09-s92-zone-marker { position:absolute; top:-2px; width:3px; height:16px; background:#1A1A18; border-radius:99px; transition:left 0.3s ease; }
+.b09-s92-zone-labels { display:flex; justify-content:space-between; font-size:9px; color:#52524C; font-family:'Sora',sans-serif; }
+.b09-s92-zone-legend { display:flex; gap:10px; }
+.b09-s92-zone-leg { display:flex; align-items:center; gap:4px; font-size:10px; color:#3A3A35; font-family:'Sora',sans-serif; }
+.b09-s92-zone-dot { width:8px; height:8px; border-radius:50%; }
+.b09-s92-row { display:flex; justify-content:space-between; align-items:center; }
+.b09-s92-row-label { font-size:11px; color:#3A3A35; font-family:'Sora',sans-serif; }
+.b09-s92-row-val { font-size:11px; font-family:'Courier Prime',monospace; font-weight:500; color:#1A1A18; }
+.b09-s92-row-val.good { color:#0F6E56; } .b09-s92-row-val.warn { color:#854F0B; } .b09-s92-row-val.bad { color:#A32D2D; }
+.b09-s92-compare { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.b09-s92-cmp-card { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-lg); overflow:hidden; }
+.b09-s92-cmp-head { padding:7px 12px; font-size:11px; font-weight:500; font-family:'Sora',sans-serif; }
+.b09-s92-cmp-head.s92-legacy { background:#854F0B; color:#FAEEDA; }
+.b09-s92-cmp-head.s92-segwit { background:#0F6E56; color:#fff; }
+.b09-s92-cmp-body { padding:10px 12px; display:flex; flex-direction:column; gap:6px; }
+.b09-s92-cmp-row { display:flex; justify-content:space-between; align-items:center; }
+.b09-s92-cmp-label { font-size:10px; color:#3A3A35; font-family:'Sora',sans-serif; }
+.b09-s92-cmp-val { font-size:11px; font-family:'Courier Prime',monospace; color:#1A1A18; }
+.b09-s92-cmp-val.s92-good { color:#0F6E56; font-weight:500; }
+.b09-s92-cmp-val.s92-warn { color:#854F0B; }
+.b09-s92-note { padding:10px 14px; border-radius:var(--border-radius-md); font-size:12px; line-height:1.6; font-family:'Sora',sans-serif; }
+.b09-s92-note.s92-note-info { background:#EEEDFE; color:#3C3489; border:0.5px solid rgba(83,74,183,0.2); }
+.b09-s92-note.s92-note-good { background:#EAF3DE; color:#27500A; border:0.5px solid rgba(59,109,17,0.2); }
+.b09-s92-note.s92-note-warn { background:#FAEEDA; color:#633806; border:0.5px solid rgba(133,79,11,0.2); }
+.b09-s92-note.s92-note-bad  { background:#FCEBEB; color:#791F1F; border:0.5px solid rgba(163,45,45,0.2); }
+
+/* ============================================================
+   PAGE 12 · BAB 9 · 9.3 SIMULATION (RBF dan CPFP)
+============================================================ */
+.b09-s93-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b09-s93-tabs { display:flex; gap:0; border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-md); overflow:hidden; margin-bottom:1rem; }
+.b09-s93-tab { flex:1; padding:8px 12px; font-size:12px; font-weight:500; background:transparent; color:#3A3A35; border:none; cursor:pointer; font-family:'Sora',sans-serif; transition:all 0.15s; }
+.b09-s93-tab.s93-act { background:#534AB7; color:#fff; }
+.b09-s93-pane { display:none; flex-direction:column; gap:10px; }
+.b09-s93-pane.show { display:flex; }
+.b09-s93-hint { font-size:11px; color:#3A3A35; line-height:1.6; font-family:'Sora',sans-serif; }
+.b09-s93-queue { display:flex; flex-direction:column; gap:4px; padding:8px; background:#F4F4F0; border-radius:var(--border-radius-md); border:0.5px solid rgba(124,58,237,0.1); }
+.b09-s93-tx { display:flex; align-items:center; gap:8px; padding:6px 10px; border-radius:6px; transition:all 0.3s; }
+.b09-s93-tx.high    { background:rgba(15,110,86,0.12); }
+.b09-s93-tx.med     { background:rgba(83,74,183,0.08); }
+.b09-s93-tx.low     { background:rgba(133,79,11,0.08); }
+.b09-s93-tx.stuck   { background:rgba(163,45,45,0.08); border:0.5px dashed rgba(163,45,45,0.3); }
+.b09-s93-tx.new-tx  { background:rgba(15,110,86,0.18); border:0.5px solid rgba(15,110,86,0.4); }
+.b09-s93-tx.parent  { background:rgba(133,79,11,0.08); border:0.5px dashed rgba(133,79,11,0.3); }
+.b09-s93-tx.package { background:rgba(15,110,86,0.12); border:0.5px solid rgba(15,110,86,0.4); }
+.b09-s93-tx-num { font-size:10px; color:#52524C; min-width:18px; font-family:'Courier Prime',monospace; }
+.b09-s93-tx-bar { width:4px; border-radius:99px; flex-shrink:0; height:22px; }
+.b09-s93-tx-bar.high { background:#0F6E56; } .b09-s93-tx-bar.med { background:#534AB7; }
+.b09-s93-tx-bar.low  { background:#854F0B; } .b09-s93-tx-bar.red { background:#A32D2D; }
+.b09-s93-tx-id { font-size:10px; font-family:'Courier Prime',monospace; color:#3A3A35; flex:1; }
+.b09-s93-tx-badge { font-size:9px; padding:1px 6px; border-radius:99px; font-family:'Sora',sans-serif; flex-shrink:0; }
+.b09-s93-tx-badge.stuck { background:#FCEBEB; color:#791F1F; }
+.b09-s93-tx-badge.new   { background:#EAF3DE; color:#27500A; }
+.b09-s93-tx-badge.parent { background:#FAEEDA; color:#633806; }
+.b09-s93-tx-badge.pkg   { background:#EAF3DE; color:#27500A; }
+.b09-s93-tx-fee { font-size:10px; font-family:'Courier Prime',monospace; font-weight:500; }
+.b09-s93-tx-fee.high { color:#0F6E56; } .b09-s93-tx-fee.med { color:#534AB7; }
+.b09-s93-tx-fee.low  { color:#854F0B; } .b09-s93-tx-fee.bad { color:#A32D2D; }
+.b09-s93-detail { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-lg); overflow:hidden; }
+.b09-s93-detail-head { padding:8px 14px; font-size:11px; font-weight:500; background:#F4F4F0; color:#1A1A18; font-family:'Sora',sans-serif; }
+.b09-s93-detail-body { padding:10px 14px; display:flex; flex-direction:column; gap:6px; }
+.b09-s93-drow { display:flex; justify-content:space-between; align-items:center; }
+.b09-s93-dk { font-size:11px; color:#3A3A35; font-family:'Sora',sans-serif; }
+.b09-s93-dv { font-size:11px; font-family:'Courier Prime',monospace; font-weight:500; color:#1A1A18; }
+.b09-s93-dv.s93-good { color:#0F6E56; } .b09-s93-dv.s93-warn { color:#854F0B; }
+.b09-s93-dv.s93-bad  { color:#A32D2D; } .b09-s93-dv.s93-purp { color:#534AB7; }
+.b09-s93-btn-primary { padding:6px 14px; font-size:12px; font-weight:500; border-radius:99px; border:none; cursor:pointer; font-family:'Sora',sans-serif; background:#534AB7; color:#fff; }
+.b09-s93-btn-primary:disabled { background:#52524C; cursor:not-allowed; }
+.b09-s93-btn-sec { padding:6px 14px; font-size:12px; font-weight:500; border-radius:99px; border:0.5px solid rgba(124,58,237,0.2); background:transparent; color:#534AB7; cursor:pointer; font-family:'Sora',sans-serif; }
+.b09-s93-note { padding:10px 14px; border-radius:var(--border-radius-md); font-size:12px; line-height:1.6; font-family:'Sora',sans-serif; }
+.b09-s93-note.s93-note-info { background:#EEEDFE; color:#3C3489; border:0.5px solid rgba(83,74,183,0.2); }
+.b09-s93-note.s93-note-good { background:#EAF3DE; color:#27500A; border:0.5px solid rgba(59,109,17,0.2); }
+
+/* ============================================================
+   PAGE 12 · BAB 9 · 9.4 SIMULATION (Mempool Congestion)
+============================================================ */
+.b09-s94-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b09-s94-toggle { display:flex; gap:0; border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-md); overflow:hidden; width:fit-content; }
+.b09-s94-tog { padding:7px 16px; font-size:12px; font-weight:500; background:transparent; color:#3A3A35; border:none; cursor:pointer; font-family:'Sora',sans-serif; transition:all 0.2s; }
+.b09-s94-tog.quiet-tog { background:#0F6E56; color:#fff; }
+.b09-s94-tog.busy-tog  { background:#A32D2D; color:#fff; }
+.b09-s94-subtitle { font-size:11px; color:#52524C; font-family:'Sora',sans-serif; }
+.b09-s94-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
+.b09-s94-card { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-lg); overflow:hidden; }
+.b09-s94-card-head { padding:8px 14px; font-size:11px; font-weight:500; font-family:'Sora',sans-serif; }
+.b09-s94-card-head.quiet-head { background:#0F6E56; color:#fff; }
+.b09-s94-card-head.busy-head  { background:#A32D2D; color:#fff; }
+.b09-s94-card-body { padding:12px 14px; display:flex; flex-direction:column; gap:8px; }
+.b09-s94-cv { width:100%; display:block; border-radius:var(--border-radius-md); }
+.b09-s94-metric { display:flex; flex-direction:column; gap:2px; }
+.b09-s94-metric-label { font-size:10px; color:#52524C; font-family:'Sora',sans-serif; }
+.b09-s94-metric-val { font-size:16px; font-weight:700; font-family:'Courier Prime',monospace; }
+.b09-s94-metric-val.s94-good { color:#0F6E56; }
+.b09-s94-metric-val.s94-bad  { color:#A32D2D; }
+.b09-s94-fee-table { display:flex; flex-direction:column; gap:4px; }
+.b09-s94-fee-row { display:flex; align-items:center; gap:8px; }
+.b09-s94-fee-label { font-size:10px; color:#3A3A35; min-width:90px; font-family:'Sora',sans-serif; }
+.b09-s94-fee-bar-wrap { flex:1; height:8px; background:#EEEDFE; border-radius:99px; overflow:hidden; }
+.b09-s94-fee-bar { height:100%; border-radius:99px; transition:width 0.6s ease; }
+.b09-s94-fee-val { font-size:10px; font-family:'Courier Prime',monospace; min-width:70px; text-align:right; font-weight:500; }
+.b09-s94-fee-val.s94-good { color:#0F6E56; }
+.b09-s94-fee-val.s94-warn { color:#854F0B; }
+.b09-s94-fee-val.s94-bad  { color:#A32D2D; }
+.b09-s94-strategy { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-lg); overflow:hidden; margin-bottom:10px; }
+.b09-s94-strategy-head { padding:8px 14px; font-size:11px; font-weight:500; font-family:'Sora',sans-serif; background:#F4F4F0; color:#1A1A18; }
+.b09-s94-strategy-body { padding:10px 14px; display:flex; flex-direction:column; gap:6px; }
+.b09-s94-strategy-item { display:flex; gap:8px; align-items:flex-start; font-size:11px; color:#3A3A35; font-family:'Sora',sans-serif; }
+.b09-s94-strategy-icon { flex-shrink:0; font-size:13px; }
+.b09-s94-note { padding:10px 14px; border-radius:var(--border-radius-md); font-size:12px; line-height:1.6; font-family:'Sora',sans-serif; }
+.b09-s94-note.quiet-note { background:#EAF3DE; color:#27500A; border:0.5px solid rgba(59,109,17,0.2); }
+.b09-s94-note.busy-note  { background:#FCEBEB; color:#791F1F; border:0.5px solid rgba(163,45,45,0.2); }
+
+/* ============================================================
+   PAGE 12 · BAB 9 · 9.5 SIMULATION (Fee Estimator)
+============================================================ */
+.b09-s95-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b09-s95-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
+.b09-s95-group { display:flex; flex-direction:column; gap:8px; }
+.b09-s95-group-label { font-size:11px; font-weight:500; color:#1A1A18; font-family:'Sora',sans-serif; }
+.b09-s95-group-sub { font-size:10px; color:#52524C; font-family:'Sora',sans-serif; margin-top:-4px; }
+.b09-s95-opts { display:flex; flex-direction:column; gap:4px; }
+.b09-s95-opt { display:flex; align-items:center; gap:8px; padding:7px 10px; border-radius:var(--border-radius-md); border:0.5px solid rgba(124,58,237,0.12); cursor:pointer; transition:all 0.15s; background:transparent; }
+.b09-s95-opt:hover { border-color:#534AB7; }
+.b09-s95-opt.sel { border-color:#534AB7; background:#EEEDFE; }
+.b09-s95-radio { width:14px; height:14px; border-radius:50%; border:1.5px solid rgba(124,58,237,0.3); flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+.b09-s95-opt.sel .b09-s95-radio { border-color:#534AB7; background:#534AB7; }
+.b09-s95-radio-dot { width:5px; height:5px; border-radius:50%; background:#fff; }
+.b09-s95-opt-label { font-size:12px; font-family:'Sora',sans-serif; color:#1A1A18; flex:1; }
+.b09-s95-opt-val { font-size:10px; font-family:'Courier Prime',monospace; color:#52524C; }
+.b09-s95-result { border:0.5px solid rgba(124,58,237,0.2); border-radius:var(--border-radius-lg); overflow:hidden; margin-bottom:10px; }
+.b09-s95-result-head { padding:10px 14px; display:flex; align-items:baseline; gap:10px; border-bottom:0.5px solid rgba(124,58,237,0.1); }
+.b09-s95-result-label { font-size:11px; color:#3A3A35; font-family:'Sora',sans-serif; }
+.b09-s95-result-val { font-size:36px; font-weight:700; font-family:'Courier Prime',monospace; line-height:1; }
+.b09-s95-result-unit { font-size:13px; color:#3A3A35; font-family:'Sora',sans-serif; }
+.b09-s95-result-body { padding:10px 14px; display:flex; flex-direction:column; gap:8px; }
+.b09-s95-result-row { display:flex; justify-content:space-between; align-items:center; }
+.b09-s95-result-key { font-size:11px; color:#3A3A35; font-family:'Sora',sans-serif; }
+.b09-s95-result-v { font-size:11px; font-family:'Courier Prime',monospace; font-weight:500; color:#1A1A18; }
+.b09-s95-result-v.s95-good { color:#0F6E56; } .b09-s95-result-v.s95-warn { color:#854F0B; } .b09-s95-result-v.s95-bad { color:#A32D2D; }
+.b09-s95-queue { display:flex; flex-direction:column; gap:4px; }
+.b09-s95-queue-label { font-size:10px; color:#52524C; font-family:'Sora',sans-serif; }
+.b09-s95-queue-track { display:flex; gap:3px; flex-wrap:wrap; align-items:center; }
+.b09-s95-block { width:22px; height:22px; border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:8px; font-weight:500; font-family:'Sora',sans-serif; }
+.b09-s95-block.full    { background:#A32D2D; color:#fff; }
+.b09-s95-block.your    { background:#0F6E56; color:#fff; }
+.b09-s95-block.empty   { background:#F4F4F0; border:0.5px solid rgba(124,58,237,0.1); color:#52524C; }
+.b09-s95-more { font-size:10px; color:#52524C; font-family:'Sora',sans-serif; margin-left:4px; }
+.b09-s95-explain { padding:10px 14px; border-radius:var(--border-radius-md); font-size:11px; line-height:1.7; font-family:'Sora',sans-serif; }
+.b09-s95-explain.s95-good { background:#EAF3DE; color:#27500A; border:0.5px solid rgba(59,109,17,0.2); }
+.b09-s95-explain.s95-warn { background:#FAEEDA; color:#633806; border:0.5px solid rgba(133,79,11,0.2); }
+.b09-s95-explain.s95-bad  { background:#FCEBEB; color:#791F1F; border:0.5px solid rgba(163,45,45,0.2); }
+
+/* ============================================================
+   PAGE 12 · BAB 9 · 9.6 SIMULATION (Fee Market Future)
+============================================================ */
+.b09-s96-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b09-s96-tabs { display:flex; gap:0; border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-md); overflow:hidden; margin-bottom:1rem; }
+.b09-s96-tab { flex:1; padding:8px 12px; font-size:12px; font-weight:500; background:transparent; color:#3A3A35; border:none; cursor:pointer; font-family:'Sora',sans-serif; transition:all 0.15s; }
+.b09-s96-tab.s96-act { background:#534AB7; color:#fff; }
+.b09-s96-pane { display:none; flex-direction:column; gap:10px; }
+.b09-s96-pane.show { display:flex; }
+.b09-s96-cv { width:100%; display:block; border-radius:var(--border-radius-lg); }
+.b09-s96-legend { display:flex; gap:12px; flex-wrap:wrap; }
+.b09-s96-leg { display:flex; align-items:center; gap:6px; font-size:11px; color:#3A3A35; font-family:'Sora',sans-serif; }
+.b09-s96-leg-line { width:20px; height:3px; border-radius:99px; flex-shrink:0; }
+.b09-s96-halvings { display:flex; flex-direction:column; gap:4px; }
+.b09-s96-halvings-label { font-size:10px; color:#52524C; font-family:'Sora',sans-serif; }
+.b09-s96-halving-row { display:flex; gap:4px; flex-wrap:wrap; }
+.b09-s96-chip { padding:3px 10px; border-radius:99px; font-size:10px; font-family:'Courier Prime',monospace; background:#F4F4F0; color:#3A3A35; }
+.b09-s96-chip.past { background:#EEEDFE; color:#534AB7; }
+.b09-s96-chip.next { background:#534AB7; color:#fff; }
+.b09-s96-scenarios { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.b09-s96-sc-card { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-lg); overflow:hidden; }
+.b09-s96-sc-head { padding:7px 12px; font-size:11px; font-weight:500; font-family:'Sora',sans-serif; }
+.b09-s96-sc-head.s96-opt  { background:#0F6E56; color:#fff; }
+.b09-s96-sc-head.s96-pess { background:#A32D2D; color:#fff; }
+.b09-s96-sc-body { padding:10px 12px; display:flex; flex-direction:column; gap:5px; font-size:11px; color:#3A3A35; font-family:'Sora',sans-serif; line-height:1.5; }
+.b09-s96-sc-body b { color:#1A1A18; }
+.b09-s96-note { padding:10px 14px; border-radius:var(--border-radius-md); font-size:12px; line-height:1.6; font-family:'Sora',sans-serif; }
+.b09-s96-note.s96-neutral { background:#EEEDFE; color:#3C3489; border:0.5px solid rgba(83,74,183,0.2); }
+

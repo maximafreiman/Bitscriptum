@@ -1,0 +1,558 @@
+<!-- ============================================================
+     PAGE 5 · BAB 2 · Wallet dan Private Key
+     |-- 2.1 · Apa itu Wallet? [DONE]
+     |-- 2.2 · Private Key dan Public Key [LOCKED]
+     |-- 2.3 · Dari Key ke Address [LOCKED]
+     |-- 2.4 · Seed Phrase [LOCKED]
+     |-- 2.5 · Jenis-jenis Wallet [LOCKED]
+     |-- 2.6 · Custodial vs Non-Custodial [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab2">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b2">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b2">← Chapter List</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-heading">Bab 2</div>
+      <div class="sidebar-title">Wallet dan Private Key</div>
+
+      <!-- 2.1 · DONE -->
+      <div class="sidebar-item active" id="sb-2-1">
+        <div class="sb-num">2.1</div>
+        <div class="sb-label">Apa itu wallet?</div>
+      </div>
+      <!-- 2.2 · DONE -->
+      <div class="sidebar-item" id="sb-2-2">
+        <div class="sb-num">2.2</div>
+        <div class="sb-label">Private key dan public key</div>
+      </div>
+      <!-- 2.3 · DONE -->
+      <div class="sidebar-item" id="sb-2-3">
+        <div class="sb-num">2.3</div>
+        <div class="sb-label">Dari key ke address</div>
+      </div>
+      <!-- 2.4 · DONE -->
+      <div class="sidebar-item" id="sb-2-4">
+        <div class="sb-num">2.4</div>
+        <div class="sb-label">Seed phrase</div>
+      </div>
+      <!-- 2.5 · DONE -->
+      <div class="sidebar-item" id="sb-2-5">
+        <div class="sb-num">2.5</div>
+        <div class="sb-label">Jenis-jenis wallet</div>
+      </div>
+      <!-- 2.6 · DONE -->
+      <div class="sidebar-item" id="sb-2-6">
+        <div class="sb-num">2.6</div>
+        <div class="sb-label">Custodial vs non-custodial</div>
+      </div>
+    </div>
+    <!-- END SIDEBAR -->
+
+    <!-- CONTENT AREA -->
+    <div class="prologue-content" id="bab2-content">
+
+      <!-- ==============================
+           SECTION 2.1 · Apa itu wallet?
+      ============================== -->
+      <div class="p-section active" id="section-2-1">
+        <div class="p-eyebrow">Bab 2 · 2.1</div>
+        <div class="p-heading">Bukan tempat menyimpan Bitcoin</div>
+        <div class="p-title">Apa itu Wallet?</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Namanya menyesatkan.</p>
+          <p>Wallet dalam Bitcoin tidak menyimpan Bitcoin. Ini hal pertama yang harus diluruskan. Bitcoin tidak ada di dalam aplikasi di ponselmu. Ia tidak tersimpan di perangkatmu. Ia ada di blockchain, dan blockchain ada di ribuan komputer di seluruh dunia.</p>
+          <p>Yang disimpan wallet adalah sesuatu yang jauh lebih penting: kunci.</p>
+          <p>Bayangkan Bitcoin seperti brankas yang terkunci di tempat umum yang bisa dilihat semua orang. Semua orang tahu isi brankasnya berapa. Tapi hanya orang yang punya kuncinya yang bisa membuka dan memindahkan isinya. Wallet adalah tempat kamu menyimpan kunci itu.</p>
+
+          <p><strong>Bukan rekening, bukan saldo</strong></p>
+          <p>Rekening bank menyimpan catatanmu di server milik bank. Bank tahu siapa kamu, berapa saldo kamu, dan bisa mengubah atau membekukannya kapanpun.</p>
+          <p>Wallet Bitcoin tidak seperti itu. Tidak ada nama, tidak ada identitas, tidak ada institusi yang menyimpan datamu. Yang ada hanyalah sepasang kunci matematika yang membuktikan bahwa kamu adalah pemilik sah dari Bitcoin di alamat tertentu.</p>
+
+          <p><strong>Apa yang sebenarnya ada di dalam wallet?</strong></p>
+          <p>Semuanya berawal dari satu angka, lalu turun berantai:</p>
+          <p><strong>Private key.</strong> Angka acak yang sangat besar, dibuat sekali dan tidak bisa ditebak oleh siapapun. Ini adalah bukti kepemilikan. Siapapun yang tahu private key-mu, bisa memindahkan Bitcoin-mu. Siapapun.</p>
+          <p><strong>Public key.</strong> Diturunkan secara matematis dari private key. Ia tidak dirahasiakan, tapi bukan ini yang kamu berikan ke orang lain. Tugasnya adalah membuktikan ke jaringan bahwa transaksimu benar-benar berasal darimu.</p>
+          <p><strong>Address.</strong> Diturunkan sekali lagi dari public key, lebih pendek dan lebih tahan salah ketik. Inilah yang kamu bagikan ketika ingin menerima Bitcoin. Seperti nomor rekening, tapi tanpa identitasmu di baliknya.</p>
+
+          <div class="p-callout">
+            <p>Wallet bukan tempat menyimpan Bitcoin. Wallet adalah tempat menyimpan kunci yang membuktikan kamu pemilik Bitcoin. Kalau kamu kehilangan kuncinya, Bitcoin-mu tidak hilang dari blockchain, tapi tidak ada yang bisa mengaksesnya lagi, selamanya.</p>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-2-2" data-sb="sb-2-2">
+            2.2 — Private Key dan Public Key →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 2.1 -->
+
+      <!-- ==============================
+           SECTION 2.2 · Private key dan public key
+      ============================== -->
+      <div class="p-section" id="section-2-2">
+        <div class="p-eyebrow">Bab 2 · 2.2</div>
+        <div class="p-heading">Angka yang tidak bisa ditebak siapapun</div>
+        <div class="p-title">Private Key dan Public Key</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Di balik setiap wallet Bitcoin, ada sebuah angka.</p>
+          <p>Bukan angka biasa. Ini adalah angka acak yang sangat besar, 256 bit, atau sekitar 78 digit desimal. Angka ini tidak dibuat oleh manusia, tidak dipilih oleh server, dan tidak didaftarkan ke siapapun. Ia lahir dari keacakan murni di perangkatmu sendiri, pada saat wallet dibuat.</p>
+          <p>Inilah <strong>private key</strong>-mu.</p>
+
+          <p><strong>Seberapa acak?</strong></p>
+          <p>Jumlah kemungkinan private key adalah 2²⁵⁶, atau sekitar 1,2 × 10⁷⁷. Sebagai pembanding: jumlah atom di seluruh alam semesta yang bisa kita observasi diperkirakan sekitar 10⁸⁰. Ruang private key belum sebesar itu, tapi berada di kelas angka yang sama, dan itu sudah jauh melewati apa pun yang bisa disisir oleh komputer, sekarang maupun nanti. Peluang dua orang menghasilkan private key yang sama secara tidak sengaja, secara praktis, adalah nol. Ini bukan janji. Ini matematika.</p>
+
+          <p><strong>Dari private key lahir public key</strong></p>
+          <p>Private key tidak pernah dibagikan ke siapapun. Tapi dari private key, bisa diturunkan sebuah <strong>public key</strong> melalui proses matematika satu arah.</p>
+          <p>Satu arah artinya: dari private key, public key bisa dihitung dalam sepersekian detik. Arah sebaliknya tidak punya jalan pintas yang diketahui siapapun. Bukan karena ada informasi yang hilang di tengah jalan, sebab public key sepenuhnya ditentukan oleh private key-mu dan tidak ada yang tercecer. Tapi karena membalikkannya menuntut kerja komputasi yang, dengan metode terbaik yang kita punya hari ini, tidak akan selesai dalam umur alam semesta.</p>
+          <p>Mudah dihitung ke depan, tidak mungkin ditelusuri balik. Seluruh keamanan Bitcoin bersandar pada ketimpangan ini.</p>
+
+          <p><strong>Lalu public key ini buat apa?</strong></p>
+          <p>Sampai di sini kita baru tahu public key itu aman dibagikan. Tapi kenapa ia perlu ada sama sekali?</p>
+          <p>Untuk menjawabnya, ada satu benda ketiga yang belum kita sebut: <strong>tanda tangan digital</strong>.</p>
+          <p>Ketika kamu mengirim Bitcoin, wallet-mu tidak mengirimkan private key ke mana-mana. Yang ia lakukan adalah mengambil dua bahan, yaitu private key-mu dan isi transaksinya (berapa jumlahnya dan ke alamat mana), lalu mengolah keduanya menjadi satu angka baru. Angka itulah tanda tangannya.</p>
+          <p>Dua sifat tanda tangan inilah yang membuat seluruh sistem bekerja.</p>
+          <p><strong>Ia terikat pada satu transaksi.</strong> Karena lahir dari isi transaksi itu sendiri, ia hanya sah untuk transaksi itu. Ubah jumlahnya sedikit, ganti alamat tujuannya, dan tanda tangan yang sama langsung tidak cocok lagi. Ia tidak bisa digunting dari satu transaksi lalu ditempel ke transaksi lain.</p>
+          <p><strong>Ia bisa diperiksa tanpa private key.</strong> Ini bagian yang paling penting. Siapapun yang memegang public key-mu bisa memastikan tanda tangan itu dibuat oleh pemegang private key yang cocok, tanpa pernah tahu private key-nya. Memeriksa tidak menuntut rahasia yang sama dengan membuat.</p>
+          <p>Di sinilah pembagian tugasnya jadi jelas. Private key membuat tanda tangan, dan hanya ia yang bisa. Public key memeriksa tanda tangan, dan siapapun bisa. Satu untuk membuktikan, satu untuk memverifikasi.</p>
+          <p>Dan itulah alasan sebenarnya public key aman dibagikan. Bukan sekadar karena ia tidak membocorkan private key, tapi karena yang ia berikan ke orang lain hanyalah kemampuan <strong>memeriksa</strong>, tidak pernah kemampuan <strong>membuat</strong>.</p>
+          <p>Bagaimana persisnya angka itu dihitung, dan kenapa memeriksa jauh lebih murah daripada memalsukan, kita bongkar di Bab 4 saat masuk ke ECDSA dan Schnorr.</p>
+
+          <p><strong>Kenapa ini penting?</strong></p>
+          <p>Karena seluruh sistem kepemilikan Bitcoin berdiri di atas prinsip ini. Tidak ada username. Tidak ada password. Tidak ada verifikasi email. Kepemilikanmu dibuktikan semata-mata oleh kemampuanmu menghasilkan tanda tangan yang valid menggunakan private key, dan jaringan bisa memverifikasinya menggunakan public key tanpa perlu tahu siapa kamu.</p>
+
+          <div class="p-callout">
+            <p>Private key adalah identitasmu di Bitcoin. Siapapun yang memegangnya, memegang Bitcoin-mu. Tidak ada "lupa password", tidak ada "reset via email", tidak ada layanan pelanggan yang bisa membantumu. Ia adalah tanggung jawab yang absolut.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi interaktif — Private Key dan Public Key</div>
+
+          <div class="kp-desc">
+            Klik "Generate" untuk membuat sepasang kunci baru. Perhatikan bagaimana private key yang berbeda selalu menghasilkan public key yang berbeda pula. Lalu coba ubah satu karakter di private key.
+          </div>
+
+          <div class="kp-keys">
+            <div class="kp-key-box priv" id="b02-s22-box-priv">
+              <div class="kp-key-head">
+                <div class="kp-key-label priv">Private Key</div>
+                <div class="kp-key-badge priv">Jangan dibagikan</div>
+              </div>
+              <div class="kp-key-val" id="b02-s22-priv">Belum di-generate...</div>
+            </div>
+            <div class="kp-key-box pub" id="b02-s22-box-pub">
+              <div class="kp-key-head">
+                <div class="kp-key-label pub">Public Key</div>
+                <div class="kp-key-badge pub">Aman dibagikan</div>
+              </div>
+              <div class="kp-key-val" id="b02-s22-pub">Belum di-generate...</div>
+            </div>
+          </div>
+
+          <div class="kp-oneway" id="b02-s22-oneway">
+            <div class="kp-oneway-item">
+              <span class="kp-oneway-key priv">Private Key</span>
+              <span class="kp-oneway-arrow">→</span>
+              <span class="kp-oneway-key pub">Public Key</span>
+              <span class="kp-oneway-result ok">✓ Mudah</span>
+            </div>
+            <span class="kp-oneway-sep">|</span>
+            <div class="kp-oneway-item">
+              <span class="kp-oneway-key pub">Public Key</span>
+              <span class="kp-oneway-arrow">→</span>
+              <span class="kp-oneway-key priv">Private Key</span>
+              <span class="kp-oneway-result bad">✗ Mustahil</span>
+            </div>
+          </div>
+
+          <div class="kp-tamper" id="b02-s22-tamper">
+            <div class="kp-tamper-label">Coba ubah satu karakter di private key di bawah ini dan lihat apa yang terjadi pada public key:</div>
+            <textarea class="kp-tamper-input" id="b02-s22-tamper-input" rows="3"></textarea>
+            <div class="kp-tamper-result" id="b02-s22-tamper-result"></div>
+          </div>
+
+          <div class="kp-controls">
+            <button class="kp-btn kp-btn-gen" id="b02-s22-btn-gen">Generate Key Pair ↗</button>
+            <button class="kp-btn kp-btn-reset" id="b02-s22-btn-reset">Reset</button>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-2-1" data-sb="sb-2-1">
+            ← 2.1 — Apa itu Wallet?
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-2-3" data-sb="sb-2-3">
+            2.3 — Dari Key ke Address →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 2.2 -->
+
+      <!-- ==============================
+           SECTION 2.3 · Dari key ke address
+      ============================== -->
+      <div class="p-section" id="section-2-3">
+        <div class="p-eyebrow">Bab 2 · 2.3</div>
+        <div class="p-heading">Satu kunci, banyak wajah</div>
+        <div class="p-title">Dari Key ke Address</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Private key menghasilkan public key. Tapi public key belum bisa langsung dipakai sebagai alamat untuk menerima Bitcoin. Ada satu langkah lagi.</p>
+          <p>Public key diproses melalui serangkaian fungsi hash, menghasilkan sebuah string yang lebih pendek dan lebih mudah dibaca. Inilah <strong>address</strong> Bitcoin. Alamat inilah yang kamu bagikan ke orang lain ketika ingin menerima Bitcoin. Bukan private key, bukan public key, tapi alamat yang diturunkan dari keduanya.</p>
+
+          <p><strong>Kenapa tidak langsung pakai public key?</strong></p>
+          <p>Dua alasan utama. Pertama, keamanan. Dengan menyembunyikan public key di balik hash, ada lapisan perlindungan tambahan kalau suatu hari ada kemajuan komputasi yang menjadi ancaman. Satu catatan penting: perlindungan ini hanya berlaku selama address itu belum pernah kamu pakai untuk mengirim. Begitu kamu membelanjakan dana darinya, public key-mu ikut terungkap di blockchain. Inilah alasan sebenarnya di balik saran yang sering kamu dengar untuk tidak memakai ulang satu address, dan kita bahas lebih jauh di 10.5. Kedua, praktis. Public key adalah string panjang yang sulit dibaca manusia. Address jauh lebih pendek dan punya mekanisme checksum yang mendeteksi kesalahan ketik.</p>
+
+          <p><strong>Format address yang berbeda</strong></p>
+          <p>Kalau kamu pernah melihat address Bitcoin, mungkin kamu perhatikan ada yang dimulai dengan angka 1, ada yang dengan 3, dan ada yang dengan bc1. Masing-masing merepresentasikan generasi teknologi yang berbeda dengan kemampuan dan efisiensi yang berbeda pula. Detail teknis di balik setiap format akan kita bahas di Bab 6.</p>
+
+          <div class="p-callout">
+            <p>Satu private key bisa menghasilkan banyak address berbeda tergantung format yang dipakai. Tapi semua address itu tetap milik satu private key yang sama. Inilah kenapa wallet modern bisa menampilkan beberapa address sekaligus tanpa membuat kamu kehilangan kendali.</p>
+
+          <p><strong>Bagaimana wallet tahu address mana miliknya?</strong></p>
+          <p>Kalimat barusan menyisakan satu pertanyaan. Kalau satu kunci bisa menghasilkan banyak address dalam beberapa format sekaligus, bagaimana wallet tahu persis address mana saja yang harus ia awasi? Dulu jawabannya berantakan: setiap wallet punya caranya sendiri, dan memindahkan cadangan dari satu aplikasi ke aplikasi lain sering berakhir dengan saldo yang tampak hilang padahal cuma tidak terdeteksi.</p>
+          <p>Jawaban modernnya adalah <strong>output descriptor</strong>, sebuah baris teks yang menyatakan aturannya secara lengkap. Bentuknya kira-kira begini:</p>
+          <p><code>wpkh([d34db33f/84h/0h/0h]xpub6.../0/*)</code></p>
+          <p>Dibaca satu per satu, isinya masuk akal. <code>wpkh</code> memberitahu formatnya, yaitu P2WPKH atau bc1q yang kita bahas di 6.4. Bagian dalam kurung siku adalah asal-usulnya, menandai perangkat mana dan jalur turunan mana yang dipakai. <code>xpub6...</code> adalah kunci publik induk yang bisa menurunkan seluruh anak. Dan <code>/0/*</code> berarti "semua address di cabang penerimaan", dengan bintang sebagai pengganti nomor urut yang tidak terbatas.</p>
+          <p>Satu baris itu memuat semua yang dibutuhkan untuk menemukan kembali seluruh danamu, tanpa mengandung satu pun rahasia. Ia memakai xpub, bukan xprv, jadi ia bisa memindai tapi tidak bisa membelanjakan. Kamu bisa menyimpannya bersama seed phrase, dan ia justru melengkapi: seed phrase memberi kemampuan menandatangani, descriptor memberi tahu di mana harus mencari.</p>
+          <p>Descriptor juga bisa menyatakan aturan yang lebih rumit dari sekadar satu kunci, termasuk multisig yang kita bahas di 6.5. Di situlah ia bertemu Miniscript dari 6.2: descriptor menjadi cara menuliskan syarat pembelanjaan yang bisa dibaca manusia sekaligus dipahami perangkat lunak. Karena itu, kalau kamu memakai skema yang lebih dari satu kunci, menyimpan descriptor bukan lagi tambahan yang bagus untuk dimiliki, melainkan <strong>bagian dari cadangan itu sendiri</strong>. Tanpa descriptor, seed phrase saja belum tentu cukup untuk menyusun ulang wallet multisig.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi interaktif — Dari Key ke Address</div>
+
+          <div class="ka-controls">
+            <button class="ka-btn ka-btn-gen" id="b02-s23-btn-gen">Generate ↗</button>
+            <button class="ka-btn ka-btn-reset" id="b02-s23-btn-reset">Reset</button>
+          </div>
+
+          <div class="ka-node">
+            <div class="ka-node-head">
+              <div class="ka-node-label priv">Private Key</div>
+              <div class="ka-node-badge priv">Rahasia</div>
+            </div>
+            <div class="ka-node-val" id="b02-s23-priv">Klik Generate...</div>
+          </div>
+
+          <div class="ka-arrow">
+            <div class="ka-arrow-line"></div>
+            <div class="ka-arrow-tip"></div>
+            <div class="ka-arrow-lbl">Elliptic Curve Multiplication</div>
+          </div>
+
+          <div class="ka-node">
+            <div class="ka-node-head">
+              <div class="ka-node-label pub">Public Key</div>
+              <div class="ka-node-badge pub">Bisa dibagikan</div>
+            </div>
+            <div class="ka-node-val" id="b02-s23-pub">Menunggu...</div>
+          </div>
+
+          <div class="ka-arrow">
+            <div class="ka-arrow-line"></div>
+            <div class="ka-arrow-tip"></div>
+            <div class="ka-arrow-lbl">Hashing (SHA256 + RIPEMD160 / Bech32)</div>
+          </div>
+
+          <div id="b02-s23-addr-grid"><div class="ka-placeholder">Address akan muncul setelah Generate.</div></div>
+          <div class="ka-hint-bottom" id="b02-s23-hint-bottom">Klik setiap format address untuk melihat penjelasannya. Satu private key menghasilkan semua format ini sekaligus.</div>
+        
+          <div class="lab-link"><span class="kode">C2</span><span class="isi"><span class="hd">Lanjut ke Laboratorium</span>Format terkompresi yang disebut di atas berasal dari sifat kurvanya sendiri. Itu bisa kamu periksa langsung di Laboratorium C2.</span></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-2-2" data-sb="sb-2-2">
+            ← 2.2 — Private Key dan Public Key
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-2-4" data-sb="sb-2-4">
+            2.4 — Seed Phrase →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 2.3 -->
+
+      <!-- ==============================
+           SECTION 2.4 · Seed phrase
+      ============================== -->
+      <div class="p-section" id="section-2-4">
+        <div class="p-eyebrow">Bab 2 · 2.4</div>
+        <div class="p-heading">Kata-kata yang menyimpan segalanya</div>
+        <div class="p-title">Seed Phrase</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Private key adalah segalanya di Bitcoin. Tapi ada satu masalah praktis: private key adalah string 64 karakter hex yang tidak mungkin dihafal manusia.</p>
+          <p>Tidak ada yang bisa mengingat itu. Dan kalau hilang, Bitcoin-mu hilang selamanya.</p>
+          <p>Solusinya adalah <strong>seed phrase</strong>, juga disebut mnemonic phrase atau recovery phrase. Urutannya sebenarnya kebalikan dari yang sering dibayangkan orang. Wallet tidak mengubah private key menjadi kata. Yang terjadi: wallet membuat keacakan awal, menuliskannya sebagai serangkaian kata biasa, lalu dari kata-kata itulah seluruh private key-mu diturunkan. Seed phrase datang lebih dulu, private key menyusul.</p>
+
+          <p><strong>Bagaimana cara kerjanya?</strong></p>
+          <p>Seed phrase biasanya terdiri dari 12 atau 24 kata yang dipilih dari daftar 2048 kata standar yang disebut BIP-39 wordlist. Kata-kata ini bukan acak sembarangan. Mereka dipilih karena mudah dibedakan satu sama lain, menghindari kata yang mirip secara visual maupun bunyi.</p>
+          <p>Dengan 2048 kata dan 12 posisi, kombinasi kata yang mungkin adalah 2048¹². Tapi tidak semua kombinasi itu sah: kata terakhir membawa checksum, sehingga frasa 12 kata sebenarnya mewakili 128 bit entropi, dan frasa 24 kata mewakili 256 bit. Angka yang terakhir itu persis sebesar ruang private key yang kita hitung di 2.2, yaitu sekitar 1,2 × 10⁷⁷ kemungkinan. Peluang dua orang menghasilkan seed phrase yang sama secara tidak sengaja, secara praktis, adalah nol. Dua belas kata yang terdengar sepele itu memikul beban yang sama dengan angka 256 bit di bab sebelumnya.</p>
+          <p>Dari seed phrase ini, wallet bisa menghasilkan kembali seluruh hierarki kunci. Tidak hanya satu private key, tapi ratusan bahkan ribuan address sekaligus. Inilah yang disebut HD wallet, atau Hierarchical Deterministic wallet.</p>
+
+          <p><strong>Satu seed phrase, satu wallet</strong></p>
+          <p>Seed phrase adalah representasi lengkap dari seluruh wallet-mu. Siapapun yang punya seed phrase-mu, punya akses ke semua Bitcoin di wallet tersebut, dari semua address, semua format, semua network.</p>
+          <p>Ini berarti dua hal penting. Pertama, backup seed phrase adalah backup seluruh wallet. Tidak perlu backup tiap private key satu per satu. Kedua, seed phrase harus disimpan offline, di tempat yang aman, tidak pernah difoto, tidak pernah diketik di komputer yang terhubung internet, dan tidak pernah diberikan ke siapapun dengan alasan apapun.</p>
+
+          <div class="p-callout">
+            <p>Tidak ada perusahaan wallet yang legitimate yang pernah meminta seed phrase-mu. Tidak ada support yang butuh seed phrase-mu. Tidak ada form yang perlu kamu isi dengan seed phrase-mu. Kalau ada yang memintanya, itu penipuan. Selalu.</p>
+
+          <p><strong>Masalah yang belum kita selesaikan</strong></p>
+          <p>Saran standar soal seed phrase terdengar sederhana: tulis di kertas, simpan di tempat aman. Tapi coba pikirkan baik-baik dan kamu akan menemukan bahwa saran itu menarik dua arah sekaligus. Semakin banyak salinan yang kamu buat, semakin kecil risiko kehilangan, tapi semakin besar peluang salah satunya ditemukan orang. Semakin sedikit salinan dan semakin tersembunyi, semakin aman dari pencuri, tapi semakin mudah lenyap karena kebakaran, banjir, atau sekadar lupa di mana menaruhnya.</p>
+          <p>Tidak ada jumlah salinan yang menyelesaikan keduanya. Selama satu kertas berisi seluruh rahasia, kamu hanya bisa memilih risiko mana yang lebih kamu takuti.</p>
+          <p><strong>Memecah rahasia jadi kepingan</strong></p>
+          <p>Ada cara keluar dari tarik-menarik itu, dan namanya <strong>Shamir Secret Sharing</strong>. Rahasianya dipecah menjadi beberapa keping, misalnya lima, dengan syarat cukup tiga keping untuk menyusunnya kembali. Yang membuatnya menarik bukan pembagiannya, melainkan sifat matematisnya: <strong>satu atau dua keping tidak membocorkan apa-apa</strong>. Bukan membocorkan sebagian, bukan mempersempit tebakan, benar-benar nol. Sampai keping ketiga berkumpul, isinya sama tidak bergunanya dengan angka acak.</p>
+          <p>Artinya kamu bisa menyebar lima keping di lima tempat berbeda. Dua boleh hilang tanpa kamu kehilangan apa pun, dan dua boleh ditemukan orang tanpa mereka mendapat apa pun. Tarik-menarik tadi selesai.</p>
+          <p>Tapi ada satu kelemahan yang jarang disebut. Untuk memakainya, keping-keping itu harus disatukan kembali di satu perangkat, dan pada detik itu seluruh seed phrase-mu utuh kembali di satu tempat. Kalau perangkat itu sedang disusupi, semua kerja tadi sia-sia. Multisig yang kita bahas di 6.5 tidak punya masalah ini, karena kuncinya tidak pernah disatukan: masing-masing menandatangani sendiri-sendiri di perangkatnya sendiri. Karena itu banyak yang menganggap multisig lebih aman untuk jumlah besar, dan Shamir lebih cocok untuk cadangan yang jarang disentuh.</p>
+          <p><strong>Dan kalau kamu meninggal?</strong></p>
+          <p>Ini pertanyaan yang jarang dibahas buku Bitcoin, padahal justru paling sering terjadi. Sifat yang membuat Bitcoin benar-benar milikmu, yaitu tidak ada pihak yang bisa mengambilnya tanpa kuncimu, berlaku juga bagi keluargamu. Tidak ada bank yang bisa dihubungi, tidak ada surat kematian yang bisa ditunjukkan, tidak ada proses hukum yang bisa memaksa jaringan menyerahkan apa pun. Kalau pengetahuan itu ikut hilang bersamamu, dananya ikut hilang selamanya.</p>
+          <p>Yang mengejutkan, hambatan terbesarnya biasanya bukan teknis. Ahli warismu perlu tahu tiga hal, dan hanya yang ketiga yang berbau teknologi: bahwa Bitcoin itu <strong>ada</strong>, di mana kepingannya <strong>disimpan</strong>, dan bagaimana <strong>memakainya</strong>. Banyak kasus kehilangan bukan karena kriptografinya sulit, melainkan karena keluarga tidak pernah tahu ada yang harus dicari.</p>
+          <p>Pendekatannya bermacam-macam. Ada yang menitipkan sebagian keping Shamir ke pengacara atau anggota keluarga yang berbeda. Ada yang memakai multisig di mana satu kunci dipegang pihak ketiga yang hanya ikut menandatangani setelah kematian terbukti. Ada juga yang memakai timelock, sehingga sebuah transaksi ke ahli waris otomatis menjadi sah setelah jangka waktu tertentu berlalu tanpa diperbarui. Cara terakhir itu kita bahas di Bab 15.</p>
+          <p>Satu peringatan yang perlu ditutup dengan jujur: <strong>kerumitan itu sendiri adalah risiko</strong>. Skema warisan yang terlalu berbelit sudah menghilangkan lebih banyak Bitcoin daripada skema yang sederhana, karena pemiliknya sendiri lupa cara kerjanya, atau ahli warisnya menyerah di tengah jalan. Rencana yang benar-benar dipahami oleh orang yang akan menjalankannya jauh lebih berharga daripada rencana yang canggih di atas kertas.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi interaktif — Seed Phrase Generator</div>
+
+          <div class="b02-s24-desc">
+            Wallet membuat keacakan awal, menuliskannya sebagai kata-kata biasa, lalu menurunkan seluruh private key dari kata-kata itu. Klik Generate untuk membuat seed phrase baru dari BIP-39 wordlist.
+          </div>
+
+          <div class="sp-toggle">
+            <button class="sp-toggle-btn active" id="b02-s24-btn-12">12 kata</button>
+            <button class="sp-toggle-btn" id="b02-s24-btn-24">24 kata</button>
+          </div>
+
+          <div class="sp-grid" id="b02-s24-grid"></div>
+
+          <div class="sp-warning" id="b02-s24-warning">
+            🔒 <strong>Peringatan:</strong> Seed phrase ini dibuat untuk tujuan edukasi dan tidak boleh digunakan untuk menyimpan Bitcoin sungguhan. Seed phrase yang sesungguhnya harus dibuat oleh wallet yang terpercaya dan disimpan secara offline.
+          </div>
+
+          <div class="sp-derive" id="b02-s24-derive">
+            <div class="sp-derive-head">Dari seed phrase ini, wallet menurunkan:</div>
+            <div class="sp-derive-body">
+              <div class="sp-derive-row">
+                <div class="sp-derive-label">Address #1</div>
+                <div class="sp-derive-val" id="b02-s24-addr-1"></div>
+              </div>
+              <div class="sp-derive-row">
+                <div class="sp-derive-label">Address #2</div>
+                <div class="sp-derive-val" id="b02-s24-addr-2"></div>
+              </div>
+              <div class="sp-derive-row">
+                <div class="sp-derive-label">Address #3</div>
+                <div class="sp-derive-val" id="b02-s24-addr-3"></div>
+              </div>
+              <div class="sp-derive-note">
+                Satu seed phrase menghasilkan jutaan address yang berbeda secara deterministik. Backup seed phrase = backup seluruh wallet.
+              </div>
+            </div>
+          </div>
+
+          <div class="sp-controls">
+            <button class="sp-btn sp-btn-gen" id="b02-s24-btn-gen">Generate Seed Phrase ↗</button>
+            <button class="sp-btn sp-btn-reset" id="b02-s24-btn-reset">Reset</button>
+          </div>
+        
+          <div class="lab-link"><span class="kode">C5</span><span class="isi"><span class="hd">Lanjut ke Laboratorium</span>Nilai di peraga ini bersifat <b>ilustratif</b>. Untuk melihat entropi sungguhan diubah jadi kata lewat checksum SHA-256 dan daftar 2048 kata resmi, buka Laboratorium C5.</span></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-2-3" data-sb="sb-2-3">
+            ← 2.3 — Dari Key ke Address
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-2-5" data-sb="sb-2-5">
+            2.5 — Jenis-jenis Wallet →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 2.4 -->
+
+      <!-- ==============================
+           SECTION 2.5 · Jenis-jenis wallet
+      ============================== -->
+      <div class="p-section" id="section-2-5">
+        <div class="p-eyebrow">Bab 2 · 2.5</div>
+        <div class="p-heading">Di mana private key-mu disimpan?</div>
+        <div class="p-title">Jenis-jenis Wallet</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Wallet adalah tempat menyimpan kunci. Tapi tidak semua wallet diciptakan sama. Ada yang lebih nyaman, ada yang lebih aman, ada yang keduanya dengan trade-off tertentu.</p>
+          <p>Perbedaan utama antara jenis wallet bukan di tampilannya, tapi di satu pertanyaan: di mana private key disimpan?</p>
+
+          <p><strong>Hot Wallet</strong></p>
+          <p>Hot wallet adalah wallet yang terhubung ke internet. Aplikasi di ponselmu, ekstensi browser, aplikasi desktop yang online, semuanya masuk kategori ini.</p>
+          <p>Kelebihannya mudah diakses, cepat untuk transaksi sehari-hari, dan biasanya gratis. Kekurangannya karena terhubung ke internet, ia lebih rentan terhadap serangan. Malware, phishing, atau celah keamanan di aplikasi bisa mengekspos private key-mu.</p>
+          <p>Hot wallet cocok untuk jumlah kecil yang sering dipakai, seperti dompet di saku. Kamu tidak menaruh semua tabunganmu di dompet fisik yang dibawa ke mana-mana.</p>
+
+          <p><strong>Cold Wallet</strong></p>
+          <p>Cold wallet adalah wallet yang tidak pernah terhubung ke internet. Private key dibuat dan disimpan di perangkat yang offline sepenuhnya.</p>
+          <p>Jenis yang paling umum adalah hardware wallet, perangkat fisik khusus seperti USB yang menyimpan private key di dalam chip yang terisolasi. Untuk menandatangani transaksi, kamu menghubungkan perangkat ini ke komputer, tapi private key tidak pernah keluar dari perangkat.</p>
+          <p>Yang paling sederhana adalah paper wallet, private key dan seed phrase dicetak atau ditulis di atas kertas dan disimpan di tempat aman. Tidak ada yang bisa meretasnya secara digital karena ia tidak digital.
+          </p>
+          <p>Tapi paper wallet sudah lama tidak lagi direkomendasikan, dan alasannya penting untuk dipahami sebelum kamu membuatnya. Untuk membelanjakan dananya, kamu harus memasukkan private key itu ke perangkat yang terhubung internet, dan pada saat itu juga seluruh keunggulan offline-nya hilang. Ia juga tidak mendukung hierarki address seperti seed phrase modern, sehingga satu kertas hanya melayani satu address. Kalau tujuanmu penyimpanan jangka panjang, seed phrase yang ditulis tangan dan disimpan offline memberikan keamanan yang sama tanpa kelemahan-kelemahan itu.</p>
+          <p>Cold wallet cocok untuk menyimpan jumlah besar dalam jangka panjang, seperti brankas di rumah.</p>
+
+          <p><strong>Aturan praktis</strong></p>
+          <p>Tidak ada yang salah dengan memakai keduanya. Banyak pengguna Bitcoin menyimpan sebagian kecil di hot wallet untuk transaksi harian, dan menyimpan sebagian besar di cold wallet untuk jangka panjang.</p>
+
+          <div class="p-callout">
+            <p>Keamanan Bitcoin bukan tentang platform atau aplikasi yang paling canggih. Ia tentang seberapa baik kamu menjaga private key-mu dari jangkauan orang lain dan koneksi internet.</p>
+
+          <p><strong>Sepenuhnya terputus: air-gapped signing</strong></p>
+          <p>Hardware wallet biasa tetap ditancapkan ke komputer lewat USB saat menandatangani. Private key-nya memang tidak ikut keluar, tapi tetap ada jalur data antara perangkat rahasiamu dan mesin yang mungkin terinfeksi. Bagi sebagian orang, jalur itu sendiri sudah terlalu banyak.</p>
+          <p><strong>Air-gapped signing</strong> menghapusnya sama sekali. Perangkat penandatangan tidak pernah menyentuh komputer, tidak lewat USB, tidak lewat Bluetooth, tidak lewat apa pun. Yang berpindah antara keduanya hanya <strong>gambar</strong>: kode QR yang ditampilkan di satu layar lalu dipotret kamera perangkat satunya.</p>
+          <p>Alurnya bersandar pada PSBT yang kita bahas di 3.6. Komputermu menyusun transaksi yang belum ditandatangani, lalu menampilkannya sebagai QR. Perangkat air-gapped memindai QR itu, menunjukkan isinya di layarnya sendiri supaya kamu bisa memeriksa jumlah dan alamat tujuan, lalu menandatanganinya. Hasilnya ditampilkan sebagai QR baru, dipindai balik oleh komputer, dan barulah disiarkan ke jaringan.</p>
+          <p>Perhatikan bahwa yang berpindah bolak-balik cuma transaksi, tidak pernah kuncinya. Dan karena jalurnya berupa gambar, malware di komputer tidak punya saluran untuk menjangkau perangkat penandatangan. Beberapa perangkat bahkan dijual tanpa port data sama sekali, hanya kamera, layar, dan slot kartu microSD.</p>
+          <p>Ada satu langkah yang tidak boleh dilewati, dan justru di situ kekuatannya. Layar perangkat penandatangan menunjukkan jumlah dan alamat tujuan sebelum kamu setujui. <strong>Periksa di layar itu, bukan di layar komputer.</strong> Kalau komputermu disusupi dan diam-diam mengganti alamat tujuan, satu-satunya tempat kebohongan itu ketahuan adalah layar perangkat yang tidak terhubung ke mana-mana.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Eksplorasi — Jenis-jenis Wallet</div>
+          <div class="wt-grid" id="b02-s25-grid"></div>
+        
+          <div class="lab-link"><span class="kode">C4</span><span class="isi"><span class="hd">Lanjut ke Laboratorium</span>Bagaimana satu benih menurunkan seluruh kunci dompetmu, dan kenapa jalur turunan memakai tanda kutip, dihitung sungguhan di Laboratorium C4.</span></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-2-4" data-sb="sb-2-4">
+            ← 2.4 — Seed Phrase
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-2-6" data-sb="sb-2-6">
+            2.6 — Custodial vs Non-Custodial →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 2.5 -->
+
+      <!-- ==============================
+           SECTION 2.6 · Custodial vs non-custodial
+      ============================== -->
+      <div class="p-section" id="section-2-6">
+        <div class="p-eyebrow">Bab 2 · 2.6</div>
+        <div class="p-heading">Siapa yang memegang kuncinya?</div>
+        <div class="p-title">Custodial vs Non-Custodial</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Ada satu pertanyaan yang lebih penting dari memilih aplikasi wallet mana yang terbaik: siapa yang memegang private key-mu?</p>
+          <p>Jawabannya menentukan segalanya.</p>
+
+          <p><strong>Custodial wallet</strong></p>
+          <p>Custodial artinya ada pihak lain yang menyimpan private key-mu atas namamu. Exchange seperti Binance, Coinbase, atau Indodax adalah contoh paling umum. Ketika kamu membeli Bitcoin di sana dan tidak menariknya, Bitcoin itu ada di wallet mereka, bukan wallet-mu.</p>
+          <p>Kamu hanya punya saldo di buku rekening mereka. Seperti menabung di bank.</p>
+          <p>Ini nyaman. Tidak perlu urus seed phrase, tidak perlu takut salah kirim, ada customer service kalau ada masalah. Tapi ada harga yang harus dibayar: kamu tidak benar-benar memegang Bitcoin-mu.</p>
+          <p>Exchange bisa membekukan akunmu. Exchange bisa bangkrut. Exchange bisa diretas. Semua ini sudah terjadi, berkali-kali, di berbagai platform di seluruh dunia.</p>
+
+          <p><strong>Non-custodial wallet</strong></p>
+          <p>Non-custodial artinya kamu sendiri yang memegang private key. Tidak ada pihak ketiga yang bisa memblokir, membekukan, atau mengambil Bitcoin-mu.</p>
+          <p>Tapi tanggung jawabnya penuh ada di tanganmu. Tidak ada customer service. Tidak ada pemulihan akun. Kalau seed phrase hilang, Bitcoin hilang selamanya.</p>
+
+          <p><strong>"Not your keys, not your coins"</strong></p>
+          <p>Ini bukan sekadar slogan. Ini adalah prinsip fundamental Bitcoin. Selama private key ada di tangan orang lain, kamu tidak benar-benar memiliki Bitcoin. Kamu memiliki janji dari orang lain bahwa mereka akan memberikanmu Bitcoin kalau kamu memintanya.</p>
+          <p>Dan janji bisa diingkari.</p>
+
+          <div class="p-callout">
+            <p>Custodial wallet bukan pilihan yang setara dengan non-custodial. Ia adalah trade-off yang sadar: kamu menukar kedaulatan atas uangmu dengan kenyamanan. Pahami konsekuensinya sebelum memilih.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi — Apa yang terjadi ketika exchange bermasalah?</div>
+
+          <div class="b02-s26-desc">
+            Pilih skenario untuk melihat apa yang terjadi pada pengguna custodial wallet vs non-custodial wallet.
+          </div>
+
+          <div class="cv-pills">
+            <button class="cv-pill" id="b02-s26-pill-0">
+              <div class="cv-pill-tag">Skenario 1 · Mt. Gox (2014)</div>
+              <div class="cv-pill-title">Exchange diretas</div>
+              <div class="cv-pill-sub">850.000 BTC hilang. Exchange terbesar di dunia saat itu.</div>
+            </button>
+            <button class="cv-pill" id="b02-s26-pill-1">
+              <div class="cv-pill-tag">Skenario 2 · FTX (2022)</div>
+              <div class="cv-pill-title">Exchange bangkrut karena fraud</div>
+              <div class="cv-pill-sub">8 miliar dolar dana nasabah digelapkan. Kolaps dalam hitungan hari.</div>
+            </button>
+            <button class="cv-pill" id="b02-s26-pill-2">
+              <div class="cv-pill-tag">Skenario 3 · Regulasi</div>
+              <div class="cv-pill-title">Akun dibekukan oleh otoritas</div>
+              <div class="cv-pill-sub">Pemerintah memerintahkan exchange untuk memblokir akses pengguna.</div>
+            </button>
+          </div>
+
+          <div class="cv-compare" id="b02-s26-compare">
+            <div class="cv-side custodial">
+              <div class="cv-side-head">
+                <span class="cv-side-icon">🏦</span>
+                <span class="cv-side-name">Custodial Wallet</span>
+              </div>
+              <div class="cv-side-body">
+                <div class="cv-timeline" id="b02-s26-cust-tl"></div>
+              </div>
+            </div>
+            <div class="cv-side noncustodial">
+              <div class="cv-side-head">
+                <span class="cv-side-icon">🔑</span>
+                <span class="cv-side-name">Non-Custodial Wallet</span>
+              </div>
+              <div class="cv-side-body">
+                <div class="cv-timeline" id="b02-s26-non-tl"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cv-verdict" id="b02-s26-verdict"></div>
+
+          <div class="cv-reset">
+            <button class="cv-btn" id="b02-s26-reset">Reset</button>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-2-5" data-sb="sb-2-5">
+            ← 2.5 — Jenis-jenis Wallet
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 2.6 -->
+
+    </div>
+    <!-- END CONTENT AREA -->
+
+  </div>
+
+</div>
+<!-- END PAGE 5 · BAB 2 -->
+
+

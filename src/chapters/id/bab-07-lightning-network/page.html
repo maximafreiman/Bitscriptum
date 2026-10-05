@@ -1,0 +1,647 @@
+<!-- ============================================================
+     PAGE 10 · BAB 7 · Lightning Network
+     |-- 7.1 · Masalah Skalabilitas [DONE]
+     |-- 7.2 · Payment Channel [LOCKED]
+     |-- 7.3 · Routing dan HTLC [LOCKED]
+     |-- 7.4 · Membuka dan Menutup Channel [LOCKED]
+     |-- 7.5 · Invoice dan Pembayaran [LOCKED]
+     |-- 7.6 · Keterbatasan dan Trade-off [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab7">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b7">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b7">← Daftar Bab</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab7">
+      <div class="sidebar-heading">Bab 7</div>
+      <div class="sidebar-title">Lightning Network</div>
+
+      <div class="sidebar-item active" id="sb-7-1">
+        <div class="sb-num">7.1</div>
+        <div class="sb-label">Masalah Skalabilitas</div>
+      </div>
+      <div class="sidebar-item" id="sb-7-2">
+        <div class="sb-num">7.2</div>
+        <div class="sb-label">Payment Channel</div>
+      </div>
+      <div class="sidebar-item" id="sb-7-3">
+        <div class="sb-num">7.3</div>
+        <div class="sb-label">Routing dan HTLC</div>
+      </div>
+      <div class="sidebar-item" id="sb-7-4">
+        <div class="sb-num">7.4</div>
+        <div class="sb-label">Membuka dan Menutup Channel</div>
+      </div>
+      <div class="sidebar-item" id="sb-7-5">
+        <div class="sb-num">7.5</div>
+        <div class="sb-label">Invoice dan Pembayaran</div>
+      </div>
+      <div class="sidebar-item" id="sb-7-6">
+        <div class="sb-num">7.6</div>
+        <div class="sb-label">Keterbatasan dan Trade-off</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab7-content">
+
+      <!-- ==============================
+           SECTION 7.1 · Masalah Skalabilitas
+      ============================== -->
+      <div class="p-section active" id="section-7-1">
+        <div class="p-eyebrow">Bab 7 · 7.1</div>
+        <div class="p-heading">Kenapa Bitcoin tidak bisa menangani jutaan transaksi per detik?</div>
+        <div class="p-title">Masalah Skalabilitas</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Bitcoin by design lambat dan mahal untuk transaksi kecil. Setiap transaksi harus dikonfirmasi di blockchain, menunggu 10 menit per block, dan bersaing dengan transaksi lain untuk ruang block yang terbatas. Di saat jaringan ramai, fee bisa mencapai puluhan dolar untuk transaksi senilai beberapa sen.</p>
+
+          <p>Ini bukan bug. Ini trade-off yang disengaja.</p>
+
+          <p><strong>Mengapa block dibatasi?</strong></p>
+          <p>Block size yang besar berarti node harus menyimpan dan memproses lebih banyak data. Semakin besar block, semakin mahal biaya menjalankan node. Semakin mahal biaya node, semakin sedikit orang yang mau menjalankannya. Semakin sedikit node, semakin terpusat jaringan. Sentralisasi adalah musuh utama Bitcoin.</p>
+          <p>Satoshi memahami ini. Bitcoin dirancang untuk menjadi settlement layer yang aman, bukan sistem pembayaran ritel. Setiap transaksi yang masuk ke blockchain adalah transaksi yang sudah final dan tidak bisa diubah, seperti settlement antar bank, bukan seperti gesek kartu di kasir.</p>
+
+          <p><strong>Trilemma skalabilitas</strong></p>
+          <p>Ada tiga sifat yang diinginkan dari sistem pembayaran: terdesentralisasi, aman, dan skalabel. Secara bersamaan, ketiganya tidak bisa dicapai sepenuhnya dalam satu layer. Bitcoin memilih desentralisasi dan keamanan. Skalabilitas diselesaikan di layer lain.</p>
+
+          <p><strong>Layer 2 sebagai jawaban</strong></p>
+          <p>Solusinya bukan memperbesar block, tapi membangun layer di atas Bitcoin yang bisa menangani transaksi dengan cepat dan murah, tapi tetap mewarisi keamanan Bitcoin sebagai settlement layer akhir. Lightning Network adalah implementasi paling matang dari ide ini.</p>
+
+          <div class="p-callout">
+            <p>Perdebatan ini bukan perdebatan teoretis. Ia sempat membelah komunitas Bitcoin pada 2017 dan berakhir dengan hard fork yang melahirkan Bitcoin Cash, sebuah jaringan terpisah dengan block yang jauh lebih besar.</p>
+          <p>Keduanya masih berjalan sampai hari ini, jadi kamu bisa melihat sendiri konsekuensi dari dua pilihan itu. Bitcoin Cash memang memberikan fee yang jauh lebih murah, persis seperti yang dijanjikan. Yang juga terjadi: hash rate yang mengamankannya tinggal sebagian kecil dari Bitcoin, dan adopsinya jauh lebih sempit. Rantai dengan hash rate lebih rendah lebih murah untuk diserang, dan itu konsekuensi aritmetika, bukan pendapat.</p>
+          <p>Apakah harga itu sepadan dengan fee yang lebih murah adalah pertanyaan yang sampai sekarang masih diperdebatkan dengan sungguh-sungguh oleh orang-orang yang paham betul apa yang mereka bicarakan. Yang penting kamu pahami dari bab ini bukan siapa yang menang, melainkan kenapa memperbesar block bukan pilihan gratis. Setiap tambahan kapasitas dibayar dengan naiknya biaya menjalankan node, dan node adalah yang membuat aturan Bitcoin bisa ditegakkan tanpa mempercayai siapapun.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualisasi — Trilemma skalabilitas</div>
+          <div class="b07-s71-desc">
+            Pilih skenario untuk melihat bagaimana setiap pendekatan memilih trade-off yang berbeda di antara tiga sifat yang diinginkan.
+          </div>
+
+          <div class="b07-s71-tabs" id="b07-s71-tabs"></div>
+          <canvas id="b07-s71-canvas" height="340"></canvas>
+          <div class="b07-s71-note" id="b07-s71-note"></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-7-2" data-sb="sb-7-2">
+            7.2 — Payment Channel →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 7.1 -->
+
+      <!-- ==============================
+           SECTION 7.2 · Payment Channel
+      ============================== -->
+      <div class="p-section" id="section-7-2">
+        <div class="p-eyebrow">Bab 7 · 7.2</div>
+        <div class="p-heading">Bertransaksi ribuan kali dengan dua transaksi on-chain</div>
+        <div class="p-title">Payment Channel</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Lightning Network dibangun di atas satu konsep sederhana: tidak semua transaksi perlu dicatat di blockchain. Yang perlu dicatat hanya dua hal: saat channel dibuka dan saat channel ditutup.</p>
+
+          <p><strong>Ide dasarnya</strong></p>
+          <p>Bayangkan dua orang, Alice dan Bob, yang sering bertransaksi satu sama lain. Daripada setiap transaksi masuk ke blockchain, mereka bisa membuka sebuah payment channel: mengunci sejumlah bitcoin di sebuah multisig address bersama, lalu bertransaksi di antara mereka secara off-chain sesuka hati, dan hanya menetapkan saldo akhir ke blockchain saat selesai. Selama channel terbuka, Alice dan Bob bisa saling mengirim bitcoin ribuan kali tanpa satu pun transaksi menyentuh blockchain. Hanya dua transaksi on-chain yang terjadi: satu untuk membuka channel, satu untuk menutupnya.</p>
+
+          <p><strong>Multisig 2-dari-2: fondasi channel</strong></p>
+          <p>Di balik setiap payment channel adalah sebuah multisig 2-dari-2. Berbeda dengan multisig biasa seperti di P2SH yang bisa 2-dari-3 atau 3-dari-5 dengan toleransi satu pihak absen, multisig Lightning tidak punya toleransi sama sekali. Kedua pihak harus menandatangani untuk menutup channel secara kooperatif. Ini bukan kelemahan, ini adalah desain yang disengaja. Tidak ada satu pihak pun yang bisa unilateral mengambil dana kecuali lewat mekanisme yang sudah disepakati sebelumnya.</p>
+
+          <p><strong>Commitment transaction</strong></p>
+          <p>Setiap kali saldo berubah di dalam channel, Alice dan Bob saling bertukar commitment transaction: transaksi yang belum disiarkan yang merepresentasikan distribusi saldo terkini. Kalau salah satu pihak ingin keluar dari channel, mereka bisa menyiarkan commitment transaction terakhir ke blockchain.</p>
+
+          <p><strong>Tiga skenario penutupan channel</strong></p>
+          <p>Pertama, penutupan kooperatif: kedua pihak setuju, menandatangani closing transaction bersama, dana langsung dibagi sesuai saldo akhir. Ini yang paling efisien. Kedua, penutupan paksa: salah satu pihak menghilang atau tidak mau kooperatif. Pihak yang jujur bisa menyiarkan commitment transaction terakhir secara unilateral, tapi harus menunggu time-lock selesai sebelum bisa mengambil dananya. Ketiga, hukuman atas kecurangan: kalau seseorang mencoba menyiarkan commitment transaction lama yang lebih menguntungkan dirinya, pihak lain punya window waktu untuk mendeteksi dan menyiarkan revocation key. Hasilnya: pihak yang curang kehilangan seluruh dananya di channel.</p>
+
+          <p><strong>Insentif yang membuat curang tidak masuk akal</strong></p>
+          <p>Kalau Alice mencoba curang dengan menyiarkan state lama, Bob bisa mengambil seluruh dana di channel sebagai hukuman, bukan hanya miliknya saja. Alice kehilangan segalanya. Ini membuat kecurangan sangat mahal dan irasional secara ekonomi.</p>
+
+          <p><strong>Tapi bagaimana kalau Bob sedang tidur?</strong></p>
+          <p>Di sinilah seluruh mekanisme hukuman tadi punya syarat yang belum kita sebut. Bob hanya bisa menghukum kalau ia <strong>melihat</strong> state lama itu muncul di blockchain, dan ia harus melihatnya sebelum timelock Alice habis, biasanya sekitar satu hari. Kalau node Bob mati, ponselnya kehabisan baterai, atau ia sedang berlibur seminggu, Alice bisa curang dan lolos begitu saja.</p>
+          <p>Ini bukan celah teoretis. Justru inilah beda paling nyata antara Bitcoin on-chain dan Lightning. Bitcoin biasa tidak menuntut apa pun darimu setelah transaksi dikonfirmasi: kamu bisa hilang sepuluh tahun dan dananya tetap aman. Lightning menuntut <strong>kehadiran</strong>, karena keamanannya bersandar pada seseorang yang mengawasi dalam jendela waktu tertentu.</p>
+          <p>Jawabannya adalah <strong>watchtower</strong>, sebuah layanan yang mengawasi blockchain menggantikan kamu. Kamu menitipkan padanya sepotong data terenkripsi untuk setiap state yang dicabut. Data itu tidak memberitahu watchtower siapa kamu, berapa saldomu, atau channel mana yang kamu punya. Ia baru berguna kalau state lama yang cocok benar-benar muncul di blockchain, dan pada saat itulah watchtower bisa menyusun penalty transaction dan menyiarkannya untukmu.</p>
+          <p>Yang menarik, kamu tidak perlu memercayai watchtower. Ia tidak bisa mencuri danamu, tidak bisa membuka channel-mu, dan tidak tahu apa-apa selama tidak ada kecurangan. Risiko terburuknya cuma satu: ia lalai dan tidak melakukan apa-apa, yang membuatmu kembali ke posisi seperti tidak punya watchtower sama sekali. Karena itu banyak pengguna menitip ke beberapa watchtower sekaligus.
+          </p>
+          <p>Jadi kalimat "curang tidak masuk akal" tadi perlu satu tambahan supaya jujur: curang tidak masuk akal <strong>selama ada yang mengawasi</strong>. Menyediakan pengawas itu, entah lewat node yang selalu menyala atau lewat watchtower, adalah ongkos yang dibayar Lightning demi kecepatannya.</p>
+
+          <div class="p-callout">
+            <p>Payment channel bukan penemuan Lightning Network. Benihnya sudah ada di kode Bitcoin paling awal: Satoshi menyertakan mekanisme penggantian transaksi berbasis nSequence yang ia jelaskan lewat korespondensi, bukan lewat whitepaper. Idenya lalu dikembangkan beberapa peneliti sebelum Lightning. Kenapa mekanisme awal itu gagal bekerja, kita bahas di 15.3. Yang Lightning lakukan adalah menghubungkan banyak channel menjadi jaringan yang bisa melakukan routing pembayaran antar pihak yang tidak punya channel langsung.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi interaktif — Lifecycle channel dan Penalty Transaction</div>
+          <div class="b07-s72-desc">
+            Klik setiap fase untuk melihat detail transaksi. Perhatikan berapa banyak transaksi off-chain yang terjadi dengan hanya dua transaksi on-chain.
+          </div>
+
+          <div class="b07-s72-phases" id="b07-s72-phases-wrap">
+            <div class="b07-s72-phase active" id="b07-s72-ph1">
+              <div class="b07-s72-ph-head on-chain-open">
+                <span>Fase 1</span><span class="b07-s72-ph-badge">on-chain</span>
+              </div>
+              <div class="b07-s72-ph-body">
+                <div class="b07-s72-ph-title">Buka Channel</div>
+                <div class="b07-s72-ph-sub">Funding transaction dikunci di multisig 2-dari-2</div>
+                <div class="b07-s72-bal">
+                  <div class="b07-s72-bal-row"><span class="b07-s72-bal-name">Alice</span><span class="b07-s72-bal-val alice-val">0.05 BTC</span></div>
+                  <div class="b07-s72-bar-bg"><div class="b07-s72-bar-fill alice-fill" style="width:50%"></div></div>
+                  <div class="b07-s72-bal-row"><span class="b07-s72-bal-name">Bob</span><span class="b07-s72-bal-val bob-val">0.05 BTC</span></div>
+                  <div class="b07-s72-bar-bg"><div class="b07-s72-bar-fill bob-fill" style="width:50%"></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="b07-s72-arrow">→</div>
+            <div class="b07-s72-phase" id="b07-s72-ph2">
+              <div class="b07-s72-ph-head off-chain">
+                <span>Fase 2</span><span class="b07-s72-ph-badge">off-chain</span>
+              </div>
+              <div class="b07-s72-ph-body">
+                <div class="b07-s72-ph-title">Transaksi dalam Channel</div>
+                <div class="b07-s72-ph-sub">Saldo berubah, tidak ada yang on-chain</div>
+                <div class="b07-s72-bal">
+                  <div class="b07-s72-bal-row"><span class="b07-s72-bal-name">Alice</span><span class="b07-s72-bal-val alice-val">0.03 BTC</span></div>
+                  <div class="b07-s72-bar-bg"><div class="b07-s72-bar-fill alice-fill" style="width:30%"></div></div>
+                  <div class="b07-s72-bal-row"><span class="b07-s72-bal-name">Bob</span><span class="b07-s72-bal-val bob-val">0.07 BTC</span></div>
+                  <div class="b07-s72-bar-bg"><div class="b07-s72-bar-fill bob-fill" style="width:70%"></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="b07-s72-arrow">→</div>
+            <div class="b07-s72-phase" id="b07-s72-ph3">
+              <div class="b07-s72-ph-head on-chain-close">
+                <span>Fase 3</span><span class="b07-s72-ph-badge">on-chain</span>
+              </div>
+              <div class="b07-s72-ph-body">
+                <div class="b07-s72-ph-title">Tutup Channel</div>
+                <div class="b07-s72-ph-sub">Settlement transaction mencatat saldo akhir</div>
+                <div class="b07-s72-bal">
+                  <div class="b07-s72-bal-row"><span class="b07-s72-bal-name">Alice</span><span class="b07-s72-bal-val alice-val">0.03 BTC</span></div>
+                  <div class="b07-s72-bar-bg"><div class="b07-s72-bar-fill alice-fill" style="width:30%"></div></div>
+                  <div class="b07-s72-bal-row"><span class="b07-s72-bal-name">Bob</span><span class="b07-s72-bal-val bob-val">0.07 BTC</span></div>
+                  <div class="b07-s72-bar-bg"><div class="b07-s72-bar-fill bob-fill" style="width:70%"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b07-s72-detail">
+            <div class="b07-s72-detail-head" id="b07-s72-detail-head">Fase 1 · Buka Channel</div>
+            <div class="b07-s72-detail-body" id="b07-s72-detail-body"></div>
+          </div>
+
+          <div class="b07-s72-note info-note" id="b07-s72-note">Klik setiap fase untuk melihat detail transaksi dan penjelasannya.</div>
+
+          <div class="b07-s72-cheat">
+            <div class="b07-s72-cheat-head">
+              <span>Coba curang</span><span id="b07-s72-cheat-state">state terakhir: Alice 0.03 / Bob 0.07</span>
+            </div>
+            <div class="b07-s72-cheat-body">
+              <div class="b07-s72-cheat-q" id="b07-s72-cheat-q">
+                Saldo Alice sudah turun dari 0.05 ke 0.03 BTC. Di komputernya masih tersimpan state lama waktu ia masih punya 0.05. Kenapa ia tidak menyiarkan yang itu saja? Coba saja, dan lihat apa yang terjadi.
+              </div>
+              <div class="b07-s72-cheat-btns">
+                <button class="b07-s72-btn danger" id="b07-s72-btn-cheat">Alice siarkan state lama (0.05 / 0.05)</button>
+                <button class="b07-s72-btn" id="b07-s72-btn-honest">Tutup jujur (0.03 / 0.07)</button>
+                <button class="b07-s72-btn" id="b07-s72-btn-reset">Ulangi</button>
+              </div>
+              <div class="b07-s72-steps" id="b07-s72-steps"></div>
+              <div class="b07-s72-outcome" id="b07-s72-outcome" style="display:none"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-7-1" data-sb="sb-7-1">
+            ← 7.1 — Masalah Skalabilitas
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-7-3" data-sb="sb-7-3">
+            7.3 — Routing dan HTLC →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 7.2 -->
+
+      <!-- ==============================
+           SECTION 7.3 · Routing dan HTLC
+      ============================== -->
+      <div class="p-section" id="section-7-3">
+        <div class="p-eyebrow">Bab 7 · 7.3</div>
+        <div class="p-heading">Bayar siapapun, lewat siapapun, tanpa kepercayaan</div>
+        <div class="p-title">Routing dan HTLC</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Payment channel antara dua pihak sudah powerful. Tapi bayangkan ini: Alice ingin membayar Carol, tapi Alice dan Carol tidak punya channel langsung. Haruskah mereka membuka channel baru hanya untuk satu transaksi? Tentu tidak. Lightning punya cara yang lebih elegan.</p>
+
+          <p><strong>Bayar lewat perantara</strong></p>
+          <p>Kalau Alice punya channel ke Bob, dan Bob punya channel ke Carol, Alice bisa membayar Carol lewat Bob. Bob jadi perantara. Tidak perlu channel baru, tidak perlu interaksi on-chain sama sekali. Tapi ini langsung memunculkan pertanyaan yang sangat wajar: kenapa Alice harus percaya Bob? Bagaimana kalau Bob mengambil uang Alice tapi tidak meneruskannya ke Carol? Jawabannya: Alice tidak perlu percaya Bob sama sekali. Ini yang membuat Lightning luar biasa.</p>
+
+          <p><strong>Kunci dan rahasia</strong></p>
+          <p>Bayangkan sebuah gembok dengan kunci yang unik. Carol yang membuat gembok itu, dan hanya Carol yang punya kuncinya. Carol memberikan foto gembok itu kepada Alice, tapi menyimpan kuncinya untuk dirinya sendiri. Alice berkata kepada Bob: "Aku akan memberikan 0.01 BTC kepadamu, tapi hanya kalau kamu bisa menunjukkan kunci yang membuka gembok ini. Kalau dalam 24 jam kamu tidak bisa menunjukkannya, uangnya kembali ke aku." Bob tahu bahwa Carol punya kuncinya. Jadi Bob berkata kepada Carol: "Aku akan memberikan 0.01 BTC kepadamu, tapi hanya kalau kamu menunjukkan kunci itu kepadaku. Kalau dalam 12 jam tidak ada, uangnya kembali ke aku." Carol menunjukkan kuncinya kepada Bob, mengambil 0.01 BTC. Bob sekarang punya kunci itu, menunjukkannya kepada Alice, mengambil 0.01 BTC. Selesai.</p>
+
+          <p><strong>Dalam bahasa teknis: HTLC</strong></p>
+          <p>Mekanisme "gembok dan kunci" ini dalam dunia Bitcoin disebut HTLC, singkatan dari Hash Time-Locked Contract. "Gembok" adalah hash dari sebuah rahasia. "Kunci" adalah rahasia itu sendiri. HTLC bukan teknologi baru. Ia adalah Bitcoin Script biasa, kombinasi dari OP_HASH160 yang sudah kita pelajari di Bab 6 dan OP_CHECKLOCKTIMEVERIFY yang dibahas tuntas di Bab 15. Lightning tidak mengubah Bitcoin, ia hanya memanfaatkan apa yang sudah ada.</p>
+
+          <p><strong>Kenapa timelock Bob lebih pendek dari Alice?</strong></p>
+          <p>Alice memberi Bob waktu 24 jam, tapi Bob memberi Carol waktu 12 jam. Ini bukan kebetulan. Bob butuh cukup waktu untuk bereaksi setelah Carol mengungkapkan kuncinya. Kalau waktunya sama, Bob mungkin tidak sempat mengklaim dari Alice sebelum time-lock habis. Semakin panjang rantai perantara, semakin bertingkat time-lock-nya.</p>
+
+          <p><strong>Privasi lewat onion routing</strong></p>
+          <p>Setiap perantara hanya tahu satu hal: dari mana pembayaran datang dan ke mana harus diteruskan. Bob tahu ia menerima dari Alice dan harus meneruskan ke Carol, tapi Bob tidak tahu apakah Alice adalah pengirim asli atau apakah Carol adalah penerima akhir. Teknik ini disebut onion routing, sama seperti yang dipakai Tor.</p>
+
+          <div class="p-callout">
+            <p>HTLC adalah salah satu konstruksi kriptografi paling elegan di Bitcoin. Ia memungkinkan pembayaran melewati banyak perantara yang tidak saling percaya, tanpa satupun perantara bisa mencuri dana. Semua dijamin oleh matematika, bukan kepercayaan.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualisasi — Alur pembayaran HTLC</div>
+          <div class="b07-s73-desc">
+            Lima langkah bagaimana Alice membayar Carol lewat Bob tanpa kepercayaan. Klik setiap langkah untuk melihat apa yang terjadi di tiap node.
+          </div>
+
+          <div class="b07-s73-steps" id="b07-s73-steps"></div>
+          <div class="b07-s73-nodes" id="b07-s73-nodes"></div>
+          <div class="b07-s73-arrows" id="b07-s73-arrows"></div>
+          <div class="b07-s73-det">
+            <div class="b07-s73-dh" id="b07-s73-dh"></div>
+            <div class="b07-s73-db" id="b07-s73-db"></div>
+          </div>
+          <div class="b07-s73-note" id="b07-s73-note"></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-7-2" data-sb="sb-7-2">
+            ← 7.2 — Payment Channel
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-7-4" data-sb="sb-7-4">
+            7.4 — Membuka dan Menutup Channel →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 7.3 -->
+
+      <!-- ==============================
+           SECTION 7.4 · Membuka dan Menutup Channel
+      ============================== -->
+      <div class="p-section" id="section-7-4">
+        <div class="p-eyebrow">Bab 7 · 7.4</div>
+        <div class="p-heading">Apa yang sebenarnya terjadi on-chain?</div>
+        <div class="p-title">Membuka dan Menutup Channel</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Di 7.2 kita sudah melihat tiga skenario penutupan channel dari sisi konsepnya. Sekarang kita lihat sisi teknisnya: transaksi apa yang sebenarnya disiarkan ke blockchain, dalam urutan apa, dan berapa ongkosnya.</p>
+
+          <p><strong>Membuka channel: funding transaction</strong></p>
+          <p>Membuka channel adalah satu transaksi Bitcoin biasa. Alice dan Bob masing-masing berkontribusi dana ke sebuah output multisig 2-dari-2. Output ini disebut funding output. Sebelum funding transaction disiarkan ke jaringan, Alice dan Bob sudah harus bertukar commitment transaction pertama mereka. Ini penting: kalau funding transaction disiarkan tanpa commitment transaction yang valid dan salah satu pihak tiba-tiba tidak kooperatif, dana bisa terjebak selamanya. Jadi urutannya: buat commitment transaction dulu, baru siarkan funding transaction.</p>
+
+          <p><strong>Tiga cara menutup channel</strong></p>
+          <p>Pertama, cooperative close: kedua pihak setuju menutup channel. Mereka menandatangani closing transaction bersama yang langsung membagi dana sesuai saldo akhir. Ini cara terbaik: cepat, murah, dan tidak perlu menunggu time-lock. Kedua, force close: salah satu pihak tidak bisa dihubungi atau tidak mau kooperatif. Pihak yang jujur menyiarkan commitment transaction terakhir. Ada time-lock yang harus ditunggu sebelum dana bisa diambil, biasanya beberapa ratus block. Ini memberi waktu bagi pihak lain untuk mendeteksi kalau ada kecurangan. Ketiga, penalty close: kalau seseorang menyiarkan commitment transaction yang sudah kedaluwarsa, pihak yang jujur bisa menyiarkan justice transaction dan mengambil seluruh dana di channel sebagai hukuman.</p>
+
+          <p><strong>Biaya membuka dan menutup channel</strong></p>
+          <p>Setiap kali membuka channel, ada satu transaksi on-chain. Setiap kali menutup channel, ada satu transaksi on-chain lagi. Jadi biaya on-chain selalu dua kali fee transaksi, tidak peduli berapa banyak transaksi terjadi di dalam channel. Ini yang membuat Lightning sangat ekonomis untuk penggunaan rutin: bayar ribuan transaksi dengan biaya on-chain dua kali saja.</p>
+
+          <p><strong>Channel capacity dan likuiditas</strong></p>
+          <p>Channel punya kapasitas terbatas. Kalau Alice membuka channel dengan 0.1 BTC, ia tidak bisa mengirim lebih dari 0.1 BTC lewat channel itu dalam total. Likuiditas adalah sumber daya yang harus dikelola dengan hati-hati di Lightning Network.</p>
+
+          <div class="p-callout">
+            <p>Membuka channel adalah keputusan ekonomi: berapa lama akan dipakai, seberapa besar kapasitas yang dibutuhkan, dan berapa fee on-chain yang rela dibayar. Untuk pengguna kasual, wallet Lightning modern mengelola ini secara otomatis melalui channel yang dikelola penyedia layanan.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualisasi — Tiga cara menutup channel</div>
+          <div class="b07-s74-desc">
+            Klik setiap kartu untuk melihat detail, langkah-langkah, dan perbedaan kecepatan serta biaya dari tiap cara menutup channel.
+          </div>
+
+          <div class="b07-s74-grid">
+            <div class="b07-s74-card sel coop" id="b07-s74-c1">
+              <div class="b07-s74-head s74-coop">
+                <span>Cooperative close</span><span class="b07-s74-badge">terbaik</span>
+              </div>
+              <div class="b07-s74-cbody">
+                <div class="b07-s74-stat"><div class="b07-s74-sl">Kecepatan</div><div class="b07-s74-sv sv-g">1 konfirmasi</div></div>
+                <div class="b07-s74-stat"><div class="b07-s74-sl">Transaksi on-chain</div><div class="b07-s74-sv sv-g">1</div></div>
+                <div class="b07-s74-stat"><div class="b07-s74-sl">Time-lock</div><div class="b07-s74-sv sv-g">Tidak ada</div></div>
+                <div class="b07-s74-stat"><div class="b07-s74-sl">Biaya</div><div class="b07-s74-sv sv-g">Paling murah</div></div>
+              </div>
+            </div>
+            <div class="b07-s74-card" id="b07-s74-c2">
+              <div class="b07-s74-head s74-force">
+                <span>Force close</span><span class="b07-s74-badge">darurat</span>
+              </div>
+              <div class="b07-s74-cbody">
+                <div class="b07-s74-stat"><div class="b07-s74-sl">Kecepatan</div><div class="b07-s74-sv sv-m">~144 block</div></div>
+                <div class="b07-s74-stat"><div class="b07-s74-sl">Transaksi on-chain</div><div class="b07-s74-sv sv-m">2</div></div>
+                <div class="b07-s74-stat"><div class="b07-s74-sl">Time-lock</div><div class="b07-s74-sv sv-m">Ada — harus tunggu</div></div>
+                <div class="b07-s74-stat"><div class="b07-s74-sl">Biaya</div><div class="b07-s74-sv sv-m">Lebih mahal</div></div>
+              </div>
+            </div>
+            <div class="b07-s74-card" id="b07-s74-c3">
+              <div class="b07-s74-head s74-pen">
+                <span>Penalty close</span><span class="b07-s74-badge">hukuman</span>
+              </div>
+              <div class="b07-s74-cbody">
+                <div class="b07-s74-stat"><div class="b07-s74-sl">Kecepatan</div><div class="b07-s74-sv sv-r">Tergantung deteksi</div></div>
+                <div class="b07-s74-stat"><div class="b07-s74-sl">Transaksi on-chain</div><div class="b07-s74-sv sv-r">2-3</div></div>
+                <div class="b07-s74-stat"><div class="b07-s74-sl">Time-lock</div><div class="b07-s74-sv sv-r">Window waktu terbatas</div></div>
+                <div class="b07-s74-stat"><div class="b07-s74-sl">Hasil</div><div class="b07-s74-sv sv-r">Penyerang kehilangan semua</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b07-s74-detail">
+            <div class="b07-s74-dhead" id="b07-s74-dhead"></div>
+            <div class="b07-s74-dbody" id="b07-s74-dbody"></div>
+          </div>
+
+          <div class="b07-s74-note" id="b07-s74-note"></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-7-3" data-sb="sb-7-3">
+            ← 7.3 — Routing dan HTLC
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-7-5" data-sb="sb-7-5">
+            7.5 — Invoice dan Pembayaran →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 7.4 -->
+
+      <!-- ==============================
+           SECTION 7.5 · Invoice dan Pembayaran
+      ============================== -->
+      <div class="p-section" id="section-7-5">
+        <div class="p-eyebrow">Bab 7 · 7.5</div>
+        <div class="p-heading">Scan, konfirmasi, selesai — dalam satu detik</div>
+        <div class="p-title">Invoice dan Pembayaran</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Sejauh ini kita sudah memahami bagaimana channel bekerja dan bagaimana pembayaran bisa dirouting. Tapi bagaimana cara pengguna sehari-hari sebenarnya melakukan pembayaran di Lightning? Jawabannya adalah invoice.</p>
+
+          <p><strong>Apa itu invoice?</strong></p>
+          <p>Invoice adalah permintaan pembayaran yang dibuat oleh penerima. Ia berisi semua informasi yang dibutuhkan pengirim untuk menyelesaikan pembayaran: jumlah yang harus dibayar, hash dari rahasia HTLC, node ID penerima, dan masa berlaku invoice. Invoice biasanya direpresentasikan sebagai string teks panjang yang dimulai dengan <code>lnbc</code> (untuk mainnet) atau kode QR yang bisa discan. Formatnya disebut BOLT-11, salah satu standar protokol Lightning.</p>
+
+          <p><strong>Alur pembayaran</strong></p>
+          <p>Carol ingin menerima 0.001 BTC dari Alice. Carol membuat invoice. Di balik layar, Carol membuat rahasia R dan menghitung H = hash(R), lalu memasukkan H ke dalam invoice. Carol membagikan invoice kepada Alice lewat QR code atau copy-paste. Alice membuka invoice di wallet-nya. Wallet secara otomatis menemukan rute terbaik ke Carol. Alice mengkonfirmasi. Wallet melakukan routing pembayaran HTLC. Carol mengungkapkan R untuk mengklaim pembayaran. Dari sudut pandang pengguna: scan QR, konfirmasi, selesai. Kurang dari satu detik.</p>
+
+          <p><strong>Kelemahan invoice klasik</strong></p>
+          <p>Invoice BOLT-11 punya beberapa keterbatasan. Pertama, single-use: setiap invoice hanya bisa dibayar sekali. Kedua, penerima harus online saat pembayaran datang untuk mengungkapkan R. Ketiga, tidak ada bukti pembayaran yang bisa diverifikasi pihak ketiga.</p>
+
+          <p><strong>BOLT-12: offers</strong></p>
+          <p>Standar baru yang sedang berkembang, BOLT-12, memperkenalkan konsep "offer": sebuah kode statis yang bisa digunakan berkali-kali. Saat pengirim ingin membayar, wallet mereka menghubungi node penerima untuk meminta invoice baru yang unik. Ini menyelesaikan masalah single-use dan memungkinkan pembayaran berulang seperti langganan.</p>
+
+          
+          <p><strong>LNURL: satu alamat, berkali-kali dipakai</strong></p>
+          <p>Di luar standar BOLT, ada pendekatan lain yang sudah banyak dipakai: LNURL. Berbeda dari invoice BOLT-11 yang one-time, LNURL adalah protokol berbasis HTTP yang memungkinkan wallet pengirim untuk meminta invoice baru setiap kali ingin membayar, cukup dari satu alamat statis. Artinya penerima bisa membagikan satu kode atau alamat seperti <code>nama@domain.com</code>, dan pengirim bisa membayar berulang kali tanpa penerima perlu membuat invoice baru setiap saat. Penggunaan lnbc (BOLT-11) tetap jauh lebih umum di transaksi sehari-hari, tapi LNURL hadir sebagai solusi praktis untuk kasus seperti donasi, tip, atau pembayaran berulang.</p>
+
+          <div class="p-callout">
+            <p>Lightning invoice adalah antarmuka antara protokol yang kompleks dan pengguna yang hanya ingin scan dan bayar. Di balik QR code sederhana itu tersembunyi payment hash, routing hints, dan tanda tangan kriptografis. Abstraksi yang baik membuat teknologi yang rumit terasa seperti magic.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualisasi — Struktur invoice dan alur pembayaran</div>
+          <div class="b07-s75-desc">
+            Tab pertama: klik setiap segmen invoice untuk melihat apa artinya. Tab kedua: alur pembayaran dari buat invoice sampai selesai.
+          </div>
+
+          <div class="b07-s75-tabs">
+            <button class="b07-s75-tab active" id="b07-s75-t1">Struktur invoice</button>
+            <button class="b07-s75-tab" id="b07-s75-t2">Alur pembayaran</button>
+          </div>
+
+          <!-- Pane 1: Struktur invoice -->
+          <div class="b07-s75-pane show" id="b07-s75-p1">
+            <div style="font-size:11px;color:#52524C;font-family:'Sora',sans-serif;margin-bottom:8px;">Klik bagian invoice atau legenda untuk melihat penjelasannya:</div>
+            <div class="b07-s75-string" id="b07-s75-string">
+              <span class="b07-s75-seg seg-prefix" data-key="prefix">lnbc</span><span class="b07-s75-seg seg-amount" data-key="amount">1m</span><span class="b07-s75-seg seg-ts" data-key="timestamp">1pj</span><span class="b07-s75-seg seg-phash" data-key="phash">pp5kw5uzfmzk6wfcg9...</span><span class="b07-s75-seg seg-nodeid" data-key="nodeid">hz02a7pqfxpj9...</span><span class="b07-s75-seg seg-expiry" data-key="expiry">x3600</span><span class="b07-s75-seg seg-sig" data-key="sig">0n9rqsypp5...</span>
+            </div>
+            <div class="b07-s75-legend" id="b07-s75-legend">
+              <div class="b07-s75-leg" data-key="prefix"><div class="b07-s75-dot" style="background:#AFA9EC;"></div>Prefix jaringan</div>
+              <div class="b07-s75-leg" data-key="amount"><div class="b07-s75-dot" style="background:#5DCAA5;"></div>Jumlah</div>
+              <div class="b07-s75-leg" data-key="timestamp"><div class="b07-s75-dot" style="background:#FAC775;"></div>Timestamp</div>
+              <div class="b07-s75-leg" data-key="phash"><div class="b07-s75-dot" style="background:#F09595;"></div>Payment hash</div>
+              <div class="b07-s75-leg" data-key="nodeid"><div class="b07-s75-dot" style="background:#85B7EB;"></div>Node ID penerima</div>
+              <div class="b07-s75-leg" data-key="expiry"><div class="b07-s75-dot" style="background:#97C459;"></div>Masa berlaku</div>
+              <div class="b07-s75-leg" data-key="sig"><div class="b07-s75-dot" style="background:#888780;"></div>Tanda tangan</div>
+            </div>
+            <div class="b07-s75-detail">
+              <div class="b07-s75-dhead" id="b07-s75-dhead">Pilih bagian invoice untuk melihat penjelasan</div>
+              <div class="b07-s75-dbody" id="b07-s75-dbody"></div>
+            </div>
+          </div>
+
+          <!-- Pane 2: Alur pembayaran -->
+          <div class="b07-s75-pane" id="b07-s75-p2">
+            <div class="b07-s75-flow">
+              <div class="b07-s75-fstep">
+                <div class="b07-s75-fnum fc">C</div>
+                <div class="b07-s75-fcontent">
+                  <div class="b07-s75-factor">Carol (penerima)</div>
+                  <div class="b07-s75-ftitle">Buat rahasia dan invoice</div>
+                  <div class="b07-s75-fdesc">Carol membuat rahasia R, menghitung H = hash(R), lalu membuat invoice BOLT-11 yang berisi H, jumlah, dan informasi routing.</div>
+                  <div class="b07-s75-fcode">lnbc1m1pj...pp5kw5...hz02a7...0n9rq...</div>
+                </div>
+              </div>
+              <div class="b07-s75-fstep">
+                <div class="b07-s75-fnum fc">C</div>
+                <div class="b07-s75-fcontent">
+                  <div class="b07-s75-factor">Carol (penerima)</div>
+                  <div class="b07-s75-ftitle">Bagikan invoice ke Alice</div>
+                  <div class="b07-s75-fdesc">Carol menampilkan QR code atau mengirim string invoice. Alice bisa scan atau copy-paste ke wallet-nya.</div>
+                </div>
+              </div>
+              <div class="b07-s75-fstep">
+                <div class="b07-s75-fnum fa">A</div>
+                <div class="b07-s75-fcontent">
+                  <div class="b07-s75-factor">Alice (pengirim)</div>
+                  <div class="b07-s75-ftitle">Buka invoice dan cari rute</div>
+                  <div class="b07-s75-fdesc">Wallet Alice decode invoice, membaca jumlah dan payment hash, lalu mencari rute terbaik ke node Carol di jaringan Lightning.</div>
+                </div>
+              </div>
+              <div class="b07-s75-fstep">
+                <div class="b07-s75-fnum fa">A</div>
+                <div class="b07-s75-fcontent">
+                  <div class="b07-s75-factor">Alice (pengirim)</div>
+                  <div class="b07-s75-ftitle">Konfirmasi dan kirim HTLC</div>
+                  <div class="b07-s75-fdesc">Alice konfirmasi pembayaran. Wallet memulai HTLC routing menggunakan payment hash H dari invoice. Dana terkunci di tiap hop.</div>
+                </div>
+              </div>
+              <div class="b07-s75-fstep">
+                <div class="b07-s75-fnum fc">C</div>
+                <div class="b07-s75-fcontent">
+                  <div class="b07-s75-factor">Carol (penerima)</div>
+                  <div class="b07-s75-ftitle">Ungkap R, klaim pembayaran</div>
+                  <div class="b07-s75-fdesc">Carol mengungkapkan R ke node terakhir. Dana mengalir balik di tiap hop sampai Alice. Pembayaran selesai.</div>
+                </div>
+              </div>
+              <div class="b07-s75-fstep">
+                <div class="b07-s75-fnum fb">✓</div>
+                <div class="b07-s75-fcontent">
+                  <div class="b07-s75-factor">Selesai</div>
+                  <div class="b07-s75-ftitle">Pembayaran terkonfirmasi dalam kurang dari 1 detik</div>
+                  <div class="b07-s75-fdesc">Tidak ada on-chain transaction. Tidak ada konfirmasi yang perlu ditunggu. R yang diungkap Carol menjadi bukti pembayaran yang tidak bisa dipalsukan.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-7-4" data-sb="sb-7-4">
+            ← 7.4 — Membuka dan Menutup Channel
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-7-6" data-sb="sb-7-6">
+            7.6 — Keterbatasan dan Trade-off →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 7.5 -->
+
+      <!-- ==============================
+           SECTION 7.6 · Keterbatasan dan Trade-off
+      ============================== -->
+      <div class="p-section" id="section-7-6">
+        <div class="p-eyebrow">Bab 7 · 7.6</div>
+        <div class="p-heading">Tidak ada solusi sempurna — hanya trade-off yang jujur</div>
+        <div class="p-title">Keterbatasan dan Trade-off Lightning</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Lightning Network adalah teknologi yang luar biasa, tapi bukan solusi sempurna. Memahami keterbatasannya sama pentingnya dengan memahami kelebihannya.</p>
+
+          <p><strong>Likuiditas yang terkunci</strong></p>
+          <p>Untuk membuka channel, pengguna harus mengunci bitcoin di dalamnya. Bitcoin yang terkunci ini tidak bisa dipakai untuk hal lain selama channel terbuka. Untuk node yang melakukan routing, mereka harus mengunci likuiditas di banyak channel sekaligus. Ini adalah modal yang menganggur.</p>
+
+          <p><strong>Masalah inbound liquidity</strong></p>
+          <p>Kalau Alice membuka channel ke Bob dengan 0.1 BTC, seluruh kapasitas ada di sisi Alice. Bob tidak bisa mengirim ke Alice sampai Alice mengirim sesuatu ke Bob terlebih dahulu. Untuk menerima pembayaran, pengguna butuh inbound liquidity: channel yang punya kapasitas di sisi penerima. Mendapatkan inbound liquidity tidak selalu mudah dan sering membutuhkan biaya.</p>
+
+          <p><strong>Keharusan online</strong></p>
+          <p>Untuk menerima pembayaran di Lightning klasik, node penerima harus online. Kalau ponsel mati saat seseorang mencoba membayar, pembayaran gagal. Ini berbeda dengan Bitcoin on-chain di mana penerima tidak perlu online. BOLT-12 offers mulai mengatasi ini, tapi belum sepenuhnya tersebar luas.</p>
+
+          <p><strong>Watchtower: delegasi pengawasan</strong></p>
+          <p>Untuk mendeteksi kecurangan, pengguna harus memantau blockchain secara berkala. Kalau node offline terlalu lama, pihak curang bisa menyiarkan state lama tanpa terdeteksi. Solusinya adalah watchtower: layanan pihak ketiga yang memantau blockchain atas nama pengguna. Tapi ini memperkenalkan elemen kepercayaan baru.</p>
+
+          <p><strong>Routing tidak selalu berhasil</strong></p>
+          <p>Menemukan rute yang punya cukup likuiditas di setiap hop adalah masalah yang sulit. Pembayaran besar sering gagal karena tidak ada rute dengan kapasitas yang cukup. Lightning bekerja sangat baik untuk pembayaran kecil dan rutin, tapi kurang cocok untuk transfer nilai besar.</p>
+
+          <p><strong>Trade-off yang jujur</strong></p>
+          <p>Lightning bukan pengganti Bitcoin on-chain. Ia adalah layer di atasnya untuk pembayaran yang sering, kecil, dan cepat. Untuk pembayaran besar, final, dan yang membutuhkan keamanan maksimal, on-chain tetap lebih tepat. Keduanya melayani kebutuhan yang berbeda.</p>
+
+          <div class="p-callout">
+            <p>Setiap teknologi punya trade-off. Yang penting adalah memahami trade-off tersebut dan memilih alat yang tepat untuk kebutuhan yang tepat. Lightning bukan Bitcoin yang lebih baik. Lightning adalah Bitcoin yang diperluas untuk kasus penggunaan yang berbeda.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Perbandingan — Lightning vs Bitcoin on-chain</div>
+          <div class="b07-s76-desc">
+            Perbandingan sembilan dimensi untuk membantu memilih mana yang tepat untuk situasi tertentu.
+          </div>
+
+          <div class="b07-s76-grid">
+            <div class="b07-s76-hcell s76-label">Dimensi</div>
+            <div class="b07-s76-hcell s76-ln">Lightning Network</div>
+            <div class="b07-s76-hcell s76-oc">Bitcoin on-chain</div>
+
+            <div class="b07-s76-cell s76-label">Kecepatan konfirmasi</div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill good">Kurang dari 1 detik</span><div class="b07-s76-sub">Instan setelah routing selesai</div></div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill mid">10 menit - beberapa jam</span><div class="b07-s76-sub">Tergantung fee dan kepadatan mempool</div></div>
+
+            <div class="b07-s76-cell s76-label">Biaya transaksi</div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill good">Sangat murah</span><div class="b07-s76-sub">Fraction of satoshi per transaksi</div></div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill mid">Bervariasi</span><div class="b07-s76-sub">Bisa mahal saat jaringan ramai</div></div>
+
+            <div class="b07-s76-cell s76-label">Finalitas pembayaran</div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill mid">Probabilistik</span><div class="b07-s76-sub">Aman tapi perlu channel aktif</div></div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill good">Absolut</span><div class="b07-s76-sub">Setelah beberapa konfirmasi, tidak bisa dibalik</div></div>
+
+            <div class="b07-s76-cell s76-label">Keamanan</div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill mid">Tinggi, dengan syarat</span><div class="b07-s76-sub">Butuh monitoring atau watchtower</div></div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill good">Maksimal</span><div class="b07-s76-sub">Dijamin langsung oleh Proof of Work</div></div>
+
+            <div class="b07-s76-cell s76-label">Privasi</div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill good">Lebih baik</span><div class="b07-s76-sub">Onion routing, tidak semua tercatat on-chain</div></div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill bad">Terbatas</span><div class="b07-s76-sub">Semua transaksi publik di blockchain</div></div>
+
+            <div class="b07-s76-cell s76-label">Penerima harus online</div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill bad">Ya (BOLT-11)</span><div class="b07-s76-sub">BOLT-12 offers mulai mengatasi ini</div></div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill good">Tidak</span><div class="b07-s76-sub">Dana bisa dikirim kapanpun</div></div>
+
+            <div class="b07-s76-cell s76-label">Ukuran pembayaran</div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill good">Mikro sampai menengah</span><div class="b07-s76-sub">Ideal untuk pembayaran kecil dan rutin</div></div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill good">Semua ukuran</span><div class="b07-s76-sub">Cocok untuk transfer nilai besar</div></div>
+
+            <div class="b07-s76-cell s76-label">Kompleksitas pengguna</div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill bad">Tinggi</span><div class="b07-s76-sub">Channel, likuiditas, routing — butuh abstraksi</div></div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill mid">Menengah</span><div class="b07-s76-sub">Fee estimation, UTXO management</div></div>
+
+            <div class="b07-s76-cell s76-label">Modal yang dibutuhkan</div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill mid">Likuiditas terkunci</span><div class="b07-s76-sub">Bitcoin dikunci di channel</div></div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill good">Tidak ada</span><div class="b07-s76-sub">Tidak perlu modal awal khusus</div></div>
+          </div>
+
+          <div class="b07-s76-use">
+            <div class="b07-s76-use-card">
+              <div class="b07-s76-use-head s76-ln-head">Pakai Lightning untuk...</div>
+              <div class="b07-s76-use-body">
+                <div class="b07-s76-use-item"><div class="b07-s76-dot s76-dot-ln"></div><span>Bayar kopi, makanan, atau belanja sehari-hari</span></div>
+                <div class="b07-s76-use-item"><div class="b07-s76-dot s76-dot-ln"></div><span>Mikropayment: streaming sats per menit, tips konten</span></div>
+                <div class="b07-s76-use-item"><div class="b07-s76-dot s76-dot-ln"></div><span>Transaksi berulang dengan pihak yang sama</span></div>
+                <div class="b07-s76-use-item"><div class="b07-s76-dot s76-dot-ln"></div><span>Pembayaran yang butuh konfirmasi instan</span></div>
+              </div>
+            </div>
+            <div class="b07-s76-use-card">
+              <div class="b07-s76-use-head s76-oc-head">Pakai on-chain untuk...</div>
+              <div class="b07-s76-use-body">
+                <div class="b07-s76-use-item"><div class="b07-s76-dot s76-dot-oc"></div><span>Simpanan jangka panjang (cold storage)</span></div>
+                <div class="b07-s76-use-item"><div class="b07-s76-dot s76-dot-oc"></div><span>Transfer nilai besar yang butuh finalitas absolut</span></div>
+                <div class="b07-s76-use-item"><div class="b07-s76-dot s76-dot-oc"></div><span>Kirim ke penerima yang tidak punya Lightning</span></div>
+                <div class="b07-s76-use-item"><div class="b07-s76-dot s76-dot-oc"></div><span>Membuka atau menutup Lightning channel</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b07-s76-note">Lightning bukan pengganti Bitcoin on-chain. Ia adalah layer di atasnya untuk pembayaran yang sering, kecil, dan cepat. Keduanya melayani kebutuhan yang berbeda dan saling melengkapi.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-7-5" data-sb="sb-7-5">
+            ← 7.5 — Invoice dan Pembayaran
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 7.6 -->
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 10 · BAB 7 -->
+
+

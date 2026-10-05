@@ -1,0 +1,673 @@
+<!-- ============================================================
+     PAGE 15 · BAB 12 · Privasi On-chain: CoinJoin dan Teknik Lainnya
+     |-- 12.1 · Mengapa Privasi di Bitcoin Itu Sulit [DONE]
+     |-- 12.2 · [LOCKED]
+     |-- 12.3 · [LOCKED]
+     |-- 12.4 · [LOCKED]
+     |-- 12.5 · [LOCKED]
+     |-- 12.6 · [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab12">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b12">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b12">← Daftar Bab</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab12">
+      <div class="sidebar-heading">Bab 12</div>
+      <div class="sidebar-title">Privasi On-chain: CoinJoin dan Teknik Lainnya</div>
+
+      <div class="sidebar-item active" id="sb-12-1">
+        <div class="sb-num">12.1</div>
+        <div class="sb-label">Mengapa Privasi di Bitcoin Itu Sulit</div>
+      </div>
+      <div class="sidebar-item" id="sb-12-2">
+        <div class="sb-num">12.2</div>
+        <div class="sb-label">CoinJoin — Mencampur tanpa Kepercayaan</div>
+      </div>
+      <div class="sidebar-item" id="sb-12-3">
+        <div class="sb-num">12.3</div>
+        <div class="sb-label">Payjoin — Privasi yang Tidak Terlihat</div>
+      </div>
+      <div class="sidebar-item" id="sb-12-4">
+        <div class="sb-num">12.4</div>
+        <div class="sb-label">Silent Payments — Privasi tanpa Koordinasi</div>
+      </div>
+      <div class="sidebar-item" id="sb-12-5">
+        <div class="sb-num">12.5</div>
+        <div class="sb-label">Lightning Network dan Privasi</div>
+      </div>
+      <div class="sidebar-item" id="sb-12-6">
+        <div class="sb-num">12.6</div>
+        <div class="sb-label">Privasi adalah Spektrum, Bukan Tombol On/Off</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab12-content">
+
+      <!-- ==============================
+           SECTION 12.1 · Mengapa Privasi di Bitcoin Itu Sulit
+      ============================== -->
+      <div class="p-section active" id="section-12-1">
+        <div class="p-eyebrow">Bab 12 · 12.1</div>
+        <div class="p-heading">Bitcoin bukan anonim, ia pseudonim — dan perbedaannya sangat besar</div>
+        <div class="p-title">Mengapa Privasi di Bitcoin Itu Sulit</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Bitcoin sering disebut sebagai mata uang anonim. Ini adalah kesalahpahaman yang cukup serius. Bitcoin bukan anonim, ia pseudonim. Setiap transaksi tercatat permanen di blockchain yang bisa dibaca siapapun. Yang tersembunyi hanyalah identitas di balik address, bukan transaksinya itu sendiri.</p>
+
+          <p><strong>Transparansi sebagai fitur, bukan bug</strong></p>
+          <p>Transparansi penuh blockchain adalah pilihan desain yang disengaja. Tanpa transparansi ini, node tidak bisa memverifikasi bahwa tidak ada bitcoin yang dibuat dari nol atau dibelanjakan dua kali. Transparansi adalah harga yang dibayar untuk desentralisasi dan verifikasi tanpa kepercayaan. Tapi transparansi ini punya konsekuensi privasi yang serius. Kalau seseorang mengetahui satu address milikmu, mereka bisa melihat semua transaksi yang masuk dan keluar dari address itu. Dan dengan analisis heuristik seperti yang kita bahas di Bab 10, mereka bisa mulai menghubungkan address-address lain yang kemungkinan milikmu juga.</p>
+
+          <p><strong>Heuristik analisis blockchain</strong></p>
+          <p>Ada beberapa heuristik yang digunakan analis blockchain untuk menghubungkan address dan mengidentifikasi pemilik. Common input ownership: kalau dua UTXO digunakan bersama sebagai input, kemungkinan besar keduanya milik orang yang sama. Change output detection: kembalian transaksi biasanya bisa diidentifikasi dari nilai yang tidak bulat atau dari tipe script yang sama dengan pengirim. Address reuse: kalau address yang sama muncul lebih dari sekali, semua transaksinya terhubung.</p>
+
+          <p><strong>Kenapa ini penting</strong></p>
+          <p>Privasi finansial bukan tentang menyembunyikan sesuatu yang ilegal. Ini tentang hak dasar: kamu tidak ingin employer-mu tahu berapa gajimu dari pekerjaan sampingan, kamu tidak ingin competitor-mu tahu dengan siapa kamu bertransaksi, kamu tidak ingin penyerang tahu berapa banyak bitcoin yang kamu miliki. Di negara dengan pemerintahan yang tidak stabil, privasi finansial bisa menjadi masalah keselamatan nyata.</p>
+
+          <div class="p-callout">
+            <p>Blockchain Bitcoin adalah buku besar publik permanen. Setiap kesalahan privasi yang kamu buat hari ini bisa dianalisis ulang bertahun-tahun kemudian dengan tools yang lebih canggih. Privasi yang baik harus dibangun dari awal, bukan ditambal setelahnya.</p>
+
+          <p><strong>Yang bocor bukan cuma siapa, tapi juga pakai apa</strong></p>
+          <p>Heuristik yang kita bahas tadi berusaha menjawab pertanyaan "UTXO ini milik siapa". Ada lapisan lain yang lebih halus dan jarang disadari: transaksimu juga membocorkan <strong>wallet apa yang kamu pakai</strong>. Namanya <em>wallet fingerprinting</em>.</p>
+          <p>Penyebabnya sederhana. Protokol Bitcoin memberi banyak kebebasan tentang bagaimana sebuah transaksi disusun, dan setiap wallet mengambil keputusan yang sedikit berbeda. Keputusan itu konsisten, dan konsistensi itulah yang menjadi sidik jari.</p>
+          <p>Beberapa yang paling mudah dibaca: <strong>urutan output</strong>, apakah kembalian selalu ditaruh di posisi pertama atau diacak. <strong>Nomor versi transaksi</strong>, ada yang memakai 1, ada yang 2. <strong>Nilai nSequence</strong> yang kita bahas di 15.3, apakah wallet menandai transaksinya replaceable atau tidak. <strong>Cara membulatkan fee</strong>, apakah selalu angka bulat atau hasil perhitungan presisi. Dan yang paling terang, <strong>jenis alamat</strong>: wallet yang membelanjakan dari bc1q lalu mengirim kembalian ke bc1q juga menyempit pilihannya sendiri.</p>
+          <p>Satu ciri saja tidak berarti banyak. Tapi digabungkan, kombinasinya sering cukup untuk menebak wallet apa yang dipakai, dan kadang versinya. Bagi pengamat, itu petunjuk berharga. Kalau ia tahu kamu memakai wallet tertentu, ia tahu pola kembalianmu, tahu apakah kamu mungkin memakai fitur privasi tertentu, dan bisa menyaring transaksi lain di blockchain yang punya sidik jari sama.</p>
+          <p>Ada akibat yang lebih tidak enak lagi. Sidik jari itu bisa dipakai untuk memecahkan CoinJoin yang kita bahas di 12.2. Kalau dari sepuluh peserta sebuah CoinJoin hanya satu yang memakai wallet dengan ciri tertentu, anonimitas yang seharusnya didapat dari berbaur bersama sembilan orang lain ikut menipis.</p>
+          <p>Yang bisa kamu lakukan terbatas, dan jujur saja tidak banyak. Memakai wallet yang populer membuatmu berbaur dengan lebih banyak orang. Memakai jenis alamat yang sama dengan mayoritas jaringan juga membantu. Tapi pada dasarnya ini bukan sesuatu yang bisa diperbaiki pengguna sendiri: yang perlu berubah adalah wallet-nya, dan sebagian pengembang memang sedang menyeragamkan perilaku mereka agar sidik jarinya melebur.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualisasi — Heuristik analisis blockchain</div>
+          <div class="b12-s121-desc">
+            Pilih salah satu heuristik untuk melihat bagaimana analis blockchain mengidentifikasi pemilik address dan menghubungkan transaksi.
+          </div>
+
+          <div class="b12-s121-heur">
+            <div class="b12-s121-heur-label">Pilih heuristik analisis:</div>
+            <div class="b12-s121-heur-btns">
+              <button class="b12-s121-heur-btn s121-act" id="b12-s121-h1">Common Input Ownership</button>
+              <button class="b12-s121-heur-btn" id="b12-s121-h2">Change Output Detection</button>
+              <button class="b12-s121-heur-btn" id="b12-s121-h3">Address Reuse</button>
+            </div>
+          </div>
+
+          <div class="b12-s121-graph" id="b12-s121-graph">
+            <svg id="b12-s121-svg" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;"></svg>
+          </div>
+
+          <div class="b12-s121-findings" id="b12-s121-findings"></div>
+          <div class="b12-s121-note s121-warn" id="b12-s121-note">Pilih salah satu heuristik di atas untuk melihat bagaimana analis blockchain mengidentifikasi pemilik address.</div>
+        
+          <div class="lab-link"><span class="kode">D2</span><span class="isi"><span class="hd">Lanjut ke Laboratorium</span>Sebaran jenis address di seluruh jaringan, dan kenapa menghitung per UTXO dan per nilai memberi kesimpulan berlawanan, ada di Laboratorium D2.</span></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-12-2" data-sb="sb-12-2">
+            12.2 — CoinJoin: Mencampur tanpa Kepercayaan →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 12.1 -->
+
+      <!-- ==============================
+           SECTION 12.2 · CoinJoin — Mencampur tanpa Kepercayaan
+      ============================== -->
+      <div class="p-section" id="section-12-2">
+        <div class="p-eyebrow">Bab 12 · 12.2</div>
+        <div class="p-heading">Privasi tanpa kepercayaan — beberapa pengguna, satu transaksi</div>
+        <div class="p-title">CoinJoin — Mencampur tanpa Kepercayaan</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>CoinJoin adalah teknik privasi paling fundamental di Bitcoin. Ide dasarnya sederhana tapi powerful: beberapa pengguna menggabungkan transaksi mereka menjadi satu transaksi bersama dengan banyak input dari banyak pengguna dan banyak output dengan nilai yang sama.</p>
+
+          <p><strong>Bagaimana CoinJoin bekerja</strong></p>
+          <p>Bayangkan Alice ingin mengirim 0.1 BTC dan Bob juga ingin mengirim 0.1 BTC. Daripada membuat dua transaksi terpisah, mereka bergabung dalam satu transaksi: dua input dari Alice dan Bob, dua output 0.1 BTC ke penerima masing-masing. Analis blockchain tidak bisa lagi menggunakan heuristik common input ownership karena input memang dari dua orang berbeda. Dan karena outputnya sama nilainya, tidak bisa ditentukan mana output Alice dan mana output Bob.</p>
+
+          <p><strong>Tanpa kepercayaan</strong></p>
+          <p>Yang membuat CoinJoin elegan adalah tidak ada yang perlu dipercaya. Setiap peserta menandatangani transaksi hanya setelah memverifikasi bahwa output mereka ada di transaksi tersebut. Kalau ada yang mencoba memanipulasi output, tanda tangan tidak valid dan transaksi batal. Tidak ada pihak yang bisa mencuri dana peserta lain.</p>
+
+          <p><strong>Implementasi CoinJoin</strong></p>
+          <p>Ada beberapa implementasi CoinJoin yang berbeda. Wasabi Wallet menggunakan WabiSabi, protokol CoinJoin yang memungkinkan output dengan nilai yang berbeda-beda, bukan hanya satu denominasi. JoinMarket adalah marketplace di mana market maker menyediakan likuiditas untuk CoinJoin dengan imbalan fee kecil. Whirlpool dari Samourai Wallet menggunakan denominasi tetap dan memungkinkan pengguna untuk melakukan multiple mixing rounds.</p>
+
+          <p><strong>Keterbatasan CoinJoin</strong></p>
+          <p>CoinJoin bukan solusi sempurna. Pertama, butuh koordinasi antara beberapa pengguna yang mau join di waktu yang sama. Kedua, kalau pengguna kemudian menggabungkan output CoinJoin dengan UTXO lain yang tidak di-CoinJoin, privasi yang sudah dibangun bisa bocor. Ketiga, beberapa exchange dan layanan mulai menolak bitcoin yang berasal dari CoinJoin, menciptakan masalah fungibilitas yang serius.</p>
+
+          <p><strong>Catatan tentang Samourai Wallet</strong></p>
+          <p>Pada April 2024, pendiri Samourai Wallet ditangkap oleh pihak berwenang AS dengan tuduhan money laundering dan pengoperasian layanan pengiriman uang tanpa izin. Ini adalah contoh nyata bagaimana tools privasi Bitcoin berada di wilayah yang masih diperdebatkan secara hukum. Whirlpool tidak lagi aktif sebagai layanan terpusat sejak itu, meskipun protokolnya masih bisa dijalankan secara mandiri.</p>
+
+          <div class="p-callout">
+            <p>CoinJoin adalah bukti bahwa privasi bisa dibangun di atas Bitcoin tanpa mengubah protokol dasarnya. Tapi kasus Samourai menunjukkan bahwa batasan antara tools privasi dan layanan keuangan yang perlu regulasi masih menjadi perdebatan aktif di berbagai yurisdiksi.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualisasi — Tanpa CoinJoin vs Dengan CoinJoin</div>
+          <div class="b12-s122-desc">
+            Tab pertama: Alice dan Bob bertransaksi secara terpisah, semuanya terlacak jelas. Tab kedua: keduanya bergabung dalam satu CoinJoin, analis tidak bisa lagi menentukan mana output siapa.
+          </div>
+
+          <div class="b12-s122-tabs">
+            <button class="b12-s122-tab s122-act" id="b12-s122-t1">Tanpa CoinJoin</button>
+            <button class="b12-s122-tab" id="b12-s122-t2">Dengan CoinJoin</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b12-s122-pane show" id="b12-s122-p1">
+            <div class="b12-s122-hint">Alice dan Bob masing-masing membuat transaksi terpisah. Analis bisa melacak setiap transaksi dengan jelas.</div>
+            <div class="b12-s122-txs">
+              <div class="b12-s122-tx">
+                <div class="b12-s122-tx-head s122-alice">Alice · TX_a1b2</div>
+                <div class="b12-s122-tx-body">
+                  <div class="b12-s122-tx-row"><div class="b12-s122-tx-label">Input</div><div class="b12-s122-tx-val s122-inp">0.15 BTC</div></div>
+                  <div class="b12-s122-tx-divider"></div>
+                  <div class="b12-s122-tx-row"><div class="b12-s122-tx-label">Output (Carol)</div><div class="b12-s122-tx-val s122-out">0.10 BTC</div></div>
+                  <div class="b12-s122-tx-row"><div class="b12-s122-tx-label">Kembalian</div><div class="b12-s122-tx-val s122-out">0.04 BTC</div></div>
+                  <div class="b12-s122-tx-row"><div class="b12-s122-tx-label">Fee</div><div class="b12-s122-tx-val s122-fee">0.01 BTC</div></div>
+                </div>
+              </div>
+              <div class="b12-s122-tx">
+                <div class="b12-s122-tx-head s122-bob">Bob · TX_c3d4</div>
+                <div class="b12-s122-tx-body">
+                  <div class="b12-s122-tx-row"><div class="b12-s122-tx-label">Input</div><div class="b12-s122-tx-val s122-inp">0.12 BTC</div></div>
+                  <div class="b12-s122-tx-divider"></div>
+                  <div class="b12-s122-tx-row"><div class="b12-s122-tx-label">Output (Dave)</div><div class="b12-s122-tx-val s122-out">0.10 BTC</div></div>
+                  <div class="b12-s122-tx-row"><div class="b12-s122-tx-label">Kembalian</div><div class="b12-s122-tx-val s122-out">0.01 BTC</div></div>
+                  <div class="b12-s122-tx-row"><div class="b12-s122-tx-label">Fee</div><div class="b12-s122-tx-val s122-fee">0.01 BTC</div></div>
+                </div>
+              </div>
+            </div>
+            <div class="b12-s122-analysis">
+              <div class="b12-s122-analysis-head">Apa yang bisa dilihat analis blockchain</div>
+              <div class="b12-s122-analysis-body">
+                <div class="b12-s122-analysis-row s122-fail">✗ TX_a1b2: input Alice jelas milik satu orang, kembalian teridentifikasi, Carol sebagai penerima terlacak</div>
+                <div class="b12-s122-analysis-row s122-fail">✗ TX_c3d4: input Bob jelas milik satu orang, kembalian teridentifikasi, Dave sebagai penerima terlacak</div>
+                <div class="b12-s122-analysis-row s122-fail">✗ Kedua transaksi bisa dilacak secara independen dan lengkap</div>
+              </div>
+            </div>
+            <div class="b12-s122-note s122-warn">Tanpa CoinJoin, setiap transaksi adalah jendela terbuka ke aktivitas finansial penggunanya. Analis dengan mudah bisa menentukan siapa membayar siapa.</div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b12-s122-pane" id="b12-s122-p2">
+            <div class="b12-s122-hint">Alice dan Bob menggabungkan transaksi mereka menjadi satu CoinJoin. Output dibuat sama nilainya sehingga analis tidak bisa menentukan mana milik siapa.</div>
+            <div class="b12-s122-combined">
+              <div class="b12-s122-combined-head">
+                <span>CoinJoin TX_e5f6 — Alice + Bob</span>
+                <span class="b12-s122-combined-badge">2 peserta</span>
+              </div>
+              <div class="b12-s122-combined-body">
+                <div class="b12-s122-combined-col">
+                  <div class="b12-s122-combined-col-label">Input</div>
+                  <div class="b12-s122-combined-item s122-inp-a">Alice: 0.15 BTC</div>
+                  <div class="b12-s122-combined-item s122-inp-b">Bob: 0.12 BTC</div>
+                </div>
+                <div class="b12-s122-combined-arrow">→</div>
+                <div class="b12-s122-combined-col">
+                  <div class="b12-s122-combined-col-label">Output (sama nilai)</div>
+                  <div class="b12-s122-combined-item s122-out-eq">0.10 BTC (siapa?)</div>
+                  <div class="b12-s122-combined-item s122-out-eq">0.10 BTC (siapa?)</div>
+                  <div class="b12-s122-combined-item s122-out-eq">0.04 BTC (kembalian?)</div>
+                  <div class="b12-s122-combined-item s122-out-eq">0.01 BTC (kembalian?)</div>
+                </div>
+              </div>
+            </div>
+            <div class="b12-s122-analysis">
+              <div class="b12-s122-analysis-head">Apa yang bisa dilihat analis blockchain</div>
+              <div class="b12-s122-analysis-body">
+                <div class="b12-s122-analysis-row s122-fail">✗ Heuristik common input ownership gagal: input memang dari dua orang berbeda</div>
+                <div class="b12-s122-analysis-row s122-fail">✗ Tidak bisa ditentukan output 0.10 BTC mana yang milik Alice dan mana milik Bob</div>
+                <div class="b12-s122-analysis-row s122-fail">✗ Tidak bisa ditentukan kembalian mana yang kembali ke Alice dan mana ke Bob</div>
+                <div class="b12-s122-analysis-row s122-pass">✓ Tidak ada dana yang dicuri: setiap peserta menandatangani hanya setelah memverifikasi outputnya ada</div>
+              </div>
+            </div>
+            <div class="b12-s122-note s122-info">CoinJoin memutus rantai pelacakan tanpa membutuhkan kepercayaan ke pihak ketiga. Validitas transaksi tetap bisa diverifikasi oleh semua node, tapi asal-usul dana menjadi jauh lebih sulit ditentukan.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-12-1" data-sb="sb-12-1">
+            ← 12.1 — Mengapa Privasi di Bitcoin Itu Sulit
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-12-3" data-sb="sb-12-3">
+            12.3 — Payjoin: Privasi yang Tidak Terlihat →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 12.2 -->
+
+      <!-- ==============================
+           SECTION 12.3 · Payjoin — Privasi yang Tidak Terlihat
+      ============================== -->
+      <div class="p-section" id="section-12-3">
+        <div class="p-eyebrow">Bab 12 · 12.3</div>
+        <div class="p-heading">Privasi yang tidak meninggalkan jejak yang bisa dikenali</div>
+        <div class="p-title">Payjoin — Privasi yang Tidak Terlihat</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>CoinJoin membutuhkan koordinasi antara beberapa pengguna yang tidak saling kenal. Payjoin mengambil pendekatan yang berbeda: privasi dibangun langsung ke dalam transaksi pembayaran biasa antara pengirim dan penerima.</p>
+
+          <p><strong>Apa itu Payjoin?</strong></p>
+          <p>Payjoin (juga disebut P2EP atau Pay-to-End-Point) adalah protokol di mana penerima pembayaran ikut berkontribusi input ke transaksi. Dalam transaksi biasa, hanya pengirim yang menyediakan input. Dalam Payjoin, penerima juga menambahkan satu atau lebih UTXO sebagai input tambahan. Hasilnya: transaksi terlihat seperti transaksi biasa dari luar, tapi heuristik common input ownership sekarang memberikan kesimpulan yang salah. Analis yang melihat transaksi ini akan berasumsi semua input milik satu orang, padahal sebenarnya input berasal dari dua pihak berbeda.</p>
+
+          <p><strong>Kenapa ini lebih baik dari CoinJoin biasa?</strong></p>
+          <p>CoinJoin mudah diidentifikasi oleh analis blockchain karena pola transaksinya khas: banyak input dari banyak address dan banyak output dengan nilai yang sama persis. Walau isi transaksinya tidak bisa dideobfuskasi, keberadaan CoinJoin sendiri bisa dideteksi dan ditandai. Beberapa exchange menolak bitcoin yang pernah melalui CoinJoin bahkan tanpa bisa membuktikan dana itu terkait aktivitas ilegal. Payjoin tidak memiliki pola yang bisa diidentifikasi. Dari luar, transaksi Payjoin terlihat persis seperti transaksi pembayaran biasa.</p>
+
+          <p><strong>Bagaimana Payjoin bekerja secara teknis</strong></p>
+          <p>Prosesnya dimulai dari pengirim yang ingin membayar. Pengirim mengontak penerima melalui endpoint khusus, biasanya URL yang disediakan wallet penerima. Penerima merespons dengan menambahkan UTXO miliknya ke transaksi yang sedang dikonstruksi. Pengirim kemudian memverifikasi dan menandatangani transaksi lengkap. Hasilnya adalah satu transaksi yang tampak normal tapi mengandung input dari kedua pihak.</p>
+
+          <p><strong>Keterbatasan Payjoin</strong></p>
+          <p>Payjoin membutuhkan penerima yang mendukung protokol ini. Kalau merchant atau wallet penerima tidak mendukung Payjoin, transaksi dilakukan seperti biasa tanpa manfaat privasi. Adopsi masih terbatas: BIP 78 mendefinisikan protokol standar Payjoin, dan beberapa wallet seperti BTCPay Server, Wasabi Wallet, dan JoinMarket sudah mendukungnya, tapi masih jauh dari universal.</p>
+
+          <div class="p-callout">
+            <p>Payjoin adalah teknik privasi yang elegan karena tidak meninggalkan jejak yang bisa diidentifikasi. Kalau adopsinya luas, ia bisa meningkatkan privasi seluruh pengguna Bitcoin bahkan yang tidak secara aktif menggunakannya, karena analis tidak bisa lagi mengasumsikan semua input dalam satu transaksi milik satu orang.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualisasi — Transaksi biasa vs Payjoin</div>
+          <div class="b12-s123-desc">
+            Dua transaksi yang dari luar terlihat hampir identik. Klik "Terapkan Heuristik" untuk melihat mengapa analis mendapat kesimpulan yang benar pada transaksi biasa tapi salah pada Payjoin.
+          </div>
+
+          <div class="b12-s123-legend">
+            <div class="b12-s123-leg"><div class="b12-s123-leg-dot" style="background:#EEEDFE;border:1px solid rgba(83,74,183,0.3);"></div>UTXO milik Pengirim A</div>
+            <div class="b12-s123-leg"><div class="b12-s123-leg-dot" style="background:#EAF3DE;border:1px solid rgba(15,110,86,0.3);"></div>UTXO milik Penerima B</div>
+            <div class="b12-s123-leg"><div class="b12-s123-leg-dot" style="background:#FAEEDA;border:1px solid rgba(133,79,11,0.2);"></div>Kembalian</div>
+          </div>
+
+          <div class="b12-s123-grid">
+            <div class="b12-s123-col">
+              <div class="b12-s123-col-head s123-normal">
+                <div class="b12-s123-col-head-title" style="color:#1A1A18;">Transaksi Biasa</div>
+                <div class="b12-s123-col-head-sub" style="color:#3A3A35;">hanya Pengirim A yang punya input</div>
+              </div>
+              <div class="b12-s123-tx">
+                <div class="b12-s123-tx-section">
+                  <div class="b12-s123-tx-section-label">Input</div>
+                  <div class="b12-s123-tx-item s123-inp-a1">UTXO A1: 0.800 BTC</div>
+                  <div class="b12-s123-tx-item s123-inp-a2">UTXO A2: 0.350 BTC</div>
+                  <div class="b12-s123-tx-owner">keduanya milik Pengirim A</div>
+                </div>
+                <div class="b12-s123-tx-divider"></div>
+                <div class="b12-s123-tx-section">
+                  <div class="b12-s123-tx-section-label">Output</div>
+                  <div class="b12-s123-tx-item s123-out">Penerima B: 1.100 BTC</div>
+                  <div class="b12-s123-tx-item s123-out-change">Kembalian A: 0.040 BTC</div>
+                </div>
+              </div>
+              <div class="b12-s123-analyst s123-correct" id="b12-s123-a-normal" style="display:none;">
+                <div class="b12-s123-analyst-label">Kesimpulan analis — BENAR</div>
+                <div class="b12-s123-analyst-text">UTXO A1 dan A2 digunakan bersama, kemungkinan milik satu orang. Kembalian 0.040 BTC ke Pengirim A. Pembayaran 1.100 BTC ke Penerima B. Analisis akurat.</div>
+              </div>
+            </div>
+
+            <div class="b12-s123-col">
+              <div class="b12-s123-col-head s123-payjoin">
+                <div class="b12-s123-col-head-title">Payjoin</div>
+                <div class="b12-s123-col-head-sub">Pengirim A dan Penerima B sama-sama punya input</div>
+              </div>
+              <div class="b12-s123-tx">
+                <div class="b12-s123-tx-section">
+                  <div class="b12-s123-tx-section-label">Input</div>
+                  <div class="b12-s123-tx-item s123-inp-a1">UTXO A1: 0.800 BTC</div>
+                  <div class="b12-s123-tx-item s123-inp-b">UTXO B1: 0.350 BTC</div>
+                  <div class="b12-s123-tx-owner">A1 milik Pengirim A, B1 milik Penerima B</div>
+                </div>
+                <div class="b12-s123-tx-divider"></div>
+                <div class="b12-s123-tx-section">
+                  <div class="b12-s123-tx-section-label">Output</div>
+                  <div class="b12-s123-tx-item s123-out">Penerima B: 1.100 BTC</div>
+                  <div class="b12-s123-tx-item s123-out-change">Kembalian A: 0.040 BTC</div>
+                </div>
+              </div>
+              <div class="b12-s123-analyst s123-wrong" id="b12-s123-a-payjoin" style="display:none;">
+                <div class="b12-s123-analyst-label">Kesimpulan analis — SALAH</div>
+                <div class="b12-s123-analyst-text">UTXO A1 dan B1 digunakan bersama, analis asumsikan milik satu orang. Padahal B1 sebenarnya milik Penerima B yang ikut berkontribusi input. Analisis menyesatkan.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b12-s123-btn-wrap">
+            <button class="b12-s123-btn-primary" id="b12-s123-apply">Terapkan Heuristik Common Input</button>
+            <button class="b12-s123-btn-sec" id="b12-s123-rst">Reset</button>
+          </div>
+
+          <div class="b12-s123-verdict" id="b12-s123-verdict" style="display:none;">
+            <div class="b12-s123-verdict-card s123-v-correct">
+              <div class="b12-s123-verdict-icon">✓</div>
+              <div class="b12-s123-verdict-label">Transaksi biasa: analisis benar</div>
+              <div class="b12-s123-verdict-text">Dua input memang milik satu orang. Heuristik bekerja dengan tepat.</div>
+            </div>
+            <div class="b12-s123-verdict-card s123-v-wrong">
+              <div class="b12-s123-verdict-icon">✗</div>
+              <div class="b12-s123-verdict-label">Payjoin: analisis salah</div>
+              <div class="b12-s123-verdict-text">Dua input dari dua orang berbeda, tapi analis tidak bisa tahu. Dari luar, kedua transaksi terlihat identik.</div>
+            </div>
+          </div>
+
+          <div class="b12-s123-note s123-idle" id="b12-s123-note">Klik "Terapkan Heuristik Common Input" untuk melihat mengapa analis mendapat kesimpulan yang berbeda dari dua transaksi yang terlihat hampir sama.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-12-2" data-sb="sb-12-2">
+            ← 12.2 — CoinJoin: Mencampur tanpa Kepercayaan
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-12-4" data-sb="sb-12-4">
+            12.4 — Silent Payments: Privasi tanpa Koordinasi →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 12.3 -->
+
+      <!-- ==============================
+           SECTION 12.4 · Silent Payments — Privasi tanpa Koordinasi
+      ============================== -->
+      <div class="p-section" id="section-12-4">
+        <div class="p-eyebrow">Bab 12 · 12.4</div>
+        <div class="p-heading">Satu alamat statis, tak terbatas pembayaran, tidak ada yang bisa menghubungkannya</div>
+        <div class="p-title">Silent Payments — Privasi tanpa Koordinasi</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>CoinJoin butuh koordinasi antar pengguna. Payjoin butuh penerima yang mendukung protokol. Silent Payments mengambil pendekatan yang lebih radikal: privasi yang tidak butuh koordinasi sama sekali dari pengirim atau penerima.</p>
+
+          <p><strong>Apa itu Silent Payments?</strong></p>
+          <p>Silent Payments (BIP 352) adalah protokol yang memungkinkan seseorang mempublikasikan satu alamat statis yang bisa digunakan oleh siapapun untuk mengirim pembayaran, tapi setiap pembayaran yang diterima akan masuk ke address on-chain yang berbeda-beda dan tidak bisa dihubungkan satu sama lain hanya dengan melihat blockchain. Analoginya: bayangkan kamu punya satu nomor rekening bank yang kamu bagikan ke semua orang, tapi setiap kali seseorang mentransfer ke nomor itu, uangnya masuk ke sub-rekening berbeda yang tidak terlihat satu sama lain dari luar.</p>
+
+          <p><strong>Bagaimana cara kerjanya?</strong></p>
+          <p>Pengirim menggunakan kunci publik penerima yang ada di alamat statis bersama dengan kunci privat pengirim untuk menghasilkan alamat pembayaran unik melalui operasi kriptografis yang disebut Elliptic Curve Diffie-Hellman. Alamat ini unik untuk setiap pengirim dan tidak bisa dikaitkan dengan alamat pembayaran dari pengirim lain, bahkan oleh orang yang tahu alamat statis penerima. Penerima kemudian men-scan blockchain menggunakan kunci privatnya untuk menemukan pembayaran yang ditujukan untuknya.</p>
+
+          <p><strong>Kelebihan Silent Payments</strong></p>
+          <p>Tidak perlu koordinasi: pengirim cukup tahu alamat statis penerima, tidak perlu komunikasi tambahan. Tidak ada address reuse: setiap pembayaran menghasilkan address on-chain yang unik, bahkan dari alamat statis yang sama. Tidak ada server pihak ketiga yang perlu dipercaya. Alamat statis bisa dipublikasikan secara terbuka seperti alamat email, tapi lebih aman dari segi privasi karena tidak mengekspos riwayat transaksi.</p>
+
+          <p><strong>Keterbatasan</strong></p>
+          <p>Scanning blockchain untuk menemukan pembayaran lebih berat secara komputasi. Light wallet yang mengandalkan server pihak ketiga akan kesulitan mengimplementasikan Silent Payments tanpa kehilangan privasi. Masih cukup baru: diimplementasikan di Cake Wallet dan beberapa wallet lain, tapi belum tersedia di mayoritas wallet populer.</p>
+
+          <div class="p-callout">
+            <p>Silent Payments adalah salah satu inovasi privasi paling menarik dalam ekosistem Bitcoin belakangan ini. Ia mengatasi salah satu masalah fundamental: bagaimana kamu bisa menerima pembayaran dari siapapun tanpa mengungkapkan riwayat transaksimu, dan tanpa harus berkoordinasi dengan pengirim terlebih dahulu.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi — Bagaimana Silent Payments bekerja</div>
+          <div class="b12-s124-desc">
+            Satu alamat statis, tiga pengirim berbeda. Lihat bagaimana setiap pengirim menghasilkan address on-chain yang unik, dan mengapa analis tidak bisa menghubungkannya, tapi penerima bisa menemukan semuanya.
+          </div>
+
+          <div style="font-size:11px;font-weight:500;color:#1A1A18;font-family:'Sora',sans-serif;margin-bottom:6px;">Alamat statis penerima (dipublikasikan sekali, dipakai selamanya):</div>
+          <div class="b12-s124-static">
+            <div class="b12-s124-static-label">Silent Payment Address</div>
+            <div class="b12-s124-static-addr">sp1qqgste7k9hx0qx9gqd3d5hmfyj2xzakvka6yh3dkqvgzr4k5q3...</div>
+            <div class="b12-s124-static-sub">Bisa dipublikasikan di website, profil, kartu nama — aman</div>
+          </div>
+
+          <div class="b12-s124-flow-label">Tiga pengirim berbeda mengirim ke alamat statis yang sama:</div>
+          <div class="b12-s124-senders">
+            <div class="b12-s124-sender">
+              <div class="b12-s124-sender-box s124-alice">Alice<br><span style="font-size:9px;font-weight:400;">0.05 BTC</span></div>
+              <div class="b12-s124-sender-arrow">↓</div>
+              <div class="b12-s124-sender-result s124-alice" id="b12-s124-res-alice">
+                <div class="b12-s124-sender-result-label">Address on-chain unik:</div>
+                bc1p...a3f7
+              </div>
+            </div>
+            <div class="b12-s124-sender">
+              <div class="b12-s124-sender-box s124-bob">Bob<br><span style="font-size:9px;font-weight:400;">0.12 BTC</span></div>
+              <div class="b12-s124-sender-arrow">↓</div>
+              <div class="b12-s124-sender-result s124-bob" id="b12-s124-res-bob">
+                <div class="b12-s124-sender-result-label">Address on-chain unik:</div>
+                bc1p...9k2m
+              </div>
+            </div>
+            <div class="b12-s124-sender">
+              <div class="b12-s124-sender-box s124-carol">Carol<br><span style="font-size:9px;font-weight:400;">0.03 BTC</span></div>
+              <div class="b12-s124-sender-arrow">↓</div>
+              <div class="b12-s124-sender-result s124-carol" id="b12-s124-res-carol">
+                <div class="b12-s124-sender-result-label">Address on-chain unik:</div>
+                bc1p...x8r1
+              </div>
+            </div>
+          </div>
+
+          <div class="b12-s124-blockchain" id="b12-s124-blockchain">
+            <div class="b12-s124-blockchain-head">Yang terlihat di blockchain (oleh siapapun)</div>
+            <div class="b12-s124-blockchain-body">
+              <div class="b12-s124-chain-item" id="b12-s124-chain-1"><div class="b12-s124-chain-item-label">Transaksi #1</div>bc1p...a3f7 menerima 0.05 BTC <span class="b12-s124-chain-badge">pemilik tidak diketahui</span></div>
+              <div class="b12-s124-chain-item" id="b12-s124-chain-2"><div class="b12-s124-chain-item-label">Transaksi #2</div>bc1p...9k2m menerima 0.12 BTC <span class="b12-s124-chain-badge">pemilik tidak diketahui</span></div>
+              <div class="b12-s124-chain-item" id="b12-s124-chain-3"><div class="b12-s124-chain-item-label">Transaksi #3</div>bc1p...x8r1 menerima 0.03 BTC <span class="b12-s124-chain-badge">pemilik tidak diketahui</span></div>
+              <div class="b12-s124-link-note" id="b12-s124-link-note">Ketiga address on-chain tidak bisa dihubungkan satu sama lain. Analis tidak tahu bahwa ketiganya milik orang yang sama.</div>
+            </div>
+          </div>
+
+          <div class="b12-s124-scan" id="b12-s124-scan">
+            <div class="b12-s124-scan-head">Yang ditemukan penerima saat scanning dengan kunci privatnya</div>
+            <div class="b12-s124-scan-body">
+              <div class="b12-s124-scan-item" id="b12-s124-scan-1">bc1p...a3f7 — 0.05 BTC dari Alice <span class="b12-s124-scan-badge">milikku</span></div>
+              <div class="b12-s124-scan-item" id="b12-s124-scan-2">bc1p...9k2m — 0.12 BTC dari Bob <span class="b12-s124-scan-badge">milikku</span></div>
+              <div class="b12-s124-scan-item" id="b12-s124-scan-3">bc1p...x8r1 — 0.03 BTC dari Carol <span class="b12-s124-scan-badge">milikku</span></div>
+            </div>
+          </div>
+
+          <div class="b12-s124-btn-wrap">
+            <button class="b12-s124-btn-primary" id="b12-s124-run">Simulasikan Pengiriman</button>
+            <button class="b12-s124-btn-sec" id="b12-s124-rst">Reset</button>
+          </div>
+
+          <div class="b12-s124-note s124-idle" id="b12-s124-note">Klik "Simulasikan Pengiriman" untuk melihat bagaimana tiga pengirim yang berbeda menghasilkan address on-chain yang berbeda-beda dari satu alamat statis yang sama.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-12-3" data-sb="sb-12-3">
+            ← 12.3 — Payjoin: Privasi yang Tidak Terlihat
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-12-5" data-sb="sb-12-5">
+            12.5 — Lightning Network dan Privasi →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 12.4 -->
+
+      <!-- ==============================
+           SECTION 12.5 · Lightning Network dan Privasi
+      ============================== -->
+      <div class="p-section" id="section-12-5">
+        <div class="p-eyebrow">Bab 12 · 12.5</div>
+        <div class="p-heading">Lightning bukan hanya lebih cepat dan murah — ia juga lebih privat</div>
+        <div class="p-title">Lightning Network dan Privasi</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Lightning Network bukan hanya solusi skalabilitas. Ia juga membawa karakteristik privasi yang sangat berbeda dari transaksi on-chain. Memahami perbedaan ini penting untuk membuat keputusan yang tepat tentang kapan menggunakan Lightning dan kapan menggunakan on-chain.</p>
+
+          <p><strong>Privasi Lightning vs on-chain</strong></p>
+          <p>Transaksi on-chain tercatat permanen di blockchain yang bisa dibaca siapapun. Transaksi Lightning tidak tercatat di blockchain sama sekali. Yang tercatat hanyalah pembukaan dan penutupan channel. Seluruh pembayaran yang terjadi di dalam channel tetap privat dari publik. Kalau Alice dan Bob punya channel Lightning dan melakukan ribuan transaksi, yang terlihat di blockchain hanyalah dua transaksi, bukan ribuan transaksi individual.</p>
+
+          <p><strong>Onion routing di Lightning</strong></p>
+          <p>Lightning menggunakan onion routing mirip dengan Tor: setiap node di jalur pembayaran hanya tahu dari mana pembayaran datang dan ke mana ia harus diteruskan, tapi tidak tahu keseluruhan jalur. Node pertama tahu pengirim tapi tidak tahu penerima akhir. Node terakhir tahu penerima tapi tidak tahu pengirim asal. Ini memberikan privasi yang lebih baik dari transaksi on-chain biasa, tapi bukan sempurna.</p>
+
+          <p><strong>Tantangan privasi Lightning</strong></p>
+          <p>Ada beberapa tantangan privasi yang spesifik untuk Lightning. Channel balance visibility: node yang terhubung ke kamu bisa melihat saldo channel yang kamu miliki bersama mereka. Invoice reuse: kalau kamu menggunakan invoice yang sama untuk menerima beberapa pembayaran, pembayar bisa saling mengetahui. Routing node surveillance: node besar yang merutekan banyak pembayaran bisa mengumpulkan data tentang pola pembayaran di jaringan.</p>
+
+          <p><strong>BOLT 12 dan Offers</strong></p>
+          <p>BOLT 12 adalah standar baru yang memperkenalkan konsep offers, pengganti invoice Lightning yang lebih privat. Offers memungkinkan penerima mempublikasikan satu kode yang bisa digunakan berkali-kali untuk menerima pembayaran, mirip seperti Silent Payments tapi di layer Lightning. Setiap pembayaran menghasilkan invoice unik secara kriptografis, mencegah korelasi antar pembayaran.</p>
+
+          <div class="p-callout">
+            <p>Lightning memberikan privasi yang lebih baik dari on-chain untuk sebagian besar transaksi sehari-hari, tapi bukan tanpa kelemahan. Pilihan terbaik bergantung pada konteks: untuk nilai besar yang butuh finalitas on-chain, gunakan on-chain. Untuk transaksi kecil yang sering, Lightning menawarkan privasi lebih baik sekaligus biaya lebih rendah.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualisasi — Privasi Lightning vs on-chain</div>
+          <div class="b12-s125-desc">
+            Tab pertama: bandingkan apa yang terlihat di blockchain saat Alice mengirim 10 pembayaran ke Bob via on-chain vs Lightning. Tab kedua: lihat bagaimana onion routing menyembunyikan jalur pembayaran dari node perantara.
+          </div>
+
+          <div class="b12-s125-tabs">
+            <button class="b12-s125-tab s125-act" id="b12-s125-t1">On-chain vs Lightning</button>
+            <button class="b12-s125-tab" id="b12-s125-t2">Onion Routing</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b12-s125-pane show" id="b12-s125-p1">
+            <div class="b12-s125-scenario-label">Alice mengirim 10 pembayaran ke Bob. Bandingkan apa yang terlihat di blockchain pada masing-masing metode.</div>
+            <div class="b12-s125-grid">
+              <div class="b12-s125-col">
+                <div class="b12-s125-col-head s125-onchain">On-chain<div class="b12-s125-col-head-sub">semua transaksi publik</div></div>
+                <div class="b12-s125-ledger">
+                  <div class="b12-s125-ledger-head">Blockchain — terlihat oleh semua orang</div>
+                  <div class="b12-s125-ledger-body">
+                    <div class="b12-s125-tx-row s125-pub" id="b12-s125-oc1"><div class="b12-s125-tx-dot s125-pub"></div>TX #1 — 0.01 BTC</div>
+                    <div class="b12-s125-tx-row s125-pub" id="b12-s125-oc2"><div class="b12-s125-tx-dot s125-pub"></div>TX #2 — 0.05 BTC</div>
+                    <div class="b12-s125-tx-row s125-pub" id="b12-s125-oc3"><div class="b12-s125-tx-dot s125-pub"></div>TX #3 — 0.02 BTC</div>
+                    <div class="b12-s125-tx-row s125-pub" id="b12-s125-oc4"><div class="b12-s125-tx-dot s125-pub"></div>TX #4 — 0.03 BTC</div>
+                    <div class="b12-s125-tx-row s125-pub" id="b12-s125-oc5"><div class="b12-s125-tx-dot s125-pub"></div>TX #5 — 0.01 BTC</div>
+                    <div class="b12-s125-tx-row s125-pub" id="b12-s125-oc6"><div class="b12-s125-tx-dot s125-pub"></div>TX #6 — 0.08 BTC</div>
+                    <div class="b12-s125-tx-row s125-pub" id="b12-s125-oc7"><div class="b12-s125-tx-dot s125-pub"></div>TX #7 — 0.02 BTC</div>
+                    <div class="b12-s125-tx-row s125-pub" id="b12-s125-oc8"><div class="b12-s125-tx-dot s125-pub"></div>TX #8 — 0.04 BTC</div>
+                    <div class="b12-s125-tx-row s125-pub" id="b12-s125-oc9"><div class="b12-s125-tx-dot s125-pub"></div>TX #9 — 0.01 BTC</div>
+                    <div class="b12-s125-tx-row s125-pub" id="b12-s125-oc10"><div class="b12-s125-tx-dot s125-pub"></div>TX #10 — 0.03 BTC</div>
+                  </div>
+                </div>
+              </div>
+              <div class="b12-s125-col">
+                <div class="b12-s125-col-head s125-lightning">Lightning<div class="b12-s125-col-head-sub">hanya channel open/close yang publik</div></div>
+                <div class="b12-s125-ledger">
+                  <div class="b12-s125-ledger-head">Blockchain — terlihat oleh semua orang</div>
+                  <div class="b12-s125-ledger-body">
+                    <div class="b12-s125-tx-row s125-neutral" id="b12-s125-ln-open"><div class="b12-s125-tx-dot s125-neutral"></div>Channel open — 0.5 BTC</div>
+                    <div class="b12-s125-tx-row s125-priv" id="b12-s125-ln-p1"><div class="b12-s125-tx-dot s125-priv"></div>10 pembayaran — privat</div>
+                    <div class="b12-s125-tx-row s125-neutral" id="b12-s125-ln-close"><div class="b12-s125-tx-dot s125-neutral"></div>Channel close — settlement</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="b12-s125-btn-wrap">
+              <button class="b12-s125-btn-primary" id="b12-s125-run1">Simulasikan 10 Pembayaran</button>
+              <button class="b12-s125-btn-sec" id="b12-s125-rst1">Reset</button>
+            </div>
+            <div class="b12-s125-summary" id="b12-s125-summary" style="display:none;">
+              <div class="b12-s125-summary-card s125-bad"><div class="b12-s125-summary-label">On-chain: terlihat publik</div><div class="b12-s125-summary-val">10 TX</div><div class="b12-s125-summary-sub">Jumlah, nilai, dan pola pembayaran Alice ke Bob semuanya terbaca jelas</div></div>
+              <div class="b12-s125-summary-card s125-good"><div class="b12-s125-summary-label">Lightning: privat</div><div class="b12-s125-summary-val">2 TX</div><div class="b12-s125-summary-sub">Hanya channel open dan close yang tercatat. 10 pembayaran di dalamnya tidak terlihat</div></div>
+            </div>
+            <div class="b12-s125-note s125-idle" id="b12-s125-note1">Klik "Simulasikan 10 Pembayaran" untuk melihat perbedaan visibilitas antara pembayaran on-chain dan Lightning.</div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b12-s125-pane" id="b12-s125-p2">
+            <div class="b12-s125-scenario-label">Lightning menggunakan onion routing: setiap node perantara hanya tahu satu langkah sebelum dan sesudahnya, tidak tahu keseluruhan jalur.</div>
+            <div class="b12-s125-nodes">
+              <div class="b12-s125-node"><div class="b12-s125-node-circle s125-sender">Alice</div><div class="b12-s125-node-label">Pengirim</div><div class="b12-s125-node-knows s125-good">Tahu:<br>tujuan akhir (Bob)</div></div>
+              <div class="b12-s125-arrow-wrap"><div class="b12-s125-arrow-line"></div><div class="b12-s125-arrow-head">→</div></div>
+              <div class="b12-s125-node"><div class="b12-s125-node-circle s125-relay">Node 1</div><div class="b12-s125-node-label">Perantara</div><div class="b12-s125-node-knows s125-warn">Tahu:<br>dari Alice<br>ke Node 2</div></div>
+              <div class="b12-s125-arrow-wrap"><div class="b12-s125-arrow-line"></div><div class="b12-s125-arrow-head">→</div></div>
+              <div class="b12-s125-node"><div class="b12-s125-node-circle s125-relay">Node 2</div><div class="b12-s125-node-label">Perantara</div><div class="b12-s125-node-knows s125-warn">Tahu:<br>dari Node 1<br>ke Bob</div></div>
+              <div class="b12-s125-arrow-wrap"><div class="b12-s125-arrow-line"></div><div class="b12-s125-arrow-head">→</div></div>
+              <div class="b12-s125-node"><div class="b12-s125-node-circle s125-receiver">Bob</div><div class="b12-s125-node-label">Penerima</div><div class="b12-s125-node-knows s125-good">Tahu:<br>menerima dari<br>seseorang</div></div>
+            </div>
+            <div class="b12-s125-knows-table">
+              <div class="b12-s125-knows-head">Yang diketahui tiap node tentang pembayaran ini</div>
+              <div class="b12-s125-knows-body">
+                <div class="b12-s125-knows-row s125-header"><div>Node</div><div>Tahu pengirim?</div><div>Tahu penerima?</div><div>Tahu jumlah asli?</div></div>
+                <div class="b12-s125-knows-row"><div class="b12-s125-knows-cell">Alice (pengirim)</div><div class="b12-s125-knows-cell s125-yes">Ya (dirinya)</div><div class="b12-s125-knows-cell s125-yes">Ya (Bob)</div><div class="b12-s125-knows-cell s125-yes">Ya</div></div>
+                <div class="b12-s125-knows-row"><div class="b12-s125-knows-cell">Node 1</div><div class="b12-s125-knows-cell s125-yes">Ya (Alice)</div><div class="b12-s125-knows-cell s125-no">Tidak</div><div class="b12-s125-knows-cell s125-no">Tidak pasti</div></div>
+                <div class="b12-s125-knows-row"><div class="b12-s125-knows-cell">Node 2</div><div class="b12-s125-knows-cell s125-no">Tidak</div><div class="b12-s125-knows-cell s125-yes">Ya (Bob)</div><div class="b12-s125-knows-cell s125-no">Tidak pasti</div></div>
+                <div class="b12-s125-knows-row"><div class="b12-s125-knows-cell">Bob (penerima)</div><div class="b12-s125-knows-cell s125-no">Tidak tahu siapa</div><div class="b12-s125-knows-cell s125-yes">Ya (dirinya)</div><div class="b12-s125-knows-cell s125-yes">Ya</div></div>
+              </div>
+            </div>
+            <div class="b12-s125-note s125-run">Node perantara hanya tahu satu langkah sebelum dan sesudahnya. Tidak ada node tunggal yang punya gambaran lengkap tentang siapa membayar siapa, kecuali pengirim dan penerima sendiri.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-12-4" data-sb="sb-12-4">
+            ← 12.4 — Silent Payments: Privasi tanpa Koordinasi
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-12-6" data-sb="sb-12-6">
+            12.6 — Privasi adalah Spektrum →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 12.5 -->
+
+      <!-- ==============================
+           SECTION 12.6 · Privasi adalah Spektrum, Bukan Tombol On/Off
+      ============================== -->
+      <div class="p-section" id="section-12-6">
+        <div class="p-eyebrow">Bab 12 · 12.6</div>
+        <div class="p-heading">Privasi bergantung pada threat model kamu, bukan satu solusi untuk semua</div>
+        <div class="p-title">Privasi adalah Spektrum, Bukan Tombol On/Off</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Setelah membahas berbagai teknik privasi di bab ini, penting untuk memahami satu hal: privasi di Bitcoin bukan sesuatu yang bisa langsung diaktifkan atau dinonaktifkan. Ia adalah spektrum yang bergantung pada banyak keputusan kecil yang kamu buat setiap kali bertransaksi.</p>
+
+          <p><strong>Tidak ada solusi sempurna</strong></p>
+          <p>Setiap teknik yang kita bahas punya keterbatasan. CoinJoin bisa diidentifikasi polanya dan beberapa exchange menolaknya. Payjoin butuh penerima yang mendukung protokol. Silent Payments belum tersedia di semua wallet. Lightning punya keterbatasan sendiri untuk transaksi besar. Tidak ada satu teknik yang bisa menyelesaikan semua masalah privasi sekaligus.</p>
+
+          <p><strong>Threat model: ancaman dari siapa?</strong></p>
+          <p>Pertanyaan pertama yang harus dijawab sebelum memikirkan privasi adalah: kamu ingin melindungi diri dari siapa? Dari perusahaan analitik blockchain yang melacak pola transaksi? Dari exchange yang mungkin membekukan dana karena tainted coins? Dari orang-orang di sekitarmu yang tidak perlu tahu berapa banyak bitcoin yang kamu miliki? Jawaban yang berbeda membutuhkan strategi yang berbeda.</p>
+
+          <p><strong>Praktik dasar yang bisa dilakukan semua orang</strong></p>
+          <p>Ada beberapa langkah sederhana yang bisa dilakukan siapapun tanpa membutuhkan tools khusus. Gunakan HD wallet yang menghasilkan address baru secara otomatis untuk setiap transaksi. Hindari menggabungkan UTXO dari sumber berbeda dalam satu transaksi kalau tidak perlu. Gunakan Lightning untuk pembayaran kecil dan rutin. Berhati-hati dengan siapa kamu berbagi informasi tentang address atau transaksimu.</p>
+
+          <p><strong>Privasi dan fungibilitas</strong></p>
+          <p>Ada hubungan yang erat antara privasi dan fungibilitas Bitcoin. Fungibilitas berarti setiap satoshi bitcoin seharusnya diperlakukan sama, terlepas dari sejarahnya. Kalau beberapa bitcoin bisa di-taint karena pernah digunakan dalam aktivitas yang dicurigai dan exchange bisa menolak bitcoin tersebut, maka bitcoin tidak lagi sepenuhnya fungibel. Privasi yang baik membantu mempertahankan fungibilitas: kalau sejarah transaksi tidak bisa dilacak, tidak ada bitcoin yang bisa di-taint.</p>
+
+          <p><strong>Masa depan privasi Bitcoin</strong></p>
+          <p>Komunitas Bitcoin terus bekerja pada peningkatan privasi di level protokol. Silent Payments sudah mulai diadopsi. BOLT 12 sedang dalam proses implementasi. Ada diskusi tentang cross-input signature aggregation yang bisa membuat semua transaksi terlihat lebih seragam. Privasi Bitcoin di masa depan kemungkinan akan jauh lebih baik dari hari ini, tapi ini adalah proses yang lambat dan hati-hati karena setiap perubahan protokol membutuhkan konsensus komunitas yang luas.</p>
+
+          <div class="p-callout">
+            <p>Privasi bukan tentang menjadi kriminal. Ini tentang mempertahankan hak dasar untuk mengelola informasi finansialmu sendiri. Sama seperti kamu tidak mempublikasikan rekening bank ke semua orang, kamu juga tidak perlu mempublikasikan seluruh riwayat transaksi Bitcoinmu. Privasi yang baik adalah fondasi dari kebebasan finansial yang sejati.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Panduan — Threat model dan rekomendasi privasi</div>
+          <div class="b12-s126-desc">
+            Pilih profil yang paling sesuai dengan situasimu untuk melihat rekomendasi teknik privasi yang relevan berdasarkan threat model masing-masing.
+          </div>
+
+          <div class="b12-s126-profiles">
+            <div class="b12-s126-profile active" data-profile="0"><div class="b12-s126-profile-icon">👤</div><div class="b12-s126-profile-title">Pengguna Kasual</div><div class="b12-s126-profile-sub">Ingin privasi dasar, tidak mau ribet</div></div>
+            <div class="b12-s126-profile" data-profile="1"><div class="b12-s126-profile-icon">🏪</div><div class="b12-s126-profile-title">Pedagang / Merchant</div><div class="b12-s126-profile-sub">Menerima pembayaran dari pelanggan</div></div>
+            <div class="b12-s126-profile" data-profile="2"><div class="b12-s126-profile-icon">📈</div><div class="b12-s126-profile-title">Investor Jangka Panjang</div><div class="b12-s126-profile-sub">Menyimpan Bitcoin dalam jumlah signifikan</div></div>
+            <div class="b12-s126-profile" data-profile="3"><div class="b12-s126-profile-icon">🛡️</div><div class="b12-s126-profile-title">Privasi Tinggi</div><div class="b12-s126-profile-sub">Di negara represif atau butuh privasi kuat</div></div>
+          </div>
+
+          <div class="b12-s126-detail" id="b12-s126-detail"></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-12-5" data-sb="sb-12-5">
+            ← 12.5 — Lightning Network dan Privasi
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 12.6 -->
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 15 · BAB 12 -->
+
+

@@ -1,0 +1,730 @@
+<!-- ============================================================
+     PAGE 7 · BAB 4 · Kriptografi Bitcoin
+     |-- 4.1 · Fungsi Hash [DONE]
+     |-- 4.2 · Elliptic Curve (ECC) [LOCKED]
+     |-- 4.3 · ECDSA [LOCKED]
+     |-- 4.4 · Schnorr [LOCKED]
+     |-- 4.5 · Merkle Tree [LOCKED]
+     |-- 4.6 · Dari kriptografi ke keamanan jaringan [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab4">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b4">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b4">← Chapter List</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-heading">Bab 4</div>
+      <div class="sidebar-title">Kriptografi Bitcoin</div>
+
+      <!-- 4.1 · DONE -->
+      <div class="sidebar-item active" id="sb-4-1">
+        <div class="sb-num">4.1</div>
+        <div class="sb-label">Fungsi Hash</div>
+      </div>
+      <!-- 4.2 · DONE -->
+      <div class="sidebar-item" id="sb-4-2">
+        <div class="sb-num">4.2</div>
+        <div class="sb-label">Elliptic Curve (ECC)</div>
+      </div>
+      <!-- 4.3 · DONE -->
+      <div class="sidebar-item" id="sb-4-3">
+        <div class="sb-num">4.3</div>
+        <div class="sb-label">ECDSA</div>
+      </div>
+      <!-- 4.4 · DONE -->
+      <div class="sidebar-item" id="sb-4-4">
+        <div class="sb-num">4.4</div>
+        <div class="sb-label">Schnorr</div>
+      </div>
+      <!-- 4.5 · DONE -->
+      <div class="sidebar-item" id="sb-4-5">
+        <div class="sb-num">4.5</div>
+        <div class="sb-label">Merkle Tree, Root & Proof</div>
+      </div>
+      <!-- 4.6 · DONE -->
+      <div class="sidebar-item" id="sb-4-6">
+        <div class="sb-num">4.6</div>
+        <div class="sb-label">Dari kriptografi ke keamanan</div>
+      </div>
+    </div>
+    <!-- END SIDEBAR -->
+
+    <!-- CONTENT AREA -->
+    <div class="prologue-content" id="bab4-content">
+
+      <!-- ==============================
+           SECTION 4.1 · Fungsi Hash
+      ============================== -->
+      <div class="p-section active" id="section-4-1">
+        <div class="p-eyebrow">Bab 4 · 4.1</div>
+        <div class="p-heading">Mesin penghancur yang deterministik</div>
+        <div class="p-title">Fungsi Hash</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Bayangkan sebuah mesin ajaib. Kamu bisa memasukkan apapun ke dalamnya: selembar kertas, satu kata, atau seluruh isi perpustakaan nasional. Mesin itu akan selalu mengeluarkan sebuah kartu berukuran sama, berisi deretan angka dan huruf sepanjang 64 karakter.</p>
+          <p>Itulah fungsi hash.</p>
+
+          <p><strong>Seperti sidik jari, tapi untuk data</strong></p>
+          <p>Setiap data punya "sidik jari" hash yang unik. Seperti sidik jari manusia, hash sebuah data bisa dipakai untuk memverifikasi identitasnya tanpa perlu membandingkan seluruh isinya. Dan seperti sidik jari, dari hash tidak bisa direkonstruksi data aslinya.</p>
+          <p>Kalau kamu ingin memastikan file yang kamu unduh tidak rusak atau dimanipulasi di tengah jalan, kamu bisa membandingkan hash-nya dengan hash yang disediakan oleh sumbernya. Kalau hash-nya sama, file-nya identik. Kalau berbeda satu bit pun, hash-nya berbeda total.</p>
+
+          <p><strong>Sifat pertama: deterministik</strong></p>
+          <p>Input yang sama selalu menghasilkan output yang sama. SHA-256("Bitcoin") akan selalu menghasilkan hash yang persis sama, di komputer manapun, kapanpun. Tidak ada variasi, tidak ada keacakan.</p>
+
+          <p><strong>Sifat kedua: avalanche effect</strong></p>
+          <p>Ubah satu huruf kecil saja, dan seluruh hash berubah total. "Bitcoin" dan "bitcoin" menghasilkan hash yang tidak punya kesamaan sama sekali. Tidak ada pola yang bisa ditebak, tidak ada transisi yang mulus. Satu perubahan kecil, gempa besar di output.</p>
+          <p>Ini seperti resep kue. Kalau kamu ganti satu gram gula dengan garam, rasanya berubah drastis. Tidak ada cara untuk menebak berapa banyak yang diganti hanya dari mencicipi hasilnya.</p>
+
+          <p><strong>Sifat ketiga: satu arah</strong></p>
+          <p>Dari output, tidak mungkin merekonstruksi input. Ini bukan soal kunci rahasia atau enkripsi. Ini soal matematika. Tidak ada persamaan yang bisa dibalik. Satu-satunya cara untuk menemukan input dari sebuah hash adalah mencoba semua kemungkinan satu per satu. Untuk SHA-256, dengan seluruh komputer di dunia bekerja bersama, membutuhkan waktu lebih dari usia alam semesta. Bukan hiperbola.</p>
+
+          <p><strong>Sifat keempat: collision resistant</strong></p>
+          <p>SHA-256 menghasilkan output 256-bit, artinya ada 2²⁵⁶ kemungkinan output yang berbeda. Kemungkinan dua input berbeda menghasilkan hash yang sama, secara praktis, adalah nol.</p>
+
+          <p><strong>SHA-256 di Bitcoin</strong></p>
+          <p>Bitcoin menggunakan SHA-256 hampir di mana-mana. Untuk menghasilkan alamat dari public key. Untuk menghubungkan block satu sama lain di blockchain. Sebagai inti dari proses mining. Setiap block berisi hash dari block sebelumnya, membentuk rantai yang tidak bisa dimanipulasi tanpa menghitung ulang seluruh rantai sesudahnya.</p>
+
+          <div class="p-callout">
+            <p>SHA-256 bukan enkripsi. Enkripsi bisa dibalik kalau kamu punya kuncinya. Hash tidak bisa dibalik sama sekali. Ini perbedaan fundamental yang sering disalahpahami, bahkan oleh orang yang sudah lama berkecimpung di dunia teknologi.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Hash Playground — SHA-256 real-time</div>
+
+          <div class="b04-s41-desc">
+            Ketik apapun dan lihat SHA-256 hash-nya muncul secara real-time. Coba ubah satu huruf kecil dan perhatikan bagaimana seluruh hash berubah total.
+          </div>
+
+          <div class="hp-input-label">Input</div>
+          <textarea class="hp-textarea" id="b04-s41-input" rows="3" placeholder="Ketik sesuatu..."></textarea>
+
+          <div class="hp-hash-box">
+            <div class="hp-hash-head">
+              <span class="hp-hash-label">SHA-256 Hash</span>
+              <span class="hp-hash-algo">256-bit · 64 karakter hex</span>
+            </div>
+            <div class="hp-hash-val hp-hash-empty" id="b04-s41-hash">Ketik sesuatu untuk melihat hash-nya...</div>
+          </div>
+
+          <div class="hp-meta">
+            <div class="hp-meta-item">Panjang input: <span class="hp-meta-val" id="b04-s41-len">0</span> karakter</div>
+            <div class="hp-meta-item">Panjang hash: <span class="hp-meta-val">64</span> karakter (selalu)</div>
+          </div>
+
+          <div class="hp-presets">
+            <span style="font-size:11px;color:#52524C;align-self:center;">Coba contoh:</span>
+            <button class="hp-preset" id="b04-s41-pr-0" data-text="Bitcoin">Bitcoin</button>
+            <button class="hp-preset" id="b04-s41-pr-1" data-text="bitcoin">bitcoin</button>
+            <button class="hp-preset" id="b04-s41-pr-2" data-text="Satoshi Nakamoto">Satoshi Nakamoto</button>
+            <button class="hp-preset" id="b04-s41-pr-3" data-text="Hello, World!">Hello, World!</button>
+            <button class="hp-preset" id="b04-s41-pr-4" data-text="1">1</button>
+            <button class="hp-preset" id="b04-s41-pr-5" data-text="2">2</button>
+          </div>
+
+          <div class="hp-avalanche">
+            <div class="hp-av-head">Avalanche Effect — perbandingan dua input yang hampir sama</div>
+            <div class="hp-av-body" id="b04-s41-av-body">
+              <div style="font-size:12px;color:#52524C;">Ketik sesuatu di atas untuk melihat perbandingan dengan versi yang berbeda satu huruf.</div>
+            </div>
+          </div>
+
+          <div class="sim-label" style="margin-top:1.5rem">Perbandingan jenis hash</div>
+          <div class="b04-s41-cmp-desc">
+            Ketik input di atas dan lihat bagaimana jenis hash berbeda menghasilkan output yang berbeda. SHA-256 dan SHA-256d dipakai langsung di Bitcoin. Hash160 dipakai untuk alamat. SHA-1 sudah tidak aman dan tidak dipakai Bitcoin.
+          </div>
+
+          <div class="b04-s41-cmp-table">
+            <div class="b04-s41-cmp-row header">
+              <div class="b04-s41-cmp-name">Fungsi</div>
+              <div class="b04-s41-cmp-bits">Bit</div>
+              <div class="b04-s41-cmp-use">Dipakai di Bitcoin</div>
+              <div class="b04-s41-cmp-out">Output (hex)</div>
+            </div>
+
+            <div class="b04-s41-cmp-row">
+              <div class="b04-s41-cmp-name active">SHA-256</div>
+              <div class="b04-s41-cmp-bits">256</div>
+              <div class="b04-s41-cmp-use">Merkle Root, Mining</div>
+              <div class="b04-s41-cmp-out" id="b04-s41-cmp-sha256">—</div>
+            </div>
+
+            <div class="b04-s41-cmp-row">
+              <div class="b04-s41-cmp-name active">SHA-256d</div>
+              <div class="b04-s41-cmp-bits">256</div>
+              <div class="b04-s41-cmp-use">TXID, Block Hash</div>
+              <div class="b04-s41-cmp-out" id="b04-s41-cmp-sha256d">—</div>
+            </div>
+
+            <div class="b04-s41-cmp-row">
+              <div class="b04-s41-cmp-name active">Hash160</div>
+              <div class="b04-s41-cmp-bits">160</div>
+              <div class="b04-s41-cmp-use">Alamat Bitcoin</div>
+              <div class="b04-s41-cmp-out" id="b04-s41-cmp-hash160">—</div>
+            </div>
+
+            <div class="b04-s41-cmp-row deprecated">
+              <div class="b04-s41-cmp-name">SHA-1 ⚠️</div>
+              <div class="b04-s41-cmp-bits">160</div>
+              <div class="b04-s41-cmp-use">Tidak dipakai — deprecated</div>
+              <div class="b04-s41-cmp-out b04-s41-cmp-note-cell">Sudah deprecated dan diblokir di banyak browser modern. Bitcoin tidak menggunakannya.</div>
+            </div>
+          </div>
+
+          <div class="b04-s41-cmp-note">
+            SHA-256, SHA-256d, dan Hash160 dihitung secara akurat — SHA-256 via Web Crypto API, RIPEMD-160 via implementasi langsung dari spesifikasi RFC 2286. SHA-1 sudah deprecated, diblokir browser modern, dan tidak dipakai Bitcoin.
+          </div>
+        
+          <div class="lab-link"><span class="kode">C1</span><span class="isi"><span class="hd">Lanjut ke Laboratorium</span>Alat di atas menampilkan hasilnya. Kalau kamu ingin melihat <b>proses masaknya</b>, ronde demi ronde sampai avalanche terjadi, itu ada di Laboratorium C1.</span></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-4-2" data-sb="sb-4-2">
+            4.2 — Elliptic Curve →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 4.1 -->
+
+      <!-- ==============================
+           SECTION 4.2 · Elliptic Curve (ECC)
+      ============================== -->
+      <div class="p-section" id="section-4-2">
+        <div class="p-eyebrow">Bab 4 · 4.2</div>
+        <div class="p-heading">Lompatan yang tidak bisa dibalik</div>
+        <div class="p-title">Elliptic Curve Cryptography</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Di Bab 2 kita belajar bahwa private key menghasilkan public key melalui proses satu arah. Sekarang saatnya kita pahami mengapa proses itu tidak bisa dibalik.</p>
+          <p>Jawabannya ada di sebuah cabang matematika yang disebut Elliptic Curve Cryptography, atau ECC. Tapi kita tidak akan mulai dari matematikanya. Kita mulai dari masalahnya.</p>
+
+          <p><strong>Masalah yang harus dipecahkan</strong></p>
+          <p>Bayangkan kamu ingin membuat sistem di mana seseorang bisa membuktikan identitasnya tanpa mengungkapkan rahasia yang membuktikan identitas itu. Seperti ini: kamu ingin membuktikan bahwa kamu tahu jalan menuju sebuah tempat tersembunyi, tanpa harus menunjukkan petanya kepada siapapun. Kamu cukup tiba di sana. Orang lain bisa memverifikasi bahwa kamu sampai, tapi tidak bisa merekonstruksi rute yang kamu ambil.</p>
+          <p>Untuk itu, dibutuhkan operasi matematika yang punya satu sifat krusial: mudah dilakukan ke satu arah, tapi mustahil dibalik.</p>
+
+          <p><strong>Analogi kunci kombinasi</strong></p>
+          <p>Bayangkan sebuah kunci kombinasi dengan puluhan digit. Memutar kenopnya sesuai kombinasi yang kamu tahu: gampang, beberapa detik. Menemukan kombinasinya kalau kamu tidak tahu: tidak ada jalan selain mencoba, dan jumlah percobaannya jauh melampaui waktu yang tersedia bagi siapapun.</p>
+          <p>Perhatikan bahwa yang menghalangi bukan hilangnya informasi. Kombinasinya masih ada di sana, utuh, menentukan posisi kenop secara pasti. Yang menghalangi adalah ongkos untuk menemukannya kembali. Ini bedanya dengan mencampur cat, di mana komposisi aslinya benar-benar musnah. ECC bekerja seperti kunci kombinasi, bukan seperti cat: hasilnya sepenuhnya ditentukan oleh input, tapi menelusuri balik menuntut kerja yang tidak akan pernah selesai.</p>
+
+          <p><strong>Lompatan di atas kurva</strong></p>
+          <p>Kurva eliptik adalah garis matematika dengan bentuk tertentu. Di atas kurva ini, ada satu titik awal yang sudah disepakati semua orang, disebut titik generator G. Dari titik G, kita bisa "melompat" ke titik berikutnya dengan aturan matematika tertentu. Dari sana melompat lagi. Dan lagi. Setiap lompatan mengikuti aturan yang sama, tapi menghasilkan titik yang tersebar acak di seluruh kurva.</p>
+          <p>Private key adalah jumlah lompatan yang kamu lakukan. Bisa jadi angka yang sangat besar, sampai 2²⁵⁶ kemungkinan. Public key adalah titik akhir tempat kamu mendarat. Menghitung titik akhir dari jumlah lompatan: mudah, butuh milidetik. Menemukan jumlah lompatan dari titik akhir: mustahil secara komputasi. Tidak ada jalan pintas.</p>
+
+          <p><strong>Format public key</strong></p>
+          <p>Titik akhir di kurva eliptik adalah sepasang koordinat (x, y). Di Bitcoin, koordinat ini dikodekan menjadi string hex. Format yang paling umum dipakai sekarang adalah format compressed: prefix <strong>02</strong> kalau y positif, atau <strong>03</strong> kalau y negatif, diikuti koordinat x dalam hex. Karena kurva eliptik simetris, penerima bisa menghitung ulang y dari x dan prefix kapanpun dibutuhkan.</p>
+
+          <p><strong>SECP256K1</strong></p>
+          <p>Bitcoin menggunakan kurva eliptik spesifik yang disebut SECP256K1. Kurva ini dipilih karena sifat matematisnya yang efisien, aman, dan tidak ada pintu belakang yang tersembunyi.</p>
+
+          <div class="p-callout">
+            <p>Keamanan seluruh sistem kepemilikan Bitcoin berdiri di atas satu masalah matematika yang belum terpecahkan: dari titik akhir, tidak ada cara menemukan berapa lompatan yang dilakukan. Selama masalah ini belum terpecahkan, private key tidak bisa diturunkan dari public key.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi interaktif — Lompatan di atas Kurva Eliptik</div>
+          <div class="b04-s42-desc">
+            Geser slider untuk mengubah private key (jumlah lompatan). Perhatikan bagaimana titik akhir dan public key berubah total meski hanya menambah satu lompatan.
+          </div>
+
+          <div class="ecc-ctrl">
+            <label class="ecc-label">Private key (jumlah lompatan)</label>
+            <input type="range" id="b04-s42-slider" min="1" max="32" step="1" value="7">
+            <span class="ecc-k-val" id="b04-s42-k">7</span>
+          </div>
+
+          <div class="ecc-canvas-wrap">
+            <canvas id="b04-s42-canvas" height="300"></canvas>
+          </div>
+
+          <div class="ecc-cards">
+            <div class="ecc-card">
+              <div class="ecc-card-label">Private key</div>
+              <div class="ecc-card-val priv" id="b04-s42-priv">7 lompatan</div>
+              <div class="ecc-card-sub">Angka rahasia yang hanya kamu tahu. Di Bitcoin sungguhan ini adalah angka 256-bit acak.</div>
+            </div>
+            <div class="ecc-card">
+              <div class="ecc-card-label">Titik akhir — koordinat (x, y)</div>
+              <div class="ecc-card-val coord" id="b04-s42-coord">(x, y)</div>
+              <div class="ecc-card-sub">Hasil perkalian k × G. Ini adalah public key dalam bentuk koordinat mentah.</div>
+            </div>
+            <div class="ecc-card">
+              <div class="ecc-card-label">Public key — format compressed</div>
+              <div class="ecc-card-val pub" id="b04-s42-pub">02...</div>
+              <div class="ecc-card-sub" id="b04-s42-pub-sub"></div>
+            </div>
+          </div>
+
+          <div class="ecc-note" id="b04-s42-note">
+            Geser slider untuk mengubah private key.
+          </div>
+
+          <div class="ecc-caveat">
+            Simulasi ini hanya menampilkan maksimal 32 lompatan, dan sudah sulit ditebak kemana arah tiap lompatannya. Private key Bitcoin sungguhan adalah 2²⁵⁶ lompatan. Angka itu tidak bisa dibayangkan oleh otak manusia manapun, dan tidak bisa dipecahkan oleh komputer manapun yang pernah ada.
+          </div>
+
+          <div class="b04-fmt">
+            <div class="b04-fmt-head">Format public key: kenapa cukup separuhnya</div>
+            <div class="b04-fmt-body">
+              <div class="b04-fmt-q">Titik di kurva punya koordinat X dan Y. Tapi kurvanya simetris terhadap sumbu X, jadi untuk setiap X hanya ada dua kemungkinan Y: satu genap, satu ganjil. Artinya Y tidak perlu disimpan, cukup dicatat yang mana.</div>
+              <div class="b04-fmt-cards">
+                <div class="b04-fmt-card unc">
+                  <div class="b04-fmt-tag">Uncompressed</div>
+                  <div class="b04-fmt-bytes"><span class="b04-fmt-pfx unc">04</span><span class="b04-fmt-x">X (32 byte)</span><span class="b04-fmt-y">Y (32 byte)</span></div>
+                  <div class="b04-fmt-size">65 byte</div>
+                  <div class="b04-fmt-sub">Format lama. Menyimpan X dan Y dua-duanya.</div>
+                </div>
+                <div class="b04-fmt-card cmp">
+                  <div class="b04-fmt-tag">Compressed</div>
+                  <div class="b04-fmt-bytes"><span class="b04-fmt-pfx cmp">02/03</span><span class="b04-fmt-x">X (32 byte)</span></div>
+                  <div class="b04-fmt-size">33 byte</div>
+                  <div class="b04-fmt-sub">Prefiks 02 kalau Y genap, 03 kalau ganjil. Y dihitung ulang saat dibutuhkan.</div>
+                </div>
+              </div>
+              <div class="b04-fmt-note">Hemat <b>32 byte</b> per public key, hampir setengahnya, tanpa kehilangan informasi apa pun. Y bukan dibuang, melainkan bisa diturunkan kembali dari X lewat persamaan kurvanya. Inilah kenapa hampir semua wallet modern memakai format compressed.</div>
+            </div>
+          </div>
+        
+          <div class="lab-link"><span class="kode">C2</span><span class="isi"><span class="hd">Lanjut ke Laboratorium</span>Peraga di atas menunjukkan <b>akibatnya</b> saat private key berubah. Aritmetika yang menghasilkannya, termasuk penjumlahan titik dan double-and-add, dibedah di Laboratorium C2.</span></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-4-1" data-sb="sb-4-1">
+            ← 4.1 — Fungsi Hash
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-4-3" data-sb="sb-4-3">
+            4.3 — ECDSA →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 4.2 -->
+
+      <!-- ==============================
+           SECTION 4.3 · ECDSA
+      ============================== -->
+      <div class="p-section" id="section-4-3">
+        <div class="p-eyebrow">Bab 4 · 4.3</div>
+        <div class="p-heading">Membuktikan tanpa mengungkapkan</div>
+        <div class="p-title">ECDSA</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Kita sudah tahu bahwa private key menghasilkan public key lewat ECC. Sekarang pertanyaannya: bagaimana private key digunakan untuk membuktikan kepemilikan tanpa mengungkapkan private key itu sendiri?</p>
+          <p>Jawabannya adalah tanda tangan digital. Di Bitcoin, mekanisme ini disebut ECDSA, Elliptic Curve Digital Signature Algorithm.</p>
+
+          <p><strong>Analogi surat bermaterai</strong></p>
+          <p>Bayangkan kamu mengirim surat resmi. Kamu tidak ingin siapapun bisa memalsukan suratmu, dan penerima harus bisa memastikan surat itu benar-benar dari kamu. Di dunia fisik, kamu pakai tanda tangan dan materai. Di dunia Bitcoin, kamu pakai ECDSA.</p>
+          <p>Bedanya dengan tanda tangan fisik: tanda tangan ECDSA unik untuk setiap pesan. Tanda tangan kamu untuk transaksi senilai 0.1 BTC hari ini berbeda sepenuhnya dengan tanda tangan kamu untuk transaksi senilai 0.1 BTC besok, meski private key yang dipakai sama. Tidak ada yang bisa menyalin tanda tanganmu dari satu transaksi dan menempelkannya ke transaksi lain.</p>
+
+          <p><strong>Bagaimana signing bekerja</strong></p>
+          <p>Ketika kamu mengirim Bitcoin, wallet mengambil data transaksi, menggabungkannya dengan private key-mu, dan menghasilkan dua angka: r dan s. Keduanya bersama-sama membentuk tanda tangan ECDSA. Proses ini juga melibatkan angka acak rahasia yang disebut nonce. Nonce ini harus benar-benar acak dan tidak boleh dipakai dua kali. Kalau satu nonce yang sama dipakai untuk menandatangani dua transaksi berbeda, private key-mu bisa dihitung balik sepenuhnya hanya dari kedua tanda tangan itu. Ini bukan kelemahan teoretis: kesalahan implementasi semacam ini pernah menguras wallet di dunia nyata. Perhatikan juga bahwa nonce di sini tidak ada hubungannya dengan nonce yang dicari miner di Bab 5. Namanya kebetulan sama, konsepnya berbeda.</p>
+
+          <p><strong>Bagaimana verification bekerja</strong></p>
+          <p>Siapapun yang punya public key dan tanda tangan bisa memverifikasi bahwa tanda tangan itu dibuat oleh pemilik private key yang sesuai, tanpa perlu tahu private key-nya. Jaringan Bitcoin melakukan verifikasi ini untuk setiap transaksi yang masuk. Kalau tanda tangan tidak valid, transaksi ditolak.</p>
+
+          <p><strong>Satu input, satu tanda tangan</strong></p>
+          <p>Setiap input dalam transaksi harus ditandatangani secara terpisah. Kalau transaksimu punya tiga input dari tiga UTXO berbeda, kamu perlu membuat tiga tanda tangan berbeda, masing-masing membuktikan kepemilikan UTXO yang bersangkutan.</p>
+
+          <div class="p-callout">
+            <p>ECDSA memungkinkan sesuatu yang luar biasa: kamu bisa membuktikan bahwa kamu tahu sebuah rahasia, tanpa mengungkapkan rahasianya. Jaringan tahu kamu punya private key yang benar, tapi tidak pernah melihat private key-mu.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi interaktif — ECDSA: Sign, Verify, Tamper</div>
+          <div class="b04-s43-desc">
+            Ikuti tiga tahap: tandatangani transaksi, verifikasi tanda tangan, lalu coba manipulasi dan lihat apa yang terjadi.
+          </div>
+
+          <div class="ec-steps">
+            <div class="ec-step-tab active" id="b04-s43-tab-1"><div class="ec-step-num">Tahap 1</div><div class="ec-step-title">✍️ Sign</div></div>
+            <div class="ec-step-tab" id="b04-s43-tab-2"><div class="ec-step-num">Tahap 2</div><div class="ec-step-title">✅ Verify</div></div>
+            <div class="ec-step-tab" id="b04-s43-tab-3"><div class="ec-step-num">Tahap 3</div><div class="ec-step-title">🔍 Tamper</div></div>
+          </div>
+
+          <!-- PANEL 1 -->
+          <div class="ec-panel show" id="b04-s43-panel-1">
+            <div class="ec-field">
+              <div class="ec-field-label">Pesan transaksi</div>
+              <div class="ec-field-desc">Data yang akan ditandatangani. Di Bitcoin sungguhan ini adalah data transaksi lengkap: siapa pengirim, penerima, dan berapa jumlahnya.</div>
+              <textarea class="ec-field-input" id="b04-s43-msg" rows="2">Kirim 0.05 BTC ke bc1q...3f8a</textarea>
+            </div>
+            <div class="ec-btns">
+              <button class="kp-btn kp-btn-gen" id="b04-s43-btn-sign">Tanda tangani transaksi ↗</button>
+              <button class="kp-btn kp-btn-reset" id="b04-s43-btn-reset">Reset</button>
+            </div>
+            <div id="b04-s43-sign-wrap" style="display:none">
+              <div class="ec-field">
+                <div class="ec-field-label">Private key</div>
+                <div class="ec-field-desc">Kunci rahasiamu. Dipakai untuk membuat tanda tangan tapi tidak pernah dikirim ke jaringan atau dibagikan ke siapapun.</div>
+                <div class="ec-field-val priv" id="b04-s43-priv">—</div>
+              </div>
+              <div class="ec-field">
+                <div class="ec-field-label">Nonce (k)</div>
+                <div class="ec-field-desc">Angka acak yang dibuat baru setiap kali menandatangani. Harus benar-benar unik — tidak boleh dipakai dua kali untuk dua pesan berbeda.</div>
+                <div class="ec-field-val nc" id="b04-s43-nonce">—</div>
+              </div>
+              <div class="ec-field">
+                <div class="ec-field-label">Tanda tangan (r, s)</div>
+                <div class="ec-field-desc">Hasil matematika dari pesan + private key + nonce. Unik untuk transaksi ini saja. Siapapun bisa memverifikasinya menggunakan public key, tanpa perlu tahu private key.</div>
+                <div class="ec-field-val sig" id="b04-s43-sig">—</div>
+              </div>
+              <div class="ec-warning">
+                ⚠️ Nonce yang sama dipakai dua kali untuk dua pesan berbeda bisa mengekspos private key-mu secara matematis. Ini pernah terjadi di dunia nyata dan mengakibatkan kehilangan Bitcoin.
+                <span class="ec-warning-sol">Solusinya: wallet modern menggunakan CSPRNG (Cryptographically Secure Pseudo-Random Number Generator) untuk memastikan setiap nonce benar-benar acak dan tidak pernah berulang. Kamu tidak perlu mengelolanya secara manual, wallet yang baik menangani ini secara otomatis.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- PANEL 2 -->
+          <div class="ec-panel" id="b04-s43-panel-2">
+            <div class="ec-field">
+              <div class="ec-field-label">Pesan yang diterima</div>
+              <div class="ec-field-desc">Data transaksi yang diterima oleh node jaringan.</div>
+              <div class="ec-field-val msg" id="b04-s43-v-msg">Selesaikan Tahap 1 terlebih dahulu.</div>
+            </div>
+            <div class="ec-field">
+              <div class="ec-field-label">Tanda tangan (r, s)</div>
+              <div class="ec-field-desc">Tanda tangan yang disertakan bersama transaksi. Node menggunakannya bersama public key untuk verifikasi.</div>
+              <div class="ec-field-val sig" id="b04-s43-v-sig">—</div>
+            </div>
+            <div class="ec-field">
+              <div class="ec-field-label">Public key pengirim</div>
+              <div class="ec-field-desc">Diketahui publik. Node menggunakan public key ini untuk memverifikasi tanda tangan, tanpa perlu tahu private key.</div>
+              <div class="ec-field-val pub" id="b04-s43-v-pub">—</div>
+            </div>
+            <div class="ec-btns">
+              <button class="kp-btn kp-btn-gen" id="b04-s43-btn-verify">Verifikasi tanda tangan ↗</button>
+            </div>
+            <div class="ec-result" id="b04-s43-v-result"></div>
+          </div>
+
+          <!-- PANEL 3 -->
+          <div class="ec-panel" id="b04-s43-panel-3">
+            <div class="ec-note">Coba manipulasi pesan atau tanda tangan, lalu verifikasi. Lihat bagaimana perubahan sekecil apapun langsung terdeteksi.</div>
+            <div class="ec-tamper-row">
+              <button class="ec-tamper-btn danger" id="b04-s43-t-msg">Ubah jumlah BTC</button>
+              <button class="ec-tamper-btn danger" id="b04-s43-t-addr">Ubah alamat tujuan</button>
+              <button class="ec-tamper-btn danger" id="b04-s43-t-sig">Ubah tanda tangan</button>
+              <button class="ec-tamper-btn" id="b04-s43-t-reset">Kembalikan ke asli</button>
+            </div>
+            <div class="ec-field">
+              <div class="ec-field-label">Pesan</div>
+              <div class="ec-field-val msg" id="b04-s43-t-msg-val">Selesaikan Tahap 1 terlebih dahulu.</div>
+            </div>
+            <div class="ec-field">
+              <div class="ec-field-label">Tanda tangan (r, s)</div>
+              <div class="ec-field-val sig" id="b04-s43-t-sig-val">—</div>
+            </div>
+            <div class="ec-btns">
+              <button class="kp-btn kp-btn-gen" id="b04-s43-btn-t-verify">Verifikasi ↗</button>
+            </div>
+            <div class="ec-result" id="b04-s43-t-result"></div>
+          </div>
+
+          <div class="raw-toggle-row">
+            <button class="raw-toggle-btn" id="b04-s43-raw-btn">
+              <span class="raw-toggle-icon">{}</span> Lihat Raw Data
+            </button>
+            <span class="raw-toggle-hint">Tanda tangan ECDSA dalam format DER encoding — format yang dipakai Bitcoin</span>
+          </div>
+
+          <div class="raw-panel" id="b04-s43-raw-panel">
+            <div class="raw-panel-head">
+              <span>ECDSA Signature · DER Encoding</span>
+              <span class="raw-panel-src">scriptSig / witness</span>
+            </div>
+            <pre class="raw-panel-body" id="b04-s43-raw-body">Tanda tangani transaksi di Tahap 1 terlebih dahulu.</pre>
+          </div>
+        
+          <div class="lab-link"><span class="kode">C3</span><span class="isi"><span class="hd">Lanjut ke Laboratorium</span>Peraga di atas mengikuti <b>alurnya</b>. Perhitungan r dan s yang sebenarnya, plus peragaan bagaimana nonce dipakai ulang membocorkan private key, ada di Laboratorium C3.</span></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-4-2" data-sb="sb-4-2">
+            ← 4.2 — Elliptic Curve
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-4-4" data-sb="sb-4-4">
+            4.4 — Schnorr →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 4.3 -->
+
+      <!-- ==============================
+           SECTION 4.4 · Schnorr
+      ============================== -->
+      <div class="p-section" id="section-4-4">
+        <div class="p-eyebrow">Bab 4 · 4.4</div>
+        <div class="p-heading">Satu tanda tangan, berapapun orangnya</div>
+        <div class="p-title">Schnorr Signature</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>ECDSA sudah bekerja dengan baik selama Bitcoin ada. Tapi ada algoritma tanda tangan lain yang lebih elegan, lebih efisien, dan punya sifat-sifat yang membuka kemungkinan baru: Schnorr signature.</p>
+          <p>Schnorr diaktifkan di Bitcoin melalui upgrade Taproot pada November 2021.</p>
+
+          <p><strong>Kenapa bukan Schnorr dari awal?</strong></p>
+          <p>Selama hampir dua dekade, Schnorr signature dilindungi paten dan nyaris tidak dipakai siapapun. Paten itu kedaluwarsa pada 2008, beberapa bulan sebelum Bitcoin dirilis. Jadi alasan Satoshi memilih ECDSA bukan soal paten. Saat itu Schnorr belum distandarisasi, belum teruji luas, dan belum tersedia di OpenSSL, pustaka kriptografi yang jadi sandaran kode awal Bitcoin. ECDSA memenuhi ketiganya. Butuh bertahun-tahun sesudahnya bagi komunitas Bitcoin untuk mematangkan Schnorr dan mencapai konsensus untuk mengaktifkannya secara aman.</p>
+
+          <p><strong>Keunggulan pertama: lebih sederhana</strong></p>
+          <p>Schnorr punya bukti keamanan yang lebih kuat dan lebih mudah dianalisis. ECDSA lebih kompleks dan punya lebih banyak sudut yang bisa salah diimplementasikan, seperti masalah nonce yang kita bahas di 4.3.</p>
+
+          <p><strong>Keunggulan kedua: linear dan bisa digabung</strong></p>
+          <p>Ini yang paling penting. Tanda tangan Schnorr bisa digabungkan secara matematis. Kalau dua orang masing-masing punya private key, mereka bisa membuat satu tanda tangan tunggal yang mewakili keduanya. Orang luar tidak bisa membedakan apakah tanda tangan itu dari satu orang atau seratus orang.</p>
+
+          <p><strong>Keunggulan ketiga: lebih privat</strong></p>
+          <p>Karena tanda tangan bisa digabung, transaksi multisignature terlihat identik dengan transaksi biasa dari luar. Tidak ada yang bisa tahu apakah sebuah transaksi membutuhkan 2 dari 3 tanda tangan atau cukup 1.</p>
+
+          <p><strong>Keunggulan keempat: lebih efisien</strong></p>
+          <p>Tanda tangan yang digabung lebih kecil ukurannya dari kumpulan tanda tangan terpisah. Ini menghemat ruang di block dan menurunkan fee untuk transaksi kompleks.</p>
+
+          <p><strong>MuSig</strong></p>
+          <p>Kemampuan menggabungkan tanda tangan Schnorr ini diimplementasikan dalam protokol yang disebut MuSig. Dengan MuSig, beberapa pihak bisa berkolaborasi membuat satu tanda tangan tanpa ada satu pihak pun yang tahu private key pihak lain.</p>
+
+          <p><strong>Taproot</strong></p>
+          <p>Schnorr adalah fondasi dari Taproot, upgrade Bitcoin terbesar sejak SegWit. Taproot memungkinkan kondisi pengeluaran yang kompleks disembunyikan di balik tanda tangan tunggal yang sederhana. Selama semua pihak setuju, transaksi terlihat seperti transaksi biasa. Hanya kalau ada sengketa, kondisi kompleks itu terungkap.</p>
+
+          <div class="p-callout">
+            <p>Schnorr bukan sekadar upgrade teknis. Ia adalah fondasi dari privasi dan skalabilitas Bitcoin generasi berikutnya. Setiap transaksi Taproot yang terlihat sederhana bisa menyembunyikan logika yang sangat kompleks di baliknya.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi interaktif — ECDSA vs Schnorr: Agregasi, Ukuran, dan Privasi</div>
+          <div class="b04-s44-desc">
+            Geser jumlah penandatangan sebuah transaksi multisig. Perhatikan tiga hal sekaligus: berapa tanda tangan yang tersimpan di blockchain, berapa besar ukurannya, dan apakah orang luar bisa tahu ini multisig.
+          </div>
+
+          <div class="b04-s44-ctrl">
+            <label>Penandatangan</label>
+            <input type="range" id="b04-s44-signers" min="1" max="15" step="1" value="3">
+            <span class="b04-s44-ctrl-val" id="b04-s44-signers-val">3 dari 3</span>
+          </div>
+
+          <div class="b04-s44-bars">
+            <div class="b04-s44-bar-row">
+              <span class="b04-s44-bar-lbl e">ECDSA</span>
+              <span class="b04-s44-bar-track"><span class="b04-s44-bar-fill e" id="b04-s44-bar-e" style="width:0%"></span></span>
+              <span class="b04-s44-bar-val" id="b04-s44-val-e">0 byte</span>
+            </div>
+            <div class="b04-s44-bar-row">
+              <span class="b04-s44-bar-lbl s">Schnorr</span>
+              <span class="b04-s44-bar-track"><span class="b04-s44-bar-fill s" id="b04-s44-bar-s" style="width:0%"></span></span>
+              <span class="b04-s44-bar-val" id="b04-s44-val-s">0 byte</span>
+            </div>
+            <div class="b04-s44-verdict" id="b04-s44-verdict"></div>
+          </div>
+
+          <div class="sc-grid">
+            <div class="sc-col">
+              <div class="sc-col-head e">⚡ ECDSA — tanda tangan terlihat</div>
+              <div class="sc-col-body" id="b04-s44-e-body"></div>
+            </div>
+            <div class="sc-col">
+              <div class="sc-col-head s">Schnorr — semua terlihat sama</div>
+              <div class="sc-col-body" id="b04-s44-s-body"></div>
+            </div>
+          </div>
+
+          <div class="sc-obs bad" id="b04-s44-e-obs" style="margin-bottom:8px"></div>
+          <div class="sc-obs ok"  id="b04-s44-s-obs" style="margin-bottom:1.25rem"></div>
+          <div class="sc-note" id="b04-s44-note"></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-4-3" data-sb="sb-4-3">
+            ← 4.3 — ECDSA
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-4-5" data-sb="sb-4-5">
+            4.5 — Merkle Tree →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 4.4 -->
+
+      <!-- ==============================
+           SECTION 4.5 · Merkle Tree, Merkle Root, dan Merkle Proof
+      ============================== -->
+      <div class="p-section" id="section-4-5">
+        <div class="p-eyebrow">Bab 4 · 4.5</div>
+        <div class="p-heading">Satu hash yang merangkum segalanya</div>
+        <div class="p-title">Merkle Tree, Merkle Root, dan Merkle Proof</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Setiap block Bitcoin berisi ratusan bahkan ribuan transaksi. Ada satu pertanyaan sederhana yang butuh jawaban efisien: bagaimana cara membuktikan bahwa sebuah transaksi tertentu ada di dalam sebuah block, tanpa harus mengunduh dan memeriksa seluruh isi block?</p>
+          <p>Jawabannya adalah Merkle Tree.</p>
+
+          <p><strong>Pohon dari hash</strong></p>
+          <p>Merkle Tree adalah struktur data berbentuk pohon yang dibangun dari hash. Cara kerjanya: pertama, setiap transaksi di-hash menghasilkan Transaction ID atau TXID. Ini adalah "daun" dari pohon. Kedua, daun-daun itu dipasangkan dua-dua. Setiap pasangan digabungkan dan di-hash lagi, menghasilkan satu hash baru di level di atasnya. Ketiga, proses ini terus berulang ke atas sampai hanya tersisa satu hash tunggal di puncak.</p>
+          <p>Hash tunggal di puncak itu disebut Merkle Root.</p>
+
+          <p><strong>Merkle Root di header block</strong></p>
+          <p>Merkle Root inilah yang disimpan di header setiap block Bitcoin. Bukan seluruh daftar transaksi, tapi hasil dari struktur pohon yang hierarkis ini. Merkle Root merangkum seluruh isi block dalam satu hash berukuran 32 byte. Kalau satu transaksi berubah, TXID-nya berubah, yang mengubah hash di atasnya, sampai Merkle Root ikut berubah. Tidak ada yang bisa memanipulasi transaksi tanpa mengubah Merkle Root.</p>
+
+          <p><strong>Merkle Proof</strong></p>
+          <p>Yang membuat Merkle Tree benar-benar powerful adalah Merkle Proof. Untuk membuktikan bahwa transaksi T ada di dalam sebuah block, kamu tidak perlu melihat seluruh isi block. Kamu hanya perlu TXID transaksi T, beberapa hash "saudara" di sepanjang jalur dari T ke root, dan Merkle Root yang ada di header block. Dengan elemen-elemen itu, siapapun bisa memverifikasi bahwa T memang ada di block tersebut dengan menghitung ulang jalur hash dari bawah ke atas.</p>
+
+          <p><strong>SPV (Simplified Payment Verification)</strong></p>
+          <p>Merkle Proof adalah fondasi dari SPV, cara kerja wallet ringan seperti wallet di smartphone. Wallet SPV tidak mengunduh seluruh blockchain yang ratusan gigabyte. Ia hanya mengunduh header block, lalu meminta Merkle Proof untuk transaksi yang relevan. Cukup untuk memverifikasi pembayaran tanpa menjadi full node.</p>
+
+          <div class="p-callout">
+            <p>Untuk membuktikan satu transaksi di block yang berisi 2.000 transaksi, kamu hanya butuh sekitar 11 hash. Bukan 2.000, bukan 1.999, tapi 11. Ini karena pohon biner tumbuh secara logaritmik, efisiensi yang elegan dari matematika sederhana.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi interaktif — Merkle Tree dan Merkle Proof</div>
+          <div class="b04-s45-desc">
+            Klik salah satu transaksi di baris bawah untuk melihat Merkle Proof-nya — jalur hash minimal yang dibutuhkan untuk membuktikan bahwa transaksi itu ada di dalam block.
+          </div>
+
+          <div class="mt-canvas-wrap">
+            <canvas id="b04-s45-canvas" height="340"></canvas>
+          </div>
+
+          <div class="mt-proof" id="b04-s45-proof">
+            <div class="mt-proof-head">
+              <span>Merkle Proof</span>
+              <span id="b04-s45-proof-title"></span>
+            </div>
+            <div class="mt-proof-body" id="b04-s45-proof-body"></div>
+          </div>
+
+          <div class="mt-note" id="b04-s45-note">
+            Untuk memverifikasi 1 transaksi dari 8 transaksi di block ini, kamu hanya butuh 3 hash. Semakin besar block, semakin dramatis efisiensinya.
+          </div>
+
+          <div class="raw-toggle-row">
+            <button class="raw-toggle-btn" id="b04-s45-raw-btn">
+              <span class="raw-toggle-icon">{}</span> Lihat Raw Data
+            </button>
+            <span class="raw-toggle-hint">Merkle Root seperti di block header Bitcoin</span>
+          </div>
+
+          <div class="raw-panel" id="b04-s45-raw-panel">
+            <div class="raw-panel-head">
+              <span>Block Header · Merkle Root</span>
+              <span class="raw-panel-src">bitcoin-cli getblockheader</span>
+            </div>
+            <pre class="raw-panel-body" id="b04-s45-raw-body">Klik salah satu Tx untuk melihat Merkle Root dan Merkle Proof dalam format raw.</pre>
+          </div>
+        
+          <div class="lab-link"><span class="kode">C7</span><span class="isi"><span class="hd">Lanjut ke Laboratorium</span>Satu hal yang tidak dibahas di sini: apa yang terjadi kalau jumlah simpul di sebuah tingkat ganjil. Aturannya dan cacat yang pernah lahir darinya ada di Laboratorium C7.</span></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-4-4" data-sb="sb-4-4">
+            ← 4.4 — Schnorr
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-4-6" data-sb="sb-4-6">
+            4.6 — Kriptografi dan Keamanan →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 4.5 -->
+
+      <!-- ==============================
+           SECTION 4.6 · Dari Kriptografi ke Keamanan Jaringan
+      ============================== -->
+      <div class="p-section" id="section-4-6">
+        <div class="p-eyebrow">Bab 4 · 4.6</div>
+        <div class="p-heading">Bagaimana semuanya bekerja bersama</div>
+        <div class="p-title">Dari Kriptografi ke Keamanan Jaringan</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Kita sudah mempelajari semua komponen kriptografi yang membentuk Bitcoin: hash function, ECC, ECDSA, Schnorr, dan Merkle Tree. Sekarang saatnya melihat bagaimana semuanya bekerja bersama sebagai satu sistem yang utuh.</p>
+
+          <p><strong>Hash menjaga integritas blockchain</strong></p>
+          <p>Setiap block berisi hash dari block sebelumnya. Ini berarti kalau kamu ingin mengubah transaksi di block lama, kamu harus menghitung ulang hash seluruh rantai block sesudahnya. Sementara itu jaringan terus menambang block baru. Kamu tidak akan pernah bisa mengejar. Inilah kenapa semakin banyak konfirmasi sebuah transaksi, semakin aman. Setiap block baru yang ditambang di atasnya membuat serangan semakin tidak mungkin.</p>
+
+          <p><strong>ECC dan ECDSA menjaga kepemilikan</strong></p>
+          <p>Tanpa private key yang benar, tidak ada yang bisa menandatangani transaksi yang valid dari alamat Bitcoin-mu. Jaringan memverifikasi setiap tanda tangan sebelum menerima transaksi. Tidak ada otoritas pusat, tidak ada password yang bisa direset, tidak ada "lupa sandi." Kepemilikan murni bersifat kriptografis.</p>
+
+          <p><strong>Merkle Tree menjaga efisiensi verifikasi</strong></p>
+          <p>Tanpa Merkle Tree, untuk memverifikasi satu transaksi kamu harus mengunduh seluruh block. Dengan Merkle Tree, kamu hanya butuh beberapa hash. Ini yang membuat Bitcoin bisa digunakan di perangkat dengan sumber daya terbatas tanpa harus mempercayai pihak ketiga.</p>
+
+          <p><strong>Schnorr menjaga privasi dan skalabilitas</strong></p>
+          <p>Dengan Schnorr, transaksi kompleks terlihat seperti transaksi biasa. Privasi meningkat, ukuran transaksi mengecil, dan fee turun. Ini bukan sekadar upgrade teknis tapi perubahan fundamental pada cara Bitcoin bisa digunakan.</p>
+
+          <p><strong>Sistem yang saling mengunci</strong></p>
+          <p>Yang membuat Bitcoin berbeda bukan satu komponen kriptografinya, tapi bagaimana semuanya saling mengunci. Hash memastikan riwayat tidak bisa diubah. ECC memastikan kepemilikan tidak bisa dipalsukan. Merkle Tree memastikan verifikasi bisa dilakukan secara efisien. Schnorr memastikan privasi dan efisiensi terus meningkat. Tidak ada satu titik kegagalan. Tidak ada satu pihak yang bisa memanipulasi sistem. Kepercayaan dibangun dari matematika, bukan dari institusi.</p>
+
+          <div class="p-callout">
+            <p>Satoshi tidak menemukan semua matematika ini. SHA-256, ECC, Merkle Tree, semuanya sudah ada sebelum Bitcoin. Yang Satoshi lakukan adalah merangkai komponen-komponen yang sudah ada menjadi satu sistem yang untuk pertama kalinya memecahkan masalah double-spend tanpa otoritas pusat. Itu yang membuat Bitcoin bukan sekadar teknologi, tapi sebuah penemuan.</p>
+
+          <p><strong>Lalu bagaimana dengan komputer kuantum?</strong></p>
+          <p>Dua kali di buku ini kita menyandarkan argumen pada kalimat "kalau suatu hari ada kemajuan komputasi yang menjadi ancaman": waktu membahas alamat di 2.3, dan waktu membahas P2PKH di 6.3. Sudah waktunya kalimat itu dijelaskan.</p>
+          <p>Yang terancam bukan seluruh kriptografi Bitcoin, melainkan satu bagiannya saja. Fungsi hash seperti SHA-256 relatif tahan: komputer kuantum mempercepat pencariannya, tapi tidak meruntuhkannya, dan memperpanjang ukuran hash sudah cukup untuk mengimbangi. Yang benar-benar rapuh adalah <strong>tanda tangan</strong>. Algoritma Shor, kalau dijalankan di komputer kuantum yang cukup besar, bisa menghitung private key dari public key. Persis kebalikan dari sifat satu arah yang kita bahas di 4.2, dan seluruh kepemilikan Bitcoin berdiri di atas sifat itu.</p>
+          <p>Tapi perhatikan syaratnya: <strong>public key harus terlihat lebih dulu</strong>. Di sinilah kebiasaan menyembunyikan public key di balik hash, yang kita bahas di 2.3, ternyata berubah dari sekadar kerapian menjadi perlindungan yang serius.</p>
+          <p><strong>Berapa banyak yang sebenarnya terpapar?</strong></p>
+          <p>Berbagai analisis pada 2026 memperkirakan sekitar <strong>6,5 sampai 6,9 juta BTC</strong>, kira-kira sepertiga dari seluruh pasokan, sudah memperlihatkan public key-nya di blockchain. Angka itu terbagi dua. Sekitar 1,9 juta berasal dari format P2PK paling awal yang memang menaruh public key langsung di output, termasuk sekitar 1,7 juta yang diduga milik Satoshi sendiri. Sisanya, sekitar 4,1 juta, terpapar bukan karena formatnya melainkan karena <strong>pemakaian ulang alamat</strong>. Inilah harga nyata dari kebiasaan yang kita bahas di 10.5.</p>
+          <p>Artinya, sebagian besar keterpaparan itu bukan cacat protokol. Ia hasil pilihan pengguna, dan itu berarti sebagian besarnya bisa dihindari.</p>
+          <p><strong>Perdebatan yang sedang berlangsung</strong></p>
+          <p>Pada Februari 2026 muncul <strong>BIP-360</strong>, yang mengusulkan format output baru bernama P2MR. Ia mirip Taproot tapi membuang jalur key path, sehingga tidak ada public key yang tampil di blockchain saat output dibuat. Ini menutup keterpaparan untuk transaksi baru, tapi tidak menolong koin yang public key-nya sudah terlanjur terlihat.</p>
+          <p>Dua bulan kemudian muncul <strong>BIP-361</strong>, dan di sinilah perdebatannya memanas. Usulan itu menawarkan jadwal bertahap: setelah beberapa tahun, jaringan berhenti menerima output ke format lama, lalu beberapa tahun berikutnya verifikasi ECDSA dan Schnorr dimatikan sepenuhnya. Koin yang belum pindah menjadi <strong>beku secara permanen</strong>.</p>
+          <p>Reaksinya keras, dan kedua sisinya punya dasar. Yang menolak menyebutnya penyitaan: membekukan koin orang lain karena mereka tidak sempat atau tidak bisa pindah, termasuk pemilik yang sudah meninggal, bertentangan dengan janji bahwa tidak ada yang bisa mengambil Bitcoin-mu. Yang mendukung menjawab bahwa membiarkannya juga bukan sikap netral: kalau tidak dibekukan, koin itu akan diambil oleh siapa pun yang lebih dulu punya komputer kuantum, dan yang beredar bukan lagi Bitcoin yang dimiliki melainkan Bitcoin yang dicuri. Pilihannya bukan antara menyita dan tidak menyita, melainkan antara membekukan atau menyerahkan.</p>
+          <p><strong>Bagian yang akan menua, dan bagian yang tidak</strong></p>
+          <p>Per pertengahan 2026, kedua usulan itu masih berupa usulan dan belum diaktifkan. Kalau kamu membaca ini beberapa tahun kemudian, besar kemungkinan keadaannya sudah bergeser. Mungkin salah satunya sudah aktif, mungkin keduanya digantikan usulan lain, mungkin perdebatannya masih berjalan. Nama dan nomor BIP di atas memang akan menua, begitu juga angka 6,9 juta itu, dan begitu juga setiap perkiraan tentang kapan komputer kuantum yang cukup besar benar-benar ada. Riwayat perkiraan semacam itu penuh dengan tenggat yang lewat begitu saja.</p>
+          <p>Tapi empat hal berikut tidak akan menua, dan itulah yang sebenarnya perlu kamu bawa dari bagian ini. Pertama, yang terancam hanya tanda tangan, bukan fungsi hash. Kedua, ancaman itu baru berlaku setelah public key terlihat di blockchain. Ketiga, keterpaparan terbesar datang dari pemakaian ulang alamat, bukan dari cacat protokol. Keempat, setiap solusi pada akhirnya harus memilih antara membekukan koin yang terlanjur terpapar atau membiarkannya diambil, dan tidak ada pilihan ketiga yang menyenangkan semua pihak.</p>
+          <p>Kalau kamu ingin tahu keadaan terkini, yang perlu dicari bukan berita tentang komputer kuantum, melainkan dua pertanyaan yang jauh lebih membumi: apakah sudah ada format output tahan kuantum yang aktif di jaringan, dan apakah wallet yang kamu pakai sudah mendukungnya. Selebihnya kebisingan.</p>
+          <p>Dan apa pun jawaban kedua pertanyaan itu nanti, yang bisa kamu lakukan sendiri tetap sama sederhananya: <strong>jangan pakai ulang alamat</strong>. Selama public key-mu belum pernah tampil di blockchain, kamu tidak berada di kelompok yang terpapar, hari ini maupun sepuluh tahun lagi. Nasihat yang di 10.5 terdengar seperti soal privasi ternyata juga soal ketahanan jangka panjang.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Peta sistem — Kriptografi Bitcoin</div>
+          <div class="b04-s46-desc">
+            Klik setiap komponen untuk melihat perannya, cara kerjanya, dan apa yang terjadi jika komponen itu tidak ada.
+          </div>
+
+          <div class="csm-grid" id="b04-s46-grid"></div>
+
+          <div class="csm-detail" id="b04-s46-detail">
+            <div class="csm-detail-head" id="b04-s46-detail-head"></div>
+            <div class="csm-detail-body" id="b04-s46-detail-body"></div>
+          </div>
+
+          <div class="csm-summary" id="b04-s46-summary">
+            Klik salah satu komponen di atas untuk melihat perannya dalam sistem Bitcoin.
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-4-5" data-sb="sb-4-5">
+            ← 4.5 — Merkle Tree
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 4.6 -->
+
+    </div>
+    <!-- END CONTENT AREA -->
+
+  </div>
+
+</div>
+<!-- END PAGE 7 · BAB 4 -->
+
+

@@ -1,0 +1,85 @@
+/* ============================================================
+   WELCOME PAGE
+   Judul memakai 52px tetap sehingga terpotong di kolom sempit.
+   min() membuatnya mengecil sendiri dan tetap 52px di layar lebar,
+   jadi bekerja walau media query tidak menyala.
+============================================================ */
+.title-brand{ font-size:min(52px, 14vw) !important; line-height:1.06 !important;
+  white-space:nowrap !important; overflow-wrap:normal !important; word-break:keep-all !important; }
+.title-welcome{ font-size:min(22px, 6.5vw) !important; white-space:nowrap !important; }
+.main-title{ max-width:100% !important; }
+#btn-mulai{ white-space:nowrap !important; font-size:min(12px, 3.9vw) !important;
+  padding-left:min(28px,7vw) !important; padding-right:min(28px,7vw) !important; }
+.eyebrow{ font-size:min(10px, 3.4vw) !important; white-space:nowrap !important; }
+
+/* Hiasan pojok dan hash ticker: dekorasi khas layar lebar. Di ponsel
+   keduanya saling tabrak dan memakan ruang tanpa memberi informasi,
+   jadi disembunyikan. */
+@media (max-width:760px){
+  .corner-deco, .corner-accent, .hash-ticker, .ticker-label, .ticker-value{
+    display:none !important; }
+}
+
+@media (max-width:480px){
+  /* Nomor bab dua digit (11 sampai 20) tidak muat di kotaknya yang
+     berukuran tetap, jadi angkanya terpotong. */
+  .chapter-num{ width:auto !important; min-width:1.9em !important; padding:0 3px !important;
+    text-align:center !important; flex-shrink:0 !important; }
+
+  /* Judul pustaka dan URL panjang boleh patah di mana saja */
+  .apx-ref-title, .apx-ref-meta, .apx-ref-link, .apx-ref-note{
+    overflow-wrap:anywhere !important; word-break:break-word !important; }
+  .apx-tab-btn{ white-space:normal !important; }
+
+  /* --- label terkecil dinaikkan --- */
+  .p-eyebrow, .sim-label, .apx-section-eyebrow{ font-size:10.5px !important; letter-spacing:0.12em !important; }
+  .p-simulation [class*="-label"], .p-simulation [class*="-tag"],
+  .p-simulation [class*="-role"],  .p-simulation [class*="-num"],
+  .p-simulation [class*="-cap"],   .p-simulation [class*="-note"],
+  .p-simulation [class*="-desc"],  .p-simulation [class*="-sub"]{ font-size:10.5px !important; }
+  .p-simulation, .p-callout, .p-body{ text-rendering:optimizeLegibility; }
+
+  /* navigasi bab lebih terbaca */
+  .sb-label{ font-size:12px !important; }
+  .sb-num{ font-size:10.5px !important; }
+
+  /* --- target sentuh --- */
+  .sidebar-item{ min-height:44px !important; display:flex !important;
+    flex-direction:column !important; justify-content:center !important; }
+  .bs-lang-switch button{ padding:11px 15px !important; }
+  #bs-lang-toggle button{ padding:11px 18px !important; }
+  .apx-tab-btn{ min-height:40px !important; padding:10px 13px !important; }
+  .apx-chapter-btn{ min-height:38px !important; }
+  .topbar-back, .apx-back-btn{ display:inline-block !important; padding:10px 0 !important; }
+  .p-nav-btn{ min-height:42px !important; }
+  .p-simulation button{ min-height:36px !important; }
+}
+/* layar amat sempit: rapatkan padding supaya konten dapat ruang */
+/* Kata status lebih panjang di sebagian bahasa, dan itu cukup mendorong
+   daftar bab melewati tepi. Di bawah 400px statusnya disembunyikan, sama
+   seperti deskripsi bab yang sudah lebih dulu disembunyikan di sana. */
+@media (max-width:340px){
+  .chapter-status{ display:none !important; }
+  .chapter-item-right{ gap:0 !important; }
+  .chapter-item{ padding-right:14px !important; }
+}
+@media (max-width:300px){
+  .apx-topbar{ padding-left:8px !important; padding-right:8px !important; }
+  .bs-lang-switch button{ padding:11px 7px !important; font-size:9px !important; }
+  .apx-logo-text, .apx-topbar-sep{ display:none !important; }
+  /* daftar bab di layar terkecil: status disembunyikan, judul dapat ruang penuh */
+  .chapter-status{ display:none !important; }
+  .chapter-item{ padding-left:12px !important; padding-right:12px !important; }
+}
+@media (max-width:360px){
+  /* daftar bab: kolom kanan boleh menyusut, panah tidak wajib */
+  .chapter-item{ gap:8px !important; }
+  .chapter-item-right{ flex-shrink:1 !important; min-width:0 !important; }
+  .chapter-arrow{ display:none !important; }
+  .prologue-content, .cl-content, .apx-body{ padding-left:14px !important; padding-right:14px !important; }
+  .topbar, .apx-topbar{ padding-left:14px !important; padding-right:14px !important; }
+  /* switcher dirapatkan di layar amat sempit supaya tetap muat di topbar */
+  .bs-lang-switch button{ padding:11px 10px !important; }
+  .bs-tb-right{ gap:8px !important; }
+  .p-simulation{ padding-left:11px !important; padding-right:11px !important; }
+}

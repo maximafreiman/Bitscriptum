@@ -1,0 +1,584 @@
+<!-- ============================================================
+     PAGE 14 · BAB 11 · Mining: Hardware, Pool, dan Ekonomi
+     |-- 11.1 · Apa itu Mining dan Mengapa Ada? [DONE]
+     |-- 11.2 · [LOCKED]
+     |-- 11.3 · [LOCKED]
+     |-- 11.4 · [LOCKED]
+     |-- 11.5 · [LOCKED]
+     |-- 11.6 · [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab11">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b11">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b11">← Daftar Bab</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab11">
+      <div class="sidebar-heading">Bab 11</div>
+      <div class="sidebar-title">Mining: Hardware, Pool, dan Ekonomi</div>
+
+      <div class="sidebar-item active" id="sb-11-1">
+        <div class="sb-num">11.1</div>
+        <div class="sb-label">Dari Protokol ke Industri</div>
+      </div>
+      <div class="sidebar-item" id="sb-11-2">
+        <div class="sb-num">11.2</div>
+        <div class="sb-label">Evolusi Hardware Mining</div>
+      </div>
+      <div class="sidebar-item" id="sb-11-3">
+        <div class="sb-num">11.3</div>
+        <div class="sb-label">Mining Pool</div>
+      </div>
+      <div class="sidebar-item" id="sb-11-4">
+        <div class="sb-num">11.4</div>
+        <div class="sb-label">Ekonomi Mining</div>
+      </div>
+      <div class="sidebar-item" id="sb-11-5">
+        <div class="sb-num">11.5</div>
+        <div class="sb-label">Mining dan Energi</div>
+      </div>
+      <div class="sidebar-item" id="sb-11-6">
+        <div class="sb-num">11.6</div>
+        <div class="sb-label">Masa Depan Mining dan Desentralisasi</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab11-content">
+
+      <!-- ==============================
+           SECTION 11.1 · Dari Protokol ke Industri
+      ============================== -->
+      <div class="p-section active" id="section-11-1">
+        <div class="p-eyebrow">Bab 11 · 11.1</div>
+        <div class="p-heading">Di Bab 5 kita tahu mengapa mining ada — kini kita lihat bagaimana industrinya bekerja</div>
+        <div class="p-title">Dari Protokol ke Industri</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Di Bab 5 kita sudah memahami mengapa mining ada: Proof of Work adalah mekanisme konsensus yang memungkinkan Bitcoin mencapai kesepakatan tanpa otoritas pusat. Setiap block yang valid merepresentasikan kerja nyata yang sudah dilakukan, dan kerja nyata itu membutuhkan energi nyata.</p>
+
+          <p>Di bab ini kita tidak akan mengulang mekanisme itu. Yang akan kita bahas adalah bagaimana mining beroperasi sebagai industri nyata: hardware seperti apa yang digunakan, bagaimana miner berkolaborasi dalam pool, bagaimana ekonominya bekerja, dan apa implikasinya terhadap energi dan desentralisasi.</p>
+
+          <p><strong>Mining di tahun 2009 vs sekarang</strong></p>
+          <p>Ketika Satoshi Nakamoto menambang block pertama pada Januari 2009, ia menggunakan CPU laptop biasa. Tidak ada persaingan, tidak ada hardware khusus, tidak ada perusahaan mining. Satu orang, satu komputer, dan sebuah protokol yang baru lahir.</p>
+
+          <p>Hari ini, mining Bitcoin adalah industri global senilai miliaran dolar. Perusahaan-perusahaan mining publik tercatat di bursa saham. Fasilitas mining berukuran gudang besar beroperasi di negara-negara dengan listrik murah. Hardware yang digunakan adalah ASIC (Application-Specific Integrated Circuit), chip yang dirancang dari nol khusus untuk satu tujuan: menghitung SHA-256 hash secepat mungkin. Chip ini tidak bisa digunakan untuk hal lain.</p>
+
+          <p><strong>Mengapa industrialisasi ini terjadi?</strong></p>
+          <p>Jawabannya sederhana: insentif ekonomi. Selama block reward bernilai cukup besar, ada motivasi kuat untuk berinvestasi dalam hardware yang lebih efisien. Miner yang lebih efisien mendapat porsi reward yang lebih besar dengan biaya lebih rendah. Kompetisi ini mendorong inovasi hardware yang luar biasa cepat.</p>
+
+          <p>Tapi industrialisasi ini juga membawa konsekuensi yang perlu dipikirkan. Mining yang dulu bisa dilakukan siapapun di rumah kini membutuhkan modal besar dan akses ke listrik murah dalam skala industri. Ini menciptakan tekanan sentralisasi yang bertentangan dengan semangat awal Bitcoin sebagai sistem yang bisa dipartisipasi semua orang.</p>
+
+          <div class="p-callout">
+            <p>Mining Bitcoin bukan sekadar "komputer yang memecahkan teka-teki." Ini adalah industri dengan supply chain global, pasar hardware yang kompleks, dan dinamika ekonomi yang unik. Memahami industri ini membantu kita memahami ketahanan dan kerentanan jaringan Bitcoin di dunia nyata.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualisasi — Mining 2009 vs sekarang</div>
+          <div class="b11-s111-desc">
+            Betapa dramatisnya perubahan industri mining dalam 15 tahun: dari laptop di kamar tidur ke fasilitas industri dengan ribuan ASIC.
+          </div>
+
+          <div class="b11-s111-grid">
+            <div class="b11-s111-col">
+              <div class="b11-s111-col-head s111-then">
+                <div class="b11-s111-col-head-title">Mining 2009</div>
+                <div class="b11-s111-col-head-sub">Era Satoshi</div>
+              </div>
+              <div class="b11-s111-stats">
+                <div class="b11-s111-stat"><div class="b11-s111-stat-label">Hardware</div><div class="b11-s111-stat-val s111-then-val">CPU laptop biasa</div><div class="b11-s111-stat-sub">Bisa dipakai untuk hal lain</div></div>
+                <div class="b11-s111-stat"><div class="b11-s111-stat-label">Hash rate tipikal</div><div class="b11-s111-stat-val s111-then-val">~5 MH/s</div><div class="b11-s111-stat-sub">5 juta percobaan per detik</div></div>
+                <div class="b11-s111-stat"><div class="b11-s111-stat-label">Konsumsi daya</div><div class="b11-s111-stat-val s111-then-val">~65 Watt</div><div class="b11-s111-stat-sub">Daya laptop standar</div></div>
+                <div class="b11-s111-stat"><div class="b11-s111-stat-label">Modal awal</div><div class="b11-s111-stat-val s111-then-val">$0 ekstra</div><div class="b11-s111-stat-sub">Pakai komputer yang sudah ada</div></div>
+                <div class="b11-s111-stat"><div class="b11-s111-stat-label">Siapa yang bisa?</div><div class="b11-s111-stat-val s111-then-val">Siapapun</div><div class="b11-s111-stat-sub">Satoshi, Hal Finney, dan siapapun yang install software</div></div>
+              </div>
+              <div class="b11-s111-caps">
+                <div class="b11-s111-caps-label">Karakteristik:</div>
+                <div class="b11-s111-cap"><span class="b11-s111-cap-icon">✓</span>Tidak butuh modal khusus</div>
+                <div class="b11-s111-cap"><span class="b11-s111-cap-icon">✓</span>Bisa dilakukan dari rumah</div>
+                <div class="b11-s111-cap"><span class="b11-s111-cap-icon">✓</span>Hardware serbaguna</div>
+                <div class="b11-s111-cap"><span class="b11-s111-cap-icon">~</span>Hash rate rendah, tapi persaingan juga rendah</div>
+              </div>
+            </div>
+
+            <div class="b11-s111-col">
+              <div class="b11-s111-col-head s111-now">
+                <div class="b11-s111-col-head-title">Mining 2024</div>
+                <div class="b11-s111-col-head-sub">Era Industri</div>
+              </div>
+              <div class="b11-s111-stats">
+                <div class="b11-s111-stat"><div class="b11-s111-stat-label">Hardware</div><div class="b11-s111-stat-val s111-now-val">ASIC (Antminer S21)</div><div class="b11-s111-stat-sub">Chip khusus SHA-256, tidak bisa dipakai untuk hal lain</div></div>
+                <div class="b11-s111-stat"><div class="b11-s111-stat-label">Hash rate tipikal</div><div class="b11-s111-stat-val s111-now-val">200 TH/s</div><div class="b11-s111-stat-sub">200 triliun percobaan per detik</div></div>
+                <div class="b11-s111-stat"><div class="b11-s111-stat-label">Konsumsi daya</div><div class="b11-s111-stat-val s111-now-val">~3.500 Watt</div><div class="b11-s111-stat-sub">54x lebih besar, tapi jauh lebih efisien per hash</div></div>
+                <div class="b11-s111-stat"><div class="b11-s111-stat-label">Modal awal</div><div class="b11-s111-stat-val s111-now-val">$3.000-5.000+</div><div class="b11-s111-stat-sub">Belum termasuk infrastruktur listrik dan cooling</div></div>
+                <div class="b11-s111-stat"><div class="b11-s111-stat-label">Siapa yang kompetitif?</div><div class="b11-s111-stat-val s111-now-val">Perusahaan besar</div><div class="b11-s111-stat-sub">Fasilitas industri dengan ribuan ASIC dan listrik murah</div></div>
+              </div>
+              <div class="b11-s111-caps">
+                <div class="b11-s111-caps-label">Karakteristik:</div>
+                <div class="b11-s111-cap"><span class="b11-s111-cap-icon">✓</span>Hash rate sangat tinggi, jaringan sangat aman</div>
+                <div class="b11-s111-cap"><span class="b11-s111-cap-icon">✓</span>Efisiensi energi per hash jauh lebih baik</div>
+                <div class="b11-s111-cap"><span class="b11-s111-cap-icon">✗</span>Butuh modal besar dan listrik murah</div>
+                <div class="b11-s111-cap"><span class="b11-s111-cap-icon">✗</span>Terdominasi pemain institusional</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b11-s111-compare">
+            <div class="b11-s111-compare-head">Perbandingan hash rate (skala logaritmik)</div>
+            <div class="b11-s111-compare-body">
+              <div class="b11-s111-bar-row"><div class="b11-s111-bar-label">CPU 2009</div><div class="b11-s111-bar-wrap"><div class="b11-s111-bar-fill" style="width:4%;background:#52524C;">5 MH/s</div></div><div class="b11-s111-bar-note">5 MH/s</div></div>
+              <div class="b11-s111-bar-row"><div class="b11-s111-bar-label">ASIC 2024</div><div class="b11-s111-bar-wrap"><div class="b11-s111-bar-fill" style="width:100%;background:#534AB7;">200 TH/s</div></div><div class="b11-s111-bar-note">200 TH/s</div></div>
+              <div class="b11-s111-factor">ASIC modern <b>40 miliar kali</b> lebih cepat dari CPU 2009 — setara perbedaan berlari kaki dengan kecepatan cahaya.</div>
+            </div>
+          </div>
+
+          <div class="b11-s111-note">Industrialisasi ini adalah konsekuensi alami dari insentif ekonomi Bitcoin. Tapi ia juga menciptakan pertanyaan penting: kalau mining hanya bisa dilakukan oleh perusahaan besar, seberapa "terdesentralisasi" jaringan Bitcoin sesungguhnya? Pertanyaan ini akan terus kita bahas di bab ini.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-11-2" data-sb="sb-11-2">
+            11.2 — Evolusi Hardware Mining →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 11.1 -->
+
+      <!-- ==============================
+           SECTION 11.2 · Evolusi Hardware Mining
+      ============================== -->
+      <div class="p-section" id="section-11-2">
+        <div class="p-eyebrow">Bab 11 · 11.2</div>
+        <div class="p-heading">Dari laptop ke pabrik — 15 tahun evolusi hardware yang paling dramatis dalam sejarah komputasi</div>
+        <div class="p-title">Evolusi Hardware Mining</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Sejarah hardware mining Bitcoin adalah salah satu kisah evolusi teknologi yang paling dramatis dalam sejarah komputasi. Dalam waktu kurang dari 15 tahun, efisiensi mining meningkat triliunan kali lipat.</p>
+
+          <p><strong>Era CPU (2009-2010)</strong></p>
+          <p>Di awal Bitcoin, semua orang mining dengan CPU laptop atau desktop biasa. Satoshi Nakamoto sendiri mining dengan CPU. Hash rate seluruh jaringan waktu itu sangat rendah sehingga siapapun bisa mining block dengan komputer biasa. Tidak ada persaingan berarti dan satu block bisa ditemukan dalam hitungan menit dengan laptop standar.</p>
+
+          <p><strong>Era GPU (2010-2013)</strong></p>
+          <p>Seseorang menyadari bahwa GPU (Graphics Processing Unit), chip yang biasanya digunakan untuk rendering grafis game, jauh lebih efisien untuk menghitung SHA-256 dibanding CPU. GPU bisa melakukan ribuan operasi paralel sekaligus. Hash rate melonjak drastis dan CPU mining praktis tidak lagi menguntungkan.</p>
+
+          <p><strong>Era FPGA (2011-2013)</strong></p>
+          <p>FPGA (Field-Programmable Gate Array) adalah chip yang bisa diprogram ulang untuk tugas tertentu. Lebih efisien dari GPU untuk SHA-256, tapi masih bisa diprogram ulang untuk keperluan lain. Era ini singkat karena segera digantikan oleh ASIC.</p>
+
+          <p><strong>Era ASIC (2013-sekarang)</strong></p>
+          <p>ASIC (Application-Specific Integrated Circuit) adalah chip yang dirancang dari nol hanya untuk satu tujuan: menghitung SHA-256 hash secepat dan seefisien mungkin. Tidak bisa digunakan untuk hal lain sama sekali. ASIC modern seperti Antminer S21 bisa mencapai lebih dari 200 TH/s (terahash per detik) dengan konsumsi energi sekitar 3.500 watt. Ini berarti ratusan triliun percobaan hash setiap detik.</p>
+
+          <p><strong>Dampak ASIC pada desentralisasi</strong></p>
+          <p>ASIC menciptakan paradoks: di satu sisi, ASIC membuat jaringan jauh lebih aman karena hash rate yang sangat tinggi membuat serangan 51% sangat mahal. Di sisi lain, ASIC membuat mining semakin terpusat pada pemain yang punya modal besar untuk membeli hardware dan membayar listrik dalam skala industri. Mining yang dulu bisa dilakukan siapapun di rumah kini didominasi oleh perusahaan mining besar dengan fasilitas khusus.</p>
+
+          <div class="p-callout">
+            <p>Evolusi hardware mining mencerminkan hukum ekonomi yang sederhana: selama ada insentif finansial yang cukup besar, inovasi akan terus mendorong batas efisiensi. Yang menarik adalah bagaimana hal ini secara tidak sengaja mengubah siapa yang bisa berpartisipasi dalam proses mining Bitcoin.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Timeline — Evolusi hardware mining</div>
+          <div class="b11-s112-desc">
+            Klik tiap era untuk melihat spesifikasi, efisiensi energi, dan konteks historisnya. Chart logaritmik di bawah menunjukkan betapa dramatisnya perbedaan antar era.
+          </div>
+
+          <div class="b11-s112-timeline" id="b11-s112-timeline">
+            <div class="b11-s112-era active" data-era="0"><div class="b11-s112-era-dot">💻</div><div class="b11-s112-era-label">CPU</div><div class="b11-s112-era-year">2009-2010</div></div>
+            <div class="b11-s112-era" data-era="1"><div class="b11-s112-era-dot">🎮</div><div class="b11-s112-era-label">GPU</div><div class="b11-s112-era-year">2010-2013</div></div>
+            <div class="b11-s112-era" data-era="2"><div class="b11-s112-era-dot">🔧</div><div class="b11-s112-era-label">FPGA</div><div class="b11-s112-era-year">2011-2013</div></div>
+            <div class="b11-s112-era" data-era="3"><div class="b11-s112-era-dot">⚡</div><div class="b11-s112-era-label">ASIC</div><div class="b11-s112-era-year">2013-kini</div></div>
+          </div>
+
+          <div class="b11-s112-detail" id="b11-s112-detail"></div>
+
+          <div class="b11-s112-chart">
+            <div class="b11-s112-chart-label">Perbandingan hash rate (skala logaritmik)</div>
+            <div class="b11-s112-chart-sub">Tiap era berbeda miliaran kali lipat — skala log digunakan agar perbedaannya terlihat</div>
+            <div class="b11-s112-bars">
+              <div class="b11-s112-bar-row"><div class="b11-s112-bar-era">CPU</div><div class="b11-s112-bar-wrap"><div class="b11-s112-bar-fill" style="width:8%;background:#52524C;">~10 MH/s</div></div><div class="b11-s112-bar-info">~10 MH/s</div></div>
+              <div class="b11-s112-bar-row"><div class="b11-s112-bar-era">GPU</div><div class="b11-s112-bar-wrap"><div class="b11-s112-bar-fill" style="width:30%;background:#854F0B;">~500 MH/s</div></div><div class="b11-s112-bar-info">~500 MH/s</div></div>
+              <div class="b11-s112-bar-row"><div class="b11-s112-bar-era">FPGA</div><div class="b11-s112-bar-wrap"><div class="b11-s112-bar-fill" style="width:50%;background:#534AB7;">~1 GH/s</div></div><div class="b11-s112-bar-info">~1 GH/s</div></div>
+              <div class="b11-s112-bar-row"><div class="b11-s112-bar-era">ASIC</div><div class="b11-s112-bar-wrap"><div class="b11-s112-bar-fill" style="width:100%;background:#0F6E56;">200+ TH/s</div></div><div class="b11-s112-bar-info">200+ TH/s</div></div>
+            </div>
+          </div>
+
+          <div class="b11-s112-note">Skala nyata: ASIC modern sekitar 20 juta kali lebih cepat dari GPU generasi pertama, dan lebih dari 20 miliar kali lebih cepat dari CPU era awal.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-11-1" data-sb="sb-11-1">
+            ← 11.1 — Apa itu Mining dan Mengapa Ada?
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-11-3" data-sb="sb-11-3">
+            11.3 — Mining Pool →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 11.2 -->
+
+      <!-- ==============================
+           SECTION 11.3 · Mining Pool
+      ============================== -->
+      <div class="p-section" id="section-11-3">
+        <div class="p-eyebrow">Bab 11 · 11.3</div>
+        <div class="p-heading">Daripada berjuang sendiri, bergabunglah dan bagi hasilnya</div>
+        <div class="p-title">Mining Pool</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Ketika mining menjadi sangat kompetitif, miner individu menghadapi masalah yang mirip dengan penjudi: mereka bisa saja tidak pernah menemukan block meskipun sudah bekerja keras berbulan-bulan. Probabilitas menemukan block bagi satu miner kecil sangat rendah, dan pendapatan mereka menjadi sangat tidak pasti. Mining pool hadir sebagai solusi.</p>
+
+          <p><strong>Apa itu mining pool?</strong></p>
+          <p>Mining pool adalah kelompok miner yang menggabungkan hash rate mereka dan berbagi reward secara proporsional. Daripada masing-masing berjuang sendiri untuk menemukan block, mereka bekerja bersama. Ketika pool menemukan block, reward dibagi ke semua anggota berdasarkan kontribusi hash rate masing-masing. Analoginya seperti tiket lotere: daripada satu orang membeli satu tiket dengan peluang menang sangat kecil, seratus orang patungan membeli seratus tiket dan berbagi hasilnya. Peluang menang jauh lebih tinggi, dan meski hadiahnya dibagi, pendapatan menjadi jauh lebih konsisten.</p>
+
+          <p><strong>Bagaimana pool bekerja?</strong></p>
+          <p>Pool memberikan pekerjaan kepada miner anggotanya berupa tugas yang lebih mudah dari target jaringan sesungguhnya. Tugas-tugas ini disebut shares. Miner mengirimkan shares yang berhasil mereka temukan ke pool sebagai bukti bahwa mereka benar-benar bekerja. Sesekali, sebuah share yang ditemukan miner ternyata juga memenuhi target jaringan yang sesungguhnya, artinya block baru ditemukan dan pool mendapat reward.</p>
+
+          <p><strong>Metode pembayaran</strong></p>
+          <p>Ada beberapa cara pool membagi reward. PPS (Pay Per Share): miner dibayar untuk setiap share yang valid, terlepas dari apakah pool menemukan block atau tidak, dan pool menanggung risiko variance. PPLNS (Pay Per Last N Shares): pembayaran berdasarkan shares yang dikontribusikan dalam periode terakhir sebelum block ditemukan, lebih volatile tapi menguntungkan saat pool beruntung. FPPS (Full Pay Per Share): seperti PPS tapi juga memperhitungkan fee transaksi dalam pembagian.</p>
+
+          <p><strong>Dampak pool terhadap desentralisasi</strong></p>
+          <p>Mining pool menciptakan kekhawatiran sentralisasi: beberapa pool besar menguasai porsi signifikan dari total hash rate jaringan. Tapi perlu dicatat bahwa miner individu dalam pool tetap bebas pindah pool kapan saja. Kalau sebuah pool bertindak curang, miner akan meninggalkannya dan pindah ke pool lain atau mining sendiri. Stratum V2 adalah protokol terbaru yang memberi miner lebih banyak kontrol, termasuk kemampuan memilih sendiri transaksi yang dimasukkan ke block.</p>
+
+          <div class="p-callout">
+            <p>Mining pool adalah inovasi yang membuat mining lebih mudah diakses oleh miner kecil, tapi sekaligus menciptakan tekanan sentralisasi. Ini adalah trade-off yang terus diperdebatkan dalam komunitas Bitcoin. Stratum V2 adalah salah satu upaya untuk menjaga desentralisasi sambil tetap memungkinkan kolaborasi efisien.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi — Solo mining vs Pool mining</div>
+          <div class="b11-s113-desc">
+            Kamu punya 1% dari hash rate jaringan. Simulasikan 20 block dan lihat perbedaan pendapatan antara solo mining dan bergabung ke pool.
+          </div>
+
+          <div class="b11-s113-top">
+            <button class="b11-s113-btn-primary" id="b11-s113-run">Simulasikan 20 Block</button>
+            <button class="b11-s113-btn-sec" id="b11-s113-rst">Reset</button>
+          </div>
+
+          <div class="b11-s113-grid">
+            <div class="b11-s113-col">
+              <div class="b11-s113-col-head s113-solo">⛏ Solo Mining</div>
+              <div class="b11-s113-chart-wrap">
+                <div class="b11-s113-chart-label">Pendapatan per block (sangat tidak menentu)</div>
+                <canvas class="b11-s113-cv" id="b11-s113-cv-solo" height="100"></canvas>
+              </div>
+              <div class="b11-s113-stats">
+                <div class="b11-s113-stat"><div class="b11-s113-stat-label">Block ditemukan</div><div class="b11-s113-stat-val s113-warn" id="b11-s113-solo-blocks">0 / 20</div></div>
+                <div class="b11-s113-stat"><div class="b11-s113-stat-label">Total pendapatan</div><div class="b11-s113-stat-val" id="b11-s113-solo-income">0 BTC</div></div>
+                <div class="b11-s113-stat"><div class="b11-s113-stat-label">Variance</div><div class="b11-s113-stat-val s113-bad">Sangat tinggi</div></div>
+              </div>
+            </div>
+            <div class="b11-s113-col">
+              <div class="b11-s113-col-head s113-pool">🤝 Pool Mining</div>
+              <div class="b11-s113-chart-wrap">
+                <div class="b11-s113-chart-label">Pendapatan per block (konsisten)</div>
+                <canvas class="b11-s113-cv" id="b11-s113-cv-pool" height="100"></canvas>
+              </div>
+              <div class="b11-s113-stats">
+                <div class="b11-s113-stat"><div class="b11-s113-stat-label">Reward diterima</div><div class="b11-s113-stat-val s113-good" id="b11-s113-pool-rewards">0 / 20</div></div>
+                <div class="b11-s113-stat"><div class="b11-s113-stat-label">Total pendapatan</div><div class="b11-s113-stat-val" id="b11-s113-pool-income">0 BTC</div></div>
+                <div class="b11-s113-stat"><div class="b11-s113-stat-label">Variance</div><div class="b11-s113-stat-val s113-good">Rendah</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="font-size:11px;font-weight:500;color:#1A1A18;font-family:'Sora',sans-serif;margin-bottom:6px;">Shares yang dikirim ke pool (ungu = milikmu, hijau = share yang jadi block)</div>
+          <div class="b11-s113-shares" id="b11-s113-shares"></div>
+          <div class="b11-s113-legend">
+            <div class="b11-s113-leg"><div class="b11-s113-leg-box" style="background:rgba(83,74,183,0.25);"></div>Share dari miner lain</div>
+            <div class="b11-s113-leg"><div class="b11-s113-leg-box" style="background:#534AB7;"></div>Share milikmu (1% dari pool)</div>
+            <div class="b11-s113-leg"><div class="b11-s113-leg-box" style="background:#0F6E56;"></div>Share yang jadi block</div>
+          </div>
+
+          <div class="b11-s113-note s113-idle" id="b11-s113-note">Kamu punya 1% dari hash rate jaringan. Sebagai solo miner, probabilitas menemukan block sangat rendah. Bergabung ke pool memastikan pendapatan kecil tapi konsisten setiap block.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-11-2" data-sb="sb-11-2">
+            ← 11.2 — Evolusi Hardware Mining
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-11-4" data-sb="sb-11-4">
+            11.4 — Ekonomi Mining →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 11.3 -->
+
+      <!-- ==============================
+           SECTION 11.4 · Ekonomi Mining
+      ============================== -->
+      <div class="p-section" id="section-11-4">
+        <div class="p-eyebrow">Bab 11 · 11.4</div>
+        <div class="p-heading">Mining adalah bisnis — pendapatan harus lebih besar dari biaya</div>
+        <div class="p-title">Ekonomi Mining</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Mining Bitcoin adalah bisnis. Seperti bisnis lainnya, keberhasilannya ditentukan oleh satu persamaan sederhana: pendapatan harus lebih besar dari biaya. Tapi ekonomi mining jauh lebih kompleks dari bisnis biasa karena beberapa variabel kuncinya terus berubah secara dinamis.</p>
+
+          <p><strong>Sumber pendapatan miner</strong></p>
+          <p>Miner mendapat dua sumber pendapatan. Pertama, block reward: saat ini 3.125 BTC per block, dan akan terus berkurang setiap halving. Kedua, fee transaksi: semua fee dari transaksi yang dimasukkan ke block. Saat mempool ramai, fee bisa menjadi porsi signifikan dari total pendapatan. Pendapatan total miner dihitung dalam USD atau mata uang lokal, sehingga harga BTC sangat menentukan profitabilitas.</p>
+
+          <p><strong>Biaya operasional</strong></p>
+          <p>Biaya terbesar dalam mining adalah listrik. ASIC modern membutuhkan ribuan watt untuk beroperasi, dan harus berjalan 24 jam sehari 7 hari seminggu. Biaya listrik per kilowatt-hour (kWh) adalah faktor yang paling membedakan miner yang profitable dari yang tidak. Miner dengan akses ke listrik murah (0.03-0.05 USD/kWh) bisa tetap profitable bahkan saat harga BTC sedang rendah. Miner dengan listrik mahal (0.10-0.15 USD/kWh) bisa rugi bahkan saat harga BTC tinggi. Biaya lain termasuk hardware ASIC yang perlu diganti setiap beberapa tahun, infrastruktur cooling, sewa fasilitas, dan tenaga kerja.</p>
+
+          <p><strong>Hash rate dan difficulty</strong></p>
+          <p>Semakin banyak miner bergabung ke jaringan dengan hardware baru, hash rate total naik dan difficulty menyesuaikan agar block time tetap 10 menit. Ini berarti setiap miner mendapat porsi reward yang lebih kecil. Ekonomi mining adalah zero-sum game dalam jangka pendek: kalau miner lain menjadi lebih efisien, miner yang kurang efisien semakin tertekan.</p>
+
+          <p><strong>Hashprice dan break-even price</strong></p>
+          <p>Hashprice adalah metrik yang menghitung berapa USD yang dihasilkan per terahash per detik per hari. Ini memungkinkan miner membandingkan profitabilitas terlepas dari ukuran operasinya. Break-even price adalah harga BTC minimum agar operasi mining tidak rugi, tergantung biaya listrik dan efisiensi hardware yang digunakan.</p>
+
+          <p><strong>Halving dan dampaknya</strong></p>
+          <p>Setiap halving, block reward dipotong setengah. Kalau harga BTC tidak naik cukup untuk mengimbangi, miner yang tidak efisien akan mematikan hardware mereka. Hash rate bisa turun sementara, difficulty menyesuaikan turun, dan miner yang tersisa menjadi lebih profitable. Halving adalah salah satu momen paling menegangkan dalam siklus ekonomi mining Bitcoin.</p>
+
+          <div class="p-callout">
+            <p>Ekonomi mining adalah sistem yang sangat dinamis dan self-correcting. Profitabilitas yang tinggi menarik lebih banyak miner, yang menaikkan difficulty, yang mengurangi profitabilitas. Profitabilitas yang rendah mendorong miner keluar, yang menurunkan difficulty, yang meningkatkan profitabilitas bagi yang tersisa. Ini adalah keseimbangan yang terus bergerak.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Kalkulator — Profitabilitas mining</div>
+          <div class="b11-s114-desc">
+            Masukkan harga BTC, biaya listrik, dan spesifikasi hardware untuk melihat estimasi profit harian, break-even price, dan sensitivitas profit terhadap perubahan harga BTC.
+          </div>
+
+          <div style="font-size:11px;font-weight:500;color:#1A1A18;font-family:'Sora',sans-serif;margin-bottom:6px;">Preset hardware:</div>
+          <div class="b11-s114-preset-row">
+            <button class="b11-s114-preset" data-hash="100" data-watt="3250">Antminer S19 (100 TH/s)</button>
+            <button class="b11-s114-preset active" data-hash="200" data-watt="3500">Antminer S21 (200 TH/s)</button>
+            <button class="b11-s114-preset" data-hash="335" data-watt="5000">Antminer S21 Pro (335 TH/s)</button>
+          </div>
+
+          <div class="b11-s114-inputs">
+            <div class="b11-s114-field"><div class="b11-s114-label">Harga BTC <span class="b11-s114-label-sub">dalam USD</span></div><input class="b11-s114-input" id="b11-s114-btc" type="number" value="65000" min="1000" max="500000" step="1000"></div>
+            <div class="b11-s114-field"><div class="b11-s114-label">Biaya listrik <span class="b11-s114-label-sub">USD per kWh</span></div><input class="b11-s114-input" id="b11-s114-elec" type="number" value="0.06" min="0.01" max="0.30" step="0.01"></div>
+            <div class="b11-s114-field"><div class="b11-s114-label">Hash rate <span class="b11-s114-label-sub">TH/s</span></div><input class="b11-s114-input" id="b11-s114-hash" type="number" value="200" min="1" max="1000"></div>
+            <div class="b11-s114-field"><div class="b11-s114-label">Konsumsi daya <span class="b11-s114-label-sub">watt</span></div><input class="b11-s114-input" id="b11-s114-watt" type="number" value="3500" min="100" max="20000"></div>
+          </div>
+
+          <div class="b11-s114-result">
+            <div class="b11-s114-result-head">
+              <div class="b11-s114-result-head-label">Profit harian (estimasi)</div>
+              <div class="b11-s114-profit-val s114-profit" id="b11-s114-profit">+$0.00</div>
+            </div>
+            <div class="b11-s114-result-body">
+              <div class="b11-s114-row"><div class="b11-s114-row-label">Pendapatan harian (BTC)</div><div class="b11-s114-row-val" id="b11-s114-inc-btc">0.00000000 BTC</div></div>
+              <div class="b11-s114-row"><div class="b11-s114-row-label">Pendapatan harian (USD)</div><div class="b11-s114-row-val s114-green" id="b11-s114-inc-usd">$0.00</div></div>
+              <div class="b11-s114-row"><div class="b11-s114-row-label">Biaya listrik harian</div><div class="b11-s114-row-val s114-red" id="b11-s114-elec-cost">$0.00</div></div>
+              <div class="b11-s114-row"><div class="b11-s114-row-label">Efisiensi hardware</div><div class="b11-s114-row-val" id="b11-s114-eff">0 W/TH</div></div>
+              <div class="b11-s114-row"><div class="b11-s114-row-label">Break-even BTC price</div><div class="b11-s114-row-val s114-amber" id="b11-s114-breakeven">$0</div></div>
+              <div class="b11-s114-row"><div class="b11-s114-row-label">Hashprice</div><div class="b11-s114-row-val" id="b11-s114-hashprice">$0.00 / TH/day</div></div>
+              <div class="b11-s114-margin-wrap">
+                <div class="b11-s114-margin-label">Margin profit:</div>
+                <div class="b11-s114-margin-track"><div class="b11-s114-margin-fill" id="b11-s114-margin-fill" style="width:50%;background:#0F6E56;"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b11-s114-chart-wrap">
+            <div class="b11-s114-chart-label">Profit harian vs harga BTC (garis merah = break-even):</div>
+            <canvas class="b11-s114-cv" id="b11-s114-cv" height="120"></canvas>
+          </div>
+
+          <div class="b11-s114-note s114-profit" id="b11-s114-note">Isi input di atas untuk melihat estimasi profitabilitas mining.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-11-3" data-sb="sb-11-3">
+            ← 11.3 — Mining Pool
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-11-5" data-sb="sb-11-5">
+            11.5 — Mining dan Energi →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 11.4 -->
+
+      <!-- ==============================
+           SECTION 11.5 · Mining dan Energi
+      ============================== -->
+      <div class="p-section" id="section-11-5">
+        <div class="p-eyebrow">Bab 11 · 11.5</div>
+        <div class="p-heading">Konsumsi energi yang besar — sia-sia atau bermakna?</div>
+        <div class="p-title">Mining dan Energi</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Tidak ada topik dalam ekosistem Bitcoin yang lebih sering diperdebatkan dari konsumsi energi mining. Kritik datang dari berbagai arah, dan pertahanannya juga beragam. Yang penting adalah memahami fakta-faktanya sebelum mengambil kesimpulan.</p>
+
+          <p><strong>Berapa banyak energi yang digunakan Bitcoin?</strong></p>
+          <p>Konsumsi energi jaringan Bitcoin tidak bisa diukur langsung, karena tidak ada meteran yang terpasang di jaringan. Yang ada cuma perkiraan, dan dua perkiraan paling sering dikutip <b>berbeda cukup jauh</b>. Per pertengahan 2026, Cambridge Centre for Alternative Finance memperkirakan sekitar <b>138 TWh per tahun</b>, sedangkan Digiconomist sekitar <b>204 TWh</b>. Selisihnya 66 TWh, dan itu bukan kecerobohan.</p>
+          <p><strong>Kenapa dua angka yang sama-sama kredibel bisa berbeda sejauh itu</strong></p>
+          <p>Karena keduanya menjawab pertanyaan yang sedikit berbeda. Cambridge menyusun dari bawah: mensurvei perusahaan mining, mendata hardware yang benar-benar dipakai, lalu menghitung kebutuhan listriknya. Digiconomist menyusun dari sisi ekonomi: mengandaikan miner membelanjakan porsi tetap dari pendapatannya untuk listrik, lalu menghitung mundur. Akibatnya angka Digiconomist <b>ikut naik saat harga naik</b>, sedangkan angka Cambridge lebih terikat pada perangkat keras yang nyata. Tidak ada yang salah di antara keduanya. Yang salah adalah mengutip satu angka tanpa menyebut model mana yang dipakai.</p>
+          <p>Untuk konteks, angka itu kira-kira setara konsumsi listrik negara berukuran sedang seperti Polandia atau Thailand, dan berada di kisaran setengah persen dari seluruh listrik dunia. Sebagai pembanding lain, pusat data global menghabiskan sekitar 485 TWh pada 2025 dan tumbuh sekitar 15 persen per tahun, sementara angka Bitcoin relatif mendatar.</p>
+          <p><strong>Yang tidak akan berubah, apa pun angkanya nanti</strong></p>
+          <p>Angka di atas pasti menua, dan bagian mana pun dari buku ini yang menyebut TWh sebaiknya kamu perlakukan sebagai potret bertanggal. Tapi tiga hal berikut tidak ikut menua. Pertama, <b>konsumsi energi Bitcoin mengikuti pendapatan miner, bukan jumlah transaksi</b>. Menambah atau mengurangi transaksi dalam satu block tidak mengubah energinya sedikit pun, karena yang dibayar adalah menemukan block, bukan mengisinya. Itu sebabnya angka "energi per transaksi" yang sering dikutip media menyesatkan: penyebutnya bisa berubah tanpa pembilangnya bergerak.</p>
+          <p>Kedua, karena mengikuti pendapatan, ia <b>ikut naik turun bersama harga</b>. Ini bukan teori: pada Desember 2025 perkiraan tahunan sempat mendekati 190 TWh di puncak pasar, lalu turun kembali ke kisaran 130-an setelah harga melemah pada 2026 dan miner yang kurang efisien berhenti beroperasi. Ketiga, <b>efisiensi hardware terus membaik</b>, dari sekitar 98 J/TH pada 2016 menjadi sekitar 13,5 J/TH pada 2026. Artinya energi per hash turun terus, tapi jumlah hash naik terus, dan yang menentukan hasil akhirnya adalah harga.</p>
+          <p>Kalau kamu ingin angka terkini, yang perlu dicari bukan berita, melainkan salah satu dari dua indeks itu langsung, dan yang perlu kamu catat adalah <b>tanggal serta model mana</b> yang kamu kutip.</p>
+
+          <p><strong>Energi dan keamanan</strong></p>
+          <p>Energi yang digunakan dalam mining bukan sia-sia dari perspektif Bitcoin. Ia adalah biaya yang secara langsung mengamankan jaringan. Semakin banyak energi yang digunakan untuk mining, semakin mahal biaya untuk menyerang jaringan. Ini adalah mekanisme keamanan yang disengaja: work dalam proof of work harus nyata dan mahal.</p>
+
+          <p><strong>Sumber energi mining</strong></p>
+          <p>Komposisi sumber energi mining sudah bergeser secara signifikan. Karena miner mencari listrik termurah, mereka sering menuju ke sumber energi yang murah karena berlebihan atau terisolasi: energi hidro yang berlebih, gas buang dari sumur minyak (flared gas), energi geotermal, dan sumber terbarukan lainnya. Estimasi terkini menunjukkan sekitar 50-60% energi mining berasal dari sumber terbarukan atau rendah karbon, meskipun angka ini diperdebatkan karena metodologi yang berbeda.</p>
+
+          <p><strong>Perbandingan dengan sistem lain</strong></p>
+          <p>Sering diabaikan dalam perdebatan adalah konsumsi energi sistem keuangan tradisional: bank, ATM, kantor, data center, pencetakan uang fisik, dan pengiriman uang tunai. Perbandingan ini sulit dilakukan secara apel-ke-apel karena ruang lingkup yang berbeda, tapi penting untuk menjaga perspektif yang seimbang.</p>
+
+          <p><strong>Mining sebagai pembeli energi fleksibel</strong></p>
+          <p>Ada argumen yang menarik bahwa mining bisa berperan positif dalam grid energi. Miner bisa bertindak sebagai pembeli energi yang sangat fleksibel: mereka bisa dinyalakan saat ada surplus energi dan dimatikan saat permintaan tinggi. Ini membantu stabilisasi grid dan bisa membuat proyek energi terbarukan lebih ekonomis dengan menjadi pembeli energi yang selalu ada bahkan di luar jam puncak.</p>
+
+          <div class="p-callout">
+            <p>Perdebatan energi Bitcoin tidak punya jawaban sederhana. Seberapa mahal sebuah sistem keamanan moneter yang desentralisasi layak untuk dibayar? Ini adalah pertanyaan nilai, bukan hanya teknis. Yang bisa dilakukan adalah memastikan perdebatan ini didasarkan pada fakta yang akurat, bukan angka yang diambil tanpa konteks.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualisasi — Energi mining: sumber dan perbandingan</div>
+          <div class="b11-s115-desc">
+            Tab pertama: komposisi sumber energi yang digunakan mining Bitcoin. Tab kedua: perbandingan konsumsi energi Bitcoin dengan sistem dan industri lain.
+          </div>
+
+          <div class="b11-s115-tabs">
+            <button class="b11-s115-tab s115-act" id="b11-s115-t1">Sumber Energi Mining</button>
+            <button class="b11-s115-tab" id="b11-s115-t2">Perbandingan Konsumsi</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b11-s115-pane show" id="b11-s115-p1">
+            <div class="b11-s115-cards">
+              <div class="b11-s115-card"><div class="b11-s115-card-label">Konsumsi tahunan Bitcoin</div><div class="b11-s115-card-val" style="color:#534AB7;">~138-204 TWh</div><div class="b11-s115-card-sub">Setara konsumsi negara berukuran sedang seperti Polandia atau Thailand</div></div>
+              <div class="b11-s115-card"><div class="b11-s115-card-label">Estimasi energi terbarukan</div><div class="b11-s115-card-val" style="color:#0F6E56;">~50-60%</div><div class="b11-s115-card-sub">Metodologi berbeda menghasilkan angka yang berbeda pula</div></div>
+            </div>
+            <div class="b11-s115-donut-wrap">
+              <canvas class="b11-s115-donut" id="b11-s115-donut" height="180"></canvas>
+              <div class="b11-s115-donut-legend">
+                <div class="b11-s115-donut-leg"><div class="b11-s115-donut-leg-dot" style="background:#0F6E56;"></div><div class="b11-s115-donut-leg-label">Hidro</div><div class="b11-s115-donut-leg-pct" style="color:#0F6E56;">26%</div></div>
+                <div class="b11-s115-donut-leg"><div class="b11-s115-donut-leg-dot" style="background:#5DCAA5;"></div><div class="b11-s115-donut-leg-label">Angin & Solar</div><div class="b11-s115-donut-leg-pct" style="color:#5DCAA5;">17%</div></div>
+                <div class="b11-s115-donut-leg"><div class="b11-s115-donut-leg-dot" style="background:#534AB7;"></div><div class="b11-s115-donut-leg-label">Gas alam</div><div class="b11-s115-donut-leg-pct" style="color:#534AB7;">25%</div></div>
+                <div class="b11-s115-donut-leg"><div class="b11-s115-donut-leg-dot" style="background:#854F0B;"></div><div class="b11-s115-donut-leg-label">Batu bara</div><div class="b11-s115-donut-leg-pct" style="color:#854F0B;">22%</div></div>
+                <div class="b11-s115-donut-leg"><div class="b11-s115-donut-leg-dot" style="background:#52524C;"></div><div class="b11-s115-donut-leg-label">Lainnya</div><div class="b11-s115-donut-leg-pct" style="color:#52524C;">10%</div></div>
+              </div>
+            </div>
+            <div class="b11-s115-note s115-info">Flared gas (gas buang dari pengeboran minyak yang sebelumnya dibakar sia-sia) semakin banyak digunakan untuk mining. Ini secara paradoks mengurangi emisi karena gas yang tadinya dibakar langsung ke atmosfer kini dikonversi menjadi listrik terlebih dahulu.</div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b11-s115-pane" id="b11-s115-p2">
+            <div class="b11-s115-hint">Estimasi konsumsi energi tahunan berbagai sistem dan industri (TWh/tahun).</div>
+            <div class="b11-s115-bars">
+              <div class="b11-s115-bar-row"><div class="b11-s115-bar-label">Sistem perbankan global</div><div class="b11-s115-bar-track"><div class="b11-s115-bar-fill" style="width:100%;background:#A32D2D;">~4.000+ TWh</div></div><div class="b11-s115-bar-note">~4.000 TWh</div></div>
+              <div class="b11-s115-bar-row"><div class="b11-s115-bar-label">Data center global</div><div class="b11-s115-bar-track"><div class="b11-s115-bar-fill" style="width:55%;background:#7C3AED;">~200-250 TWh</div></div><div class="b11-s115-bar-note">~200-250 TWh</div></div>
+              <div class="b11-s115-bar-row"><div class="b11-s115-bar-label">AC rumah tangga (AS)</div><div class="b11-s115-bar-track"><div class="b11-s115-bar-fill" style="width:45%;background:#0F6E56;">~185 TWh</div></div><div class="b11-s115-bar-note">~185 TWh</div></div>
+              <div class="b11-s115-bar-row"><div class="b11-s115-bar-label">Industri emas (mining)</div><div class="b11-s115-bar-track"><div class="b11-s115-bar-fill" style="width:35%;background:#854F0B;">~130 TWh</div></div><div class="b11-s115-bar-note">~130 TWh</div></div>
+              <div class="b11-s115-bar-row"><div class="b11-s115-bar-label">Bitcoin mining</div><div class="b11-s115-bar-track"><div class="b11-s115-bar-fill" style="width:33%;background:#534AB7;">~138-204 TWh</div></div><div class="b11-s115-bar-note">~138-204 TWh</div></div>
+            </div>
+            <div class="b11-s115-note s115-warn">Perbandingan ini perlu kehati-hatian. Sistem perbankan global melayani miliaran orang dengan ribuan layanan berbeda. Bitcoin saat ini melayani sebagian kecil populasi dunia. Perbandingan yang adil harus mempertimbangkan skala layanan, bukan hanya angka energi absolut.</div>
+            <div class="b11-s115-disclaimer">Sumber: Cambridge Centre for Alternative Finance (CCAF), Galaxy Digital, IEA. Semua angka adalah estimasi dengan rentang ketidakpastian yang signifikan.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-11-4" data-sb="sb-11-4">
+            ← 11.4 — Ekonomi Mining
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-11-6" data-sb="sb-11-6">
+            11.6 — Masa Depan Mining dan Desentralisasi →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 11.5 -->
+
+      <!-- ==============================
+           SECTION 11.6 · Masa Depan Mining dan Desentralisasi
+      ============================== -->
+      <div class="p-section" id="section-11-6">
+        <div class="p-eyebrow">Bab 11 · 11.6</div>
+        <div class="p-heading">Antara tekanan sentralisasi dan semangat desentralisasi — ke mana mining akan pergi?</div>
+        <div class="p-title">Masa Depan Mining dan Desentralisasi</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Mining Bitcoin berada di persimpangan antara dua kekuatan yang saling bertentangan: tekanan menuju sentralisasi yang didorong oleh ekonomi skala, dan tekanan menuju desentralisasi yang didorong oleh semangat protokol Bitcoin itu sendiri. Ke mana arah industri ini ke depannya?</p>
+
+          <p><strong>Konsentrasi hash rate saat ini</strong></p>
+          <p>Hari ini, sebagian besar hash rate jaringan Bitcoin terkonsentrasi di beberapa pool besar. Ini bukan berarti jaringan dikontrol oleh segelintir pihak, karena miner individu dalam pool bebas pindah kapan saja. Tapi konsentrasi ini tetap menciptakan risiko teoritis dan pertanyaan tentang ketahanan jangka panjang. Secara geografis, China pernah mendominasi dengan lebih dari 60% hash rate, tapi larangan mining pada 2021 mendorong redistribusi besar-besaran. Kini hash rate tersebar ke Amerika Serikat, Kazakhstan, Rusia, Kanada, dan banyak negara lain. Distribusi geografis yang lebih luas ini secara umum positif untuk ketahanan jaringan.</p>
+
+          <p><strong>Siapa yang memilih transaksi?</strong></p>
+          <p>Dalam setup pool tradisional, operator pool yang memutuskan transaksi mana yang masuk ke block, bukan miner individu yang menjalankan hardware. Selama ini hal ini jarang menjadi masalah karena pool umumnya memilih transaksi berdasarkan fee tertinggi tanpa memfilter konten.</p>
+
+          <p>Tapi Ocean Pool mengubah dinamika ini. Ocean adalah pool yang secara eksplisit menerapkan transaction filtering: mereka menolak transaksi tertentu yang mereka anggap tidak sesuai dengan penggunaan Bitcoin yang sah, termasuk beberapa jenis Ordinals dan transaksi yang menggunakan OP_RETURN secara berlebihan. Ini bukan kecurangan dalam artian teknis. Secara protokol, miner memang punya hak memilih transaksi mana yang dimasukkan ke block.</p>
+
+          <p>Tapi ini membuka perdebatan yang lebih dalam: kalau pool besar mulai menyensor transaksi tertentu berdasarkan konten bukan hanya validitas teknis, apakah sifat censorship-resistance Bitcoin terancam? Di satu sisi, ada yang berargumen miner berhak memilih berdasarkan preferensi mereka. Di sisi lain, ada yang khawatir ini menciptakan preseden berbahaya: kalau satu pool boleh menyensor berdasarkan konten, apa yang mencegah pool lain menyensor berdasarkan kriteria lain yang lebih politis?</p>
+
+          <p><strong>Stratum V2 dan desentralisasi pemilihan transaksi</strong></p>
+          <p>Stratum V2 hadir sebagai jawaban struktural terhadap pertanyaan ini. Sebagai upgrade protokol komunikasi antara pool dan miner, Stratum V2 memberi miner individu kemampuan untuk memilih sendiri transaksi yang ingin mereka masukkan ke block. Ini adalah perubahan fundamental: bahkan kalau hash rate terkonsentrasi di pool besar, kekuatan untuk memilih transaksi terdistribusi kembali ke miner individu. Kalau Stratum V2 diadopsi luas, skenario seperti Ocean Pool yang memfilter transaksi atas nama seluruh miner dalam pool menjadi lebih sulit terjadi tanpa persetujuan eksplisit miner.</p>
+
+          <p><strong>Mining rumahan dan small-scale mining</strong></p>
+          <p>Ada gerakan yang tumbuh untuk membawa mining kembali ke skala kecil. Perangkat seperti Bitaxe adalah ASIC open-source berukuran kecil yang bisa dijalankan di rumah dengan daya beberapa watt. Hash rate-nya sangat kecil dibanding ASIC industri, tapi kontribusinya ke desentralisasi jaringan lebih besar dari angkanya. Argumennya: jaringan yang punya jutaan miner kecil yang tersebar geografis lebih tahan terhadap serangan dan regulasi daripada jaringan yang bergantung pada beberapa ratus fasilitas industri besar.</p>
+
+          <p><strong>Fee transaksi sebagai insentif jangka panjang</strong></p>
+          <p>Block reward akan terus berkurang setiap halving. Pada akhirnya, tidak akan ada lagi block reward. Insentif miner akan sepenuhnya bergantung pada fee transaksi. Kalau Bitcoin berhasil menjadi sistem yang digunakan miliaran orang, volume dan fee aggregate mungkin lebih dari cukup. Tapi kalau tidak, hash rate bisa turun dan keamanan jaringan melemah. Ini adalah salah satu pertanyaan paling fundamental tentang keberlanjutan jangka panjang Bitcoin, dan tidak ada yang tahu jawabannya dengan pasti.</p>
+
+          <div class="p-callout">
+            <p>Masa depan mining Bitcoin bergantung pada keseimbangan antara insentif ekonomi, inovasi teknologi, dan keputusan komunitas. Pertanyaan tentang siapa yang berhak memilih transaksi, seberapa terdesentralisasi hash rate harus, dan apakah fee cukup menggantikan block reward adalah pertanyaan yang akan terus diperdebatkan. Yang menarik adalah semua ini terjadi tanpa ada pihak tunggal yang bisa memutuskan jawabannya.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualisasi — Distribusi hash rate</div>
+          <div class="b11-s116-desc">
+            Tab pertama: distribusi hash rate per mining pool. Tab kedua: distribusi geografis setelah redistribusi besar pasca larangan China 2021.
+          </div>
+
+          <div class="b11-s116-tabs">
+            <button class="b11-s116-tab s116-act" id="b11-s116-t1">Per Mining Pool</button>
+            <button class="b11-s116-tab" id="b11-s116-t2">Per Negara</button>
+          </div>
+
+          <div class="b11-s116-pane show" id="b11-s116-p1">
+            <div class="b11-s116-chart-wrap">
+              <canvas class="b11-s116-cv" id="b11-s116-cv-pool" height="200"></canvas>
+              <div class="b11-s116-legend" id="b11-s116-legend-pool"></div>
+            </div>
+            <div class="b11-s116-note s116-warn">Konsentrasi pool tinggi, tapi miner dalam pool tetap bebas pindah kapan saja. Kekuatan pool bergantung pada kepercayaan miner yang bisa ditarik sewaktu-waktu. Ocean Pool (tidak termasuk di atas karena share kecil) adalah contoh pool yang menerapkan transaction filtering secara eksplisit.</div>
+            <div class="b11-s116-disclaimer">Estimasi berdasarkan block yang ditemukan ~Q1 2024. Distribusi berubah setiap hari. Sumber: mempool.space, BTC.com.</div>
+          </div>
+
+          <div class="b11-s116-pane" id="b11-s116-p2">
+            <div class="b11-s116-geo-bars" id="b11-s116-geo-bars"></div>
+            <div class="b11-s116-note s116-info">Setelah China melarang mining pada 2021, hash rate terdistribusi ulang secara masif ke berbagai negara. Distribusi geografis yang lebih luas ini positif untuk ketahanan jaringan terhadap regulasi di satu negara.</div>
+            <div class="b11-s116-disclaimer">Estimasi distribusi geografis ~2024. Sumber: CCAF Cambridge Bitcoin Electricity Consumption Index.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-11-5" data-sb="sb-11-5">
+            ← 11.5 — Mining dan Energi
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 11.6 -->
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 14 · BAB 11 -->
+
+

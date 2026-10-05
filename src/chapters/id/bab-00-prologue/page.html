@@ -1,0 +1,764 @@
+<!-- ============================================================
+     PAGE 3 · PROLOGUE
+     |-- P.1 · Apa itu uang, sebenarnya? [DONE]
+     |-- P.2 · Sejarah manipulasi uang [LOCKED]
+     |-- P.3 · Austrian Economics & sound money [LOCKED]
+     |-- P.4 · The double-spend problem [LOCKED]
+     |-- P.5 · Revolusi public-key cryptography [LOCKED]
+     |-- P.6 · Gerakan cypherpunk [LOCKED]
+     |-- P.7 · Genesis block & pesan Satoshi [LOCKED]
+     |-- P.8 · Sistem tanpa kepercayaan [LOCKED]
+============================================================ -->
+<div class="page" id="page-prologue">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-pr">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-pr">← Chapter List</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-heading">Prologue</div>
+      <div class="sidebar-title">Mengapa Bitcoin?</div>
+
+      <!-- P.1 · DONE -->
+      <div class="sidebar-item active" id="sb-p1">
+        <div class="sb-num">P.1</div>
+        <div class="sb-label">Apa itu uang, sebenarnya?</div>
+      </div>
+      <!-- P.2 · DONE -->
+      <div class="sidebar-item" id="sb-p2">
+        <div class="sb-num">P.2</div>
+        <div class="sb-label">Sejarah manipulasi uang</div>
+      </div>
+      <!-- P.3 · DONE -->
+      <div class="sidebar-item" id="sb-p3">
+        <div class="sb-num">P.3</div>
+        <div class="sb-label">Austrian Economics & sound money</div>
+      </div>
+      <!-- P.4 · DONE -->
+      <div class="sidebar-item" id="sb-p4">
+        <div class="sb-num">P.4</div>
+        <div class="sb-label">The double-spend problem</div>
+      </div>
+      <!-- P.5 · DONE -->
+      <div class="sidebar-item" id="sb-p5">
+        <div class="sb-num">P.5</div>
+        <div class="sb-label">Revolusi public-key cryptography</div>
+      </div>
+      <!-- P.6 · DONE -->
+      <div class="sidebar-item" id="sb-p6">
+        <div class="sb-num">P.6</div>
+        <div class="sb-label">Gerakan cypherpunk</div>
+      </div>
+      <!-- P.7 · DONE -->
+      <div class="sidebar-item" id="sb-p7">
+        <div class="sb-num">P.7</div>
+        <div class="sb-label">Genesis block & pesan Satoshi</div>
+      </div>
+      <!-- P.8 · DONE -->
+      <div class="sidebar-item" id="sb-p8">
+        <div class="sb-num">P.8</div>
+        <div class="sb-label">Sistem tanpa kepercayaan</div>
+      </div>
+    </div>
+    <!-- END SIDEBAR -->
+
+    <!-- CONTENT AREA -->
+    <div class="prologue-content" id="prologue-content">
+
+      <!-- ==============================
+           SECTION P.1 · Apa itu uang?
+      ============================== -->
+      <div class="p-section active" id="section-p1">
+        <div class="p-eyebrow">Prologue · P.1</div>
+        <div class="p-heading">Pertanyaan paling mendasar</div>
+        <div class="p-title">Apa itu uang, sebenarnya?</div>
+        <div class="p-divider"></div>
+        <div class="p-body">
+          <p>Kita semua menggunakan uang setiap hari. Tapi kalau ditanya <strong>"apa itu uang?"</strong> kebanyakan orang akan terdiam sejenak. Jawaban yang muncul biasanya: kertas di dompet, angka di aplikasi bank, atau koin di laci meja. Semua itu benar. Tapi semua itu juga hanya <em>bentuknya</em>, bukan esensinya.</p>
+          <p>Uang, pada dasarnya, adalah <strong>teknologi sosial</strong>. Bukan benda fisik, bukan logam mulia, bukan angka digital. Uang adalah <em>kesepakatan</em>, sebuah kepercayaan kolektif bahwa sesuatu memiliki nilai dan bisa dipertukarkan.</p>
+          <div class="p-callout">
+            <p>Selembar uang Rp 100.000 tidak bernilai karena kertasnya. Ia bernilai karena jutaan orang sepakat bahwa ia bernilai. Kalau kesepakatan itu runtuh, uang itu tidak lebih dari kertas.</p>
+          </div>
+          <p>Untuk memahami kenapa kesepakatan ini muncul, kita perlu mundur jauh ke masa sebelum uang ada sama sekali.</p>
+          <p><strong>Bayangkan sebuah desa kecil.</strong> Petani punya beras. Nelayan punya ikan. Tukang kayu punya kursi. Mereka butuh satu sama lain, dan satu-satunya cara untuk mendapatkan yang dibutuhkan adalah barter: menukar barang dengan barang secara langsung.</p>
+          <p>Masalahnya sederhana tapi fatal: bagaimana kalau nelayan butuh beras, tapi petani tidak butuh ikan, melainkan butuh kursi? Transaksi tidak bisa terjadi. Para ekonom menyebut ini <em>coincidence of wants</em>, kebetulan kebutuhan yang harus bertemu dua arah sekaligus. Barter hanya bekerja di komunitas yang sangat kecil.</p>
+          <p>Solusinya adalah menemukan sesuatu yang <strong>semua orang mau terima</strong>, bukan karena mereka butuh benda itu secara langsung, tapi karena mereka tahu orang lain juga akan menerimanya. Inilah asal mula uang.</p>
+          <p>Sepanjang sejarah, manusia pernah menggunakan kerang, garam, batu raksasa di Kepulauan Yap, bulu hewan, tembaga, perak, hingga emas. Bukan karena benda-benda itu cantik atau langka saja, tapi karena komunitas sepakat untuk mempercayainya sebagai alat tukar.</p>
+          <p>Dari eksperimen panjang ini, para ekonom merumuskan tiga fungsi utama uang yang baik:</p>
+          <p><strong>Medium of exchange.</strong> Uang harus bisa dipakai untuk membeli dan menjual. Ia menghapus kebutuhan akan coincidence of wants.</p>
+          <p><strong>Store of value.</strong> Uang harus bisa disimpan dan tetap bernilai di masa depan. Ikan segar tidak bisa menjadi uang yang baik karena ia membusuk.</p>
+          <p><strong>Unit of account.</strong> Uang harus bisa dijadikan satuan pengukur nilai. Berapa harga seekor sapi? Tiga puluh karung beras, atau satu angka yang disepakati bersama?</p>
+          <p>Emas bertahan ribuan tahun sebagai uang terbaik yang pernah ada. Langka secara alami, tahan lama, bisa dibagi, dan sulit dipalsukan. Tapi emas punya satu kelemahan besar: berat dan sulit dipindahkan.</p>
+          <p>Maka manusia menciptakan kertas, bukti kepemilikan emas yang tersimpan di gudang. Lebih praktis, lebih mudah dibawa. Dan di sinilah cerita mulai berubah. Karena kertas jauh lebih mudah dicetak daripada emas ditambang.</p>
+          <div class="p-callout">
+            <p>Uang bukan tentang benda yang kamu pegang. Uang adalah tentang <em>kepercayaan</em> yang kamu dan orang lain sepakati, dan siapa yang memegang kendali atas kesepakatan itu.</p>
+          </div>
+          <p>Pertanyaan terakhir inilah yang akan kita kejar di sepanjang Prologue ini, dan yang pada akhirnya melahirkan Bitcoin.</p>
+        </div>
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active" data-target="section-p2" data-sb="sb-p2">
+            P.2 — Sejarah Manipulasi Uang →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION P.1 -->
+
+      <!-- ==============================
+           SECTION P.2 · Sejarah manipulasi uang
+      ============================== -->
+      <div class="p-section" id="section-p2">
+        <div class="p-eyebrow">Prologue · P.2</div>
+        <div class="p-heading">Uang yang berubah diam-diam</div>
+        <div class="p-title">Sejarah manipulasi uang</div>
+        <div class="p-divider"></div>
+        <div class="p-body">
+          <p>Pernah nggak kamu nanya ke orang tua atau kakek nenek, berapa harga sebungkus mie instan dulu? Atau berapa harga bensin pertama kali mereka beli? Jawabannya pasti bikin geleng-geleng kepala. Bukan karena mie-nya berubah. Bukan karena bensinnya berubah. Tapi karena uangnya yang berubah.</p>
+          <p>Ini bukan kebetulan. Dan ini bukan takdir.</p>
+          <p><strong>Dari emas ke kertas</strong></p>
+          <p>Selama ribuan tahun, uang punya jangkar. Jangkar itu bernama emas. Setiap lembar kertas yang beredar punya padanan emas yang tersimpan di brankas pemerintah. Sistem ini disebut <em>gold standard</em>. Artinya, tidak ada yang bisa sembarangan mencetak uang lebih banyak dari emas yang dimiliki.</p>
+          <p>Ini membuat uang jujur. Nilainya stabil. Pemerintah tidak bisa seenaknya.</p>
+          <p>Tapi jangkar itu diputus.</p>
+          <p><strong>15 Agustus 1971</strong></p>
+          <p>Presiden Amerika Serikat Richard Nixon berdiri di depan kamera televisi dan mengumumkan sesuatu yang mengubah sistem keuangan dunia selamanya. Amerika Serikat tidak lagi mengaitkan dolar dengan emas. Keputusan ini dikenal sebagai <em>Nixon Shock</em>.</p>
+          <p>Alasannya saat itu terdengar masuk akal: ekonomi sedang sulit, perang Vietnam menguras anggaran, dan cadangan emas Amerika mulai menipis karena negara-negara lain mulai menukarkan dolar mereka dengan emas sungguhan.</p>
+          <p>Jadi Nixon memutus talinya. Dolar tidak lagi dijamin emas. Dan karena hampir semua mata uang dunia saat itu dikaitkan ke dolar, satu keputusan itu mengubah seluruh sistem keuangan global sekaligus.</p>
+          <div class="p-callout">
+            <p>Sejak hari itu, uang yang kamu pegang tidak dijamin apa-apa. Nilainya ditopang oleh satu hal: kepercayaan bahwa pemerintah akan mengelolanya dengan bertanggung jawab.</p>
+          </div>
+          <p><strong>Ketika mesin cetak menyala</strong></p>
+          <p>Masalahnya, kepercayaan itu sering dikhianati.</p>
+          <p>Tanpa jangkar emas, pemerintah dan bank sentral punya kemampuan baru: mencetak uang sebanyak yang mereka mau. Dan godaan itu sangat besar, terutama di saat krisis.</p>
+          <p>Ketika ekonomi ambruk di 2008, bank-bank besar di Amerika nyaris kolaps. Respons pemerintah? Cetak uang. Triliunan dolar dipompa ke sistem keuangan dalam program yang disebut <em>quantitative easing</em>.</p>
+          <p>Ketika pandemi Covid-19 melanda di 2020, hal yang sama terjadi lagi, dalam skala yang jauh lebih besar. Amerika mencetak lebih dari 40% dari seluruh dolar yang pernah ada dalam sejarah, hanya dalam dua tahun.</p>
+          <p>Akibatnya? Inflasi meledak. Harga naik. Daya beli uang yang kamu simpan di tabungan turun, tanpa kamu melakukan apa-apa, tanpa kamu dimintai izin.</p>
+          <p><strong>Siapa yang paling dirugikan?</strong></p>
+          <p>Bukan orang kaya. Orang kaya menyimpan kekayaan mereka dalam bentuk aset, saham, properti, emas, hal-hal yang nilainya ikut naik ketika uang dicetak.</p>
+          <p>Yang paling dirugikan adalah orang biasa. Yang menyimpan uangnya di rekening tabungan. Yang gajinya tidak naik secepat harga-harga. Yang bekerja keras menabung selama bertahun-tahun, hanya untuk melihat daya beli tabungannya perlahan terkikis.</p>
+          <div class="p-callout">
+            <p>Inflasi adalah pajak yang tidak pernah dipungut secara terbuka. Tidak ada surat pemberitahuan. Tidak ada pemungutan suara. Ia bekerja diam-diam, setiap hari, dan hampir tidak pernah dipertanyakan.</p>
+          </div>
+          <p><strong>Pertanyaan yang mulai muncul</strong></p>
+          <p>Kalau uang bisa dicetak kapan saja oleh siapa yang berkuasa, apakah uang itu masih bisa disebut jujur? Kalau nilai tabunganmu bisa terkikis oleh keputusan yang dibuat tanpa sepengetahuanmu, apakah kamu benar-benar memiliki uang itu?</p>
+          <p>Pertanyaan-pertanyaan inilah yang mulai membuat sebagian orang berpikir: harus ada cara lain.</p>
+        </div>
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-p1" data-sb="sb-p1">
+            ← P.1 — Apa itu uang?
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-p3" data-sb="sb-p3">
+            P.3 — Austrian Economics →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION P.2 -->
+
+      <!-- ==============================
+           SECTION P.3 · Austrian Economics & sound money
+      ============================== -->
+      <div class="p-section" id="section-p3">
+        <div class="p-eyebrow">Prologue · P.3</div>
+        <div class="p-heading">Uang yang sehat itu seperti apa?</div>
+        <div class="p-title">Austrian Economics & sound money</div>
+        <div class="p-divider"></div>
+        <div class="p-body">
+          <p>Kamu pernah nggak ngerasa kayak gini: sudah kerja keras, sudah hemat, sudah nabung, tapi kok rasanya nggak pernah cukup? Harga-harga terus naik, tapi tabungan kamu diam di tempat. Ada yang salah. Tapi salahnya di mana?</p>
+          <p>Sebagian ekonom punya jawaban yang sudah ada sejak lebih dari seratus tahun lalu. Mereka bukan dari Wall Street. Bukan dari Washington. Mereka dari Wina, Austria.</p>
+
+          <p><strong>Apa itu Austrian Economics?</strong></p>
+          <p>Austrian Economics, atau Mazhab Wina, adalah sebuah tradisi pemikiran ekonomi yang lahir di akhir abad ke-19. Tokoh-tokohnya antara lain Carl Menger, Ludwig von Mises, dan Friedrich Hayek. Nama terakhir bahkan memenangkan Nobel Ekonomi pada 1974.</p>
+          <p>Tapi lupakan dulu nama-nama itu. Yang penting adalah satu ide inti yang mereka perjuangkan: <em>uang yang baik adalah uang yang jujur.</em></p>
+          <p>Jujur dalam artian: nilainya tidak bisa dimanipulasi semau penguasa. Jumlahnya tidak bisa ditambah seenaknya. Ia mencerminkan kerja keras nyata, bukan angka yang dicetak di atas kertas.</p>
+
+          <p><strong>Cantillon Effect: siapa yang menang, siapa yang kalah</strong></p>
+          <p>Ketika uang baru dicetak, ia tidak langsung menyebar merata ke semua orang. Ia mengalir dari atas ke bawah. Bank sentral menerimanya pertama, lalu bank-bank besar, lalu pengusaha, baru kemudian sampai ke pekerja dan pensiunan.</p>
+          <p>Masalahnya, harga-harga sudah naik duluan sebelum uang itu sampai ke bawah. Jadi siapa yang dapat uang pertama, bisa beli dengan harga lama. Siapa yang dapat terakhir, sudah kesiangan.</p>
+          <p>Para ekonom menyebut ini <em>Cantillon Effect</em>, dinamai dari ekonom Richard Cantillon yang pertama kali mendeskripsikannya di abad ke-18. Coba simulasikan sendiri di bawah.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi interaktif — Cantillon Effect</div>
+
+          <div class="sim-stats-row">
+            <div class="sim-stat">
+              <div class="sim-stat-label">Total uang beredar</div>
+              <div class="sim-stat-value" id="prl-s03-total">Rp 1.000</div>
+            </div>
+            <div class="sim-stat">
+              <div class="sim-stat-label">Indeks harga (inflasi)</div>
+              <div class="sim-stat-value" id="prl-s03-price-idx">100</div>
+            </div>
+          </div>
+
+          <div class="sim-chars" id="prl-s03-chars"></div>
+
+          <div class="sim-prices-label">Harga barang — naik setiap kali uang dicetak</div>
+          <div class="sim-prices" id="prl-s03-prices"></div>
+
+          <div class="sim-alert" id="prl-s03-alert">
+            <div class="sim-alert-icon">⚠️</div>
+            <div>
+              <div class="sim-alert-title" id="prl-s03-alert-title">DAYA BELI TURUN!</div>
+              <div class="sim-alert-sub" id="prl-s03-alert-sub"></div>
+            </div>
+          </div>
+
+          <div class="sim-controls">
+            <button class="sim-btn-print" id="prl-s03-print">Cetak Uang ↗</button>
+            <button class="sim-btn-reset" id="prl-s03-reset">Reset</button>
+          </div>
+
+          <div class="sim-log-label">Log kejadian</div>
+          <div class="sim-log" id="prl-s03-log"></div>
+        </div>
+
+        <div class="p-body" style="margin-top:2rem">
+          <p><strong>Sound money: uang yang sehat</strong></p>
+          <p>Lawan dari uang yang bisa dimanipulasi adalah apa yang disebut <em>sound money</em>, uang yang sehat. Kriterianya sederhana:</p>
+          <p><strong>Langka.</strong> Jumlahnya terbatas dan tidak bisa sembarangan ditambah. Emas adalah contoh klasiknya karena untuk mendapatkan emas baru, seseorang harus menambangnya, membutuhkan waktu, tenaga, dan biaya nyata.</p>
+          <p><strong>Tahan lama.</strong> Nilainya tidak membusuk, tidak rusak, dan bisa disimpan dalam jangka panjang.</p>
+          <p><strong>Tidak bisa dimanipulasi.</strong> Tidak ada satu pihak pun yang bisa mengubah aturan mainnya di tengah jalan.</p>
+
+          <div class="p-callout">
+            <p>Sound money bukan soal emas atau logam mulia. Ia adalah soal prinsip: uang seharusnya berfungsi sebagai penyimpan nilai yang jujur, bukan alat yang bisa digunakan penguasa untuk memindahkan kekayaan secara diam-diam.</p>
+          </div>
+
+          <p><strong>Kenapa ini penting untuk Bitcoin?</strong></p>
+          <p>Satoshi Nakamoto, pencipta Bitcoin, tidak muncul dari ruang hampa. Ia muncul dari tradisi pemikiran yang sudah lama mempertanyakan sistem uang yang ada.</p>
+          <p>Bitcoin dirancang dengan prinsip sound money sebagai fondasinya. Jumlah Bitcoin dibatasi hanya 21 juta koin, selamanya. Tidak ada bank sentral Bitcoin. Tidak ada yang bisa mencetak lebih banyak karena merasa perlu.</p>
+          <p>Untuk pertama kalinya dalam sejarah, manusia punya pilihan: uang digital yang langka, terbuka, dan tidak bisa dimanipulasi oleh siapapun.</p>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-p2" data-sb="sb-p2">
+            ← P.2 — Sejarah Manipulasi Uang
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-p4" data-sb="sb-p4">
+            P.4 — The Double-Spend Problem →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION P.3 -->
+
+      <!-- ==============================
+           SECTION P.4 · The double-spend problem
+      ============================== -->
+      <div class="p-section" id="section-p4">
+        <div class="p-eyebrow">Prologue · P.4</div>
+        <div class="p-heading">Masalah terbesar uang digital</div>
+        <div class="p-title">The Double-Spend Problem</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Bayangkan kamu punya file foto. Kamu bisa kirim ke satu orang, lalu kirim lagi ke orang lain, lalu ke seribu orang sekaligus. File aslinya tetap ada. Semua orang dapat salinannya.</p>
+          <p>Sekarang bayangkan uang digital bekerja dengan cara yang sama. Kamu punya Rp 100.000 dalam bentuk file digital. Kamu kirim ke Toko A. Lalu kamu kirim file yang sama ke Toko B. Uang yang sama, dipakai dua kali. Inilah yang disebut <em>double-spend problem</em>.</p>
+          <p>Di dunia fisik, masalah ini tidak ada. Kalau kamu kasih uang kertas Rp 100.000 ke seseorang, kamu tidak punya uang itu lagi. Perpindahannya nyata dan tidak bisa diulang. Tapi di dunia digital, semua hal adalah salinan. Tidak ada yang namanya original.</p>
+
+          <p><strong>Solusi lama: percayakan ke bank</strong></p>
+          <p>Selama ini solusinya adalah menaruh pihak ketiga di tengah. Bank memastikan uang benar-benar dipotong dari saldomu sebelum sampai ke penerima. Tidak ada yang bisa double-spend karena bank mengontrol catatannya.</p>
+          <p>Tapi ini punya harga: kamu harus percaya banknya jujur, tidak bangkrut, dan tidak membekukan akunmu. Sejarah membuktikan harapan itu tidak selalu terpenuhi.</p>
+
+          <p><strong>Percobaan sebelum Bitcoin</strong></p>
+          <p>DigiCash, b-money, Bit Gold, semua mencoba membuat uang digital tanpa bank. Semua gagal di titik yang sama: bagaimana memastikan tidak ada yang membelanjakan uang yang sama dua kali, tanpa mempercayai siapapun di tengah?</p>
+          <p>Yang dibutuhkan adalah buku besar yang terbuka untuk semua, tidak dimiliki siapapun, dan tidak bisa dimanipulasi. Itulah yang diciptakan Satoshi pada 2008. Namanya: <em>blockchain</em>.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi interaktif — Double-Spend Problem</div>
+
+          <div class="ds-tabs">
+            <button class="ds-tab active-cash" id="prl-s04-tab-cash">💵 Uang Cash</button>
+            <button class="ds-tab" id="prl-s04-tab-no">💻 Digital tanpa perlindungan</button>
+            <button class="ds-tab" id="prl-s04-tab-btc">₿ Dengan Bitcoin</button>
+          </div>
+
+          <div class="ds-desc cash" id="prl-s04-desc">
+            Uang cash berpindah secara fisik. Setelah diberikan ke Toko A, uang itu tidak ada lagi di tanganmu. Untuk bayar Toko B, kamu butuh uang lagi. Inilah yang membuat cash aman secara alami.
+          </div>
+
+          <div class="ds-stage">
+            <div class="ds-actor neutral" id="prl-s04-actor-pengirim">
+              <div class="ds-actor-icon" id="prl-s04-icon-pengirim">🧑</div>
+              <div class="ds-actor-name" id="prl-s04-name-pengirim">Pembeli</div>
+              <div class="ds-actor-bal" id="prl-s04-bal-pengirim">Saldo: Rp 100.000</div>
+              <div class="ds-actor-status" id="prl-s04-st-pengirim"></div>
+            </div>
+            <div class="ds-arrow">
+              <div class="ds-arrow-line" id="prl-s04-arrow-a"></div>
+              <div class="ds-arrow-label" id="prl-s04-lbl-a">Tx #1</div>
+            </div>
+            <div class="ds-actor neutral" id="prl-s04-actor-tokoa">
+              <div class="ds-actor-icon">🏪</div>
+              <div class="ds-actor-name">Toko A</div>
+              <div class="ds-actor-bal" id="prl-s04-bal-tokoa">Menunggu...</div>
+              <div class="ds-actor-status" id="prl-s04-st-tokoa"></div>
+            </div>
+            <div class="ds-arrow">
+              <div class="ds-arrow-line" id="prl-s04-arrow-b"></div>
+              <div class="ds-arrow-label" id="prl-s04-lbl-b">Tx #2</div>
+            </div>
+            <div class="ds-actor neutral" id="prl-s04-actor-tokob">
+              <div class="ds-actor-icon">🏬</div>
+              <div class="ds-actor-name">Toko B</div>
+              <div class="ds-actor-bal" id="prl-s04-bal-tokob">Menunggu...</div>
+              <div class="ds-actor-status" id="prl-s04-st-tokob"></div>
+            </div>
+          </div>
+
+          <div class="ds-result" id="prl-s04-result"></div>
+
+          <div class="ds-controls">
+            <button class="ds-btn ds-btn-tx1" id="prl-s04-btn-tx1">Bayar Toko A ↗</button>
+            <button class="ds-btn ds-btn-tx2" id="prl-s04-btn-tx2" disabled>Bayar Toko B ↗</button>
+            <button class="ds-btn ds-btn-reset" id="prl-s04-btn-ds-reset">Reset</button>
+          </div>
+
+          <div class="ds-log">
+            <div class="ds-log-title">Log transaksi</div>
+            <div class="ds-log-entries" id="prl-s04-log"></div>
+          </div>
+        </div>
+
+        <div class="p-body" style="margin-top:2rem">
+          <div class="p-callout">
+            <p>Bitcoin menyelesaikan double-spend problem tanpa bank, tanpa pihak ketiga. Ia membuat uang digital berperilaku seperti uang cash: ketika kamu kirim, ia benar-benar berpindah. Kamu tidak punya lagi.</p>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-p3" data-sb="sb-p3">
+            ← P.3 — Austrian Economics
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-p5" data-sb="sb-p5">
+            P.5 — Revolusi Public-Key Cryptography →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION P.4 -->
+
+      <!-- ==============================
+           SECTION P.5 · Revolusi public-key cryptography
+      ============================== -->
+      <div class="p-section" id="section-p5">
+        <div class="p-eyebrow">Prologue · P.5</div>
+        <div class="p-heading">Kepemilikan tanpa identitas</div>
+        <div class="p-title">Revolusi Public-Key Cryptography</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Cash memecahkan double-spend secara fisik. Tapi ia tidak bisa membuktikan kepemilikan di dunia digital. Kalau kamu punya uang cash dan seseorang mencurinya, tidak ada cara matematis untuk membuktikan uang itu milikmu.</p>
+          <p>Bitcoin memecahkan keduanya sekaligus. Anti double-spend seperti cash, sekaligus bisa membuktikan kepemilikan secara digital. Rahasianya ada di sebuah penemuan dari tahun 1970-an yang mengubah dunia: <em>public-key cryptography</em>.</p>
+
+          <p><strong>Dua kunci, satu identitas</strong></p>
+          <p>Bayangkan kamu punya gembok dan kunci. Kamu bisa bagikan gembok itu ke siapa saja. Siapapun bisa menggunakannya untuk mengunci pesan untukmu. Tapi hanya kamu yang punya kuncinya. Hanya kamu yang bisa membuka.</p>
+          <p>Itulah cara kerja public-key cryptography. <em>Public key</em> adalah gembokmu, boleh dibagikan ke siapa saja. Di Bitcoin, ini seperti alamat rekeningmu. <em>Private key</em> adalah kuncimu, tidak boleh diketahui siapapun. Ia membuktikan bahwa kamu adalah pemilik sah dari public key tersebut.</p>
+          <p>Ketika kamu mengirim Bitcoin, kamu menandatangani transaksi dengan private key-mu. Jaringan bisa memverifikasi tanda tangan itu menggunakan public key-mu, tanpa perlu tahu siapa kamu sebenarnya.</p>
+
+          <div class="p-callout">
+            <p>Untuk pertama kalinya, seseorang bisa membuktikan kepemilikan sesuatu secara digital, tanpa menyebutkan nama, tanpa kartu identitas, tanpa bank yang memverifikasi. Matematika yang membuktikan. Bukan institusi.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi interaktif — Public-Key Cryptography</div>
+
+          <div class="pk-steps">
+
+            <!-- STEP 1 · Generate Key Pair -->
+            <div class="pk-step active" id="prl-s05-step1">
+              <div class="pk-step-header">
+                <div class="pk-step-num" id="prl-s05-stepnum1">1</div>
+                <div class="pk-step-title">Generate Key Pair</div>
+                <div class="pk-step-sub" id="prl-s05-step1-sub">Belum di-generate</div>
+              </div>
+              <div class="pk-step-body">
+                <div class="pk-desc">Setiap pengguna Bitcoin punya sepasang kunci. Public key boleh dibagikan ke siapa saja. Private key harus disimpan sendiri dan tidak boleh diketahui siapapun.</div>
+                <div class="pk-key-row" id="prl-s05-key-display" style="display:none">
+                  <div class="pk-key-box">
+                    <div class="pk-key-label pub">Public Key (boleh dibagikan)</div>
+                    <div class="pk-key-value" id="prl-s05-pub-key"></div>
+                    <div class="pk-key-note">Seperti nomor rekening, siapapun bisa kirim ke sini.</div>
+                  </div>
+                  <div class="pk-key-box">
+                    <div class="pk-key-label priv">Private Key (rahasia!)</div>
+                    <div class="pk-key-value" id="prl-s05-priv-key"></div>
+                    <div class="pk-key-note">Seperti PIN, siapapun yang tahu ini bisa kontrol akunmu.</div>
+                  </div>
+                </div>
+                <button class="pk-btn" id="prl-s05-btn-generate">Generate Key Pair ↗</button>
+              </div>
+            </div>
+
+            <!-- STEP 2 · Sign Message -->
+            <div class="pk-step" id="prl-s05-step2">
+              <div class="pk-step-header">
+                <div class="pk-step-num" id="prl-s05-stepnum2">2</div>
+                <div class="pk-step-title">Tanda Tangani Pesan</div>
+                <div class="pk-step-sub" id="prl-s05-step2-sub">Tunggu step 1</div>
+              </div>
+              <div class="pk-step-body">
+                <div class="pk-desc">Ketika mengirim Bitcoin, kamu menandatangani transaksi dengan private key-mu. Tanda tangan ini unik untuk pesan ini dan tidak bisa dipalsukan siapapun yang tidak punya private key-mu.</div>
+                <div class="pk-input-row">
+                  <textarea class="pk-input" id="prl-s05-msg-input" rows="2" placeholder='Contoh: "Kirim 1 BTC ke Toko A"' disabled></textarea>
+                </div>
+                <div class="pk-sig-box" id="prl-s05-sig-box" style="display:none">
+                  <div class="pk-sig-label">Digital Signature</div>
+                  <div class="pk-sig-value" id="prl-s05-sig-value"></div>
+                </div>
+                <button class="pk-btn" id="prl-s05-btn-sign" disabled>Sign dengan Private Key ↗</button>
+              </div>
+            </div>
+
+            <!-- STEP 3 · Verify -->
+            <div class="pk-step" id="prl-s05-step3">
+              <div class="pk-step-header">
+                <div class="pk-step-num" id="prl-s05-stepnum3">3</div>
+                <div class="pk-step-title">Verifikasi oleh Jaringan</div>
+                <div class="pk-step-sub" id="prl-s05-step3-sub">Tunggu step 2</div>
+              </div>
+              <div class="pk-step-body">
+                <div class="pk-desc">Jaringan Bitcoin memeriksa tiga hal: pesan asli, public key pengirim, dan signature. Jika cocok, transaksi valid. Coba ubah pesan sedikit lalu verifikasi lagi untuk melihat apa yang terjadi.</div>
+                <div class="pk-verify-row">
+                  <div class="pk-verify-item">
+                    <div class="pk-verify-item-label">Pesan</div>
+                    <div class="pk-verify-item-val" id="prl-s05-v-msg"></div>
+                  </div>
+                  <div class="pk-verify-item">
+                    <div class="pk-verify-item-label">Public Key</div>
+                    <div class="pk-verify-item-val" id="prl-s05-v-pub"></div>
+                  </div>
+                  <div class="pk-verify-item">
+                    <div class="pk-verify-item-label">Signature</div>
+                    <div class="pk-verify-item-val" id="prl-s05-v-sig"></div>
+                  </div>
+                </div>
+                <div class="pk-input-row">
+                  <textarea class="pk-input" id="prl-s05-verify-msg-input" rows="2" placeholder="Pesan akan muncul di sini..." disabled></textarea>
+                </div>
+                <div class="pk-result" id="prl-s05-verify-result"></div>
+                <button class="pk-btn" id="prl-s05-btn-verify" disabled>Verifikasi ↗</button>
+                <div class="pk-tamper-note" id="prl-s05-tamper-note" style="display:none">
+                  Coba ubah isi pesan di atas lalu klik Verifikasi lagi — signature tidak akan cocok.
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="p-body" style="margin-top:2rem">
+          <div class="p-callout">
+            <p>Seluruh sistem Bitcoin berdiri di atas prinsip ini. Private key-mu adalah identitasmu. Siapapun yang memegang private key, memegang Bitcoin. Bukan nama di buku rekening, bukan kartu identitas, bukan tanda tangan di atas kertas.</p>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-p4" data-sb="sb-p4">
+            ← P.4 — The Double-Spend Problem
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-p6" data-sb="sb-p6">
+            P.6 — Gerakan Cypherpunk →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION P.5 -->
+
+      <!-- ==============================
+           SECTION P.6 · Gerakan cypherpunk
+      ============================== -->
+      <div class="p-section" id="section-p6">
+        <div class="p-eyebrow">Prologue · P.6</div>
+        <div class="p-heading">Perlawanan yang ditulis dalam kode</div>
+        <div class="p-title">Gerakan Cypherpunk</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Ada yang menyadari lebih awal.</p>
+          <p>Bukan dengan turun ke jalan. Bukan dengan orasi. Mereka duduk di depan layar, menulis kode, dan pelan-pelan membangun sesuatu yang tidak bisa disensor, tidak bisa dihentikan, dan tidak perlu izin siapapun untuk berjalan.</p>
+          <p>Mereka menyebut diri mereka <strong>Cypherpunks</strong>.</p>
+
+          <p><strong>Internet yang terbuka terlalu lebar</strong></p>
+          <p>Ketika internet lahir di era ARPANET tahun 1969, ia dirancang untuk menghubungkan institusi akademik dan militer yang saling percaya. Tidak ada yang memikirkan privasi, karena semua penggunanya memang komunitas kecil yang saling kenal.</p>
+          <p>Tapi internet tumbuh. Publik masuk. Dan fondasinya tidak ikut berubah.</p>
+          <p>Data bergerak dalam bentuk terbuka, tidak terenkripsi. Siapapun yang berada di jalur koneksimu bisa membaca apa yang kamu kirim, persis seperti membaca kartu pos, bukan surat dalam amplop tertutup. Pemerintah bisa memantau. Korporasi bisa mengumpulkan. Tidak ada yang perlu izin untuk mengintip.</p>
+
+          <div class="p-callout">
+            <p>Internet tidak rusak. Ia hanya tidak pernah didesain untuk melindungimu.</p>
+          </div>
+
+          <p><strong>Dari mana mereka berasal?</strong></p>
+          <p>Tahun 1992. Tiga orang bertemu di San Francisco: Eric Hughes, Timothy C. May, dan John Gilmore. Mereka mulai mengumpulkan orang-orang yang berpikiran sama dalam sebuah mailing list. Di puncaknya, lebih dari 700 orang aktif di dalamnya, termasuk beberapa nama yang kelak mengubah lanskap teknologi dunia.</p>
+          <p>Mereka adalah matematikawan, programmer, dan kriptografer. Bukan aktivis jalanan. Tapi mereka punya keyakinan yang tajam: privasi adalah hak, bukan keistimewaan yang diberikan oleh negara.</p>
+
+          <p><strong>The Cypherpunk Manifesto</strong></p>
+          <p>Tahun 1993, Eric Hughes menulis sebuah manifesto. Tenang, tapi tegas sampai ke tulang:</p>
+          <p><em>"Privacy is necessary for an open society in the electronic age."</em></p>
+          <p>Privasi bukan tentang menyembunyikan sesuatu. Ia tentang kemampuan untuk memilih, apa yang kamu ungkapkan, kepada siapa, dan kapan. Dan solusi mereka bukan meminta. Solusi mereka adalah membangun.</p>
+
+          <p><strong>Warisan yang tidak kelihatan</strong></p>
+          <p>Banyak teknologi yang kamu pakai sehari-hari tumbuh dari benih yang ditanam gerakan ini. HTTPS yang mengamankan browsing-mu. Enkripsi end-to-end di aplikasi chat. Jaringan yang memungkinkan komunikasi tanpa pengawasan.</p>
+          <p>Dan yang paling berdampak: pada 31 Oktober 2008, seseorang dengan nama samaran Satoshi Nakamoto mengirimkan sebuah paper ke mailing list kriptografi. Judulnya sederhana. Dampaknya tidak.</p>
+          <p><em>"Bitcoin: A Peer-to-Peer Electronic Cash System."</em></p>
+          <p>Satoshi tidak muncul dari ruang hampa. Ia adalah ujung dari benang panjang yang ditenun selama puluhan tahun oleh orang-orang yang tidak menunggu dunia berubah, tapi memilih untuk mengubahnya sendiri, satu baris kode dalam satu waktu.</p>
+
+          <div class="p-callout">
+            <p>Cypherpunks menulis kode. Bukan petisi. Bukan lobi. Mereka percaya bahwa perubahan nyata tidak datang dari izin yang diberikan penguasa, tapi dari teknologi yang sudah terlanjur berjalan.</p>
+
+          <p><strong>Bitcoin bukan percobaan pertama</strong></p>
+          <p>Kalau cypherpunk memang menulis kode, wajar bertanya: kode apa yang mereka tulis sebelum Bitcoin? Di bagian Double-Spend Problem tadi kita sempat menyebut DigiCash, b-money, dan bit gold dalam satu kalimat sebagai percobaan yang gagal. Sekarang kita berhenti lebih lama di sana, karena yang menarik bukan bahwa mereka gagal, melainkan <strong>seberapa dekat mereka sudah sampai</strong>.</p>
+          <p>Percobaan paling awal datang dari <strong>David Chaum</strong>, yang pada 1989 mendirikan DigiCash. Uangnya benar-benar privat, memakai teknik kriptografi yang membuat bank tidak bisa melihat siapa membelanjakan apa. Secara teknis ia berhasil. Tapi DigiCash tetap sebuah perusahaan, dan uangnya tetap diterbitkan oleh satu pihak. Ketika perusahaan itu bangkrut pada 1998, uangnya ikut lenyap. Pelajarannya keras: privasi saja tidak cukup kalau masih ada satu titik yang bisa gagal.</p>
+          <p>Pada 1997 <strong>Adam Back</strong> membuat <strong>Hashcash</strong>, yang kita bahas lagi di 5.2. Idenya sederhana: sebelum mengirim email, komputermu harus menyelesaikan perhitungan yang sedikit memakan waktu. Bagi orang biasa itu tidak terasa, bagi pengirim spam jutaan email itu jadi mahal. Untuk pertama kalinya ada cara membuat sesuatu di dunia digital <strong>berbiaya nyata</strong>. Tapi bukti kerja Hashcash tidak bisa dipindahtangankan. Ia habis dipakai sekali, tidak bisa diberikan ke orang lain, dan tidak ada jumlah totalnya. Ia perangko, bukan uang.</p>
+          <p>Setahun kemudian, 1998, dua usulan muncul hampir bersamaan. <strong>Wei Dai</strong> menulis <strong>b-money</strong>, yang mengusulkan agar semua peserta menyimpan salinan catatan siapa punya berapa, dan uang baru lahir dari kerja komputasi. <strong>Nick Szabo</strong> menulis <strong>bit gold</strong>, yang merangkai hasil kerja komputasi menjadi rantai bersambung sehingga urutannya bisa dibuktikan.</p>
+          <p>Bacalah dua kalimat barusan sekali lagi dan kamu akan merasakan sesuatu yang aneh: keduanya terdengar <strong>hampir persis seperti Bitcoin</strong>. Catatan yang disimpan semua orang, uang yang lahir dari kerja, rantai yang membuktikan urutan. Semua sudah ada di atas kertas satu dekade sebelum Satoshi.</p>
+          <p>Lalu apa yang kurang? Satu hal, dan itu yang paling sulit. Kalau semua orang menyimpan catatan sendiri, <strong>apa yang terjadi ketika catatan mereka berbeda?</strong> Siapa yang berhak memutuskan versi mana yang benar? Baik b-money maupun bit gold menyadari masalah ini dan menawarkan jawaban, tapi jawabannya selalu berujung pada sekelompok pihak terpilih yang harus dipercaya. Persis masalah yang ingin mereka hindari sejak awal. Ini masalah double-spend yang sama seperti di bagian sebelumnya, hanya dilihat dari sudut lain.</p>
+          <p><strong>Yang sebenarnya ditambahkan Satoshi</strong></p>
+          <p>Di sinilah letak lompatannya, dan ia lebih kecil sekaligus lebih besar daripada yang biasa dibayangkan orang. Satoshi tidak menciptakan bukti kerja, tidak menciptakan tanda tangan digital, tidak menciptakan rantai hash. Semua itu sudah ada.</p>
+          <p>Yang ia lakukan adalah menyadari bahwa bukti kerja bisa memikul <strong>dua tugas sekaligus</strong>. Pendahulunya memakai bukti kerja hanya untuk membuat sesuatu mahal diproduksi. Satoshi memakainya juga untuk <strong>memutuskan catatan siapa yang berlaku</strong>: versi yang paling banyak menumpuk kerja di belakangnya, itulah yang menang. Tidak perlu memilih siapa yang berwenang, karena kewenangan itu diganti oleh sesuatu yang tidak bisa dipalsukan, yaitu energi yang sudah terlanjur dibakar.</p>
+          <p>Itu sebabnya pertanyaan "kenapa baru 2009, padahal bahannya sudah ada sejak 1998" punya jawaban yang mungkin mengecewakan sekaligus melegakan. Yang hilang selama sepuluh tahun itu bukan sebuah komponen, bukan penemuan matematis baru, dan bukan komputer yang lebih cepat. Yang hilang adalah <strong>satu cara memandang</strong> komponen yang sudah tergeletak di depan mata semua orang.</p>
+          <p>Sejarah ini juga menjelaskan sesuatu yang akan kamu temui berulang kali di buku ini. Bitcoin jarang menambahkan hal baru. Ia hampir selalu menyusun ulang yang sudah ada, dengan sangat hati-hati, karena setiap bagian yang ditambahkan adalah bagian yang bisa gagal.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Timeline — Dari ARPANET ke Bitcoin</div>
+          <div class="tl-items" id="prl-s06-items"></div>
+          <div class="tl-hint">Klik setiap momen untuk membaca detailnya.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-p5" data-sb="sb-p5">
+            ← P.5 — Revolusi Public-Key Cryptography
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-p7" data-sb="sb-p7">
+            P.7 — Genesis Block & Pesan Satoshi →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION P.6 -->
+
+      <!-- ==============================
+           SECTION P.7 · Genesis block & pesan Satoshi
+      ============================== -->
+      <div class="p-section" id="section-p7">
+        <div class="p-eyebrow">Prologue · P.7</div>
+        <div class="p-heading">Hari ketika semuanya dimulai</div>
+        <div class="p-title">Genesis Block & Pesan Satoshi</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>3 Januari 2009.</p>
+          <p>Dunia baru saja keluar dari salah satu krisis keuangan terburuk dalam sejarah modern. Bank-bank raksasa di Amerika dan Eropa nyaris ambruk. Pemerintah mengucurkan triliunan dolar uang pajak untuk menyelamatkan institusi yang sama yang menyebabkan krisis itu sendiri.</p>
+          <p>Di suatu tempat yang tidak diketahui siapapun, seseorang menyalakan sebuah jaringan.</p>
+
+          <p><strong>Blok pertama</strong></p>
+          <p>Dalam sistem Bitcoin, semua transaksi dicatat dalam satuan yang disebut <em>block</em>. Setiap block terhubung ke block sebelumnya, membentuk rantai yang tidak bisa dimanipulasi. Rantai ini disebut <em>blockchain</em>.</p>
+          <p>Block pertama yang pernah ada disebut <strong>Genesis Block</strong>. Block #0. Awal dari segalanya. Dan di dalamnya, Satoshi meninggalkan sebuah pesan yang tertulis selamanya:</p>
+          <p><em>"The Times 03/Jan/2009 Chancellor on brink of second bailout for banks"</em></p>
+          <p>Ini adalah judul halaman depan surat kabar The Times pada hari itu. Hari ketika Bitcoin lahir.</p>
+
+          <p><strong>Mengapa pesan itu penting</strong></p>
+          <p>Pesannya bukan kebetulan. Bukan sekadar timestamp. Di satu sisi, ia berfungsi sebagai bukti bahwa Genesis Block benar-benar dibuat pada tanggal itu. Di sisi lain, ia adalah pernyataan. Sebuah kritik yang tenang tapi tajam terhadap sistem keuangan yang sedang diselamatkan oleh uang rakyat di hari yang sama.</p>
+
+          <p><strong>Siapa Satoshi?</strong></p>
+          <p>Tidak ada yang tahu. Satoshi Nakamoto berkomunikasi melalui email dan forum selama dua tahun setelah Bitcoin lahir. Lalu, pada April 2011, ia mengirim pesan terakhirnya kepada seorang developer: <em>"I've moved on to other things."</em> Dan menghilang.</p>
+          <p>Identitasnya tidak pernah terkonfirmasi. Yang tersisa hanyalah kodenya. Whitepaper-nya. Dan Genesis Block yang masih berdiri hingga hari ini, dengan pesan yang sama, tidak berubah, tidak bisa diubah.</p>
+
+          <div class="p-callout">
+            <p>Bitcoin adalah satu-satunya sistem keuangan di dunia yang penciptanya memilih untuk menghilang. Tidak ada CEO. Tidak ada pendiri yang memegang kendali. Tidak ada yang bisa dihubungi untuk mengubah aturannya. Ini bukan kelemahan. Ini adalah fitur yang paling penting dari semua.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Rekonstruksi — Block #0 · Genesis Block</div>
+
+          <div class="gb-block">
+            <div class="gb-header">
+              <div class="gb-header-left">
+                <div class="gb-badge">Genesis Block</div>
+                <div class="gb-block-num">Block #0</div>
+              </div>
+              <div class="gb-hash-short">000000000019d6...</div>
+            </div>
+            <div class="gb-rows">
+              <div class="gb-row">
+                <div class="gb-key">Hash</div>
+                <div class="gb-val">000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f</div>
+              </div>
+              <div class="gb-row">
+                <div class="gb-key">Previous Hash</div>
+                <div class="gb-val">0000000000000000000000000000000000000000000000000000000000000000</div>
+              </div>
+              <div class="gb-row">
+                <div class="gb-key">Timestamp</div>
+                <div class="gb-val">2009-01-03 18:15:05 UTC</div>
+              </div>
+              <div class="gb-row">
+                <div class="gb-key">Difficulty</div>
+                <div class="gb-val">1 (minimum — jaringan baru saja lahir)</div>
+              </div>
+              <div class="gb-row">
+                <div class="gb-key">Nonce</div>
+                <div class="gb-val">2083236893</div>
+              </div>
+              <div class="gb-row">
+                <div class="gb-key">Reward</div>
+                <div class="gb-val">50 BTC (tidak pernah bisa dibelanjakan)</div>
+              </div>
+              <div class="gb-row gb-highlight">
+                <div class="gb-key">Coinbase Message</div>
+                <div class="gb-val">The Times 03/Jan/2009 Chancellor on brink of second bailout for banks</div>
+              </div>
+            </div>
+            <div class="gb-satoshi-msg">
+              <div class="gb-msg-label">Pesan Satoshi — tertulis selamanya di block pertama</div>
+              <div class="gb-msg-text">The Times 03/Jan/2009 Chancellor on brink of second bailout for banks</div>
+            </div>
+          </div>
+
+          <div class="sim-label" style="margin-top:1.5rem">Mereka yang memahami protokolnya</div>
+          <div class="qt-list">
+
+            <div class="qt-card">
+              <div class="qt-quote">A purely peer-to-peer version of electronic cash would allow online payments to be sent directly from one party to another without going through a financial institution.</div>
+              <div class="qt-footer">
+                <div class="qt-avatar">SN</div>
+                <div>
+                  <div class="qt-name">Satoshi Nakamoto</div>
+                  <div class="qt-role">Pencipta Bitcoin — Bitcoin Whitepaper</div>
+                </div>
+                <div class="qt-year">2008</div>
+              </div>
+            </div>
+
+            <div class="qt-card">
+              <div class="qt-quote">Bitcoin seems to be a very promising idea. I like the idea of basing security on the assumption that the CPU power of honest participants outweighs that of the attacker.</div>
+              <div class="qt-footer">
+                <div class="qt-avatar">HF</div>
+                <div>
+                  <div class="qt-name">Hal Finney</div>
+                  <div class="qt-role">Kriptografer — penerima pertama Bitcoin</div>
+                </div>
+                <div class="qt-year">2009</div>
+              </div>
+            </div>
+
+            <div class="qt-card">
+              <div class="qt-quote">Bitcoin is not a currency. Bitcoin is the internet of money. Currency is just the first application.</div>
+              <div class="qt-footer">
+                <div class="qt-avatar">AA</div>
+                <div>
+                  <div class="qt-name">Andreas Antonopoulos</div>
+                  <div class="qt-role">Penulis — Mastering Bitcoin</div>
+                </div>
+                <div class="qt-year">2014</div>
+              </div>
+            </div>
+
+            <div class="qt-card">
+              <div class="qt-quote">Bitcoin is a distributed system — it's not under any one entity's control. That's a feature, not a bug.</div>
+              <div class="qt-footer">
+                <div class="qt-avatar">AB</div>
+                <div>
+                  <div class="qt-name">Adam Back</div>
+                  <div class="qt-role">Kriptografer — pencipta Hashcash</div>
+                </div>
+                <div class="qt-year">2013</div>
+              </div>
+            </div>
+
+            <div class="qt-card">
+              <div class="qt-quote">What blockchain solves is the problem of two parties who don't trust each other agreeing on a shared fact.</div>
+              <div class="qt-footer">
+                <div class="qt-avatar">NS</div>
+                <div>
+                  <div class="qt-name">Nick Szabo</div>
+                  <div class="qt-role">Kriptografer — pencipta Bit Gold</div>
+                </div>
+                <div class="qt-year">2016</div>
+              </div>
+            </div>
+
+            <div class="qt-card">
+              <div class="qt-quote">Cypherpunks write code. We know that someone has to write software to defend privacy, and we're going to write it.</div>
+              <div class="qt-footer">
+                <div class="qt-avatar">EH</div>
+                <div>
+                  <div class="qt-name">Eric Hughes</div>
+                  <div class="qt-role">Co-founder — Cypherpunk Movement</div>
+                </div>
+                <div class="qt-year">1993</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-p6" data-sb="sb-p6">
+            ← P.6 — Gerakan Cypherpunk
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-p8" data-sb="sb-p8">
+            P.8 — Sistem Tanpa Kepercayaan →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION P.7 -->
+
+      <!-- ==============================
+           SECTION P.8 · Sistem tanpa kepercayaan
+      ============================== -->
+      <div class="p-section" id="section-p8">
+        <div class="p-eyebrow">Prologue · P.8</div>
+        <div class="p-heading">Penutup Prologue</div>
+        <div class="p-title">Sistem Tanpa Kepercayaan</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Seluruh sistem keuangan yang ada hari ini berdiri di atas kepercayaan.</p>
+          <p>Kamu percaya bankmu tidak akan bangkrut. Kamu percaya pemerintah tidak akan membekukan akunmu. Kamu percaya perusahaan transfer tidak akan menahan uangmu. Kepercayaan itu tidak ada jaminannya, ia hanya bergantung pada niat baik institusi yang memegang kendali.</p>
+          <p>Sejarah membuktikan, niat baik itu tidak selalu cukup.</p>
+
+          <p><strong>Trustless bukan berarti tidak ada kepercayaan</strong></p>
+          <p>Kata <em>trustless</em> sering disalahpahami. Ia bukan berarti tidak perlu percaya siapapun sama sekali. Ia berarti kamu tidak perlu mempercayai orang atau institusi tertentu, karena yang kamu percaya adalah matematika dan kode yang bisa diverifikasi oleh siapapun.</p>
+          <p>Di Bitcoin, tidak ada direktur yang bisa mengubah aturan. Tidak ada rapat dewan yang memutuskan kebijakan moneter. Tidak ada kantor pusat yang bisa dilobi atau ditekan. Aturannya tertulis dalam kode, terbuka untuk semua, dan berlaku sama untuk semua orang di seluruh dunia.</p>
+
+          <p><strong>Kepercayaan yang didesentralisasi</strong></p>
+          <p>Kalau kamu kirim Bitcoin ke seseorang, transaksi itu diverifikasi bukan oleh satu bank, tapi oleh ribuan komputer di seluruh dunia secara bersamaan. Tidak ada satupun yang punya otoritas lebih dari yang lain. Untuk memanipulasi sistemnya, seseorang harus menguasai lebih dari separuh seluruh jaringan sekaligus, sebuah tugas yang secara praktis mustahil.</p>
+          <p>Inilah yang membuat Bitcoin berbeda dari semua sistem keuangan sebelumnya. Bukan karena ia digital. Bukan karena ia baru. Tapi karena untuk pertama kalinya, kepercayaan tidak lagi bergantung pada subjektivitas manusia yang bisa salah, bisa disuap, dan bisa berubah pikiran.</p>
+
+          <div class="p-callout">
+            <p>Bitcoin tidak meminta kamu percaya pada Satoshi. Tidak meminta kamu percaya pada pengembangnya. Tidak meminta kamu percaya pada siapapun. Ia hanya meminta kamu verifikasi sendiri. Dan itulah yang membuat segalanya berbeda.</p>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-p7" data-sb="sb-p7">
+            ← P.7 — Genesis Block & Pesan Satoshi
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION P.8 -->
+
+    </div>
+    <!-- END CONTENT AREA -->
+
+  </div>
+
+</div>
+<!-- END PAGE 3 · PROLOGUE -->
+
+

@@ -1,0 +1,609 @@
+<!-- ============================================================
+     PAGE 18 · BAB 15 · Waktu di Bitcoin
+     |-- 15.1 · Waktu di Bitcoin — Bukan Jam Dinding [DONE]
+     |-- 15.2 · [LOCKED]
+     |-- 15.3 · [LOCKED]
+     |-- 15.4 · [LOCKED]
+     |-- 15.5 · [LOCKED]
+     |-- 15.6 · [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab15">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b15">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b15">← Daftar Bab</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab15">
+      <div class="sidebar-heading">Bab 15</div>
+      <div class="sidebar-title">Waktu di Bitcoin</div>
+
+      <div class="sidebar-item active" id="sb-15-1">
+        <div class="sb-num">15.1</div>
+        <div class="sb-label">Waktu di Bitcoin — Bukan Jam Dinding</div>
+      </div>
+      <div class="sidebar-item" id="sb-15-2">
+        <div class="sb-num">15.2</div>
+        <div class="sb-label">nLockTime — Cek yang Belum Bisa Dicairkan</div>
+      </div>
+      <div class="sidebar-item" id="sb-15-3">
+        <div class="sb-num">15.3</div>
+        <div class="sb-label">nSequence — Dari Ide yang Gagal ke Relative Timelock</div>
+      </div>
+      <div class="sidebar-item" id="sb-15-4">
+        <div class="sb-num">15.4</div>
+        <div class="sb-label">CLTV — Ketika Script Sendiri yang Menjaga Waktu</div>
+      </div>
+      <div class="sidebar-item" id="sb-15-5">
+        <div class="sb-num">15.5</div>
+        <div class="sb-label">CSV — Relative Timelock yang Menggerakkan Lightning</div>
+      </div>
+      <div class="sidebar-item" id="sb-15-6">
+        <div class="sb-num">15.6</div>
+        <div class="sb-label">Timelock dalam Praktik — dari Warisan hingga Vaulting</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab15-content">
+
+      <!-- ==============================
+           SECTION 15.1 · Waktu di Bitcoin — Bukan Jam Dinding
+      ============================== -->
+      <div class="p-section active" id="section-15-1">
+        <div class="p-eyebrow">Bab 15 · 15.1</div>
+        <div class="p-heading">Tanpa jam server, tanpa otoritas waktu — tapi seluruh jaringan tetap sepakat</div>
+        <div class="p-title">Waktu di Bitcoin — Bukan Jam Dinding</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Kalau kamu pernah bertanya-tanya bagaimana Bitcoin "tahu" kapan sebuah transaksi boleh atau tidak boleh diproses, jawabannya ada di cara Bitcoin mendefinisikan waktu. Dan cara ini sangat berbeda dari jam yang kamu pakai sehari-hari.</p>
+
+          <p><strong>Masalahnya: siapa yang kamu percaya untuk tahu waktu?</strong></p>
+          <p>Di dunia nyata, kamu percaya jam di HP kamu, atau server waktu yang disinkronisasi secara global. Tapi Bitcoin adalah sistem tanpa otoritas pusat. Tidak ada server waktu yang bisa dipercaya semua orang. Kalau kamu membiarkan satu pihak menentukan "waktu sekarang", kamu baru saja menciptakan titik kegagalan terpusat yang bisa diserang atau dimanipulasi.</p>
+
+          <p>Solusi Bitcoin: jangan bergantung pada jam dinding sama sekali. Gunakan dua cara mengukur waktu yang bisa diverifikasi oleh semua node secara independen.</p>
+
+          <p><strong>Cara pertama: Block Height</strong></p>
+          <p>Block height adalah nomor urut block dalam blockchain. Block pertama adalah block #0, block berikutnya #1, dan seterusnya. Setiap block baru yang ditemukan menambah satu angka. Analoginya seperti halaman buku: kalau kamu ingin merujuk ke "bab 5", kamu tidak perlu tahu kapan buku itu ditulis, cukup tahu "halaman 120". Block height bekerja sama: "setelah block 800.000" adalah titik waktu yang spesifik dan bisa diverifikasi siapapun yang punya salinan blockchain.</p>
+
+          <p>Kelebihannya: sangat sederhana dan tidak bisa dimanipulasi. Kekurangannya: tidak berhubungan langsung dengan waktu nyata karena block tidak selalu datang tepat 10 menit (bisa 2 menit, bisa 25 menit).</p>
+
+          <p><strong>Cara kedua: Median Time Past (MTP)</strong></p>
+          <p>Setiap block Bitcoin mengandung timestamp, yaitu angka yang menunjukkan kapan block itu ditambang. Tapi miner bisa sedikit berbohong tentang timestamp ini dalam batas yang diizinkan protokol. Kalau Bitcoin langsung mempercayai timestamp satu block, miner bisa memanipulasi "waktu" untuk keuntungan mereka.</p>
+
+          <p>Solusinya: ambil 11 block terakhir, ambil nilai tengah (median) dari timestamp mereka. Inilah Median Time Past (MTP). Analoginya seperti mengukur suhu rata-rata satu minggu terakhir daripada mempercayai termometer hari ini yang mungkin rusak. Satu bacaan yang salah tidak merusak gambaran keseluruhan. Dengan menggunakan median 11 block, satu miner yang berbohong tentang timestampnya tidak bisa menggeser MTP secara signifikan.</p>
+
+          <p><strong>Mengapa ini penting?</strong></p>
+          <p>Dari dua cara mengukur waktu ini, Bitcoin bisa membangun kontrak berbasis waktu yang berlaku otomatis tanpa perlu hakim, notaris, atau pihak ketiga. Kamu bisa berkata ke jaringan Bitcoin: "uang ini tidak boleh disentuh sampai block 900.000" atau "transaksi ini hanya valid setelah 6 bulan dari sekarang" dan seluruh jaringan akan menegakkannya secara otomatis.</p>
+
+          <div class="p-callout">
+            <p>Bitcoin mendefinisikan waktu secara konsensus, bukan berdasarkan jam server. Ini bukan keterbatasan, melainkan pilihan desain yang membuat sistem tetap terdesentralisasi. Hasilnya adalah mekanisme waktu yang bisa dipercaya oleh semua pihak tanpa harus mempercayai siapapun secara khusus.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualisasi — Dua cara Bitcoin mengukur waktu</div>
+          <div class="b15-s151-desc">
+            Tab pertama: block height sebagai garis waktu — tambah block dan tandai titik referensi. Tab kedua: Median Time Past — geser slider untuk memalsukan satu timestamp dan lihat mengapa MTP sulit dimanipulasi.
+          </div>
+
+          <div class="b15-s151-tabs">
+            <button class="b15-s151-tab s151-act" id="b15-s151-t1">Block Height — Waktu sebagai Urutan</button>
+            <button class="b15-s151-tab" id="b15-s151-t2">Median Time Past — Tahan Manipulasi</button>
+          </div>
+
+          <!-- PANE 1: BLOCK HEIGHT -->
+          <div class="b15-s151-pane show" id="b15-s151-p1">
+            <div class="b15-s151-hint">Block height adalah cara paling sederhana Bitcoin mengukur waktu. Seperti nomor halaman buku: "setelah halaman 800.000" adalah titik yang spesifik dan tidak bisa dipalsukan. Klik "Tambah Block Baru" untuk melihat chain bertumbuh.</div>
+            <div class="b15-s151-chain-track" id="b15-s151-track"></div>
+            <div class="b15-s151-chain-info" id="b15-s151-info">
+              <div class="b15-s151-info-label">Block terbaru</div>
+              <div class="b15-s151-info-val" id="b15-s151-val">—</div>
+              <div class="b15-s151-info-desc" id="b15-s151-desc2">Klik "Tambah Block Baru" untuk memulai.</div>
+            </div>
+            <div class="b15-s151-ctrl">
+              <button class="b15-s151-btn-primary" id="b15-s151-add">+ Tambah Block Baru</button>
+              <button class="b15-s151-btn-sec" id="b15-s151-mark">Tandai sebagai Referensi Waktu</button>
+              <button class="b15-s151-btn-sec" id="b15-s151-rst1">Reset</button>
+            </div>
+            <div class="b15-s151-note">Keunggulan block height: deterministik dan tidak bisa dipalsukan. Kelemahannya: tidak berhubungan langsung dengan waktu nyata karena block bisa datang dalam 2 menit atau 25 menit.</div>
+          </div>
+
+          <!-- PANE 2: MTP -->
+          <div class="b15-s151-pane" id="b15-s151-p2">
+            <div class="b15-s151-hint">Setiap block punya timestamp yang dicantumkan miner. Tapi miner bisa sedikit berbohong. Solusi Bitcoin: ambil 11 block terakhir, pakai nilai TENGAH (median). Geser slider untuk memalsukan timestamp satu block dan lihat seberapa besar MTP bergeser.</div>
+            <div class="b15-s151-mtp-label">11 block terakhir — tinggi bar = nilai timestamp. Bar merah = block yang dimanipulasi. Garis hijau = MTP.</div>
+            <div class="b15-s151-mtp-blocks" id="b15-s151-mtp-blocks"></div>
+            <div class="b15-s151-mtp-ctrl">
+              <div class="b15-s151-mtp-ctrl-label">Manipulasi timestamp block #6:</div>
+              <input type="range" class="b15-s151-slider" id="b15-s151-slider" min="-120" max="120" value="0">
+              <div class="b15-s151-offset" id="b15-s151-offset">+0 menit</div>
+            </div>
+            <div class="b15-s151-mtp-result" id="b15-s151-mtp-result">
+              <div class="b15-s151-mtp-result-label" id="b15-s151-mtp-rlabel">Median Time Past (MTP) saat ini</div>
+              <div class="b15-s151-mtp-result-val" id="b15-s151-mtp-val">—</div>
+              <div class="b15-s151-mtp-result-desc" id="b15-s151-mtp-desc">—</div>
+            </div>
+            <div class="b15-s151-note">MTP dipakai untuk timelock berbasis waktu. Karena menggunakan median 11 block, satu miner yang berbohong tentang timestampnya tidak bisa mengubah MTP secara signifikan.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-15-2" data-sb="sb-15-2">
+            15.2 — nLockTime: Cek yang Belum Bisa Dicairkan →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 15.1 -->
+
+      <!-- ==============================
+           SECTION 15.2 · nLockTime — Cek yang Belum Bisa Dicairkan
+      ============================== -->
+      <div class="p-section" id="section-15-2">
+        <div class="p-eyebrow">Bab 15 · 15.2</div>
+        <div class="p-heading">Selama ribuan tahun manusia butuh notaris untuk mengatur waktu dalam kontrak — Bitcoin tidak</div>
+        <div class="p-title">nLockTime — Cek yang Belum Bisa Dicairkan</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Bayangkan kamu menulis cek tapi kamu tulis tanggal bulan depan di pojok kanan atas. Bank tidak akan memproses cek itu sampai tanggal tersebut tiba. nLockTime bekerja persis seperti itu, tapi bukan bank yang menegakkan aturannya, melainkan seluruh jaringan Bitcoin secara otomatis, tanpa bisa diintervensi siapapun. Bahkan si pengirim sendiri tidak bisa membatalkan atau mempercepatnya setelah transaksi dibuat.</p>
+
+          <p>Selama ribuan tahun, manusia butuh pihak ketiga untuk mengatur waktu dalam kontrak: notaris, bank, pengacara, atau hakim. Mereka yang memastikan "cek ini baru bisa dicairkan bulan depan" atau "dana escrow ini dikembalikan kalau tidak ada yang klaim dalam 6 bulan." nLockTime menghilangkan kebutuhan itu. Kepercayaan kepada manusia diganti oleh matematika.</p>
+
+          <p><strong>Apa itu nLockTime?</strong></p>
+          <p>nLockTime adalah field 4-byte yang ada di setiap transaksi Bitcoin sejak hari pertama. Nilainya menentukan kapan transaksi itu boleh dimasukkan ke dalam block. Kalau miner mencoba memasukkan transaksi dengan nLockTime yang belum tercapai, seluruh node di jaringan akan menolak block tersebut secara otomatis.</p>
+
+          <p><strong>Dua mode: block atau waktu</strong></p>
+          <p>Ini adalah keputusan desain awal Satoshi yang masih bertahan sampai sekarang. Cara Bitcoin membedakan apakah kamu bicara tentang "block ke berapa" atau "jam berapa" adalah dengan melihat angkanya saja. Kalau nilai nLockTime di bawah 500.000.000, ia diinterpretasikan sebagai block height. Nilai 800.000 artinya "transaksi ini tidak valid sebelum block #800.000." Kalau nilainya di atas atau sama dengan 500.000.000, ia diinterpretasikan sebagai Unix timestamp yaitu jumlah detik sejak 1 Januari 1970. Angka 500.000.000 dalam Unix time adalah sekitar tahun 1985, jauh sebelum Bitcoin ada, jadi aman dipakai sebagai batas pemisah.</p>
+
+          <p><strong>Satu syarat penting yang sering dilupakan</strong></p>
+          <p>nLockTime hanya efektif kalau setidaknya satu input transaksi punya nSequence yang bukan 0xFFFFFFFF (nilai maksimum). Ini adalah detail teknis yang sering mengejutkan developer baru. Kalau semua input punya nSequence 0xFFFFFFFF, node akan mengabaikan nLockTime sepenuhnya dan transaksi bisa dimasukkan kapanpun. Di simulasi di bawah, kamu bisa mencoba mematikan nSequence dan lihat apa yang terjadi.</p>
+
+          <p><strong>Mengapa ini powerful?</strong></p>
+          <p>Scheduled payment: kamu bisa membuat transaksi yang hanya bisa dikonfirmasi mulai bulan depan. Tidak ada risiko kontraktor tidak mau kerja setelah dibayar, tidak ada risiko kamu tidak mau bayar setelah kerja selesai. Escrow dengan batas waktu: selama ini escrow butuh pihak ketiga yang kamu percaya. Dengan nLockTime, kepercayaan itu diganti oleh matematika. Dana tidak bisa kemana-mana sampai kondisi waktu terpenuhi. Dead man's switch: warisan digital yang tidak bisa diblokir oleh siapapun, tidak oleh bank, tidak oleh pemerintah, tidak bahkan oleh orang yang membuat kontraknya.</p>
+
+          <div class="p-callout">
+            <p>nLockTime adalah fitur paling sederhana dari arsenal timelock Bitcoin. Ia sudah ada sejak hari pertama dan sudah terbukti bekerja. Tapi kekuatannya terbatas karena ia hanya bekerja di level transaksi. Untuk kondisi yang lebih kompleks seperti "Alice bisa klaim kapanpun ATAU Bob bisa klaim setelah 6 bulan", kita butuh CLTV yang akan dibahas di 15.4.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi — nLockTime Builder</div>
+          <div class="b15-s152-desc">
+            Pilih skenario nyata atau atur parameter sendiri. Setiap perubahan langsung menampilkan artinya dalam bahasa manusia, nilai hex dalam transaksi, dan efek nSequence.
+          </div>
+
+          <div class="b15-s152-usecase-label">Coba skenario nyata:</div>
+          <div class="b15-s152-usecase-btns">
+            <button class="b15-s152-uc-btn" id="b15-s152-uc-gaji">Gaji bulan depan</button>
+            <button class="b15-s152-uc-btn" id="b15-s152-uc-escrow">Escrow 6 bulan</button>
+            <button class="b15-s152-uc-btn" id="b15-s152-uc-warisan">Warisan 1 tahun</button>
+            <button class="b15-s152-uc-btn" id="b15-s152-uc-block">Lock sampai block tertentu</button>
+          </div>
+
+          <div class="b15-s152-mode-label">Mode nLockTime:</div>
+          <div class="b15-s152-mode-sub">Bitcoin membedakan dua mode hanya dari angkanya: di bawah 500 juta = block height, di atas 500 juta = waktu (Unix timestamp).</div>
+          <div class="b15-s152-mode">
+            <button class="b15-s152-mode-btn s152-act" id="b15-s152-m-ts">Waktu (tanggal tertentu)</button>
+            <button class="b15-s152-mode-btn" id="b15-s152-m-bh">Block Height (block tertentu)</button>
+          </div>
+
+          <div id="b15-s152-input-area"></div>
+
+          <div class="b15-s152-meaning" id="b15-s152-meaning">
+            <div class="b15-s152-meaning-label">Artinya dalam bahasa manusia:</div>
+            <div class="b15-s152-meaning-text" id="b15-s152-meaning-text">—</div>
+            <div class="b15-s152-meaning-sub" id="b15-s152-meaning-sub">—</div>
+          </div>
+
+          <div class="b15-s152-hex-wrap">
+            <div class="b15-s152-hex-label">Field nLockTime dalam transaksi (4 byte, little-endian):</div>
+            <div class="b15-s152-hex-val" id="b15-s152-hex-val">—</div>
+            <div class="b15-s152-hex-explain" id="b15-s152-hex-explain">—</div>
+          </div>
+
+          <div class="b15-s152-seq-wrap s152-ok" id="b15-s152-seq-wrap">
+            <div class="b15-s152-seq-label" id="b15-s152-seq-label">nSequence: nLockTime AKTIF</div>
+            <div class="b15-s152-seq-toggle" id="b15-s152-seq-toggle">
+              <div class="b15-s152-seq-track s152-on" id="b15-s152-seq-track">
+                <div class="b15-s152-seq-thumb"></div>
+              </div>
+              <div class="b15-s152-seq-ttext" id="b15-s152-seq-ttext">nSequence input = 0xFFFFFFFE (nLockTime aktif)</div>
+            </div>
+            <div class="b15-s152-seq-desc" id="b15-s152-seq-desc">nLockTime akan ditegakkan. Transaksi tidak bisa masuk block sebelum waktu yang ditentukan.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-15-1" data-sb="sb-15-1">
+            ← 15.1 — Waktu di Bitcoin: Bukan Jam Dinding
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-15-3" data-sb="sb-15-3">
+            15.3 — nSequence →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 15.2 -->
+
+      <!-- ==============================
+           SECTION 15.3 · nSequence — Dari Ide yang Gagal ke Relative Timelock
+      ============================== -->
+      <div class="p-section" id="section-15-3">
+        <div class="p-eyebrow">Bab 15 · 15.3</div>
+        <div class="p-heading">Field yang dirancang untuk satu tujuan, gagal, lalu menjadi fondasi Lightning Network</div>
+        <div class="p-title">nSequence — Dari Ide yang Gagal ke Relative Timelock</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Ada satu field di setiap input transaksi Bitcoin yang punya sejarah paling berliku dari semua field di protokol. Namanya nSequence. Ia dirancang untuk satu tujuan, gagal mencapainya, lalu didaur ulang menjadi sesuatu yang jauh lebih berguna.</p>
+
+          <p><strong>Ide awal yang tidak berhasil</strong></p>
+          <p>Satoshi merancang nSequence sebagai mekanisme untuk memperbarui transaksi yang belum dikonfirmasi. Idenya: kalau dua pihak sedang bernegosiasi, mereka bisa terus mengupdate transaksi dengan menaikkan nilai nSequence. Miner seharusnya hanya memasukkan versi dengan nSequence tertinggi. Masalahnya: tidak ada insentif bagi miner untuk mengikuti aturan ini. Miner bisa saja langsung memasukkan versi pertama transaksi kalau fee-nya cukup menarik. Tanpa mekanisme enforcement, ide ini tidak bisa bekerja. nSequence lalu menjadi field yang hampir tidak berguna selama bertahun-tahun.</p>
+
+          <p><strong>Beda dengan nLockTime</strong></p>
+          <p>Sebelum membahas lebih jauh, penting untuk memahami perbedaan mendasar antara nLockTime dan nSequence. Bayangkan kamu punya dua jenis "cek tertanggal." Cek pertama tertulis: "berlaku mulai 1 Januari 2026", ini nLockTime, waktu absolut yang tidak bergantung pada kapan ceknya dipegang. Cek kedua tertulis: "berlaku 30 hari setelah diserahkan ke bank", ini nSequence, waktu relatif yang baru mulai berjalan setelah transaksi dikonfirmasi. Perbedaan ini terdengar kecil, tapi sangat krusial untuk membangun kontrak yang lebih fleksibel.</p>
+
+          <p><strong>BIP 68: nSequence mendapat makna baru</strong></p>
+          <p>Pada 2016, BIP 68 — diaktifkan bersamaan dengan BIP 112 dan BIP 113 dalam soft fork CSV — memberikan nSequence makna baru yaitu relative timelock. Alih-alih membuat field baru yang akan membutuhkan hard fork, komunitas Bitcoin mendaur ulang field lama yang hampir tidak terpakai.</p>
+
+          <p><strong>Tiga "tombol" dalam nSequence</strong></p>
+          <p>nSequence adalah angka 32-bit, tapi cara membacanya seperti perangkat dengan tiga tombol. Tombol pertama adalah on/off: satu bit yang menentukan apakah nSequence punya makna timelock sama sekali. Kalau tombol ini off, sisanya diabaikan. Tombol kedua adalah pilihan satuan: apakah jeda waktu diukur dalam block (sekitar 10 menit per block) atau dalam satuan waktu (512 detik per unit). Tombol ketiga adalah nilainya: angka 16-bit yang menentukan berapa lama jedanya, maksimum 65.535 unit.</p>
+
+          <p>Analoginya seperti mengatur alarm HP: pilih on/off, pilih AM/PM, isi jamnya. Tidak perlu memahami binary untuk menggunakan konsepnya.</p>
+
+          <p><strong>Mengapa relative timelock powerful?</strong></p>
+          <p>nLockTime tidak bisa bergantung pada kapan sebuah UTXO dikonfirmasi, ia hanya tahu waktu absolut. nSequence bisa. Ini sangat penting untuk Lightning Network: ketika channel ditutup secara paksa, ada periode tunggu berbasis nSequence yang mulai berjalan dari saat commitment transaction dikonfirmasi, bukan dari waktu absolut yang tidak bisa diprediksi. Periode ini memberikan waktu bagi pihak lain untuk mendeteksi kecurangan dan mengajukan penalty transaction.</p>
+
+          <div class="p-callout">
+            <p>nSequence adalah contoh indah dari mendaur ulang apa yang sudah ada. Daripada menambahkan field baru ke format transaksi (yang akan butuh hard fork), BIP 68 mendaur ulang field lama yang hampir tidak terpakai dan memberikannya fungsi baru yang sangat berguna. Ini adalah cara Bitcoin berevolusi: dengan hati-hati, backward-compatible, dan tanpa membuang warisan yang sudah ada.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi — nSequence: Atur dan Pahami</div>
+          <div class="b15-s153-desc">
+            Atur tiga "tombol" nSequence dan lihat artinya secara langsung. Pilih skenario umum atau eksplorasi sendiri. Bit visualizer di bawah menunjukkan representasi teknisnya.
+          </div>
+
+          <div class="b15-s153-preset-label">Coba skenario umum:</div>
+          <div class="b15-s153-presets">
+            <button class="b15-s153-preset-btn" id="b15-s153-pr-ln">Lightning force close (~1 hari)</button>
+            <button class="b15-s153-preset-btn" id="b15-s153-pr-vault">Vault 1 minggu</button>
+            <button class="b15-s153-preset-btn" id="b15-s153-pr-escrow">Escrow 1 bulan</button>
+            <button class="b15-s153-preset-btn" id="b15-s153-pr-off">Nonaktifkan timelock</button>
+            <button class="b15-s153-preset-btn" id="b15-s153-pr-max">Nilai maksimum (RBF)</button>
+          </div>
+
+          <div class="b15-s153-controls">
+            <div class="b15-s153-ctrl-card">
+              <div class="b15-s153-ctrl-label">Tombol 1 — Aktifkan relative timelock?</div>
+              <div class="b15-s153-ctrl-sub">Kalau dimatikan, nSequence tidak punya makna timelock. Nilai 0xFFFFFFFF juga menonaktifkan nLockTime di level transaksi.</div>
+              <div class="b15-s153-toggle-row" id="b15-s153-tog1">
+                <div class="b15-s153-toggle-track s153-on" id="b15-s153-tog1-track"><div class="b15-s153-toggle-thumb"></div></div>
+                <div class="b15-s153-toggle-label" id="b15-s153-tog1-label">Timelock AKTIF</div>
+                <div class="b15-s153-toggle-state" id="b15-s153-tog1-state">(bit 31 = 0)</div>
+              </div>
+            </div>
+
+            <div class="b15-s153-ctrl-card" id="b15-s153-unit-card">
+              <div class="b15-s153-ctrl-label">Tombol 2 — Satuan waktu</div>
+              <div class="b15-s153-ctrl-sub">Pilih apakah jeda waktu diukur dalam block (~10 menit per block) atau dalam satuan 512 detik (~8.5 menit).</div>
+              <div class="b15-s153-unit-row">
+                <button class="b15-s153-unit-btn s153-act" id="b15-s153-u-block">Block (~10 menit per block)</button>
+                <button class="b15-s153-unit-btn" id="b15-s153-u-time">Waktu (512 detik per unit)</button>
+              </div>
+            </div>
+
+            <div class="b15-s153-ctrl-card" id="b15-s153-val-card">
+              <div class="b15-s153-ctrl-label">Tombol 3 — Berapa lama jedanya?</div>
+              <div class="b15-s153-ctrl-sub">Maksimum 65.535 unit. Untuk kebanyakan use case, nilai 144 block (1 hari) hingga 4.032 block (28 hari) sudah mencukupi.</div>
+              <div class="b15-s153-slider-wrap">
+                <input type="range" class="b15-s153-slider" id="b15-s153-slider" min="1" max="4032" value="144">
+                <div class="b15-s153-slider-labels">
+                  <span>1</span><span>144 (~1 hari)</span><span>1.008 (~1 minggu)</span><span>4.032 (~28 hari)</span>
+                </div>
+              </div>
+              <div class="b15-s153-slider-val" id="b15-s153-slider-val">144 block</div>
+            </div>
+          </div>
+
+          <div class="b15-s153-meaning s153-active" id="b15-s153-meaning">
+            <div class="b15-s153-meaning-label" id="b15-s153-meaning-label">Artinya dalam bahasa manusia:</div>
+            <div class="b15-s153-meaning-text" id="b15-s153-meaning-text">—</div>
+            <div class="b15-s153-meaning-sub" id="b15-s153-meaning-sub">—</div>
+          </div>
+
+          <div class="b15-s153-hex-row">
+            <div class="b15-s153-hex-label">Nilai nSequence (hex) dan representasi bit:</div>
+            <div class="b15-s153-hex-val" id="b15-s153-hex-val">—</div>
+            <div class="b15-s153-hex-bits" id="b15-s153-hex-bits"></div>
+            <div class="b15-s153-bit-labels" id="b15-s153-bit-labels"></div>
+          </div>
+
+          <div class="b15-s153-usecase" id="b15-s153-usecase"></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-15-2" data-sb="sb-15-2">
+            ← 15.2 — nLockTime: Cek yang Belum Bisa Dicairkan
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-15-4" data-sb="sb-15-4">
+            15.4 — CLTV →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 15.3 -->
+
+      <!-- ==============================
+           SECTION 15.4 · CLTV — Ketika Script Sendiri yang Menjaga Waktu
+      ============================== -->
+      <div class="p-section" id="section-15-4">
+        <div class="p-eyebrow">Bab 15 · 15.4</div>
+        <div class="p-heading">Waktu bukan lagi pembatas eksternal, melainkan menjadi bagian dari logika kontrak itu sendiri</div>
+        <div class="p-title">CLTV — Ketika Script Sendiri yang Menjaga Waktu</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Sampai sekarang kita sudah melihat dua mekanisme timelock: nLockTime yang bekerja di level transaksi, dan nSequence yang bekerja di level input. Keduanya adalah pembatas di luar script. Tapi bagaimana kalau kita ingin waktu menjadi bagian dari kondisi script itu sendiri? Bagaimana kalau kita ingin berkata: "Alice bisa mengambil dana ini kapanpun, ATAU Bob bisa mengambilnya setelah 6 bulan"? Untuk itu kita butuh OP_CHECKLOCKTIMEVERIFY.</p>
+
+          <p><strong>Analogi: petugas keamanan vs brankas</strong></p>
+          <p>nLockTime seperti petugas keamanan di pintu masuk gedung: ia memeriksa apakah kamu boleh masuk berdasarkan jam. Tapi begitu kamu masuk, siapapun bisa mengambil barang di dalam. CLTV seperti brankas di dalam gedung yang punya kunci kombinasi waktu tersendiri. Tidak peduli kapan kamu masuk gedungnya, brankas itu tidak akan terbuka sebelum waktunya. Dan yang lebih powerful: brankas itu bisa punya aturan berbeda untuk orang berbeda.</p>
+
+          <p><strong>Bagaimana CLTV bekerja</strong></p>
+          <p>OP_CHECKLOCKTIMEVERIFY adalah opcode yang ditambahkan ke Script Bitcoin melalui BIP 65 pada 2015. Ketika dieksekusi, ia membandingkan nilai yang ada di stack dengan nilai nLockTime dari transaksi yang sedang diverifikasi. Kalau nilai stack lebih besar dari nLockTime transaksi, script gagal. Artinya: siapapun yang ingin membelanjakan UTXO dengan CLTV harus membuat transaksi yang berkomitmen "saya tidak akan membelanjakan ini sebelum waktu X."</p>
+
+          <p><strong>Mengapa ini powerful untuk kehidupan nyata?</strong></p>
+          <p>Bayangkan skenario ini: kamu mengirim dana untuk anakmu yang masih kuliah, tapi tidak ingin ia bisa mengaksesnya sampai lulus 4 tahun lagi. Dengan CLTV kamu bisa membuat script: "anakku bisa mengambil ini setelah block X (sekitar 4 tahun), ATAU aku bisa mengambilnya kembali kapanpun dengan kunci emergency." Tidak ada bank, tidak ada pengacara, tidak ada wali amanat. Matematika yang menegakkannya.</p>
+
+          <p>Atau bayangkan pembayaran milestone untuk kontraktor: "kontraktor bisa mengklaim pembayaran setelah tanggal pengiriman yang disepakati, tapi kalau kontraktor tidak hadir dalam 6 bulan, klien bisa refund." Escrow otomatis tanpa escrow agent.</p>
+
+          <p><strong>HTLC: CLTV yang menggerakkan Lightning Network</strong></p>
+          <p>Hash Time Lock Contract (HTLC) adalah kombinasi CLTV dengan hash preimage. Penerima bisa klaim dana dengan mengungkap sebuah rahasia yang sudah di-hash sebelumnya. Kalau rahasia tidak diungkap sebelum timeout, pengirim bisa refund. Mekanisme sederhana ini, tanpa pihak ketiga, adalah fondasi dari setiap pembayaran yang melintas di Lightning Network.</p>
+
+          <div class="p-callout">
+            <p>CLTV adalah lompatan besar dari "kapan transaksi bisa dibuat" ke "kapan UTXO bisa dibelanjakan." Perbedaan ini membuka ruang untuk kontrak yang jauh lebih ekspresif. Dengan CLTV, waktu bukan lagi pembatas eksternal, melainkan menjadi bagian dari logika kontrak itu sendiri.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi — CLTV Script Builder</div>
+          <div class="b15-s154-desc">
+            Pilih skenario dan lihat script yang terbentuk beserta penjelasan tiap baris. Timeline di bawah menunjukkan siapa bisa klaim kapan.
+          </div>
+
+          <div class="b15-s154-scenarios" id="b15-s154-scenarios">
+            <button class="b15-s154-scenario-btn s154-act" data-sc="simple">
+              <div class="b15-s154-scenario-title">1. Simpel: Dana terkunci sampai waktu tertentu</div>
+              <div class="b15-s154-scenario-desc">Hanya satu orang yang bisa klaim, dan hanya setelah waktu yang ditentukan. Seperti deposito berjangka.</div>
+            </button>
+            <button class="b15-s154-scenario-btn" data-sc="branch">
+              <div class="b15-s154-scenario-title">2. Dua cabang: Alice kapanpun, Bob setelah 6 bulan</div>
+              <div class="b15-s154-scenario-desc">Alice bisa mengambil dana kapanpun. Tapi kalau Alice tidak muncul dalam 6 bulan, Bob bisa mengklaimnya. Dasar dari escrow dan inheritance planning.</div>
+            </button>
+            <button class="b15-s154-scenario-btn" data-sc="htlc">
+              <div class="b15-s154-scenario-title">3. HTLC primitif: Fondasi Lightning Network</div>
+              <div class="b15-s154-scenario-desc">Penerima klaim dengan mengungkap rahasia. Kalau gagal, pengirim refund setelah timeout. Inilah mekanisme di balik setiap pembayaran Lightning.</div>
+            </button>
+          </div>
+
+          <div class="b15-s154-tl-label">Siapa yang bisa klaim kapan:</div>
+          <div class="b15-s154-tl-track" id="b15-s154-tl-track"></div>
+
+          <div class="b15-s154-claimers" id="b15-s154-claimers"></div>
+
+          <div class="b15-s154-script-label">Script Bitcoin (locking script / scriptPubKey):</div>
+          <div class="b15-s154-script-lines" id="b15-s154-script-lines"></div>
+
+          <div class="b15-s154-note" id="b15-s154-note"></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-15-3" data-sb="sb-15-3">
+            ← 15.3 — nSequence: Dari Ide yang Gagal ke Relative Timelock
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-15-5" data-sb="sb-15-5">
+            15.5 — CSV →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 15.4 -->
+
+      <!-- ==============================
+           SECTION 15.5 · CSV — Relative Timelock yang Menggerakkan Lightning
+      ============================== -->
+      <div class="p-section" id="section-15-5">
+        <div class="p-eyebrow">Bab 15 · 15.5</div>
+        <div class="p-heading">Tanpa CSV, Lightning Network dalam bentuknya saat ini tidak mungkin ada</div>
+        <div class="p-title">CSV — Relative Timelock yang Menggerakkan Lightning</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Kalau CLTV adalah "tidak sebelum tanggal X", maka CSV adalah "tidak sebelum X hari setelah ini dikonfirmasi." Perbedaan yang terdengar kecil ini ternyata sangat krusial untuk membangun sistem pembayaran yang aman tanpa kepercayaan.</p>
+
+          <p><strong>Analogi dua jenis kontrak</strong></p>
+          <p>Bayangkan dua jenis kontrak sewa apartemen. Kontrak pertama: "kamu boleh pindah keluar mulai 1 Januari 2026." Ini seperti CLTV, yaitu tanggal absolut yang tidak bergantung pada kapan kontrak ditandatangani. Kontrak kedua: "kamu boleh pindah keluar 30 hari setelah memberikan notice." Ini seperti CSV, yaitu periode relatif yang baru mulai berjalan setelah aksi tertentu terjadi. Perbedaan ini terdengar kecil, tapi sangat penting untuk kontrak yang tidak bisa memprediksi kapan aksinya akan terjadi.</p>
+
+          <p><strong>OP_CHECKSEQUENCEVERIFY</strong></p>
+          <p>BIP 112 menambahkan opcode CSV ke Script Bitcoin, diaktifkan bersamaan dengan BIP 68 pada 2016. CSV bekerja mirip CLTV tapi menggunakan nSequence: ia memverifikasi bahwa nSequence dari input yang membelanjakan UTXO ini sudah mencapai nilai minimum yang ditentukan. Dengan kata lain, CSV memaksa pihak yang ingin mengklaim UTXO untuk menunggu minimal X block atau X waktu sejak UTXO itu dikonfirmasi.</p>
+
+          <p><strong>Mengapa CSV adalah jantung Lightning Network</strong></p>
+          <p>Lightning Network memungkinkan dua pihak untuk melakukan banyak transaksi off-chain dengan hanya dua transaksi on-chain: pembukaan dan penutupan channel. Keamanan sistem ini bergantung pada kemampuan untuk menghukum pihak yang mencoba curang dengan commitment transaction lama.</p>
+
+          <p>Begini cara kerjanya: ketika Alice dan Bob membuka payment channel, mereka membuat commitment transaction yang merepresentasikan state terbaru. Setiap kali state diperbarui, commitment lama harus direvoke dengan memberikan revocation key. Kalau Bob mencoba menutup channel dengan commitment lama yang lebih menguntungkan baginya, Alice punya waktu untuk mendeteksi kecurangan dan mengajukan penalty transaction yang mengambil seluruh dana channel.</p>
+
+          <p>Waktu yang Alice punya untuk mendeteksi kecurangan inilah yang diatur oleh CSV. Biasanya 144 block (sekitar 1 hari). Selama periode ini, dana Bob terkunci di output yang bisa diambil oleh Alice kalau Bob terbukti curang. Tanpa CSV, Bob bisa langsung klaim sebelum Alice sempat bereaksi.</p>
+
+          <p><strong>CSV di luar Lightning</strong></p>
+          <p>Di luar Lightning, CSV berguna untuk vault dengan periode cooldown sebelum dana bisa dipindahkan, escrow yang otomatis refund setelah periode tunggu relatif, dan sistem multisig dengan backup key yang baru aktif setelah periode tidak aktif tertentu.</p>
+
+          <div class="p-callout">
+            <p>CSV memberikan mekanisme keadilan yang memungkinkan dua pihak yang tidak saling percaya untuk bertransaksi berulang kali tanpa perlu mempercayai satu sama lain. Cukup mempercayai matematika dan protokol Bitcoin. Tanpa CSV, Lightning Network dalam bentuknya saat ini tidak mungkin ada.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualisasi — CSV dalam Lightning: Jujur vs Curang</div>
+          <div class="b15-s155-desc">
+            Tab pertama: force close yang jujur — CSV sebagai periode verifikasi. Tab kedua: Bob mencoba curang dengan commitment lama — CSV memberi Alice waktu untuk mendeteksi dan menghukum.
+          </div>
+
+          <div class="b15-s155-tabs">
+            <button class="b15-s155-tab s155-act" id="b15-s155-t1">Skenario Jujur — Force Close Normal</button>
+            <button class="b15-s155-tab" id="b15-s155-t2">Skenario Curang — Bob Mencoba Tipu Alice</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b15-s155-pane show" id="b15-s155-p1">
+            <div class="b15-s155-hint">Ketika channel ditutup secara paksa secara jujur, CSV memberikan periode tunggu sebelum dana bisa diambil. Ini bukan hukuman — ini waktu yang diberikan sistem untuk memastikan semua pihak aman.</div>
+            <div class="b15-s155-steps" id="b15-s155-honest-steps"></div>
+            <div class="b15-s155-window-wrap">
+              <div class="b15-s155-window-label">CSV Window (144 block = ~1 hari)</div>
+              <div class="b15-s155-window-bar-bg">
+                <div class="b15-s155-window-bar-fill" id="b15-s155-h-bar" style="width:0%;background:#854F0B;">
+                  <div class="b15-s155-window-bar-label" id="b15-s155-h-bar-label"></div>
+                </div>
+              </div>
+              <div class="b15-s155-window-desc" id="b15-s155-h-bar-desc">Mulai setelah commitment transaction dikonfirmasi.</div>
+            </div>
+            <div class="b15-s155-ctrl">
+              <button class="b15-s155-btn-primary" id="b15-s155-h-next">Langkah Berikut →</button>
+              <button class="b15-s155-btn-sec" id="b15-s155-h-rst">Reset</button>
+              <div class="b15-s155-step-ind" id="b15-s155-h-ind">Langkah 0 / 4</div>
+            </div>
+            <div class="b15-s155-result s155-idle" id="b15-s155-h-result">Klik "Langkah Berikut" untuk melihat proses force close yang jujur.</div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b15-s155-pane" id="b15-s155-p2">
+            <div class="b15-s155-hint">Bob mencoba menutup channel dengan commitment transaction LAMA yang lebih menguntungkan baginya. CSV memberikan Alice waktu untuk mendeteksi dan mengajukan penalty transaction.</div>
+            <div class="b15-s155-steps" id="b15-s155-cheat-steps"></div>
+            <div class="b15-s155-window-wrap">
+              <div class="b15-s155-window-label">CSV Window — Waktu Alice untuk Bertindak</div>
+              <div class="b15-s155-window-bar-bg">
+                <div class="b15-s155-window-bar-fill" id="b15-s155-c-bar" style="width:0%;background:#A32D2D;">
+                  <div class="b15-s155-window-bar-label" id="b15-s155-c-bar-label"></div>
+                </div>
+              </div>
+              <div class="b15-s155-window-desc" id="b15-s155-c-bar-desc">Alice harus bertindak sebelum window habis.</div>
+            </div>
+            <div class="b15-s155-ctrl">
+              <button class="b15-s155-btn-primary" id="b15-s155-c-next">Langkah Berikut →</button>
+              <button class="b15-s155-btn-sec" id="b15-s155-c-rst">Reset</button>
+              <div class="b15-s155-step-ind" id="b15-s155-c-ind">Langkah 0 / 5</div>
+            </div>
+            <div class="b15-s155-result s155-idle" id="b15-s155-c-result">Klik "Langkah Berikut" untuk melihat apa yang terjadi ketika Bob mencoba curang.</div>
+            <div class="b15-s155-script">
+              <div class="b15-s155-script-label">Script to_local output dalam commitment transaction Lightning:</div>
+              <div class="b15-s155-script-lines">
+                <div class="b15-s155-script-line s155-neu"><div class="b15-s155-script-code">OP_IF</div><div class="b15-s155-script-note">Pilihan jalur pertama (jalur revocation)</div></div>
+                <div class="b15-s155-script-line s155-rev"><div class="b15-s155-script-code">  &lt;revocation_pubkey&gt;</div><div class="b15-s155-script-note">Alice bisa klaim SEKARANG kalau punya revocation key — bukti Bob curang</div></div>
+                <div class="b15-s155-script-line s155-neu"><div class="b15-s155-script-code">OP_ELSE</div><div class="b15-s155-script-note">Jalur normal untuk Bob</div></div>
+                <div class="b15-s155-script-line s155-csv"><div class="b15-s155-script-code">  &lt;144&gt; OP_CSV</div><div class="b15-s155-script-note">Bob harus tunggu 144 block — inilah yang memberi Alice waktu</div></div>
+                <div class="b15-s155-script-line s155-neu"><div class="b15-s155-script-code">  OP_DROP</div><div class="b15-s155-script-note">Buang nilai dari stack</div></div>
+                <div class="b15-s155-script-line s155-sig"><div class="b15-s155-script-code">  &lt;bob_pubkey&gt; OP_CHECKSIG</div><div class="b15-s155-script-note">Bob bisa klaim dengan tanda tangannya — setelah 144 block</div></div>
+                <div class="b15-s155-script-line s155-neu"><div class="b15-s155-script-code">OP_ENDIF</div><div class="b15-s155-script-note">Tutup percabangan</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-15-4" data-sb="sb-15-4">
+            ← 15.4 — CLTV: Ketika Script Sendiri yang Menjaga Waktu
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-15-6" data-sb="sb-15-6">
+            15.6 — Timelock dalam Praktik →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 15.5 -->
+
+      <!-- ==============================
+           SECTION 15.6 · Timelock dalam Praktik — dari Warisan hingga Vaulting
+      ============================== -->
+      <div class="p-section" id="section-15-6">
+        <div class="p-eyebrow">Bab 15 · 15.6</div>
+        <div class="p-heading">Timelock bukan fitur eksotis — ia adalah fondasi dari sistem keuangan yang benar-benar tanpa kepercayaan</div>
+        <div class="p-title">Timelock dalam Praktik — dari Warisan hingga Vaulting</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Setelah memahami nLockTime, nSequence, CLTV, dan CSV, saatnya melihat bagaimana semua mekanisme ini bisa dikombinasikan untuk membangun use case nyata yang powerful. Timelock bukan fitur eksotis untuk developer kriptografi, melainkan fondasi dari banyak hal yang membuat Bitcoin lebih dari sekadar sistem pembayaran sederhana.</p>
+
+          <p><strong>Dead man's switch: warisan digital yang tidak bisa diblokir</strong></p>
+          <p>Bayangkan kamu ingin memastikan bahwa kalau kamu tidak aktif selama 1 tahun, bitcoinmu bisa diakses oleh orang yang kamu percaya. Di sistem perbankan tradisional, ini butuh surat wasiat, notaris, proses hukum, dan potensi konflik keluarga. Di Bitcoin, ini bisa diimplementasikan dengan script: "key utama bisa memindahkan dana kapanpun, ATAU key cadangan bisa mengklaim setelah 52.560 block sejak UTXO terakhir disentuh." Pemilik cukup secara berkala memindahkan dana untuk mereset clock. Kalau tidak aktif selama 1 tahun, key cadangan yang dipegang ahli waris bisa mengklaim dana secara otomatis.</p>
+
+          <p><strong>Vault: lapisan keamanan tambahan</strong></p>
+          <p>Vault adalah pola di mana dana tidak bisa langsung dipindahkan begitu saja. Ada periode cooldown yang memberikan waktu untuk membatalkan kalau private key dikompromikan. Pola sederhananya: untuk membelanjakan dana dari vault, kamu harus dulu membuat "unvault transaction" yang terkunci CSV selama 144 block. Selama 144 block itu, kamu masih bisa membatalkan dengan emergency key dan mengirim dana kembali ke cold storage. Kalau hacker mencuri private key, kamu punya waktu sekitar 1 hari untuk menyadari dan membatalkan.</p>
+
+          <p><strong>Escrow dan pembayaran milestone</strong></p>
+          <p>Dengan kombinasi nLockTime, multisig, dan CLTV, kamu bisa membangun sistem escrow yang benar-benar trustless. Tidak perlu mempercayai arbiter, platform, atau siapapun. Pembayaran milestone memungkinkan kontraktor mendapat pembayaran otomatis setelah tanggal yang disepakati tanpa perlu menunggu "persetujuan" klien yang bisa saja diingkari.</p>
+
+          <p><strong>Batasan yang perlu dipahami</strong></p>
+          <p>Script Bitcoin tidak bisa melihat kondisi di luar chain. Ia tidak tahu apakah barang sudah dikirim atau pekerjaan sudah selesai. Timelock hanya bisa mengatur waktu, bukan kondisi dunia nyata. Untuk menghubungkan kondisi off-chain ke on-chain, dibutuhkan oracle atau kepercayaan minimal pada pihak ketiga. Selain itu, script yang kompleks cenderung lebih besar dan membutuhkan fee lebih tinggi, meski Taproot sudah membantu menyembunyikan kompleksitas ini.</p>
+
+          <div class="p-callout">
+            <p>Timelock adalah bukti bahwa Bitcoin bukan sekadar sistem "kirim dan terima." Ia adalah bahasa pemrograman untuk mengekspresikan kondisi kepemilikan yang kompleks, tanpa membutuhkan pengacara, bank, atau pihak ketiga yang harus dipercaya. Setiap use case yang dibangun di atas timelock adalah satu langkah lebih jauh menuju sistem keuangan yang benar-benar tanpa kepercayaan.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Use Case Explorer — Timelock dalam Praktik</div>
+          <div class="b15-s156-desc">
+            Klik setiap kartu untuk melihat detail use case, komponen timelock yang digunakan, siapa bisa melakukan apa kapan, dan keterbatasannya.
+          </div>
+
+          <div class="b15-s156-grid">
+            <div class="b15-s156-card s156-act" data-uc="dms" style="--ac:#0F6E56;--ab:#EAF3DE;">
+              <div class="b15-s156-card-icon">🔐</div>
+              <div class="b15-s156-card-title">Dead Man's Switch</div>
+              <div class="b15-s156-card-sub">Warisan digital yang otomatis berpindah kalau kamu tidak aktif selama setahun</div>
+            </div>
+            <div class="b15-s156-card" data-uc="vault" style="--ac:#534AB7;--ab:#EEEDFE;">
+              <div class="b15-s156-card-icon">🏦</div>
+              <div class="b15-s156-card-title">Vault dengan Cooldown</div>
+              <div class="b15-s156-card-sub">Dana tidak bisa langsung dicuri — ada jeda waktu yang bisa dipakai untuk membatalkan</div>
+            </div>
+            <div class="b15-s156-card" data-uc="escrow" style="--ac:#854F0B;--ab:#FAEEDA;">
+              <div class="b15-s156-card-icon">🤝</div>
+              <div class="b15-s156-card-title">Escrow Trustless</div>
+              <div class="b15-s156-card-sub">Pembayaran yang otomatis selesai atau refund — tanpa perlu mempercayai siapapun</div>
+            </div>
+            <div class="b15-s156-card" data-uc="milestone" style="--ac:#A32D2D;--ab:#FCEBEB;">
+              <div class="b15-s156-card-icon">📅</div>
+              <div class="b15-s156-card-title">Pembayaran Milestone</div>
+              <div class="b15-s156-card-sub">Bayar bertahap sesuai pencapaian — dijamin oleh protokol, bukan kepercayaan</div>
+            </div>
+          </div>
+
+          <div class="b15-s156-detail" id="b15-s156-detail"></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-15-5" data-sb="sb-15-5">
+            ← 15.5 — CSV: Relative Timelock yang Menggerakkan Lightning
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 15.6 -->
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 18 · BAB 15 -->
+
+

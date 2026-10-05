@@ -1,0 +1,672 @@
+<!-- ============================================================
+     PAGE 8 · BAB 5 · Mining dan Proof of Work
+     |-- 5.1 · Konsensus [DONE]
+     |-- 5.2 · Proof of Work [LOCKED]
+     |-- 5.3 · Mining [LOCKED]
+     |-- 5.4 · Difficulty Adjustment [LOCKED]
+     |-- 5.5 · Block Reward dan Halving [LOCKED]
+     |-- 5.6 · Serangan 51% [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab5">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b5">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b5">← Daftar Bab</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab5">
+      <div class="sidebar-heading">Bab 5</div>
+      <div class="sidebar-title">Mining dan Proof of Work</div>
+
+      <!-- 5.1 · DONE -->
+      <div class="sidebar-item active" id="sb-5-1">
+        <div class="sb-num">5.1</div>
+        <div class="sb-label">Konsensus</div>
+      </div>
+
+      <!-- 5.2 · DONE -->
+      <div class="sidebar-item" id="sb-5-2">
+        <div class="sb-num">5.2</div>
+        <div class="sb-label">Proof of Work</div>
+      </div>
+
+      <!-- 5.3 · DONE -->
+      <div class="sidebar-item" id="sb-5-3">
+        <div class="sb-num">5.3</div>
+        <div class="sb-label">Mining</div>
+      </div>
+
+      <!-- 5.4 · DONE -->
+      <div class="sidebar-item" id="sb-5-4">
+        <div class="sb-num">5.4</div>
+        <div class="sb-label">Difficulty Adjustment</div>
+      </div>
+
+      <!-- 5.5 · DONE -->
+      <div class="sidebar-item" id="sb-5-5">
+        <div class="sb-num">5.5</div>
+        <div class="sb-label">Block Reward & Halving</div>
+      </div>
+
+      <!-- 5.6 · DONE -->
+      <div class="sidebar-item" id="sb-5-6">
+        <div class="sb-num">5.6</div>
+        <div class="sb-label">Serangan 51%</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab5-content">
+
+      <!-- ==============================
+           SECTION 5.1 · Konsensus
+      ============================== -->
+      <div class="p-section active" id="section-5-1">
+        <div class="p-eyebrow">Bab 5 · 5.1</div>
+        <div class="p-heading">Bagaimana ribuan pihak yang tidak saling kenal bisa sepakat?</div>
+        <div class="p-title">Konsensus</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Setiap pagi, miliaran orang di seluruh dunia bangun dan sepakat tentang satu hal tanpa pernah membicarakannya: jam berapa sekarang. Tidak ada yang memutuskan ini. Tidak ada rapat, tidak ada pemungutan suara. Tapi semua orang di zona waktu yang sama melihat jam yang sama dan sepakat bahwa sekarang adalah pukul tujuh pagi. Ini adalah konsensus.</p>
+
+          <p><strong>Konsensus ada di mana-mana</strong></p>
+          <p>Konsensus adalah proses di mana sekelompok pihak mencapai kesepakatan bersama tentang sesuatu. Ia bisa terjadi secara formal maupun informal, dengan otoritas pusat maupun tanpa. Di parlemen, konsensus dicapai melalui voting. Di pasar saham, konsensus tentang harga sebuah saham dicapai melalui transaksi jual beli yang terus-menerus. Di internet, protokol TCP/IP adalah konsensus tentang bagaimana data harus dikirim antar komputer. Di masyarakat, bahasa adalah konsensus tentang apa arti sebuah kata.</p>
+
+          <p><strong>Konsensus yang mudah dan konsensus yang sulit</strong></p>
+          <p>Kebanyakan konsensus yang kita kenal punya satu ciri yang sama: ada otoritas pusat yang menjadi jangkar. Bank sentral menetapkan nilai mata uang. Pemerintah menetapkan hukum. Otoritas ini membuat konsensus menjadi relatif mudah. Tapi bagaimana kalau tidak ada wasit? Bagaimana kalau semua pihak setara, tidak ada yang punya otoritas lebih, dan sebagian dari mereka bahkan mungkin tidak jujur? Ini adalah konsensus yang sulit. Dan ini persis masalah yang dihadapi Bitcoin.</p>
+
+          <p><strong>Dua konsekuensi tidak mengikuti konsensus</strong></p>
+          <p>Dalam sistem apa pun yang berbasis konsensus, pihak yang tidak mengikuti kesepakatan bersama menghadapi dua pilihan. Pertama, kembali ke konsensus. Mereka menyadari bahwa versi mereka berbeda dari mayoritas, menyesuaikan diri, dan melanjutkan bersama. Kedua, membentuk golongan sendiri. Mereka tetap mempertahankan versi mereka, memisahkan diri dari mayoritas, dan membentuk sistem paralel. Di dunia Bitcoin, ini disebut fork.</p>
+
+          <p><strong>Masalah konsensus Bitcoin</strong></p>
+          <p>Bitcoin tidak punya otoritas pusat. Yang ada adalah ribuan node yang tersebar di seluruh dunia, masing-masing menyimpan salinan blockchain-nya sendiri. Pertanyaannya: kalau dua node mendapat informasi berbeda tentang block yang sama, siapa yang benar? Bagaimana ribuan komputer yang tidak saling kenal bisa sepakat tentang satu versi sejarah yang sama? Solusi Bitcoin untuk masalah ini adalah Proof of Work, yang akan kita bahas di 5.2.</p>
+
+          <div class="p-callout">
+            <p>Satoshi bukan yang pertama memikirkan masalah konsensus tanpa otoritas pusat. Ilmuwan komputer sudah bergulat dengan ini sejak 1982 dalam apa yang disebut Byzantine Generals Problem. Yang Satoshi lakukan adalah menemukan solusi praktis pertama yang bisa bekerja di sistem terbuka, tanpa izin, dan tanpa kepercayaan awal antar pihak.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi interaktif — Konsensus jaringan</div>
+          <div class="b05-s51-desc">
+            Pilih skenario untuk melihat apa yang terjadi ketika node tidak sepakat tentang rantai yang benar.
+          </div>
+
+          <div class="cs-tabs">
+            <button class="cs-tab active" id="b05-s51-t1">Semua sepakat</button>
+            <button class="cs-tab cs-fork" id="b05-s51-t2">1 menolak</button>
+            <button class="cs-tab cs-fork" id="b05-s51-t3">2 bikin fork</button>
+          </div>
+
+          <canvas id="b05-s51-canvas" height="300"></canvas>
+          <div class="cs-result" id="b05-s51-result"></div>
+        </div>
+
+        <div class="p-body" style="margin-top:1.5rem;">
+          <p><strong>Soft fork dan hard fork</strong></p>
+          <p>Ketika ada usulan perubahan aturan di Bitcoin, cara perubahannya menentukan apakah jaringan akan tetap bersatu atau terbelah permanen.</p>
+
+          <p><strong>Soft fork</strong> adalah perubahan aturan yang backward compatible. Node lama masih bisa berkomunikasi dengan node baru, tapi node baru punya aturan yang lebih ketat. Kuncinya: aturan baru adalah himpunan bagian dari aturan lama, sehingga block yang sah menurut aturan baru otomatis juga sah menurut aturan lama. Node lama tidak menolaknya. Dan karena mayoritas hashrate menegakkan aturan baru, rantai merekalah yang tumbuh lebih panjang. Berkat aturan longest chain, node lama akhirnya mengikuti rantai yang lebih panjang, bahkan tanpa harus memperbarui software mereka. SegWit yang diaktifkan pada 2017 adalah contoh soft fork.</p>
+
+          <p><strong>Hard fork</strong> adalah perubahan aturan yang tidak backward compatible. Node lama tidak bisa mengenali block dari node baru, dan sebaliknya. Split yang terjadi bersifat permanen. Dua rantai tumbuh sejajar selamanya, membentuk dua jaringan dan dua mata uang yang berbeda. Tidak ada longest chain yang bisa mendamaikan keduanya karena mereka sudah berbicara dalam bahasa yang berbeda. Bitcoin Cash yang memisahkan diri dari Bitcoin pada 2017 adalah contoh hard fork.</p>
+
+          <div class="p-callout">
+            <p>Perbedaan kuncinya: di soft fork, node lama tidak perlu tahu bahwa ada aturan baru. Di hard fork, node lama dan baru tidak bisa lagi hidup di jaringan yang sama.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation" style="margin-top:1.5rem;">
+          <div class="sim-label">Visualisasi — Soft fork vs Hard fork</div>
+          <div class="b05-s51-fork-desc">
+            Keduanya dimulai dari split yang sama, tapi berakhir sangat berbeda.
+          </div>
+
+          <div class="b05-s51-fork-grid">
+            <div class="b05-s51-fork-col">
+              <div class="b05-s51-fork-head soft-head">Soft fork</div>
+              <canvas class="b05-s51-fork-c" id="b05-s51-fk-soft" height="220"></canvas>
+              <div class="b05-s51-fork-note soft-note">Split sementara — rantai lebih panjang menang, node lama ikut tanpa sadar.</div>
+            </div>
+            <div class="b05-s51-fork-col">
+              <div class="b05-s51-fork-head hard-head">Hard fork</div>
+              <canvas class="b05-s51-fork-c" id="b05-s51-fk-hard" height="220"></canvas>
+              <div class="b05-s51-fork-note hard-note">Split permanen — dua jaringan berbeda, dua mata uang berbeda selamanya.</div>
+            </div>
+          </div>
+
+          <div class="b05-s51-fork-legend">
+            <div class="b05-s51-leg"><div class="b05-s51-dot" style="background:#534AB7;"></div><span>Node baru</span></div>
+            <div class="b05-s51-leg"><div class="b05-s51-dot" style="background:#52524C;"></div><span>Node lama</span></div>
+            <div class="b05-s51-leg"><div class="b05-s51-dot" style="background:#A32D2D;"></div><span>Rantai ditinggalkan / fork permanen</span></div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-5-2" data-sb="sb-5-2">
+            5.2 — Proof of Work →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 5.1 -->
+
+      <!-- ==============================
+           SECTION 5.2 · Proof of Work
+      ============================== -->
+      <div class="p-section" id="section-5-2">
+        <div class="p-eyebrow">Bab 5 · 5.2</div>
+        <div class="p-heading">Sangat sulit dibuat, sangat mudah diverifikasi</div>
+        <div class="p-title">Proof of Work</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Konsensus Bitcoin membutuhkan cara untuk membuktikan bahwa seseorang telah melakukan pekerjaan nyata sebelum bisa mengusulkan block baru. Cara itu disebut Proof of Work.</p>
+
+          <p><strong>Teka-teki yang asimetris</strong></p>
+          <p>Proof of Work adalah sebuah teka-teki matematika dengan sifat yang sangat spesifik: sangat sulit dipecahkan, tapi sangat mudah diverifikasi. Temukan sebuah angka yang jika digabungkan dengan data block lalu di-hash dengan SHA-256d, menghasilkan hash yang dimulai dengan sejumlah angka nol. Angka yang dicari itu disebut nonce. Tidak ada cara pintar untuk menemukannya. Satu-satunya cara adalah mencoba satu per satu, miliaran kali per detik, sampai hash yang memenuhi syarat ditemukan.</p>
+
+          <p><strong>Target dan leading zeros</strong></p>
+          <p>Jaringan Bitcoin menetapkan sebuah target: hash dari block header harus lebih kecil dari angka tertentu. Dalam praktiknya, ini berarti hash harus dimulai dengan sejumlah angka nol di depan. Semakin banyak angka nol yang dibutuhkan, semakin sulit teka-tekinya. Saat ini, hash block Bitcoin yang valid harus dimulai dengan sekitar 19 hingga 20 angka nol.</p>
+
+          <p><strong>Kenapa ini efektif?</strong></p>
+          <p>Karena sifat hash function yang sudah kita pelajari di Bab 4: output tidak bisa diprediksi. Tidak ada cara untuk tahu lebih dulu nonce mana yang akan menghasilkan hash yang valid. Setiap percobaan independen, hasil percobaan sebelumnya tidak membantu sama sekali. Ini berarti satu-satunya keunggulan yang bisa dimiliki seseorang adalah kecepatan komputasi.</p>
+
+          <p><strong>Bukti yang bisa diverifikasi</strong></p>
+          <p>Begitu nonce ditemukan, memverifikasinya hanya butuh satu kali perhitungan hash. Node lain tinggal mengambil block header, menghitung SHA-256d, dan memeriksa apakah hasilnya memenuhi target. Satu detik, selesai. Inilah asimetrinya: butuh triliunan percobaan untuk menemukan, tapi hanya satu percobaan untuk memverifikasi.</p>
+
+          <div class="p-callout">
+            <p>Proof of Work bukan penemuan Satoshi. Konsep ini pertama kali diusulkan oleh Cynthia Dwork dan Moni Naor pada 1993, dan dipopulerkan oleh Adam Back dalam sistem Hashcash pada 1997 untuk melawan spam email. Satoshi mengadaptasinya sebagai mekanisme konsensus untuk Bitcoin, penggunaan yang jauh melampaui tujuan aslinya.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi interaktif — Mining Playground</div>
+          <div class="b05-s52-desc">
+            Atur difficulty lalu klik "Mulai mining". Browser akan mencoba nonce satu per satu sampai menemukan hash yang dimulai dengan jumlah angka nol sesuai target. Hash dihitung menggunakan SHA-256d sungguhan via Web Crypto API.
+          </div>
+
+          <div class="pw-row">
+            <span class="pw-label">Difficulty</span>
+            <input class="pw-input" type="range" id="b05-s52-diff" min="1" max="5" value="2" step="1">
+            <span class="pw-val" id="b05-s52-diff-val">2 zeros</span>
+          </div>
+
+          <div class="pw-block">
+            <div class="pw-block-head">
+              <span>Block header</span>
+              <span id="b05-s52-status">siap</span>
+            </div>
+            <div class="pw-block-body">
+              <div class="pw-field">
+                <span class="pw-field-key">data</span>
+                <span class="pw-field-val">Block #882419 | prev: 000000000000 | tx: 3a7b2c...</span>
+              </div>
+              <div class="pw-field">
+                <span class="pw-field-key">nonce</span>
+                <span class="pw-field-val pw-nonce" id="b05-s52-nonce">0</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="pw-hash-label">SHA-256d (double SHA-256) dari block header:</div>
+            <div class="pw-hash" id="b05-s52-hash">—</div>
+          </div>
+
+          <div class="pw-stats">
+            <div class="pw-stat"><div class="pw-stat-label">Percobaan</div><div class="pw-stat-val" id="b05-s52-attempts">0</div></div>
+            <div class="pw-stat"><div class="pw-stat-label">Target</div><div class="pw-stat-val" id="b05-s52-target">00...</div></div>
+            <div class="pw-stat"><div class="pw-stat-label">Kecepatan</div><div class="pw-stat-val" id="b05-s52-speed">—</div></div>
+          </div>
+
+          <div class="pw-btns">
+            <button class="kp-btn kp-btn-gen" id="b05-s52-start">Mulai mining ↗</button>
+            <button class="kp-btn kp-btn-reset" id="b05-s52-reset">Reset</button>
+          </div>
+
+          <div class="pw-result" id="b05-s52-result"></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-5-1" data-sb="sb-5-1">
+            ← 5.1 — Konsensus
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-5-3" data-sb="sb-5-3">
+            5.3 — Mining →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 5.2 -->
+
+      <!-- ==============================
+           SECTION 5.3 · Mining
+      ============================== -->
+      <div class="p-section" id="section-5-3">
+        <div class="p-eyebrow">Bab 5 · 5.3</div>
+        <div class="p-heading">Dari transaksi ke block — proses lengkap</div>
+        <div class="p-title">Mining</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Kita sudah tahu bahwa miner harus menemukan nonce yang membuat hash block header memenuhi target. Tapi apa sebenarnya isi block header itu? Dan bagaimana proses mining dari awal sampai akhir?</p>
+
+          <p><strong>Anatomi sebuah block</strong></p>
+          <p>Setiap block Bitcoin terdiri dari dua bagian: header dan body. Body berisi daftar transaksi yang dikumpulkan dari mempool. Header berisi 6 field dengan total ukuran tepat 80 bytes, dan inilah yang di-hash miner triliunan kali per detik.</p>
+
+          <p><strong>Proses mining dari awal sampai akhir</strong></p>
+          <p>Pertama, miner mengumpulkan transaksi dari mempool dan memilih yang membayar fee tertinggi. Kedua, miner menyusun block candidate: menghitung Merkle Root dari semua transaksi yang dipilih dan mengisi semua field header kecuali nonce. Ketiga, miner mulai mencoba nonce dari 0, 1, 2, dan seterusnya. Kalau seluruh ruang nonce habis tanpa hasil, miner mengubah timestamp atau urutan transaksi, yang mengubah Merkle Root, lalu mulai lagi dari nonce 0. Keempat, begitu hash yang valid ditemukan, miner segera menyiarkan block ke seluruh jaringan.</p>
+
+          <p><strong>Coinbase transaction</strong></p>
+          <p>Setiap block selalu berisi satu transaksi khusus di posisi pertama: coinbase transaction. Ia tidak punya input dari UTXO manapun. Ia menciptakan bitcoin baru dari nol sebagai hadiah untuk miner yang berhasil menemukan block. Coinbase transaction juga berisi field bebas yang disebut coinbase data. Satoshi mengisi field ini dengan pesan terkenal pada genesis block: "The Times 03/Jan/2009 Chancellor on brink of second bailout for banks."</p>
+
+          <div class="p-callout">
+            <p>80 bytes. Itulah ukuran block header Bitcoin. Tidak lebih, tidak kurang. Seluruh keamanan jaringan bergantung pada proses meng-hash 80 bytes ini triliunan kali per detik, di seluruh dunia, setiap sepuluh menit.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi interaktif — Anatomi block Bitcoin</div>
+          <div class="b05-s53-desc">
+            Klik setiap field di header untuk melihat nilai contoh dan penjelasannya. Klik "Previous block hash" untuk melihat bagaimana rantai block terbentuk.
+          </div>
+
+          <div class="ba-block">
+            <div class="ba-section-head-sim header-sim">
+              <span>Block header</span>
+              <span class="ba-badge-sim">80 bytes total</span>
+            </div>
+            <div class="ba-fields-sim" id="b05-s53-fields"></div>
+          </div>
+
+          <div class="ba-block" style="margin-top:10px;">
+            <div class="ba-section-head-sim body-sim">
+              <span>Block body</span>
+              <span style="font-size:10px;color:#52524C;">4 transaksi</span>
+            </div>
+            <div class="ba-tx-sim">
+              <div class="ba-tx-item-sim coinbase-sim">
+                <span class="ba-tx-badge-sim cb-sim">coinbase</span>
+                <span class="ba-tx-hash-sim">Transaksi pertama — menciptakan bitcoin baru untuk miner. Tidak punya input UTXO.</span>
+                <span class="ba-tx-fee-sim" style="color:#534AB7;">3.125 BTC</span>
+              </div>
+              <div class="ba-tx-item-sim">
+                <span class="ba-tx-badge-sim tx-sim">tx</span>
+                <span class="ba-tx-hash-sim">3a7b2cf4e8d1a09b5c6e7f8a2d4b1c3e5f7a9b0c2d4e6f...</span>
+                <span class="ba-tx-fee-sim">142 sat/vB</span>
+              </div>
+              <div class="ba-tx-item-sim">
+                <span class="ba-tx-badge-sim tx-sim">tx</span>
+                <span class="ba-tx-hash-sim">8f3c1a2b4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d...</span>
+                <span class="ba-tx-fee-sim">87 sat/vB</span>
+              </div>
+              <div class="ba-tx-item-sim">
+                <span class="ba-tx-badge-sim tx-sim">tx</span>
+                <span class="ba-tx-hash-sim">1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b...</span>
+                <span class="ba-tx-fee-sim">34 sat/vB</span>
+              </div>
+            </div>
+            <div class="ba-total-sim">
+              <span>Total ukuran block</span>
+              <span>1.23 MB</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-5-2" data-sb="sb-5-2">
+            ← 5.2 — Proof of Work
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-5-4" data-sb="sb-5-4">
+            5.4 — Difficulty Adjustment →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 5.3 -->
+
+      <!-- ==============================
+           SECTION 5.4 · Difficulty Adjustment
+      ============================== -->
+      <div class="p-section" id="section-5-4">
+        <div class="p-eyebrow">Bab 5 · 5.4</div>
+        <div class="p-heading">Berapapun miner yang masuk atau keluar, selalu 10 menit</div>
+        <div class="p-title">Difficulty Adjustment</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Bitcoin dirancang untuk menghasilkan satu block setiap sepuluh menit. Tapi bagaimana jaringan bisa mempertahankan ritme ini ketika jumlah miner terus berubah?</p>
+
+          <p><strong>Masalah yang harus dipecahkan</strong></p>
+          <p>Kalau lebih banyak miner bergabung, hashrate jaringan naik, dan block ditemukan lebih cepat dari sepuluh menit. Kalau miner keluar, hashrate turun, dan block ditemukan lebih lambat. Tanpa mekanisme penyesuaian, interval antar block akan kacau.</p>
+
+          <p><strong>Cara kerja difficulty adjustment</strong></p>
+          <p>Setiap 2016 block, Bitcoin secara otomatis menyesuaikan difficulty. Angka 2016 bukan angka sembarang: dengan target 10 menit per block, 2016 block seharusnya membutuhkan tepat 2 minggu. Rumusnya sederhana: bandingkan waktu aktual yang dibutuhkan untuk menambang 2016 block terakhir dengan waktu idealnya. Kalau lebih cepat, difficulty naik. Kalau lebih lambat, difficulty turun.</p>
+
+          <p><strong>Batas penyesuaian</strong></p>
+          <p>Untuk mencegah perubahan yang terlalu ekstrem, Bitcoin membatasi penyesuaian maksimal 4 kali lipat naik atau 4 kali lipat turun dalam satu periode. Ini melindungi jaringan dari lonjakan atau penurunan hashrate yang sangat tiba-tiba.</p>
+
+          <p><strong>Siapa yang memutuskan?</strong></p>
+          <p>Tidak ada yang memutuskan. Setiap node menghitung adjustment ini secara mandiri menggunakan aturan yang sama, dan hasilnya selalu identik. Ini adalah contoh lain dari konsensus tanpa otoritas pusat.</p>
+
+          <p><strong>Kenapa sepuluh menit?</strong></p>
+          <p>Satoshi memilih sepuluh menit sebagai kompromi. Cukup cepat agar transaksi tidak menunggu terlalu lama, tapi cukup lambat agar block bisa menyebar ke seluruh jaringan sebelum miner lain menemukan block berikutnya.</p>
+
+          <div class="p-callout">
+            <p>Difficulty adjustment adalah salah satu mekanisme paling elegan di Bitcoin. Ia memastikan bahwa tidak peduli berapa banyak komputasi yang dilemparkan ke jaringan, satu block tetap muncul setiap sepuluh menit. Bitcoin tidak bisa di-spam dengan hashrate.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi interaktif — Difficulty adjustment</div>
+          <div class="b05-s54-desc">
+            Setiap 2016 block (~2 minggu), jaringan membandingkan waktu aktual dengan target dan menyesuaikan difficulty. Hasilnya selalu sama: ~10 menit per block.
+          </div>
+
+          <div class="b05-s54-svg-wrap">
+            <svg width="100%" viewBox="0 0 680 380" role="img" style="display:block;">
+              <title>Timeline difficulty adjustment Bitcoin</title>
+              <desc>Tiga periode berurutan yang menunjukkan bagaimana difficulty menyesuaikan terhadap perubahan hashrate</desc>
+              <defs>
+                <marker id="b05-s54-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </marker>
+              </defs>
+
+              <!-- PERIODE 1 -->
+              <g class="c-gray"><rect x="40" y="48" width="160" height="180" rx="10" stroke-width="0.5"/></g>
+              <text class="th" x="120" y="76" text-anchor="middle" dominant-baseline="central">Periode 1</text>
+              <text class="ts" x="120" y="96" text-anchor="middle" dominant-baseline="central">Baseline</text>
+              <rect x="60" y="112" width="80" height="80" rx="4" fill="#F4F4F0" opacity="0.5"/>
+              <rect x="60" y="152" width="80" height="40" rx="4" fill="#534AB7" opacity="0.7"/>
+              <text class="ts" x="100" y="210" text-anchor="middle" dominant-baseline="central" opacity="0.6">hashrate</text>
+              <rect x="155" y="112" width="36" height="24" rx="4" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+              <text class="ts" x="173" y="124" text-anchor="middle" dominant-baseline="central" fill="#534AB7">1×</text>
+              <text class="ts" x="173" y="143" text-anchor="middle" dominant-baseline="central" opacity="0.5">diff</text>
+              <rect x="56" y="230" width="128" height="32" rx="6" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+              <text class="th" x="120" y="246" text-anchor="middle" dominant-baseline="central" fill="#3B6D11">~10 menit/block</text>
+              <text class="ts" x="120" y="286" text-anchor="middle" dominant-baseline="central" opacity="0.5">2016 block selesai</text>
+              <text class="ts" x="120" y="302" text-anchor="middle" dominant-baseline="central" opacity="0.5">dalam 2 minggu</text>
+
+              <!-- ARROW 1→2 -->
+              <line x1="206" y1="138" x2="258" y2="138" stroke="#C4771A" stroke-width="1.5" marker-end="url(#b05-s54-arr)"/>
+              <rect x="202" y="116" width="60" height="16" rx="4" fill="#FAEEDA"/>
+              <text class="ts" x="232" y="124" text-anchor="middle" dominant-baseline="central" fill="#854F0B">hashrate</text>
+              <rect x="202" y="134" width="60" height="16" rx="4" fill="#FAEEDA"/>
+              <text class="ts" x="232" y="142" text-anchor="middle" dominant-baseline="central" fill="#854F0B">naik 2×</text>
+              <text class="ts" x="232" y="162" text-anchor="middle" dominant-baseline="central" fill="#A32D2D">diff naik</text>
+
+              <!-- PERIODE 2 -->
+              <g class="c-gray"><rect x="260" y="48" width="160" height="180" rx="10" stroke-width="0.5"/></g>
+              <text class="th" x="340" y="76" text-anchor="middle" dominant-baseline="central">Periode 2</text>
+              <text class="ts" x="340" y="96" text-anchor="middle" dominant-baseline="central">Hashrate naik 2×</text>
+              <rect x="280" y="112" width="80" height="80" rx="4" fill="#F4F4F0" opacity="0.5"/>
+              <rect x="280" y="116" width="80" height="76" rx="4" fill="#534AB7" opacity="0.7"/>
+              <text class="ts" x="320" y="210" text-anchor="middle" dominant-baseline="central" opacity="0.6">hashrate</text>
+              <rect x="375" y="112" width="36" height="24" rx="4" fill="#FCEBEB" stroke="#A32D2D" stroke-width="0.5"/>
+              <text class="ts" x="393" y="124" text-anchor="middle" dominant-baseline="central" fill="#A32D2D">2×</text>
+              <text class="ts" x="393" y="143" text-anchor="middle" dominant-baseline="central" opacity="0.5">diff</text>
+              <rect x="276" y="230" width="128" height="32" rx="6" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+              <text class="th" x="340" y="246" text-anchor="middle" dominant-baseline="central" fill="#3B6D11">~10 menit/block</text>
+              <text class="ts" x="340" y="286" text-anchor="middle" dominant-baseline="central" opacity="0.5">2016 block selesai</text>
+              <text class="ts" x="340" y="302" text-anchor="middle" dominant-baseline="central" opacity="0.5">dalam 2 minggu</text>
+
+              <!-- ARROW 2→3 -->
+              <line x1="426" y1="138" x2="478" y2="138" stroke="#C4771A" stroke-width="1.5" marker-end="url(#b05-s54-arr)"/>
+              <rect x="422" y="116" width="60" height="16" rx="4" fill="#FAEEDA"/>
+              <text class="ts" x="452" y="124" text-anchor="middle" dominant-baseline="central" fill="#854F0B">hashrate</text>
+              <rect x="422" y="134" width="60" height="16" rx="4" fill="#FAEEDA"/>
+              <text class="ts" x="452" y="142" text-anchor="middle" dominant-baseline="central" fill="#854F0B">turun 3×</text>
+              <text class="ts" x="452" y="162" text-anchor="middle" dominant-baseline="central" fill="#3B6D11">diff turun</text>
+
+              <!-- PERIODE 3 -->
+              <g class="c-gray"><rect x="480" y="48" width="160" height="180" rx="10" stroke-width="0.5"/></g>
+              <text class="th" x="560" y="76" text-anchor="middle" dominant-baseline="central">Periode 3</text>
+              <text class="ts" x="560" y="96" text-anchor="middle" dominant-baseline="central">Hashrate turun 3×</text>
+              <rect x="500" y="112" width="80" height="80" rx="4" fill="#F4F4F0" opacity="0.5"/>
+              <rect x="500" y="166" width="80" height="26" rx="4" fill="#534AB7" opacity="0.7"/>
+              <text class="ts" x="540" y="210" text-anchor="middle" dominant-baseline="central" opacity="0.6">hashrate</text>
+              <rect x="595" y="112" width="36" height="24" rx="4" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+              <text class="ts" x="613" y="124" text-anchor="middle" dominant-baseline="central" fill="#3B6D11">0.7×</text>
+              <text class="ts" x="613" y="143" text-anchor="middle" dominant-baseline="central" opacity="0.5">diff</text>
+              <rect x="496" y="230" width="128" height="32" rx="6" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+              <text class="th" x="560" y="246" text-anchor="middle" dominant-baseline="central" fill="#3B6D11">~10 menit/block</text>
+              <text class="ts" x="560" y="286" text-anchor="middle" dominant-baseline="central" opacity="0.5">2016 block selesai</text>
+              <text class="ts" x="560" y="302" text-anchor="middle" dominant-baseline="central" opacity="0.5">dalam 2 minggu</text>
+
+              <!-- NOTE BAWAH -->
+              <rect x="40" y="326" width="600" height="36" rx="8" fill="#F4F4F0" opacity="0.8"/>
+              <text class="ts" x="340" y="341" text-anchor="middle" dominant-baseline="central" opacity="0.8">Berapapun hashrate yang masuk atau keluar, Bitcoin selalu menemukan keseimbangan di ~10 menit per block.</text>
+              <text class="ts" x="340" y="357" text-anchor="middle" dominant-baseline="central" opacity="0.5">Adjustment terjadi otomatis setiap 2016 block (~2 minggu) — tidak ada yang mengontrol.</text>
+            </svg>
+          </div>
+
+          <div class="b05-lab">
+            <div class="b05-lab-head">Coba sendiri: apa yang terjadi kalau hashrate berubah?</div>
+            <div class="b05-lab-body">
+              <div class="b05-lab-ctrl">
+                <label>Hashrate jadi</label>
+                <input type="range" id="b05-s54-hr" min="2" max="80" step="1" value="10">
+                <span class="b05-lab-ctrl-val" id="b05-s54-hr-val">1.0x</span>
+              </div>
+              <div class="b05-lab-grid">
+                <div class="b05-lab-cell"><div class="b05-lab-k">Rata-rata waktu per block</div><div class="b05-lab-v" id="b05-s54-bt">10.0 menit</div></div>
+                <div class="b05-lab-cell"><div class="b05-lab-k">Periode 2016 block selesai dalam</div><div class="b05-lab-v" id="b05-s54-dur">14.0 hari</div></div>
+                <div class="b05-lab-cell hi"><div class="b05-lab-k">Difficulty disesuaikan</div><div class="b05-lab-v purp" id="b05-s54-adj">tetap</div></div>
+                <div class="b05-lab-cell" id="b05-s54-after-cell"><div class="b05-lab-k">Setelah penyesuaian</div><div class="b05-lab-v green" id="b05-s54-after">10.0 menit</div></div>
+              </div>
+              <div class="b05-lab-note" id="b05-s54-note"></div>
+            </div>
+          </div>
+        
+          <div class="lab-link"><span class="kode">F3</span><span class="isi"><span class="hd">Lanjut ke Laboratorium</span>Target yang dibahas di atas disimpan hanya dalam empat byte di block header. Cara empat byte memuat angka 256 bit ada di Laboratorium F3.</span></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-5-3" data-sb="sb-5-3">
+            ← 5.3 — Mining
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-5-5" data-sb="sb-5-5">
+            5.5 — Block Reward & Halving →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 5.4 -->
+
+      <!-- ==============================
+           SECTION 5.5 · Block Reward dan Halving
+      ============================== -->
+      <div class="p-section" id="section-5-5">
+        <div class="p-eyebrow">Bab 5 · 5.5</div>
+        <div class="p-heading">Satu-satunya cara bitcoin baru masuk ke dunia</div>
+        <div class="p-title">Block Reward dan Halving</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Setiap kali miner berhasil menemukan block yang valid, mereka mendapat dua jenis pendapatan: block reward dan transaction fee. Tapi ada satu bagian dari block reward yang unik di Bitcoin: ia berkurang setengahnya setiap empat tahun sekali.</p>
+
+          <p><strong>Block reward</strong></p>
+          <p>Block reward adalah bitcoin baru yang diciptakan dari nol melalui coinbase transaction. Ini adalah satu-satunya cara bitcoin baru masuk ke sirkulasi. Tidak ada cara lain. Ketika Satoshi menambang genesis block pada Januari 2009, block reward adalah 50 BTC. Setiap block baru menambahkan 50 BTC ke sirkulasi.</p>
+
+          <p><strong>Halving</strong></p>
+          <p>Setiap 210.000 block, block reward dipotong setengahnya. Dengan rata-rata 10 menit per block, 210.000 block membutuhkan waktu sekitar 4 tahun. Halving pertama terjadi pada November 2012: reward turun dari 50 menjadi 25 BTC. Halving kedua pada Juli 2016: turun menjadi 12,5 BTC. Halving ketiga pada Mei 2020: turun menjadi 6,25 BTC. Halving keempat pada April 2024: turun menjadi 3,125 BTC. Proses ini akan terus berlanjut sampai sekitar tahun 2140.</p>
+
+          <p><strong>Kenapa 21 juta?</strong></p>
+          <p>Di 1.5 kita bilang tidak ada penjelasan definitif kenapa Satoshi memilih angka 21 juta. Itu masih berlaku, dan tidak bertentangan dengan yang berikut ini. Yang tidak pernah dijelaskan Satoshi adalah kenapa ia memilih 50 BTC per block dan jarak 210.000 block. Begitu dua angka itu ditetapkan, 21 juta bukan lagi pilihan, melainkan konsekuensi yang mengikuti dengan sendirinya. Kalau semua era dijumlahkan dari 50 BTC, 25 BTC, 12,5 BTC, dan seterusnya sampai tak terhingga, hasilnya mendekati tepat 21 juta BTC. Ini adalah deret geometri yang konvergen.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Rumus — Total supply Bitcoin</div>
+          <div class="b05-s55-formula-wrap">
+            <svg width="100%" viewBox="0 0 680 130" role="img" style="display:block;">
+              <title>Rumus deret geometri total supply Bitcoin</title>
+              <desc>Sigma dari n=0 sampai 32 dari 210.000 dikali 50 dibagi 2 pangkat n sama dengan 21 juta BTC</desc>
+              <rect x="40" y="16" width="600" height="98" rx="10" fill="#F4F4F0" stroke="rgba(124,58,237,0.15)" stroke-width="0.5"/>
+              <text x="340" y="40" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#3A3A35">Total supply Bitcoin</text>
+              <text x="120" y="88" text-anchor="middle" font-family="Georgia, serif" font-size="42" fill="#534AB7">Σ</text>
+              <text x="120" y="105" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#3A3A35">n = 0</text>
+              <text x="120" y="58" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#3A3A35">32</text>
+              <text x="200" y="88" text-anchor="middle" font-family="Georgia, serif" font-size="22" fill="#1A1A18">210.000 × 50</text>
+              <line x1="155" y1="94" x2="247" y2="94" stroke="#1A1A18" stroke-width="1"/>
+              <text x="200" y="112" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#1A1A18">2</text>
+              <text x="215" y="106" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1A1A18">n</text>
+              <text x="270" y="90" text-anchor="middle" font-family="Georgia, serif" font-size="28" fill="#3A3A35">≈</text>
+              <text x="370" y="90" text-anchor="middle" font-family="Georgia, serif" font-size="26" font-weight="500" fill="#534AB7">21.000.000</text>
+              <text x="470" y="90" text-anchor="middle" font-family="Georgia, serif" font-size="20" fill="#1A1A18">BTC</text>
+              <text x="340" y="118" text-anchor="middle" font-family="'Sora', sans-serif" font-size="11" fill="#3A3A35">Deret geometri yang konvergen — 33 era halving, reward awal 50 BTC, dipotong setengah tiap 210.000 block</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="p-body">
+          <p><strong>Setelah reward nol</strong></p>
+          <p>Kalau block reward nol, apa yang memotivasi miner? Transaction fee. Seiring reward turun, fee diharapkan naik karena permintaan ruang block meningkat. Ini adalah transisi bertahap selama lebih dari 100 tahun dari subsidi ke ekonomi fee murni.</p>
+
+          <div class="p-callout">
+            <p>Halving adalah mekanisme disinflasi yang sudah terprogram sejak awal. Perlu ditegaskan istilahnya: suplai Bitcoin tetap bertambah setiap block, hanya lajunya yang terus melambat menuju nol. Yang berkurang adalah kecepatan pencetakan, bukan jumlah yang beredar. Berbeda dengan bank sentral yang bisa mencetak uang kapanpun, jadwal emisi Bitcoin tidak bisa diubah oleh siapapun. Setiap node memverifikasi bahwa coinbase transaction tidak melebihi reward yang diizinkan.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi interaktif — Jadwal halving dan emisi Bitcoin</div>
+          <div class="b05-s55-chart-desc">
+            Bar ungu menunjukkan reward per block di setiap era. Garis hijau menunjukkan total supply yang beredar, mendekati 21 juta BTC secara asimtotik.
+          </div>
+          <div style="position:relative;width:100%;height:320px;">
+            <canvas id="b05-s55-chart" role="img" aria-label="Grafik kurva emisi Bitcoin dari 2009 hingga 2140">Kurva emisi Bitcoin: reward block berkurang setengah setiap ~4 tahun, total supply mendekati 21 juta BTC pada tahun 2140.</canvas>
+          </div>
+          <div class="b05-s55-legend">
+            <span class="b05-s55-leg"><span class="b05-s55-dot" style="background:#534AB7;border-radius:2px;"></span>Block reward per block</span>
+            <span class="b05-s55-leg"><span style="width:16px;height:2px;border-top:2px dashed #3B6D11;display:inline-block;"></span>Total supply beredar</span>
+          </div>
+
+          <div class="b05-lab">
+            <div class="b05-lab-head">Coba sendiri: jalan menuju 21 juta, dan apa yang terjadi sesudahnya</div>
+            <div class="b05-lab-body">
+              <div class="b05-lab-ctrl">
+                <label>Era halving</label>
+                <input type="range" id="b05-s55-era" min="0" max="33" step="1" value="4">
+                <span class="b05-lab-ctrl-val" id="b05-s55-era-val">era 4</span>
+              </div>
+              <div class="b05-lab-grid">
+                <div class="b05-lab-cell"><div class="b05-lab-k">Era dimulai sekitar</div><div class="b05-lab-v" id="b05-s55-year">2024</div></div>
+                <div class="b05-lab-cell hi"><div class="b05-lab-k">Reward per block</div><div class="b05-lab-v purp" id="b05-s55-reward">3,125 BTC</div></div>
+                <div class="b05-lab-cell"><div class="b05-lab-k">Total beredar di akhir era</div><div class="b05-lab-v" id="b05-s55-supply">19.687.500 BTC</div></div>
+                <div class="b05-lab-cell"><div class="b05-lab-k">Persen dari 21 juta</div><div class="b05-lab-v green" id="b05-s55-pct">93,75%</div></div>
+              </div>
+              <div class="b05-lab-track"><div class="b05-lab-fill" id="b05-s55-bar" style="width:0%"></div></div>
+              <div class="b05-lab-note" id="b05-s55-note"></div>
+            </div>
+          </div>
+        
+          <div class="lab-link"><span class="kode">D1</span><span class="isi"><span class="hd">Lanjut ke Laboratorium</span>Jadwal halving sampai 2140, termasuk berapa bitcoin baru yang lahir tiap hari di tiap era, bisa kamu telusuri di Laboratorium D1.</span></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-5-4" data-sb="sb-5-4">
+            ← 5.4 — Difficulty Adjustment
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-5-6" data-sb="sb-5-6">
+            5.6 — Serangan 51% →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 5.5 -->
+
+      <!-- ==============================
+           SECTION 5.6 · Serangan 51%
+      ============================== -->
+      <div class="p-section" id="section-5-6">
+        <div class="p-eyebrow">Bab 5 · 5.6</div>
+        <div class="p-heading">Ketika penyerang menguasai mayoritas hashrate</div>
+        <div class="p-title">Serangan 51%</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Proof of Work memastikan bahwa untuk mengubah riwayat transaksi, seseorang harus mengulangi seluruh pekerjaan komputasi yang sudah dilakukan. Tapi ada satu skenario yang sering dibahas: bagaimana kalau seseorang menguasai lebih dari separuh hashrate jaringan?</p>
+
+          <p><strong>Apa yang bisa dilakukan penyerang?</strong></p>
+          <p>Dengan lebih dari 50% hashrate, penyerang bisa melakukan double-spend. Caranya: kirim bitcoin ke pihak lain, tunggu konfirmasi, sementara itu tambang rantai alternatif secara diam-diam. Karena punya hashrate lebih besar, rantai alternatif tumbuh lebih cepat. Setelah barang diterima, siarkan rantai alternatif. Berdasarkan aturan longest chain, jaringan mengadopsi rantai baru, dan transaksi pembayaran asli menghilang. Penyerang juga bisa menyensor transaksi tertentu, menolak memasukkan transaksi dari alamat tertentu ke dalam block.</p>
+
+          <p><strong>Apa yang tidak bisa dilakukan penyerang?</strong></p>
+          <p>Banyak yang salah paham. Penyerang tidak bisa mencuri bitcoin dari wallet orang lain. Tidak bisa memalsukan tanda tangan kriptografi. Tidak bisa mencetak bitcoin baru di luar jadwal halving. Tidak bisa mengubah aturan konsensus. Kriptografi yang mendasari Bitcoin tidak tersentuh oleh serangan ini.</p>
+
+          <p><strong>Kenapa serangan ini tidak masuk akal secara ekonomi?</strong></p>
+          <p>Untuk menguasai 51% hashrate Bitcoin saat ini, penyerang harus mengoperasikan lebih banyak ASIC dari seluruh miner jujur di dunia, dengan biaya hardware, listrik, dan infrastruktur mencapai miliaran dolar. Kalau serangan berhasil dan terdeteksi, kepercayaan terhadap Bitcoin runtuh, harga jatuh, dan seluruh hardware penyerang kehilangan nilainya. Penyerang menghancurkan investasinya sendiri.</p>
+
+          <p><strong>Bagaimana kalau motivasinya bukan profit, tapi kehancuran?</strong></p>
+          <p>Ini pertanyaan yang lebih serius. Bayangkan aktor sekelas negara yang rela menggelontorkan sumber daya hampir tak terbatas hanya untuk merusak Bitcoin, tanpa peduli kerugian ekonomi. Apakah Bitcoin bisa bertahan?</p>
+          <p>Jawabannya: ya, tapi membutuhkan respons aktif dari komunitas. Serangan 51% yang berkelanjutan akan terdeteksi sangat cepat. Ribuan node di seluruh dunia akan melihat reorg besar yang tidak wajar. Komunitas developer bisa mengusulkan perubahan algoritma hashing melalui hard fork. Kalau algoritma diganti, seluruh hardware ASIC yang digunakan penyerang seketika menjadi tidak berguna. Penyerang harus membeli hardware baru lagi dari awal, sementara komunitas hanya perlu memperbarui software.</p>
+          <p>Ini adalah perang yang sangat asimetris: mempertahankan jauh lebih murah dari menyerang. Setiap serangan baru membutuhkan investasi hardware baru yang masif. Setiap respons hanya membutuhkan update kode.</p>
+
+          <p><strong>Serangan 51% dan desentralisasi</strong></p>
+          <p>Inilah kenapa desentralisasi mining bukan sekadar idealisme, tapi pertahanan nyata. Semakin tersebar hashrate di seluruh dunia di antara ribuan operator independen, semakin mahal dan semakin sulit bagi satu pihak untuk menguasai mayoritas. Tidak ada satu titik yang bisa diserang, disuap, atau dipaksa untuk menyerah.</p>
+
+          <div class="p-callout">
+            <p>Ketahanan Bitcoin terhadap serangan 51% bukan hanya soal biaya. Ia juga soal insentif, desentralisasi, dan kemampuan komunitas untuk beradaptasi. Sebuah jaringan yang bisa mengganti algoritma hashing dalam hitungan hari adalah jaringan yang sangat sulit dihancurkan secara permanen, bahkan oleh aktor dengan sumber daya hampir tak terbatas.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi interaktif — Race Attack</div>
+          <div class="b05-s56-desc">
+            Atur hashrate penyerang lalu klik Mulai. Di bawah 50%, rantai jujur selalu menang. Di atas 50%, penyerang akan mengejar dan akhirnya berhasil. Kalau serangan berhasil, klik "Community response" dan lihat apa yang terjadi.
+          </div>
+
+          <div class="at-ctrl-sim">
+            <span class="at-label-sim">Hashrate penyerang</span>
+            <input type="range" min="10" max="65" step="5" value="30" id="b05-s56-slider" style="flex:1;min-width:0;">
+            <span class="at-val-sim" id="b05-s56-pct">30%</span>
+          </div>
+
+          <div class="at-chains-sim">
+            <div class="at-chain-row-sim">
+              <span class="at-chain-label-sim honest-sim">Jujur</span>
+              <div class="at-blocks-sim" id="b05-s56-honest-blocks"></div>
+              <span class="at-chain-len-sim honest-sim" id="b05-s56-honest-len">3 block</span>
+            </div>
+            <div class="at-chain-row-sim">
+              <span class="at-chain-label-sim attack-sim">Penyerang</span>
+              <div class="at-blocks-sim" id="b05-s56-attack-blocks"></div>
+              <span class="at-chain-len-sim attack-sim" id="b05-s56-attack-len">0 block</span>
+            </div>
+          </div>
+
+          <div class="at-status-sim safe-sim" id="b05-s56-status">Atur hashrate penyerang dan klik Mulai untuk melihat race attack.</div>
+
+          <div class="at-btns-sim">
+            <button class="kp-btn kp-btn-gen" id="b05-s56-start">Mulai race ↗</button>
+            <button class="kp-btn kp-btn-gen" id="b05-s56-fork" style="background:#3B6D11;border-color:#3B6D11;display:none;">Community response: ganti algoritma ↗</button>
+            <button class="kp-btn kp-btn-reset" id="b05-s56-reset">Reset</button>
+          </div>
+
+          <div class="at-note-sim">
+            Di bawah 50%: rantai jujur selalu lebih panjang dalam jangka panjang. Di atas 50%: rantai penyerang akan mengejar dan akhirnya menang. Saat community response, algoritma diganti dan seluruh rantai penyerang menjadi tidak valid.
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-5-5" data-sb="sb-5-5">
+            ← 5.5 — Block Reward & Halving
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 5.6 -->
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 8 · BAB 5 -->
+
+

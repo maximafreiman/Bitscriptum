@@ -1,0 +1,670 @@
+<!-- ============================================================
+     PAGE 17 · BAB 14 · Insiden dan Kejadian Langka di Bitcoin
+     |-- 14.1 · Nilai Overflow Bug 2010 [DONE]
+     |-- 14.2 · [LOCKED]
+     |-- 14.3 · [LOCKED]
+     |-- 14.4 · [LOCKED]
+     |-- 14.5 · [LOCKED]
+     |-- 14.6 · [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab14">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b14">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b14">← Daftar Bab</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab14">
+      <div class="sidebar-heading">Bab 14</div>
+      <div class="sidebar-title">Insiden dan Kejadian Langka di Bitcoin</div>
+
+      <div class="sidebar-item active" id="sb-14-1">
+        <div class="sb-num">14.1</div>
+        <div class="sb-label">Nilai Overflow Bug 2010</div>
+      </div>
+      <div class="sidebar-item" id="sb-14-2">
+        <div class="sb-num">14.2</div>
+        <div class="sb-label">Reorganisasi Chain (Reorg)</div>
+      </div>
+      <div class="sidebar-item" id="sb-14-3">
+        <div class="sb-num">14.3</div>
+        <div class="sb-label">March 2013 Chain Split</div>
+      </div>
+      <div class="sidebar-item" id="sb-14-4">
+        <div class="sb-num">14.4</div>
+        <div class="sb-label">Selfish Mining</div>
+      </div>
+      <div class="sidebar-item" id="sb-14-5">
+        <div class="sb-num">14.5</div>
+        <div class="sb-label">Eclipse Attack</div>
+      </div>
+      <div class="sidebar-item" id="sb-14-6">
+        <div class="sb-num">14.6</div>
+        <div class="sb-label">Apa yang Membuat Bitcoin Tetap Kuat?</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab14-content">
+
+      <!-- ==============================
+           SECTION 14.1 · Nilai Overflow Bug 2010
+      ============================== -->
+      <div class="p-section active" id="section-14-1">
+        <div class="p-eyebrow">Bab 14 · 14.1</div>
+        <div class="p-heading">184 miliar bitcoin yang tercipta dalam satu block — dan diperbaiki dalam 5 jam</div>
+        <div class="p-title">Nilai Overflow Bug 2010</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Pada 15 Agustus 2010, seseorang menemukan bug kritis di kode Bitcoin: integer overflow. Dengan mengeksploitasi bug ini, pelaku berhasil membuat transaksi yang seolah-olah menciptakan bitcoin jauh di luar aturan protokol. Transaksi ini sempat dikonfirmasi di block #74.638 sebelum di-rollback oleh komunitas dalam waktu sekitar 5 jam. Penting untuk dipahami: ini adalah bug di implementasi kode, bukan bug di protokol Bitcoin itu sendiri. Suplai 21 juta BTC tidak pernah benar-benar terancam.</p>
+
+          <p><strong>Dua hal yang perlu dibedakan</strong></p>
+          <p>Bitcoin punya dua batasan yang berbeda dan sering dikacaukan. Pertama, MAX_MONEY: ini adalah aturan konsensus protokol Bitcoin yang menetapkan tidak ada output transaksi yang boleh melebihi total suplai 21 juta BTC (2,1 kuadriliun satoshi). Kedua, MAX_INT64: ini adalah batas matematis tipe data integer 64-bit di komputer, yaitu 9,223,372,036,854,775,807. Angka ini tidak ada hubungannya dengan aturan Bitcoin, ia hanya batas teknis penyimpanan angka di memori komputer. Bug ini bukan tentang melanggar MAX_INT64, tapi tentang kode yang lupa memeriksa MAX_MONEY sebelum melakukan penjumlahan.</p>
+
+          <p><strong>Bagaimana bug ini bekerja</strong></p>
+          <p>Kode Bitcoin saat itu tidak memeriksa apakah nilai setiap output transaksi melebihi MAX_MONEY sebelum menjumlahkannya. Penyerang memanfaatkan ini dengan membuat dua output yang masing-masing jauh melebihi 21 juta BTC. Ketika keduanya dijumlahkan, total melampaui MAX_INT64 dan terjadi integer overflow: angka "membungkus" menjadi bilangan negatif besar. Kode validasi kemudian memeriksa apakah total output lebih kecil dari total input, dan karena total output sudah menjadi bilangan negatif, kondisi ini selalu terpenuhi. Transaksi lolos validasi padahal seharusnya tidak.</p>
+
+          <p><strong>Respons komunitas</strong></p>
+          <p>Satoshi Nakamoto sendiri yang merespons insiden ini. Dalam waktu sekitar 5 jam, Satoshi merilis patch yang menambahkan pemeriksaan: kalau nilai output kurang dari nol atau melebihi MAX_MONEY, transaksi langsung ditolak. Komunitas Bitcoin saat itu yang masih sangat kecil berhasil mengorganisir soft fork darurat: node-node upgrade dan mulai mengabaikan block #74.638. Chain yang bersih menjadi yang dominan. Bitcoin yang seolah-olah "tercipta" itu tidak pernah eksis secara nyata karena langsung di-rollback sebelum bisa digunakan siapapun.</p>
+
+          <div class="p-callout">
+            <p>Bug ini adalah contoh perbedaan penting antara bug protokol dan bug implementasi. Protokol Bitcoin mendefinisikan aturan dengan benar, tapi kode yang mengimplementasikan aturan tersebut punya celah. Ini salah satu alasan mengapa kode konsensus Bitcoin diaudit dengan sangat ketat: satu baris kode yang hilang bisa menciptakan celah yang berbahaya.</p>
+
+          <p><strong>Delapan tahun kemudian, nyaris terulang</strong></p>
+          <p>Mudah menganggap insiden 2010 sebagai penyakit masa muda: kode masih mentah, penggunanya sedikit, wajar ada lubang. Tapi pada September 2018 Bitcoin nyaris kehilangan batas 21 juta untuk kedua kalinya, dan kali ini di era yang sudah matang, dengan kode yang ditinjau jauh lebih ketat.</p>
+          <p>Bug itu tercatat sebagai <strong>CVE-2018-17144</strong>. Asalnya bukan dari fitur baru, melainkan dari sebuah <strong>optimasi</strong>. Pada Bitcoin Core 0.14.0 yang rilis Maret 2017, ada pemeriksaan input ganda yang dihapus karena dianggap sudah dilakukan di tempat lain, jadi mengulangnya cuma memperlambat. Anggapan itu keliru. Akibatnya node bersedia memproses sebagian block yang membelanjakan satu input yang sama lebih dari sekali.</p>
+          <p>Di versi 0.14.x, akibatnya "hanya" node mati mendadak, karena ada pemeriksaan pengaman yang sengaja menghentikan program saat menemui keadaan mustahil. Tapi pemeriksaan itu ditulis ulang di versi 0.15.0, dan sejak saat itu node tidak lagi berhenti. Ia melanjutkan. Artinya seorang miner bisa membelanjakan satu output dua kali dalam satu block, lalu mengklaim nilainya dua kali juga. Diulang berkali-kali, itu adalah pencetakan Bitcoin dari udara.</p>
+          <p>Bug itu diam selama sekitar satu setengah tahun. Yang akhirnya menemukannya bukan tim inti, melainkan seorang pengembang beralias <strong>awemany</strong> dari kubu Bitcoin Cash, saat ia membaca kode yang diwarisi proyeknya dari Bitcoin Core. Ia melaporkannya secara tertutup pada 17 September 2018, bukan hanya ke Bitcoin Core tapi juga ke proyek lain yang memakai kode yang sama.</p>
+          <p>Yang ia laporkan cuma bug crash. Justru pengembang Bitcoin Core yang kemudian menyadari bahwa akar yang sama membawa akibat jauh lebih parah: inflasi. Di titik itu mereka menghadapi pilihan yang tidak nyaman. Mengumumkan penuh berarti memberi tahu semua orang cara mencetak Bitcoin sebelum sebagian besar node sempat memperbarui diri. Diam saja berarti membiarkan lubang menganga.</p>
+          <p>Jalan yang diambil adalah pengungkapan bertahap: umumkan dan tambal bug crash yang lebih ringan secara terbuka supaya orang punya alasan mendesak untuk segera memperbarui, sambil diam-diam menghubungi miner dan bisnis besar soal yang sebenarnya. Perbaikannya rilis pada 18 September dalam versi 0.16.3, kurang dari sehari setelah laporan masuk. Dampak penuhnya baru diumumkan 20 September, setelah sebagian besar jaringan aman.</p>
+          <p>Bug ini tidak pernah dieksploitasi. Tapi pelajarannya lebih tajam daripada insiden 2010, dan ada tiga. Pertama, perubahan paling berbahaya sering bukan penambahan fitur, melainkan <strong>penghapusan sesuatu yang dikira tidak perlu</strong>. Kedua, yang menemukannya justru orang dari proyek saingan yang membaca kode warisan, jadi keterbukaan kode bukan sekadar cita-cita melainkan mekanisme pertahanan yang nyata bekerja. Ketiga, keamanan Bitcoin tidak berhenti pada matematika yang kita bahas di Bab 4. Ia juga bergantung pada manusia yang membaca kode dengan teliti, dan pada penilaian sulit soal kapan sebuah bahaya sebaiknya diumumkan.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi — Bagaimana integer overflow bekerja</div>
+          <div class="b14-s141-desc">
+            Dua hal yang perlu dibedakan: MAX_MONEY adalah aturan protokol Bitcoin (21 juta BTC), sedangkan MAX_INT64 adalah batas tipe data komputer. Bug terjadi karena kode tidak memeriksa MAX_MONEY sebelum menjumlahkan nilai.
+          </div>
+
+          <div class="b14-s141-concept">
+            <div class="b14-s141-concept-card s141-proto">
+              <div class="b14-s141-concept-label">Aturan Protokol Bitcoin</div>
+              <div class="b14-s141-concept-val">MAX_MONEY</div>
+              <div class="b14-s141-concept-desc">21 juta BTC = 2,100,000,000,000,000 satoshi. Tidak ada output transaksi yang boleh melebihi ini. Ini adalah aturan konsensus.</div>
+            </div>
+            <div class="b14-s141-concept-card s141-impl">
+              <div class="b14-s141-concept-label">Batas Tipe Data Komputer</div>
+              <div class="b14-s141-concept-val">MAX_INT64</div>
+              <div class="b14-s141-concept-desc">9,223,372,036,854,775,807. Batas matematis integer 64-bit. Tidak ada hubungannya dengan aturan Bitcoin, hanya batas teknis penyimpanan angka.</div>
+            </div>
+          </div>
+
+          <div class="b14-s141-bits-wrap">
+            <div class="b14-s141-bits-label">Representasi 64-bit signed integer — bit paling kiri adalah bit tanda (0=positif, 1=negatif):</div>
+            <div class="b14-s141-bits" id="b14-s141-bits"></div>
+            <div class="b14-s141-bits-val" id="b14-s141-bits-val">Nilai: 0 satoshi</div>
+          </div>
+
+          <div class="b14-s141-steps" id="b14-s141-steps"></div>
+
+          <div class="b14-s141-btn-wrap">
+            <button class="b14-s141-btn-primary" id="b14-s141-run">Simulasikan Bug</button>
+            <button class="b14-s141-btn-sec" id="b14-s141-rst">Reset</button>
+          </div>
+
+          <div class="b14-s141-note s141-idle" id="b14-s141-note">Klik "Simulasikan Bug" untuk melihat bagaimana nilai yang melampaui MAX_MONEY lolos validasi karena kode tidak memeriksanya.</div>
+        
+          <div class="lab-link"><span class="kode">C7</span><span class="isi"><span class="hd">Lanjut ke Laboratorium</span>Ada satu cacat lain dengan pola yang mirip, lahir dari aturan penyusunan pohon Merkle. Itu dibedah di Laboratorium C7.</span></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-14-2" data-sb="sb-14-2">
+            14.2 — Reorganisasi Chain (Reorg) →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 14.1 -->
+
+      <!-- ==============================
+           SECTION 14.2 · Reorganisasi Chain (Reorg)
+      ============================== -->
+      <div class="p-section" id="section-14-2">
+        <div class="p-eyebrow">Bab 14 · 14.2</div>
+        <div class="p-heading">Ketika sejarah Bitcoin ditulis ulang — dan mengapa itu normal</div>
+        <div class="p-title">Reorganisasi Chain (Reorg)</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Reorg, kependekan dari chain reorganization, terjadi ketika node menemukan bahwa ada chain alternatif yang lebih panjang dari chain yang sedang mereka ikuti. Node kemudian beralih ke chain yang lebih panjang, membuang block-block yang tidak lagi menjadi bagian dari chain terpanjang. Block yang dibuang ini disebut orphan block.</p>
+
+          <p><strong>Reorg kecil adalah normal</strong></p>
+          <p>Reorg 1-2 block adalah kejadian rutin yang terjadi hampir setiap hari di Bitcoin. Ini bisa terjadi ketika dua miner menemukan block valid hampir bersamaan: jaringan sementara terbagi karena sebagian node menerima block dari miner A lebih dulu, sementara sebagian lainnya menerima dari miner B lebih dulu. Begitu salah satu miner menemukan block berikutnya, chainnya menjadi lebih panjang dan seluruh jaringan konvergen ke chain tersebut. Miner yang kalah kehilangan reward block tapi jaringan tetap aman.</p>
+
+          <p><strong>Reorg besar adalah berbahaya</strong></p>
+          <p>Reorg yang dalam, 6 block atau lebih, membutuhkan hash rate yang sangat besar dan bisa dimanfaatkan untuk double spend. Penyerang dengan cukup hash rate bisa menambang chain alternatif secara diam-diam, melakukan transaksi besar di chain utama (misalnya menjual bitcoin ke exchange), lalu merilis chain alternatif yang lebih panjang yang tidak mengandung transaksi tersebut. Merchant atau exchange yang sudah menganggap transaksi final bisa menjadi korban.</p>
+
+          <p><strong>Sejarah reorg di Bitcoin</strong></p>
+          <p>Reorg terdalam yang pernah tercatat di Bitcoin mainnet bukan hasil serangan, melainkan buntut dari bug software. Rollback bug overflow 2010 yang kita bahas di 14.1 membutuhkan pembalikan puluhan block, dan chain split Maret 2013 yang akan kita bahas di 14.3 berlangsung sepanjang 24 block. Di luar dua insiden itu, reorg di Bitcoin hampir selalu hanya 1 sampai 2 block. Reorg dalam yang disengaja pernah terjadi pada jaringan lain seperti Ethereum Classic (reorg 100+ block pada 2019) dan Bitcoin Gold, tapi keduanya memiliki hash rate yang jauh lebih kecil dari Bitcoin sehingga biaya serangan jauh lebih rendah.</p>
+
+          <div class="p-callout">
+            <p>Standar "6 konfirmasi" yang sering disebut dalam Bitcoin bukan angka sembarangan. Ini adalah estimasi bahwa setelah 6 block, biaya untuk melakukan reorg yang cukup dalam untuk membatalkan transaksi tersebut menjadi sangat tidak ekonomis bagi penyerang manapun. Untuk transaksi kecil sehari-hari, 1-3 konfirmasi sudah cukup aman.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi — Bagaimana reorg terjadi</div>
+          <div class="b14-s142-desc">
+            Tab pertama: simulasi step-by-step reorg 1 block antara dua miner. Tab kedua: tabel risiko reorg berdasarkan kedalaman dan jumlah konfirmasi.
+          </div>
+
+          <div class="b14-s142-tabs">
+            <button class="b14-s142-tab s142-act" id="b14-s142-t1">Simulasi Reorg</button>
+            <button class="b14-s142-tab" id="b14-s142-t2">Reorg dan Double Spend</button>
+          </div>
+
+          <div class="b14-s142-pane show" id="b14-s142-p1">
+            <div class="b14-s142-hint">Reorg terjadi saat node menemukan chain alternatif yang lebih panjang. Node beralih ke chain terpanjang dan membuang block yang kalah. Klik "Langkah Berikut" untuk melihat prosesnya.</div>
+            <div class="b14-s142-canvas"><canvas id="b14-s142-cv" style="display:block;width:100%;height:220px;"></canvas></div>
+            <div class="b14-s142-status" id="b14-s142-status"></div>
+            <div class="b14-s142-ctrl">
+              <button class="b14-s142-btn-primary" id="b14-s142-next">Langkah Berikut →</button>
+              <button class="b14-s142-btn-sec" id="b14-s142-rst">Reset</button>
+              <div class="b14-s142-step-ind" id="b14-s142-step-ind">Langkah 0 / 4</div>
+            </div>
+            <div class="b14-s142-note s142-idle" id="b14-s142-note">Klik "Langkah Berikut" untuk memulai simulasi reorg step by step.</div>
+          </div>
+
+          <div class="b14-s142-pane" id="b14-s142-p2">
+            <div class="b14-s142-hint">Reorg kecil (1-2 block) adalah normal dan rutin terjadi. Reorg besar bisa dimanfaatkan untuk double spend. Jumlah konfirmasi yang kamu tunggu menentukan seberapa aman transaksimu.</div>
+            <div class="b14-s142-table">
+              <div class="b14-s142-table-head">Kedalaman reorg vs risiko double spend</div>
+              <div class="b14-s142-table-body">
+                <div class="b14-s142-table-row s142-header"><div>Kedalaman reorg</div><div>Hash rate dibutuhkan</div><div>Risiko</div><div>Contoh nyata</div></div>
+                <div class="b14-s142-table-row"><div class="b14-s142-cell s142-safe">1-2 block</div><div>Rendah — kebetulan</div><div class="b14-s142-cell s142-safe">Normal, rutin terjadi</div><div>Setiap hari di Bitcoin</div></div>
+                <div class="b14-s142-table-row"><div class="b14-s142-cell s142-warn">3-5 block</div><div>Sedang</div><div class="b14-s142-cell s142-warn">Jarang, perlu hash rate besar</div><div>Bitcoin: reorg 4 block (2012)</div></div>
+                <div class="b14-s142-table-row"><div class="b14-s142-cell s142-risk">6+ block</div><div>Sangat tinggi (51%+)</div><div class="b14-s142-cell s142-risk">Berbahaya, double spend mungkin</div><div>Ethereum Classic, Bitcoin Gold</div></div>
+                <div class="b14-s142-table-row"><div class="b14-s142-cell s142-risk">100+ block</div><div>Hampir mustahil di Bitcoin</div><div class="b14-s142-cell s142-safe">Tidak pernah terjadi di Bitcoin</div><div>Hanya pada jaringan dengan hash rate sangat kecil</div></div>
+              </div>
+            </div>
+            <div class="b14-s142-note s142-warn">Merchant yang menerima pembayaran besar tanpa menunggu konfirmasi cukup adalah target potensial double spend via reorg. Standar umum: 6 konfirmasi untuk transaksi bernilai tinggi, 1-3 konfirmasi untuk transaksi kecil.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-14-1" data-sb="sb-14-1">
+            ← 14.1 — Nilai Overflow Bug 2010
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-14-3" data-sb="sb-14-3">
+            14.3 — March 2013 Chain Split →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 14.2 -->
+
+      <!-- ==============================
+           SECTION 14.3 · March 2013 Chain Split
+      ============================== -->
+      <div class="p-section" id="section-14-3">
+        <div class="p-eyebrow">Bab 14 · 14.3</div>
+        <div class="p-heading">Ketika dua versi software menghasilkan dua realitas berbeda selama 6 jam</div>
+        <div class="p-title">March 2013 Chain Split</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Pada 11 Maret 2013, terjadi chain split yang tidak disengaja antara node yang menjalankan Bitcoin 0.7 dan Bitcoin 0.8. Ini bukan serangan, bukan eksploitasi bug yang disengaja, tapi sebuah konsekuensi tak terduga dari perbedaan implementasi database antara dua versi software yang keduanya mengklaim mengikuti aturan yang sama.</p>
+
+          <p><strong>Akar masalah: BerkeleyDB vs LevelDB</strong></p>
+          <p>Bitcoin 0.8 mengganti database penyimpanan dari BerkeleyDB ke LevelDB sebagai optimasi performa. Yang tidak disadari: BerkeleyDB memiliki batasan 10.000 kunci yang bisa dikunci secara bersamaan. Ini bukan bagian dari aturan konsensus Bitcoin, hanya detail implementasi. LevelDB tidak punya batasan yang sama. Block #225.430 yang ditambang pada malam 11 Maret mempengaruhi status lebih dari 5.000 transaksi sekaligus, membutuhkan lebih dari 10.000 kunci BerkeleyDB secara bersamaan. Node 0.7 tidak bisa memproses block ini dan menolaknya. Node 0.8 menerimanya tanpa masalah.</p>
+
+          <p><strong>Enam jam dengan dua Bitcoin</strong></p>
+          <p>Selama sekitar 6 jam, ada dua versi Bitcoin yang berjalan secara paralel. Chain 0.8 punya sekitar 60% hash rate sehingga tumbuh lebih cepat. Split berlangsung selama 24 block sebelum diselesaikan. Split ini tidak langsung terdeteksi: baru sekitar satu jam kemudian, pada 23:10 GMT, seorang pengguna bernama thermoman melaporkan anomali di IRC bitcoin-dev. Satu menit kemudian, Mark Karpelès dari Mt. Gox langsung menghentikan pemrosesan block sebagai langkah pencegahan.</p>
+
+          <p><strong>Solusi yang tidak biasa</strong></p>
+          <p>Komunitas harus memilih: upgrade semua ke 0.8, atau kembali ke 0.7? Keputusannya adalah kembali ke 0.7, bukan karena 0.7 lebih benar secara teknis, tapi karena lebih mudah mengkoordinasi segelintir mining pool besar untuk downgrade daripada memaksa seluruh ekosistem untuk upgrade sekaligus. BTCGuild dan Slush Pool downgrade meskipun harus merelakan reward yang sudah mereka hasilkan di chain 0.8. Pada block #225.454, chain 0.7 berhasil melampaui chain 0.8 dan jaringan bersatu kembali.</p>
+
+          <p><strong>Double spend yang tercatat</strong></p>
+          <p>Selama periode split, tercatat satu double spend. Tapi berdasarkan BIP 50, post-mortem resmi yang ditulis Gavin Andresen, ini dilakukan oleh seseorang yang sedang bereksperimen untuk menguji apakah itu mungkin, bukan dengan niat mencuri.</p>
+
+          <div class="p-callout">
+            <p>Insiden ini mengajarkan pelajaran penting: dua implementasi yang mengklaim mengikuti aturan yang sama bisa tetap menghasilkan perilaku berbeda karena detail implementasi yang tersembunyi. Ini salah satu alasan mengapa Bitcoin sangat berhati-hati dalam mengubah kode konsensus, dan mengapa ada effort besar untuk memastikan semua implementasi berperilaku identik pada semua edge case.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualisasi — March 2013 Chain Split</div>
+          <div class="b14-s143-desc">
+            Tiga tab: diagram split bident, kronologi kejadian dengan waktu GMT yang akurat berdasarkan BIP 50, dan perbandingan sebab teknis serta alasan di balik keputusan kembali ke chain 0.7.
+          </div>
+
+          <div class="b14-s143-tabs">
+            <button class="b14-s143-tab s143-act" id="b14-s143-t1">Diagram Split</button>
+            <button class="b14-s143-tab" id="b14-s143-t2">Kronologi (GMT)</button>
+            <button class="b14-s143-tab" id="b14-s143-t3">Sebab dan Solusi</button>
+          </div>
+
+          <div class="b14-s143-pane show" id="b14-s143-p1">
+            <div class="b14-s143-hint">11 Maret 2013: Bitcoin 0.7 dan 0.8 menghasilkan chain berbeda selama 24 block (~6 jam). Chain 0.8 sempat lebih panjang karena punya ~60% hash rate, tapi komunitas memilih kembali ke chain 0.7.</div>
+            <div class="b14-s143-canvas"><canvas id="b14-s143-cv" style="display:block;width:100%;height:230px;"></canvas></div>
+            <div class="b14-s143-note s143-info">Solusi yang tidak biasa: bukan dengan mengupgrade semua ke 0.8, tapi meminta miner yang sudah upgrade untuk downgrade sementara ke 0.7. BTCGuild dan Slush Pool merugi reward yang sudah mereka hasilkan di chain 0.8 demi memulihkan jaringan.</div>
+          </div>
+
+          <div class="b14-s143-pane" id="b14-s143-p2">
+            <div class="b14-s143-hint">Semua waktu dalam GMT, 11-12 Maret 2013. Sumber: BIP 50 (post-mortem resmi oleh Gavin Andresen).</div>
+            <div class="b14-s143-tl">
+              <div class="b14-s143-tl-event" data-t="trigger"><div class="b14-s143-tl-time">~22:00</div><div class="b14-s143-tl-dot-wrap"><div class="b14-s143-tl-dot s143-trigger"></div></div><div class="b14-s143-tl-card s143-trigger"><div class="b14-s143-tl-tag s143-trigger">Pemicu</div><div class="b14-s143-tl-title">Block #225.430 ditambang — membutuhkan lebih dari 10.000 kunci BerkeleyDB</div><div class="b14-s143-tl-desc">Block ini mempengaruhi status lebih dari 5.000 transaksi sekaligus, melampaui batas 10.000 kunci BerkeleyDB. Node 0.7 tidak bisa memprosesnya dan menolak. Node 0.8 menerimanya tanpa masalah.</div></div></div>
+              <div class="b14-s143-tl-event" data-t="split"><div class="b14-s143-tl-time">~22:00</div><div class="b14-s143-tl-dot-wrap"><div class="b14-s143-tl-dot s143-split"></div></div><div class="b14-s143-tl-card s143-split"><div class="b14-s143-tl-tag s143-split">Split</div><div class="b14-s143-tl-title">Dua chain terbentuk secara diam-diam</div><div class="b14-s143-tl-desc">Node 0.8 mining di atas block #225.430. Node 0.7 mining di chain alternatif. Chain 0.8 punya sekitar 60% hash rate dan tumbuh lebih cepat.</div></div></div>
+              <div class="b14-s143-tl-event" data-t="split"><div class="b14-s143-tl-time">23:10</div><div class="b14-s143-tl-dot-wrap"><div class="b14-s143-tl-dot s143-split"></div></div><div class="b14-s143-tl-card s143-split"><div class="b14-s143-tl-tag s143-split">Terdeteksi</div><div class="b14-s143-tl-title">"thermoman" melaporkan anomali di IRC bitcoin-dev</div><div class="b14-s143-tl-desc">Sekitar satu jam setelah split dimulai, baru ada yang melaporkan anomali di channel IRC bitcoin-dev.</div></div></div>
+              <div class="b14-s143-tl-event" data-t="split"><div class="b14-s143-tl-time">23:11</div><div class="b14-s143-tl-dot-wrap"><div class="b14-s143-tl-dot s143-split"></div></div><div class="b14-s143-tl-card s143-split"><div class="b14-s143-tl-tag s143-split">Exchange</div><div class="b14-s143-tl-title">Mark Karpelès (Mt. Gox) menghentikan import block Bitcoin</div><div class="b14-s143-tl-desc">Satu menit setelah laporan pertama, Mark Karpelès langsung menghentikan pemrosesan block di Mt. Gox sebagai langkah pencegahan.</div></div></div>
+              <div class="b14-s143-tl-event" data-t="fix"><div class="b14-s143-tl-time">23:18</div><div class="b14-s143-tl-dot-wrap"><div class="b14-s143-tl-dot s143-fix"></div></div><div class="b14-s143-tl-card s143-fix"><div class="b14-s143-tl-tag s143-fix">Diskusi</div><div class="b14-s143-tl-title">Pieter Wuille menginformasikan masalah ke mailing list</div><div class="b14-s143-tl-desc">Pieter Wuille mengirim email ke bitcoin-dev mailing list tapi awalnya menyarankan upgrade sebagai solusi. Downgrade adalah solusi yang benar, tapi itu baru jelas 45 menit kemudian.</div></div></div>
+              <div class="b14-s143-tl-event" data-t="fix"><div class="b14-s143-tl-time">~00:00 (12 Mar)</div><div class="b14-s143-tl-dot-wrap"><div class="b14-s143-tl-dot s143-fix"></div></div><div class="b14-s143-tl-card s143-fix"><div class="b14-s143-tl-tag s143-fix">Solusi</div><div class="b14-s143-tl-title">BTCGuild dan Slush Pool downgrade ke 0.7</div><div class="b14-s143-tl-desc">Setelah diskusi intensif, komunitas sepakat kembali ke chain 0.7. BTCGuild dan Slush Pool downgrade meski harus merelakan reward yang sudah mereka hasilkan di chain 0.8.</div></div></div>
+              <div class="b14-s143-tl-event" data-t="result"><div class="b14-s143-tl-time">~04:00 (12 Mar)</div><div class="b14-s143-tl-dot-wrap"><div class="b14-s143-tl-dot s143-result"></div></div><div class="b14-s143-tl-card s143-result"><div class="b14-s143-tl-tag s143-result">Selesai</div><div class="b14-s143-tl-title">Chain 0.7 menang di block #225.454 — jaringan bersatu kembali</div><div class="b14-s143-tl-desc">Setelah 24 block (~6 jam), chain 0.7 melampaui chain 0.8. Semua node 0.8 melakukan reorg. Tercatat satu double spend selama split, tapi dilakukan oleh seseorang yang bereksperimen untuk menguji apakah itu mungkin, bukan dengan niat mencuri.</div></div></div>
+            </div>
+          </div>
+
+          <div class="b14-s143-pane" id="b14-s143-p3">
+            <div class="b14-s143-hint">Perbedaan implementasi database antara dua versi menyebabkan split yang tidak disengaja.</div>
+            <div class="b14-s143-compare">
+              <div class="b14-s143-compare-col">
+                <div class="b14-s143-compare-head s143-v07">Bitcoin 0.7 — BerkeleyDB</div>
+                <div class="b14-s143-compare-row s143-v07"><strong>Database:</strong> BerkeleyDB (lama)</div>
+                <div class="b14-s143-compare-row s143-v07"><strong>Batas kunci:</strong> maksimum 10.000 kunci bersamaan</div>
+                <div class="b14-s143-compare-row s143-v07"><strong>Block besar:</strong> gagal saat perlu lebih dari 10.000 kunci sekaligus</div>
+                <div class="b14-s143-compare-row s143-v07"><strong>Hash rate:</strong> sekitar 40% saat split</div>
+                <div class="b14-s143-compare-row s143-conflict">Menolak block #225.430 — chain 0.7 terbentuk</div>
+              </div>
+              <div class="b14-s143-compare-col">
+                <div class="b14-s143-compare-head s143-v08">Bitcoin 0.8 — LevelDB</div>
+                <div class="b14-s143-compare-row s143-v08"><strong>Database:</strong> LevelDB (baru, lebih efisien)</div>
+                <div class="b14-s143-compare-row s143-v08"><strong>Batas kunci:</strong> tidak punya batasan yang sama</div>
+                <div class="b14-s143-compare-row s143-v08"><strong>Block besar:</strong> menerima block tanpa masalah</div>
+                <div class="b14-s143-compare-row s143-v08"><strong>Hash rate:</strong> sekitar 60% saat split</div>
+                <div class="b14-s143-compare-row s143-conflict">Menerima block #225.430 — chain 0.8 terbentuk</div>
+              </div>
+            </div>
+            <div class="b14-s143-note s143-warn">Mengapa kembali ke 0.7? Lebih mudah mengkoordinasi segelintir mining pool besar untuk downgrade daripada memaksa seluruh ekosistem untuk upgrade sekaligus. Kecepatan koordinasi lebih penting dari logika teknis dalam situasi darurat.</div>
+            <div class="b14-s143-note s143-good">Pelajaran: dua implementasi yang mengklaim mengikuti aturan yang sama bisa menghasilkan perilaku berbeda karena detail implementasi tersembunyi. Edge case bisa muncul dari tempat yang tidak terduga.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-14-2" data-sb="sb-14-2">
+            ← 14.2 — Reorganisasi Chain (Reorg)
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-14-4" data-sb="sb-14-4">
+            14.4 — Selfish Mining →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 14.3 -->
+
+      <!-- ==============================
+           SECTION 14.4 · Selfish Mining
+      ============================== -->
+      <div class="p-section" id="section-14-4">
+        <div class="p-eyebrow">Bab 14 · 14.4</div>
+        <div class="p-heading">Strategi mining yang menguntungkan di atas kertas — tapi belum pernah terbukti berhasil</div>
+        <div class="p-title">Selfish Mining</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Selfish mining adalah strategi di mana miner dengan hash rate signifikan menyembunyikan block yang berhasil mereka temukan dan tidak langsung menyiarkannya ke jaringan. Dengan menahan block ini, mereka mendapat keunggulan: mereka bisa mulai mining di atas block tersembunyi sementara jaringan masih mining di block sebelumnya.</p>
+
+          <p><strong>Bagaimana selfish mining bekerja</strong></p>
+          <p>Kalau miner curang berhasil menemukan block berikutnya sebelum jaringan tahu tentang block tersembunyi mereka, mereka bisa merilis dua block sekaligus dan membuat block jujur lainnya menjadi orphan. Miner jujur yang sudah bekerja keras menemukan block kehilangan rewardnya, sementara miner curang mendapat reward dua block sekaligus.</p>
+
+          <p><strong>Analisis formal dan ambang batas</strong></p>
+          <p>Serangan ini pertama kali dianalisis secara formal oleh Ittay Eyal dan Emin Gun Sirer dalam paper mereka pada 2013. Mereka menunjukkan bahwa dengan hash rate sekitar 33%, selfish mining bisa menguntungkan secara ekonomi. Dengan hash rate lebih besar, keuntungan teoritis semakin besar.</p>
+
+          <p><strong>Risiko teknis yang nyata</strong></p>
+          <p>Meski terlihat menguntungkan di atas kertas, selfish mining punya risiko teknis yang serius. Pertama, kerahasiaan block sulit dipertahankan di jaringan P2P: begitu block ditemukan, sinyal propagasi di jaringan bisa bocor sebelum miner curang siap merilis chain tersembunyinya. Kedua, kalau miner jujur menemukan block sebelum miner curang merilis chainnya, seluruh pekerjaan tersembunyi menjadi sia-sia dan miner curang kehilangan semua reward yang sudah diinvestasikan. Ketiga, semakin lama menyembunyikan block, semakin besar risiko chain tersembunyi tidak pernah bisa menyalip chain publik. Keempat, pola orphan yang tidak normal bisa terdeteksi oleh komunitas dan menyebabkan boikot terhadap pool yang mencurigakan.</p>
+
+          <p><strong>Mengapa belum pernah terjadi di Bitcoin</strong></p>
+          <p>Dalam praktiknya, selfish mining belum pernah terbukti terjadi dalam skala signifikan. Ada beberapa alasan: sulit mempertahankan kerahasiaan dalam jaringan peer-to-peer, risiko kehilangan reward jauh lebih nyata dari keuntungan teoritis, landscape mining pool yang terdistribusi membuat sangat sulit satu entitas mencapai 33% hash rate tanpa diketahui, dan incentif ekonomi untuk mining jujur tetap lebih kuat dalam jangka panjang.</p>
+
+          <div class="p-callout">
+            <p>Selfish mining adalah pengingat bahwa insentif ekonomi Bitcoin dirancang untuk membuat ketidakjujuran lebih mahal dari kejujuran. Tapi ini bukan jaminan absolut: kalau landscape mining berubah drastis dan satu entitas mendominasi hash rate, dinamika insentif ini bisa berubah.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi — Bagaimana selfish mining bekerja</div>
+          <div class="b14-s144-desc">
+            Tab pertama: simulasi 5 langkah selfish mining dari block tersembunyi hingga orphan. Tab kedua: syarat teknis, risiko, dan realita di Bitcoin mainnet.
+          </div>
+
+          <div class="b14-s144-tabs">
+            <button class="b14-s144-tab s144-act" id="b14-s144-t1">Simulasi Selfish Mining</button>
+            <button class="b14-s144-tab" id="b14-s144-t2">Syarat, Risiko, dan Realita</button>
+          </div>
+
+          <div class="b14-s144-pane show" id="b14-s144-p1">
+            <div class="b14-s144-hint">Miner curang menyembunyikan block yang berhasil ditemukan. Mereka mining di atas block tersembunyi sementara miner jujur masih mining di block sebelumnya.</div>
+            <div class="b14-s144-canvas"><canvas id="b14-s144-cv" style="display:block;width:100%;height:220px;"></canvas></div>
+            <div class="b14-s144-status" id="b14-s144-status"></div>
+            <div class="b14-s144-ctrl">
+              <button class="b14-s144-btn-primary" id="b14-s144-next">Langkah Berikut →</button>
+              <button class="b14-s144-btn-sec" id="b14-s144-rst">Reset</button>
+              <div class="b14-s144-step-ind" id="b14-s144-step-ind">Langkah 0 / 4</div>
+            </div>
+            <div class="b14-s144-note s144-idle" id="b14-s144-note">Klik "Langkah Berikut" untuk melihat bagaimana strategi selfish mining bekerja step by step.</div>
+          </div>
+
+          <div class="b14-s144-pane" id="b14-s144-p2">
+            <div class="b14-s144-hint">Selfish mining secara teori menguntungkan, tapi punya risiko teknis serius dan belum pernah terbukti terjadi dalam skala signifikan di Bitcoin.</div>
+            <div class="b14-s144-table">
+              <div class="b14-s144-table-head">Syarat agar selfish mining menguntungkan</div>
+              <div class="b14-s144-table-body">
+                <div class="b14-s144-table-row s144-header"><div>Faktor</div><div>Threshold teoritis</div><div>Realita di Bitcoin</div></div>
+                <div class="b14-s144-table-row"><div>Hash rate minimum</div><div class="b14-s144-cell s144-warn">~33% dari total</div><div class="b14-s144-cell s144-safe">Tidak ada pool yang mencapai ini secara konsisten</div></div>
+                <div class="b14-s144-table-row"><div>Kerahasiaan block</div><div class="b14-s144-cell s144-warn">Harus 100% tersembunyi</div><div class="b14-s144-cell s144-safe">Sulit dipertahankan di jaringan P2P terdistribusi</div></div>
+                <div class="b14-s144-table-row"><div>Risiko vs keuntungan</div><div class="b14-s144-cell s144-risk">Keuntungan kecil, risiko besar</div><div class="b14-s144-cell s144-safe">Lebih menguntungkan mining jujur jangka panjang</div></div>
+                <div class="b14-s144-table-row"><div>Deteksi komunitas</div><div class="b14-s144-cell s144-risk">Pola bisa terdeteksi</div><div class="b14-s144-cell s144-safe">Pool yang mencoba akan diboikot komunitas</div></div>
+              </div>
+            </div>
+            <div class="b14-s144-risks-label">Risiko teknis spesifik:</div>
+            <div class="b14-s144-risks">
+              <div class="b14-s144-risk-item">⚠️ <strong>Propagasi bocor:</strong> sinyal block yang ditemukan bisa terdeteksi oleh node lain di jaringan P2P sebelum miner curang siap merilis chainnya</div>
+              <div class="b14-s144-risk-item">⚠️ <strong>Race condition:</strong> kalau miner jujur menemukan block sebelum chain tersembunyi dirilis, seluruh pekerjaan tersembunyi menjadi sia-sia dan reward hilang sepenuhnya</div>
+              <div class="b14-s144-risk-item">⚠️ <strong>Akumulasi risiko:</strong> semakin panjang chain tersembunyi, semakin kecil probabilitas bisa menyalip chain publik yang terus tumbuh</div>
+              <div class="b14-s144-risk-item">⚠️ <strong>Deteksi pola:</strong> tingkat orphan yang tidak normal di sekitar pool tertentu bisa terdeteksi dan memicu investigasi atau boikot komunitas</div>
+            </div>
+            <div class="b14-s144-note s144-warn">Selfish mining paling berbahaya jika digabungkan dengan eclipse attack: miner curang mengisolasi node tertentu dan memaksa mereka mengikuti chain yang salah. Tapi kombinasi ini membutuhkan sumber daya dan koordinasi yang sangat besar.</div>
+            <div class="b14-s144-note s144-good">Bukti empiris: selfish mining belum pernah terbukti terjadi dalam skala signifikan di Bitcoin mainnet. Incentif ekonomi untuk mining jujur tetap lebih kuat dalam jangka panjang selama tidak ada satu entitas yang mendominasi hash rate.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-14-3" data-sb="sb-14-3">
+            ← 14.3 — March 2013 Chain Split
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-14-5" data-sb="sb-14-5">
+            14.5 — Eclipse Attack →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 14.4 -->
+
+      <!-- ==============================
+           SECTION 14.5 · Eclipse Attack
+      ============================== -->
+      <div class="p-section" id="section-14-5">
+        <div class="p-eyebrow">Bab 14 · 14.5</div>
+        <div class="p-heading">Serangan yang mengisolasi satu node, bukan seluruh jaringan</div>
+        <div class="p-title">Eclipse Attack</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Eclipse attack adalah serangan di mana penyerang mengontrol semua koneksi peer dari sebuah node target, sehingga node tersebut hanya berkomunikasi dengan node-node yang dikendalikan penyerang. Penting untuk dipahami sejak awal: ini adalah serangan terhadap satu node spesifik, bukan terhadap jaringan Bitcoin secara keseluruhan. Jaringan Bitcoin tetap berjalan normal.</p>
+
+          <p><strong>Analogi sederhana</strong></p>
+          <p>Bayangkan kamu tinggal di kota besar tapi semua sumber informasimu, tetangga, teman, radio, dan TV, diganti oleh agen penyerang yang menyampaikan berita palsu. Kamu masih di kota yang sama, tapi tidak tahu apa yang sebenarnya terjadi. Kota itu sendiri tetap berjalan normal tanpa kamu. Itulah eclipse attack: node yang diserang hidup di realita palsu yang dikontrol penyerang, sementara ribuan node lain di jaringan tetap beroperasi dengan benar.</p>
+
+          <p><strong>Bagaimana eclipse attack bekerja</strong></p>
+          <p>Setiap node Bitcoin mempertahankan sejumlah koneksi ke peer lain. Kalau penyerang bisa mengisi semua slot koneksi ini dengan node yang mereka kendalikan, node target tidak bisa lagi berkomunikasi dengan jaringan nyata. Penyerang melakukan ini dengan cara membanjiri jaringan dengan alamat IP yang mereka kendalikan, menunggu node target me-restart dan memilih peer baru, atau mengeksploitasi kelemahan dalam mekanisme pemilihan peer.</p>
+
+          <p><strong>Dampak yang mungkin terjadi</strong></p>
+          <p>Node yang di-eclipse bisa ditipu untuk menerima transaksi palsu (double spend terhadap merchant), membuang hash rate ke chain palsu (untuk miner), atau mengekspos informasi transaksi ke penyerang sebelum disiarkan ke jaringan nyata. Tapi sekali lagi, semua dampak ini hanya terjadi pada node yang berhasil diisolasi, bukan pada jaringan secara keseluruhan.</p>
+
+          <p><strong>Mitigasi di Bitcoin Core</strong></p>
+          <p>Bitcoin Core sudah mengimplementasikan beberapa mitigasi. Anchor connections mempertahankan 2 koneksi outbound ke node terpercaya bahkan saat restart. Batasan koneksi dari satu subnet IP yang sama mempersulit penyerang mendominasi semua slot. Dukungan Tor dan multiple network interfaces mempersulit identifikasi dan isolasi node target.</p>
+
+          <div class="p-callout">
+            <p>Eclipse attack bukan bukti bahwa Bitcoin mudah diserang atau desentralisasinya lemah. Ini adalah serangan yang membutuhkan upaya besar untuk menarget satu node spesifik, dan Bitcoin Core terus meningkatkan ketahanan koneksi peer untuk mempersulit serangan ini. Jaringan secara keseluruhan justru sangat sulit diserang justru karena terdistribusi di ribuan node yang tidak saling bergantung.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualisasi — Normal vs Eclipse</div>
+          <div class="b14-s145-desc">
+            Tab pertama: perbandingan node yang terhubung normal vs node yang di-eclipse. Tab kedua: dampak spesifik dan mitigasi yang sudah diimplementasikan Bitcoin Core.
+          </div>
+
+          <div class="b14-s145-tabs">
+            <button class="b14-s145-tab s145-act" id="b14-s145-t1">Normal vs Eclipse</button>
+            <button class="b14-s145-tab" id="b14-s145-t2">Dampak dan Mitigasi</button>
+          </div>
+
+          <div class="b14-s145-pane show" id="b14-s145-p1">
+            <div class="b14-s145-analogy">
+              <div class="b14-s145-analogy-label">Analogi sederhana</div>
+              <div class="b14-s145-analogy-text">Bayangkan kamu tinggal di kota besar, tapi semua sumber informasimu diganti oleh agen penyerang yang menyampaikan berita palsu. Kamu masih di kota yang sama, tapi tidak tahu apa yang sebenarnya terjadi. Kota itu sendiri tetap berjalan normal tanpa kamu. Itulah eclipse attack: serangan terhadap <strong>satu node spesifik</strong>, bukan terhadap jaringan Bitcoin secara keseluruhan.</div>
+            </div>
+            <div class="b14-s145-hint">Kiri: node yang terhubung normal ke banyak peer beragam. Kanan: node yang di-eclipse, semua koneksinya dikuasai penyerang.</div>
+            <div class="b14-s145-canvas"><canvas id="b14-s145-cv" style="display:block;width:100%;height:250px;"></canvas></div>
+            <div class="b14-s145-legend">
+              <div class="b14-s145-leg"><div class="b14-s145-leg-dot" style="background:#534AB7;"></div>Node Bitcoin jujur</div>
+              <div class="b14-s145-leg"><div class="b14-s145-leg-dot" style="background:#0F6E56;"></div>Node target (normal)</div>
+              <div class="b14-s145-leg"><div class="b14-s145-leg-dot" style="background:#A32D2D;"></div>Node penyerang</div>
+            </div>
+            <div class="b14-s145-kp s145-safe">✓ Jaringan Bitcoin secara keseluruhan tetap berjalan normal. Ribuan node lain tetap terhubung dan memvalidasi transaksi dengan benar. Eclipse attack hanya menyerang satu node spesifik.</div>
+            <div class="b14-s145-kp s145-warn">⚠ Node yang di-eclipse hidup di "realita palsu" — hanya menerima informasi dari penyerang. Ia tidak tahu ada jaringan Bitcoin nyata yang beroperasi di luar sana.</div>
+          </div>
+
+          <div class="b14-s145-pane" id="b14-s145-p2">
+            <div class="b14-s145-hint">Eclipse attack tidak membutuhkan hash rate besar. Yang dibutuhkan hanya kemampuan mengontrol semua koneksi jaringan satu node target.</div>
+            <div class="b14-s145-impacts">
+              <div class="b14-s145-impact s145-attack"><div class="b14-s145-impact-icon">💥</div><div class="b14-s145-impact-content"><div class="b14-s145-impact-title">Double spend terhadap merchant yang menggunakan node yang di-eclipse</div><div class="b14-s145-impact-desc">Penyerang mengirim transaksi palsu yang terlihat sah ke node target. Merchant mengira pembayaran sudah dikonfirmasi, padahal di jaringan nyata transaksi itu tidak ada. Penyerang lalu membelanjakan bitcoin yang sama di tempat lain.</div></div></div>
+              <div class="b14-s145-impact s145-attack"><div class="b14-s145-impact-icon">💥</div><div class="b14-s145-impact-content"><div class="b14-s145-impact-title">Miner yang di-eclipse membuang hash rate ke chain palsu</div><div class="b14-s145-impact-desc">Miner yang nodenya di-eclipse akan mining di atas block palsu dari penyerang. Seluruh listrik dan komputasi terbuang sia-sia karena block yang dihasilkan tidak akan diakui jaringan nyata.</div></div></div>
+              <div class="b14-s145-impact s145-attack"><div class="b14-s145-impact-icon">💥</div><div class="b14-s145-impact-content"><div class="b14-s145-impact-title">Penyerang memantau transaksi sebelum disiarkan</div><div class="b14-s145-impact-desc">Semua transaksi yang dikirim node target harus melewati node penyerang dulu, mengekspos informasi finansial yang seharusnya privat.</div></div></div>
+              <div class="b14-s145-impact s145-mitigation"><div class="b14-s145-impact-icon">🛡️</div><div class="b14-s145-impact-content"><div class="b14-s145-impact-title">Anchor connections: mempertahankan 2 koneksi ke node terpercaya</div><div class="b14-s145-impact-desc">Bitcoin Core menyimpan 2 koneksi outbound ke node yang sudah dikenal bahkan saat restart, mempersulit penyerang mengganti semua koneksi sekaligus.</div></div></div>
+              <div class="b14-s145-impact s145-mitigation"><div class="b14-s145-impact-icon">🛡️</div><div class="b14-s145-impact-content"><div class="b14-s145-impact-title">Batasan koneksi dari satu subnet IP</div><div class="b14-s145-impact-desc">Membatasi koneksi inbound dari subnet IP yang sama mempersulit penyerang mendominasi semua slot koneksi hanya dari satu blok alamat.</div></div></div>
+              <div class="b14-s145-impact s145-mitigation"><div class="b14-s145-impact-icon">🛡️</div><div class="b14-s145-impact-content"><div class="b14-s145-impact-title">Jalankan node via Tor atau alamat IP berbeda</div><div class="b14-s145-impact-desc">Node yang berjalan via Tor atau multiple network interfaces jauh lebih sulit diisolasi karena penyerang tidak bisa mengidentifikasi semua titik masuk koneksi.</div></div></div>
+            </div>
+            <div class="b14-s145-note s145-good">Eclipse attack bukan akhir dari desentralisasi Bitcoin. Ini adalah serangan yang sangat spesifik dan tertarget, hanya berdampak pada satu node. Ribuan node lain di seluruh dunia tetap bekerja normal. Bitcoin Core terus memperbaiki ketahanan koneksi peer untuk mempersulit serangan ini.</div>
+            <div class="b14-s145-note s145-warn">Node paling rentan: node rumahan dengan sedikit peer outbound atau yang jarang dirawat. Solusi paling sederhana adalah menjalankan node dengan koneksi ke banyak peer yang beragam secara geografis.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-14-4" data-sb="sb-14-4">
+            ← 14.4 — Selfish Mining
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-14-6" data-sb="sb-14-6">
+            14.6 — Apa yang Membuat Bitcoin Tetap Kuat? →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 14.5 -->
+
+      <!-- ==============================
+           SECTION 14.6 · Apa yang Membuat Bitcoin Tetap Kuat?
+      ============================== -->
+      <div class="p-section" id="section-14-6">
+        <div class="p-eyebrow">Bab 14 · 14.6</div>
+        <div class="p-heading">Bukan sistem yang sempurna — tapi sistem yang sudah battle-tested selama 15+ tahun</div>
+        <div class="p-title">Apa yang Membuat Bitcoin Tetap Kuat?</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Setelah mempelajari bug overflow, chain split, reorg, selfish mining, dan eclipse attack, pertanyaan yang wajar muncul: kalau semua ancaman ini ada, mengapa Bitcoin masih berdiri sampai hari ini?</p>
+
+          <p><strong>Insentif ekonomi yang selaras</strong></p>
+          <p>Menyerang Bitcoin dengan sukses membutuhkan biaya yang jauh melebihi keuntungan yang bisa didapat. Selfish mining lebih mahal dari mining jujur dalam jangka panjang. Eclipse attack butuh sumber daya besar untuk target yang sangat spesifik. 51% attack butuh biaya listrik dan hardware yang astronomis. Miner yang jujur mendapat reward lebih besar dan lebih konsisten dari yang curang karena sistem memang dirancang demikian.</p>
+
+          <p><strong>Redundansi jaringan yang ekstrem</strong></p>
+          <p>Tidak ada single point of failure di Bitcoin. Kalau satu node diserang, ribuan node lain tetap berjalan. Kalau satu implementasi punya bug, implementasi lain bisa jadi rujukan. Kalau satu pool mining dikompromikan, hash rate yang tersisa tetap mengamankan jaringan. Tidak ada server pusat, tidak ada CEO yang bisa ditekan, tidak ada tombol mati.</p>
+
+          <p><strong>Komunitas yang waspada dan responsif</strong></p>
+          <p>Bug 2010 ditemukan, dilaporkan, dan diperbaiki dalam 5 jam. Chain split 2013 dideteksi dalam satu jam dan diselesaikan dengan koordinasi luar biasa antara developer, pool mining, dan exchange. Developer, miner, node operator, dan pengguna semua punya insentif untuk menjaga jaringan tetap sehat karena nilai Bitcoin bergantung pada kepercayaan terhadap jaringan.</p>
+
+          <p><strong>Open source dan transparansi total</strong></p>
+          <p>Kode Bitcoin bisa diperiksa siapapun, kapanpun. Tidak ada celah yang bisa disembunyikan lama karena ribuan mata terus memperhatikan. Setiap perubahan diaudit secara ketat sebelum diimplementasikan. Kelemahan yang ditemukan diperbaiki secara terbuka dan hasilnya menjadi pelajaran bagi seluruh ekosistem.</p>
+
+          <div class="p-callout">
+            <p>Bitcoin bukan sistem yang sempurna. Ia adalah sistem yang sudah battle-tested sejak 2009, diserang dari berbagai arah, dan tetap berdiri. Setiap kelemahan yang ditemukan menjadi pelajaran. Setiap serangan yang gagal membuktikan ketahanan arsitekturnya. Dan setiap insiden yang berhasil diselesaikan membuktikan bahwa komunitas yang terdistribusi bisa berkoordinasi tanpa otoritas pusat.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Ringkasan — Insiden, Respons, dan Pelajaran</div>
+          <div class="b14-s146-desc">
+            Klik tiap baris untuk melihat detail insiden, bagaimana komunitas merespons, dan pelajaran yang dipetik. Di bawah tabel: empat pilar ketahanan Bitcoin.
+          </div>
+
+          <div class="b14-s146-table">
+            <div class="b14-s146-table-head">
+              <div>Insiden</div>
+              <div>Tahun</div>
+              <div>Status</div>
+            </div>
+            <div class="b14-s146-row" id="b14-s146-r1">
+              <div class="b14-s146-row-main">
+                <div class="b14-s146-row-title">Nilai Overflow Bug</div>
+                <div class="b14-s146-row-year">2010</div>
+                <div class="b14-s146-row-badge s146-fixed">Diperbaiki</div>
+              </div>
+              <div class="b14-s146-row-detail" id="b14-s146-d1">
+                <div class="b14-s146-detail-section s146-what">
+                  <div class="b14-s146-detail-label">Apa yang terjadi</div>
+                  <div class="b14-s146-detail-text">Penyerang mengeksploitasi bug di kode yang tidak memeriksa MAX_MONEY sebelum menjumlahkan output transaksi. Nilai yang sangat besar menyebabkan integer overflow dan transaksi ilegal dikonfirmasi di block #74.638.</div>
+                </div>
+                <div class="b14-s146-detail-section s146-response">
+                  <div class="b14-s146-detail-label">Respons komunitas</div>
+                  <div class="b14-s146-detail-text">Satoshi Nakamoto merilis patch dalam 5 jam. Komunitas melakukan soft fork darurat: node upgrade dan mengabaikan block yang bermasalah. Chain yang bersih menjadi dominan.</div>
+                </div>
+                <div class="b14-s146-detail-section s146-lesson">
+                  <div class="b14-s146-detail-label">Pelajaran</div>
+                  <div class="b14-s146-detail-text">Kode konsensus harus memeriksa MAX_MONEY sebelum menjumlahkan nilai. Satu baris kode yang hilang bisa menciptakan celah kritis. Sejak saat itu validasi nilai menjadi standar.</div>
+                </div>
+              </div>
+            </div>
+            <div class="b14-s146-row" id="b14-s146-r2">
+              <div class="b14-s146-row-main">
+                <div class="b14-s146-row-title">March 2013 Chain Split</div>
+                <div class="b14-s146-row-year">2013</div>
+                <div class="b14-s146-row-badge s146-fixed">Diselesaikan</div>
+              </div>
+              <div class="b14-s146-row-detail" id="b14-s146-d2">
+                <div class="b14-s146-detail-section s146-what">
+                  <div class="b14-s146-detail-label">Apa yang terjadi</div>
+                  <div class="b14-s146-detail-text">Perbedaan implementasi database antara Bitcoin 0.7 (BerkeleyDB) dan 0.8 (LevelDB) menyebabkan dua chain berjalan paralel selama 24 block (~6 jam). Chain 0.8 sempat lebih panjang karena punya 60% hash rate.</div>
+                </div>
+                <div class="b14-s146-detail-section s146-response">
+                  <div class="b14-s146-detail-label">Respons komunitas</div>
+                  <div class="b14-s146-detail-text">BTCGuild dan Slush Pool downgrade ke 0.7 meski harus merelakan reward. Komunitas memilih kembali ke chain 0.7 karena lebih mudah koordinasi. Jaringan bersatu di block #225.454.</div>
+                </div>
+                <div class="b14-s146-detail-section s146-lesson">
+                  <div class="b14-s146-detail-label">Pelajaran</div>
+                  <div class="b14-s146-detail-text">Dua implementasi yang mengklaim mengikuti aturan yang sama bisa menghasilkan perilaku berbeda. Perubahan infrastruktur database harus diuji pada semua edge case. Koordinasi pool mining bisa menyelesaikan krisis dengan cepat.</div>
+                </div>
+              </div>
+            </div>
+            <div class="b14-s146-row" id="b14-s146-r3">
+              <div class="b14-s146-row-main">
+                <div class="b14-s146-row-title">Reorg Terbesar di Bitcoin</div>
+                <div class="b14-s146-row-year">2012</div>
+                <div class="b14-s146-row-badge s146-fixed">Normal</div>
+              </div>
+              <div class="b14-s146-row-detail" id="b14-s146-d3">
+                <div class="b14-s146-detail-section s146-what">
+                  <div class="b14-s146-detail-label">Apa yang terjadi</div>
+                  <div class="b14-s146-detail-text">Reorg 4 block terjadi di Bitcoin mainnet pada 2012 karena bug software, bukan serangan yang disengaja. Ini adalah reorg terdalam yang pernah terjadi di Bitcoin.</div>
+                </div>
+                <div class="b14-s146-detail-section s146-response">
+                  <div class="b14-s146-detail-label">Respons komunitas</div>
+                  <div class="b14-s146-detail-text">Protokol secara otomatis menyelesaikannya dengan mengikuti chain terpanjang. Tidak diperlukan intervensi manual. Ini membuktikan mekanisme konsensus bekerja sesuai rancangan.</div>
+                </div>
+                <div class="b14-s146-detail-section s146-lesson">
+                  <div class="b14-s146-detail-label">Pelajaran</div>
+                  <div class="b14-s146-detail-text">Standar 6 konfirmasi terbukti memberikan keamanan yang cukup. Reorg dalam skala ini tidak bisa dieksploitasi untuk double spend tanpa hash rate yang sangat besar.</div>
+                </div>
+              </div>
+            </div>
+            <div class="b14-s146-row" id="b14-s146-r4">
+              <div class="b14-s146-row-main">
+                <div class="b14-s146-row-title">Selfish Mining</div>
+                <div class="b14-s146-row-year">Teoritis</div>
+                <div class="b14-s146-row-badge s146-theory">Belum terbukti</div>
+              </div>
+              <div class="b14-s146-row-detail" id="b14-s146-d4">
+                <div class="b14-s146-detail-section s146-what">
+                  <div class="b14-s146-detail-label">Apa yang terjadi</div>
+                  <div class="b14-s146-detail-text">Ittay Eyal dan Emin Gun Sirer memformalkan analisis selfish mining pada 2013. Mereka menunjukkan bahwa dengan hash rate sekitar 33%, strategi ini secara teoritis menguntungkan.</div>
+                </div>
+                <div class="b14-s146-detail-section s146-response">
+                  <div class="b14-s146-detail-label">Respons komunitas</div>
+                  <div class="b14-s146-detail-text">Komunitas mendiskusikan berbagai mitigasi. Insentif ekonomi terbukti lebih kuat: tidak ada pool yang secara terbukti melakukan selfish mining dalam skala signifikan di Bitcoin mainnet.</div>
+                </div>
+                <div class="b14-s146-detail-section s146-lesson">
+                  <div class="b14-s146-detail-label">Pelajaran</div>
+                  <div class="b14-s146-detail-text">Insentif ekonomi adalah pertahanan terkuat Bitcoin. Strategi yang menguntungkan di atas kertas seringkali tidak layak secara praktis karena risiko dan biaya tersembunyi yang lebih besar.</div>
+                </div>
+              </div>
+            </div>
+            <div class="b14-s146-row" id="b14-s146-r5">
+              <div class="b14-s146-row-main">
+                <div class="b14-s146-row-title">Eclipse Attack</div>
+                <div class="b14-s146-row-year">Aktif diteliti</div>
+                <div class="b14-s146-row-badge s146-mitigated">Dimitigasi</div>
+              </div>
+              <div class="b14-s146-row-detail" id="b14-s146-d5">
+                <div class="b14-s146-detail-section s146-what">
+                  <div class="b14-s146-detail-label">Apa yang terjadi</div>
+                  <div class="b14-s146-detail-text">Peneliti keamanan mendemonstrasikan bahwa node Bitcoin bisa diisolasi dari jaringan dengan mengontrol semua koneksi peer-nya. Node yang terisolasi bisa ditipu untuk menerima informasi palsu.</div>
+                </div>
+                <div class="b14-s146-detail-section s146-response">
+                  <div class="b14-s146-detail-label">Respons komunitas</div>
+                  <div class="b14-s146-detail-text">Bitcoin Core mengimplementasikan anchor connections, batasan koneksi per subnet, dan dukungan Tor yang lebih baik. Riset terus berlanjut untuk memperkuat ketahanan koneksi peer.</div>
+                </div>
+                <div class="b14-s146-detail-section s146-lesson">
+                  <div class="b14-s146-detail-label">Pelajaran</div>
+                  <div class="b14-s146-detail-text">Diversifikasi peer adalah perlindungan terbaik. Node yang terhubung ke banyak peer dari berbagai lokasi geografis jauh lebih sulit diisolasi. Open source memungkinkan mitigasi dilakukan secara transparan.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b14-s146-pillars-label">Empat pilar ketahanan Bitcoin:</div>
+          <div class="b14-s146-pillars">
+            <div class="b14-s146-pillar">
+              <div class="b14-s146-pillar-icon">💰</div>
+              <div class="b14-s146-pillar-title">Insentif Ekonomi</div>
+              <div class="b14-s146-pillar-desc">Menyerang Bitcoin lebih mahal dari keuntungannya. Sistem dirancang agar kejujuran selalu lebih menguntungkan dari kecurangan dalam jangka panjang.</div>
+            </div>
+            <div class="b14-s146-pillar">
+              <div class="b14-s146-pillar-icon">🌐</div>
+              <div class="b14-s146-pillar-title">Redundansi Jaringan</div>
+              <div class="b14-s146-pillar-desc">Tidak ada single point of failure. Ribuan node di seluruh dunia yang tidak saling bergantung membuat jaringan sangat sulit dimatikan.</div>
+            </div>
+            <div class="b14-s146-pillar">
+              <div class="b14-s146-pillar-icon">👥</div>
+              <div class="b14-s146-pillar-title">Komunitas Waspada</div>
+              <div class="b14-s146-pillar-desc">Setiap insiden besar direspons cepat. Developer, miner, dan pengguna semua punya insentif untuk menjaga jaringan sehat karena nilai Bitcoin bergantung padanya.</div>
+            </div>
+            <div class="b14-s146-pillar">
+              <div class="b14-s146-pillar-icon">🔓</div>
+              <div class="b14-s146-pillar-title">Open Source</div>
+              <div class="b14-s146-pillar-desc">Kode terbuka untuk diperiksa siapapun. Tidak ada celah yang bisa disembunyikan lama. Setiap perubahan diaudit oleh banyak mata sebelum diimplementasikan.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-14-5" data-sb="sb-14-5">
+            ← 14.5 — Eclipse Attack
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 14.6 -->
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 17 · BAB 14 -->
+
+

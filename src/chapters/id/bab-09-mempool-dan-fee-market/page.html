@@ -1,0 +1,670 @@
+<!-- ============================================================
+     PAGE 12 · BAB 9 · Mempool dan Fee Market
+     |-- 9.1 · Apa itu Mempool? [DONE]
+     |-- 9.2 · Fee Rate dan Prioritas [LOCKED]
+     |-- 9.3 · RBF dan CPFP [LOCKED]
+     |-- 9.4 · Mempool saat Jaringan Ramai [LOCKED]
+     |-- 9.5 · Fee Estimation [LOCKED]
+     |-- 9.6 · Masa Depan Fee Market [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab9">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b9">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b9">← Daftar Bab</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab9">
+      <div class="sidebar-heading">Bab 9</div>
+      <div class="sidebar-title">Mempool dan Fee Market</div>
+
+      <div class="sidebar-item active" id="sb-9-1">
+        <div class="sb-num">9.1</div>
+        <div class="sb-label">Apa itu Mempool?</div>
+      </div>
+      <div class="sidebar-item" id="sb-9-2">
+        <div class="sb-num">9.2</div>
+        <div class="sb-label">Fee Rate dan Prioritas</div>
+      </div>
+      <div class="sidebar-item" id="sb-9-3">
+        <div class="sb-num">9.3</div>
+        <div class="sb-label">RBF dan CPFP</div>
+      </div>
+      <div class="sidebar-item" id="sb-9-4">
+        <div class="sb-num">9.4</div>
+        <div class="sb-label">Mempool saat Jaringan Ramai</div>
+      </div>
+      <div class="sidebar-item" id="sb-9-5">
+        <div class="sb-num">9.5</div>
+        <div class="sb-label">Fee Estimation</div>
+      </div>
+      <div class="sidebar-item" id="sb-9-6">
+        <div class="sb-num">9.6</div>
+        <div class="sb-label">Masa Depan Fee Market</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab9-content">
+
+      <!-- ==============================
+           SECTION 9.1 · Apa itu Mempool?
+      ============================== -->
+      <div class="p-section active" id="section-9-1">
+        <div class="p-eyebrow">Bab 9 · 9.1</div>
+        <div class="p-heading">Ruang tunggu yang tidak terpusat</div>
+        <div class="p-title">Apa itu Mempool?</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Kita sudah berkenalan dengan mempool di 3.5 sebagai satu tahap dalam perjalanan transaksi. Sekarang kita berhenti lebih lama di sana, karena mempool bukan sekadar ruang tunggu: di sinilah harga sebuah transaksi terbentuk.</p>
+          <p>Setiap transaksi Bitcoin yang sudah dikirim tapi belum dikonfirmasi hidup di sebuah ruang tunggu. Ruang tunggu ini disebut mempool, kependekan dari memory pool. Setiap node punya mempool-nya sendiri, dan tidak ada "mempool global" yang tunggal.</p>
+
+          <p><strong>Ruang tunggu yang tidak terpusat</strong></p>
+          <p>Karena setiap node mengelola mempool-nya sendiri, dua node yang berbeda bisa punya isi mempool yang sedikit berbeda. Node A mungkin sudah menerima transaksi yang belum sampai ke Node B. Node C mungkin sudah menghapus transaksi yang masih ada di Node D karena keterbatasan memori. Ini normal dan disengaja. Mempool bukan database global yang tersinkronisasi, ia adalah kumpulan transaksi yang menunggu konfirmasi di setiap node secara independen.</p>
+
+          <p><strong>Apa yang masuk mempool?</strong></p>
+          <p>Tidak semua transaksi otomatis diterima ke mempool. Setiap node punya aturan sendiri yang disebut mempool policy. Aturan umum yang berlaku di sebagian besar node: transaksi harus valid secara kriptografis, UTXO yang digunakan harus ada dan belum dipakai, fee harus memenuhi minimum threshold, dan ukuran transaksi harus dalam batas yang wajar. Kalau transaksi tidak memenuhi syarat, ia ditolak dan tidak masuk mempool node tersebut.</p>
+
+          <p><strong>Berapa lama transaksi bisa di mempool?</strong></p>
+          <p>Transaksi yang tidak dikonfirmasi dalam waktu tertentu akan dihapus dari mempool. Sebagian besar node menghapus transaksi yang sudah lebih dari dua minggu. Kalau transaksi dihapus dari mempool sebelum dikonfirmasi, dana tidak hilang. UTXO yang digunakan kembali ke keadaan semula dan transaksi bisa disiarkan ulang.</p>
+
+          <p><strong>Mempool dan fee market</strong></p>
+          <p>Mempool adalah tempat di mana fee market terbentuk secara alami. Ruang dalam setiap block terbatas. Miner memilih transaksi mana yang akan dimasukkan ke block, dan mereka punya insentif ekonomi untuk memilih transaksi dengan fee tertinggi. Saat mempool ramai, pengguna yang ingin cepat dikonfirmasi harus bersaing dengan fee yang lebih tinggi.</p>
+
+          <div class="p-callout">
+            <p>Mempool adalah salah satu komponen Bitcoin yang paling sering disalahpahami. Banyak yang panik saat melihat transaksi mereka stuck di mempool. Padahal selama transaksi valid dan fee-nya wajar, ia akan dikonfirmasi, entah sekarang atau nanti saat jaringan lebih sepi.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi — Mempool dan seleksi transaksi</div>
+          <div class="b09-s91-desc">
+            Langkah 1: tambah transaksi ke mempool. Langkah 2: tambang block untuk melihat bagaimana miner memilih transaksi berdasarkan fee rate tertinggi.
+          </div>
+
+          <div class="b09-s91-top">
+            <span class="b09-s91-step-label">1.</span>
+            <button class="b09-s91-btn-add" id="b09-s91-add">+ Tambah Transaksi</button>
+            <span class="b09-s91-step-label">2.</span>
+            <button class="b09-s91-btn-mine" id="b09-s91-mine">Tambang Block</button>
+            <button class="b09-s91-btn-reset" id="b09-s91-reset">Reset</button>
+            <div class="b09-s91-stat" id="b09-s91-stat">Mempool: 0 tx</div>
+          </div>
+
+          <div class="b09-s91-legend">
+            <div class="b09-s91-leg"><div class="b09-s91-leg-dot" style="background:#0F6E56;"></div>Fee tinggi (diprioritaskan)</div>
+            <div class="b09-s91-leg"><div class="b09-s91-leg-dot" style="background:#534AB7;"></div>Fee sedang</div>
+            <div class="b09-s91-leg"><div class="b09-s91-leg-dot" style="background:#854F0B;"></div>Fee rendah (menunggu)</div>
+          </div>
+
+          <div class="b09-s91-body">
+            <div class="b09-s91-col">
+              <div class="b09-s91-col-head">Mempool</div>
+              <div class="b09-s91-col-sub">Transaksi menunggu konfirmasi</div>
+              <div class="b09-s91-pool" id="b09-s91-pool"><div class="b09-s91-empty">Belum ada transaksi</div></div>
+              <div class="b09-s91-cap">
+                <div class="b09-s91-cap-label">Kapasitas mempool: <span id="b09-s91-cap-pct">0%</span></div>
+                <div class="b09-s91-cap-track"><div class="b09-s91-cap-fill" id="b09-s91-cap-fill" style="width:0%"></div></div>
+              </div>
+            </div>
+            <div class="b09-s91-col">
+              <div class="b09-s91-col-head">Block saat ini</div>
+              <div class="b09-s91-col-sub">Dipilih miner berdasarkan fee tertinggi</div>
+              <div class="b09-s91-block" id="b09-s91-block"><div class="b09-s91-empty">Belum ada transaksi terpilih</div></div>
+              <div class="b09-s91-cap">
+                <div class="b09-s91-cap-label">Kapasitas block: <span id="b09-s91-blk-pct">0%</span></div>
+                <div class="b09-s91-cap-track"><div class="b09-s91-cap-fill" id="b09-s91-blk-fill" style="width:0%"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b09-s91-note idle-note" id="b09-s91-note">Mulai dari langkah 1: tambah transaksi ke mempool, lalu langkah 2: tambang block untuk melihat bagaimana miner memilih transaksi berdasarkan fee tertinggi.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-9-2" data-sb="sb-9-2">
+            9.2 — Fee Rate dan Prioritas →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 9.1 -->
+
+      <!-- ==============================
+           SECTION 9.2 · Fee Rate dan Prioritas
+      ============================== -->
+      <div class="p-section" id="section-9-2">
+        <div class="p-eyebrow">Bab 9 · 9.2</div>
+        <div class="p-heading">Bukan fee terbesar yang menang, tapi fee rate tertinggi</div>
+        <div class="p-title">Fee Rate dan Prioritas</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Di mempool, semua transaksi bersaing untuk masuk ke block berikutnya. Tapi bukan transaksi dengan fee total terbesar yang diprioritaskan. Yang diprioritaskan adalah transaksi dengan fee rate tertinggi.</p>
+
+          <p><strong>Apa itu fee rate?</strong></p>
+          <p>Fee rate adalah fee dibagi ukuran transaksi. Satuannya adalah satoshi per virtual byte, ditulis sat/vB. Sebuah transaksi dengan fee 1.000 satoshi dan ukuran 200 vbyte punya fee rate 5 sat/vB. Transaksi lain dengan fee 500 satoshi tapi ukuran 50 vbyte punya fee rate 10 sat/vB dan akan diprioritaskan lebih tinggi, meskipun fee totalnya lebih kecil. Ini logis dari sudut pandang miner: block punya kapasitas terbatas dalam satuan weight/vbyte, bukan jumlah transaksi. Miner ingin memaksimalkan pendapatan per unit ruang yang tersedia.</p>
+
+          <p><strong>Virtual byte vs byte</strong></p>
+          <p>Sejak SegWit diperkenalkan, ukuran transaksi diukur dalam virtual byte (vbyte) bukan byte biasa. Data witness (tanda tangan) mendapat diskon 75%: setiap 4 byte witness dihitung sebagai 1 vbyte. Ini insentif bagi pengguna untuk menggunakan address SegWit karena transaksi mereka lebih ringan dan fee rate-nya lebih kompetitif untuk fee yang sama.</p>
+
+          <p><strong>Bagaimana miner memilih transaksi?</strong></p>
+          <p>Miner mengurutkan semua transaksi di mempool berdasarkan fee rate, dari tertinggi ke terendah, lalu mengisi block dari atas sampai kapasitas habis. Dalam praktiknya lebih kompleks karena ada dependensi antar transaksi: transaksi B yang menggunakan output transaksi A harus masuk setelah A. Tapi prinsip dasarnya tetap: fee rate tertinggi berarti prioritas tertinggi.</p>
+
+          <p><strong>Berapa fee rate yang tepat?</strong></p>
+          <p>Tidak ada angka yang pasti. Fee rate yang tepat tergantung seberapa ramai mempool saat itu dan seberapa cepat transaksi perlu dikonfirmasi. Saat mempool sepi, bahkan 1 sat/vB bisa dikonfirmasi dalam block berikutnya. Saat mempool sangat ramai, fee rate bisa mencapai ratusan sat/vB. Tools seperti mempool.space membantu melihat kondisi mempool secara real-time.</p>
+
+          <div class="p-callout">
+            <p>Memahami fee rate adalah keterampilan dasar yang perlu dimiliki setiap pengguna Bitcoin. Terlalu rendah dan transaksi bisa stuck berminggu-minggu. Terlalu tinggi dan kamu membayar lebih dari yang perlu.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi — Kalkulator fee rate dan perbandingan Legacy vs SegWit</div>
+          <div class="b09-s92-desc">
+            Tab pertama: hitung fee rate dari fee dan ukuran transaksi. Tab kedua: bandingkan efisiensi Legacy vs SegWit dengan fee yang sama.
+          </div>
+
+          <div class="b09-s92-tabs">
+            <button class="b09-s92-tab s92-act" id="b09-s92-t1">Kalkulator fee rate</button>
+            <button class="b09-s92-tab" id="b09-s92-t2">Legacy vs SegWit</button>
+          </div>
+
+          <!-- PANE 1: KALKULATOR -->
+          <div class="b09-s92-pane show" id="b09-s92-p1">
+            <div class="b09-s92-inputs">
+              <div class="b09-s92-field">
+                <div class="b09-s92-label">Fee total <span class="b09-s92-label-sub">dalam satoshi</span></div>
+                <input class="b09-s92-input" id="b09-s92-fee" type="number" value="2100" min="1" max="1000000">
+              </div>
+              <div class="b09-s92-field">
+                <div class="b09-s92-label">Ukuran transaksi <span class="b09-s92-label-sub">dalam vbyte</span></div>
+                <input class="b09-s92-input" id="b09-s92-size" type="number" value="140" min="1" max="10000">
+              </div>
+            </div>
+            <div class="b09-s92-result">
+              <div class="b09-s92-result-head">
+                <div class="b09-s92-result-val" id="b09-s92-rate">15.0</div>
+                <div class="b09-s92-result-unit">sat/vB</div>
+              </div>
+              <div class="b09-s92-result-body">
+                <div class="b09-s92-zone-wrap">
+                  <div class="b09-s92-zone-bar">
+                    <div class="b09-s92-zone-low"></div>
+                    <div class="b09-s92-zone-med"></div>
+                    <div class="b09-s92-zone-high"></div>
+                    <div class="b09-s92-zone-marker" id="b09-s92-marker" style="left:40%"></div>
+                  </div>
+                  <div class="b09-s92-zone-labels">
+                    <span>1 sat/vB</span><span>10</span><span>30</span><span>100+</span>
+                  </div>
+                  <div class="b09-s92-zone-legend">
+                    <div class="b09-s92-zone-leg"><div class="b09-s92-zone-dot" style="background:#854F0B;"></div>Rendah</div>
+                    <div class="b09-s92-zone-leg"><div class="b09-s92-zone-dot" style="background:#534AB7;"></div>Sedang</div>
+                    <div class="b09-s92-zone-leg"><div class="b09-s92-zone-dot" style="background:#0F6E56;"></div>Tinggi</div>
+                  </div>
+                </div>
+                <div class="b09-s92-row"><div class="b09-s92-row-label">Estimasi konfirmasi</div><div class="b09-s92-row-val" id="b09-s92-eta">2-3 block</div></div>
+                <div class="b09-s92-row"><div class="b09-s92-row-label">Fee total</div><div class="b09-s92-row-val" id="b09-s92-total-sat">2,100 sat</div></div>
+                <div class="b09-s92-row"><div class="b09-s92-row-label">Prioritas di mempool</div><div class="b09-s92-row-val" id="b09-s92-priority">Sedang</div></div>
+              </div>
+            </div>
+            <div class="b09-s92-note" id="b09-s92-note1">Fee rate 15 sat/vB termasuk sedang.</div>
+          </div>
+
+          <!-- PANE 2: LEGACY VS SEGWIT -->
+          <div class="b09-s92-pane" id="b09-s92-p2">
+            <div class="b09-s92-inputs">
+              <div class="b09-s92-field">
+                <div class="b09-s92-label">Fee yang dibayar <span class="b09-s92-label-sub">sama untuk keduanya (satoshi)</span></div>
+                <input class="b09-s92-input" id="b09-s92-fee2" type="number" value="3000" min="1" max="1000000">
+              </div>
+            </div>
+            <div class="b09-s92-compare">
+              <div class="b09-s92-cmp-card">
+                <div class="b09-s92-cmp-head s92-legacy">Legacy (P2PKH)</div>
+                <div class="b09-s92-cmp-body">
+                  <div class="b09-s92-cmp-row"><div class="b09-s92-cmp-label">Ukuran</div><div class="b09-s92-cmp-val s92-warn" id="b09-s92-leg-size">226 vbyte</div></div>
+                  <div class="b09-s92-cmp-row"><div class="b09-s92-cmp-label">Fee rate</div><div class="b09-s92-cmp-val s92-warn" id="b09-s92-leg-rate">13.3 sat/vB</div></div>
+                  <div class="b09-s92-cmp-row"><div class="b09-s92-cmp-label">Prioritas</div><div class="b09-s92-cmp-val s92-warn" id="b09-s92-leg-pri">Sedang</div></div>
+                  <div class="b09-s92-cmp-row"><div class="b09-s92-cmp-label">Est. konfirmasi</div><div class="b09-s92-cmp-val" id="b09-s92-leg-eta">2-3 block</div></div>
+                </div>
+              </div>
+              <div class="b09-s92-cmp-card">
+                <div class="b09-s92-cmp-head s92-segwit">SegWit (P2WPKH)</div>
+                <div class="b09-s92-cmp-body">
+                  <div class="b09-s92-cmp-row"><div class="b09-s92-cmp-label">Ukuran</div><div class="b09-s92-cmp-val s92-good" id="b09-s92-sw-size">140 vbyte</div></div>
+                  <div class="b09-s92-cmp-row"><div class="b09-s92-cmp-label">Fee rate</div><div class="b09-s92-cmp-val s92-good" id="b09-s92-sw-rate">21.4 sat/vB</div></div>
+                  <div class="b09-s92-cmp-row"><div class="b09-s92-cmp-label">Prioritas</div><div class="b09-s92-cmp-val s92-good" id="b09-s92-sw-pri">Tinggi</div></div>
+                  <div class="b09-s92-cmp-row"><div class="b09-s92-cmp-label">Est. konfirmasi</div><div class="b09-s92-cmp-val s92-good" id="b09-s92-sw-eta">Block berikutnya</div></div>
+                </div>
+              </div>
+            </div>
+            <div class="b09-s92-note s92-note-info" id="b09-s92-note2">Dengan fee yang sama, transaksi SegWit punya fee rate lebih tinggi karena ukurannya lebih kecil.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-9-1" data-sb="sb-9-1">
+            ← 9.1 — Apa itu Mempool?
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-9-3" data-sb="sb-9-3">
+            9.3 — RBF dan CPFP →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 9.2 -->
+
+      <!-- ==============================
+           SECTION 9.3 · RBF dan CPFP
+      ============================== -->
+      <div class="p-section" id="section-9-3">
+        <div class="p-eyebrow">Bab 9 · 9.3</div>
+        <div class="p-heading">Transaksi stuck? Ada dua cara untuk mengatasinya</div>
+        <div class="p-title">RBF dan CPFP</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Transaksi sudah dikirim tapi fee-nya terlalu rendah dan stuck di mempool. Apa yang bisa dilakukan? Ada dua mekanisme yang memungkinkan pengguna untuk mempercepat transaksi yang sudah terlanjur dikirim: RBF dan CPFP.</p>
+
+          <p><strong>RBF: Replace-By-Fee</strong></p>
+          <p>RBF memungkinkan pengirim untuk mengganti transaksi yang belum dikonfirmasi dengan versi baru yang punya fee lebih tinggi. Transaksi baru menggunakan UTXO yang sama tapi membayar fee yang lebih besar, sehingga miner lebih tertarik untuk memasukkannya ke block. Agar bisa di-replace, transaksi asli harus menandai dirinya sebagai replaceable dengan mengatur nilai sequence number ke angka tertentu. Ini disebut opt-in RBF. Node yang menerima transaksi pengganti akan membuang transaksi lama dan menggantikan dengan yang baru, selama transaksi baru memenuhi syarat: fee lebih tinggi dan fee rate lebih tinggi dari transaksi aslinya.</p>
+
+          <p><strong>Full RBF</strong></p>
+          <p>Ada juga full RBF, di mana node menerima penggantian transaksi meskipun transaksi aslinya tidak menandai dirinya sebagai replaceable. Ini kontroversial karena menyentuh asumsi bahwa transaksi unconfirmed bisa dianggap aman untuk pembayaran kecil.</p>
+
+          <p><strong>CPFP: Child Pays for Parent</strong></p>
+          <p>CPFP adalah mekanisme yang berbeda. Kalau transaksi asli (parent) stuck karena fee rendah, penerima bisa membuat transaksi baru (child) yang menggunakan output dari transaksi parent, dengan fee yang sangat tinggi. Miner yang ingin mengambil fee dari transaksi child harus memasukkan transaksi parent terlebih dahulu karena child bergantung pada parent. Secara efektif, fee tinggi dari child mensubsidi konfirmasi parent yang fee-nya rendah. Miner menghitung fee rate gabungan dari paket parent+child dan membandingkannya dengan transaksi lain di mempool.</p>
+
+          <p><strong>Kapan pakai RBF vs CPFP?</strong></p>
+          <p>RBF digunakan oleh pengirim yang ingin mengganti transaksinya sendiri. CPFP bisa digunakan oleh penerima, yang tidak bisa mengubah transaksi yang sudah dikirim kepadanya tapi bisa membuat transaksi baru yang menarik parent masuk ke block.</p>
+
+          <div class="p-callout">
+            <p>RBF dan CPFP adalah bukti bahwa Bitcoin bisa sangat fleksibel dalam hal manajemen fee. Dua mekanisme yang berbeda untuk menyelesaikan masalah yang sama, dengan trade-off dan asumsi yang berbeda. Memahami keduanya membuat pengguna jauh lebih percaya diri dalam mengelola transaksinya.</p>
+
+          <p><strong>Sisi lain dari fleksibilitas itu</strong></p>
+          <p>Fleksibilitas selalu punya sisi lain. Aturan yang sama yang memungkinkan kamu mempercepat transaksimu sendiri bisa diputarbalikkan untuk <strong>menahan transaksi orang lain</strong>. Namanya <em>transaction pinning</em>.</p>
+          <p>Kuncinya ada pada satu kenyataan yang sudah kita bahas di 9.1: mempool bukan bagian dari konsensus. Ia sekadar kebijakan masing-masing node tentang apa yang mau disimpan dan diteruskan. Kebijakan itu punya batas-batas praktis, misalnya seberapa banyak transaksi turunan yang boleh menggantung dari satu transaksi yang belum terkonfirmasi. Batas itu ada untuk melindungi node dari kebanjiran. Tapi batas yang sama bisa dipakai untuk menjebak.</p>
+          <p>Bentuknya kira-kira begini. Penyerang membuat transaksi turunan yang sangat besar dan berfee sangat rendah, menempel pada transaksi yang ingin ia hambat. Gabungan itu terlalu tidak menarik untuk ditambang, tapi sudah terlanjur memenuhi kuota kebijakan mempool. Akibatnya, korban tidak bisa lagi mengganti atau mempercepat transaksinya, karena penggantinya ditolak oleh kebijakan yang sudah kepenuhan. Transaksinya tidak dibatalkan, ia hanya <strong>dipaku di tempat</strong>, macet tanpa bisa didorong.</p>
+          <p>Untuk pembayaran biasa, ini menjengkelkan. Untuk Lightning, ini berbahaya. Ingat dari 7.2 bahwa hukuman terhadap kecurangan hanya bekerja kalau transaksi hukumannya bisa masuk ke blockchain <strong>sebelum timelock habis</strong>. Kalau penyerang bisa memaku transaksi itu di mempool sampai tenggatnya lewat, mekanisme hukuman yang tampak kokoh di simulasi tadi jadi tidak berdaya. Bukan kriptografinya yang dipatahkan, melainkan jalannya menuju blockchain yang dihalangi.</p>
+          <p>Ini contoh bagus tentang lapisan keamanan yang berbeda. Bab 4 membahas keamanan yang bersandar pada matematika, dan matematika tidak bisa ditawar. Tapi di lapisan mempool, yang berlaku bukan matematika melainkan <strong>kebijakan</strong>, dan kebijakan selalu bisa dieksploitasi oleh orang yang membacanya lebih teliti daripada yang membuatnya.</p>
+          <p>Karena itu perbaikannya juga ada di lapisan kebijakan, bukan di konsensus. Salah satunya <em>package relay</em>, yang membuat node menilai satu transaksi bersama turunannya sebagai satu paket, bukan satu per satu, sehingga transaksi berfee rendah yang ditemani anak berfee tinggi tidak lagi tertolak di gerbang. Ada juga pembatasan bentuk transaksi khusus untuk protokol seperti Lightning, agar ruang bagi penyerang untuk menempelkan turunan raksasa jadi jauh lebih sempit.</p>
+          <p>Perlu dicatat bahwa perbaikan semacam ini tidak butuh soft fork, karena tidak ada aturan konsensus yang berubah. Cukup node-node memperbarui kebijakannya. Itu membuatnya lebih mudah diterapkan, tapi sekaligus berarti perlindungannya bergantung pada berapa banyak node yang benar-benar memperbarui diri.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi — RBF dan CPFP</div>
+          <div class="b09-s93-desc">
+            Tab RBF: lihat bagaimana transaksi stuck digantikan dengan versi baru yang fee-nya lebih tinggi. Tab CPFP: buat child transaction untuk menarik parent yang stuck masuk ke block.
+          </div>
+
+          <div class="b09-s93-tabs">
+            <button class="b09-s93-tab s93-act" id="b09-s93-t1">RBF — Replace-By-Fee</button>
+            <button class="b09-s93-tab" id="b09-s93-t2">CPFP — Child Pays for Parent</button>
+          </div>
+
+          <!-- RBF PANE -->
+          <div class="b09-s93-pane show" id="b09-s93-p1">
+            <div class="b09-s93-hint">Antrian mempool diurutkan berdasarkan fee rate. Transaksi kamu (merah, posisi bawah) terlalu rendah. Klik "Ganti dengan RBF" untuk mengirim versi baru dengan fee lebih tinggi.</div>
+            <div class="b09-s93-queue" id="b09-s93-rbf-queue"></div>
+            <div class="b09-s93-detail">
+              <div class="b09-s93-detail-head" id="b09-s93-rbf-dhead">Transaksi kamu (stuck)</div>
+              <div class="b09-s93-detail-body">
+                <div class="b09-s93-drow"><div class="b09-s93-dk">TX ID</div><div class="b09-s93-dv">tx_a1b2c3d4</div></div>
+                <div class="b09-s93-drow"><div class="b09-s93-dk">Fee rate saat ini</div><div class="b09-s93-dv s93-bad">2.0 sat/vB</div></div>
+                <div class="b09-s93-drow"><div class="b09-s93-dk">Fee rate baru (RBF)</div><div class="b09-s93-dv s93-good">35.0 sat/vB</div></div>
+                <div class="b09-s93-drow"><div class="b09-s93-dk">Tambahan fee</div><div class="b09-s93-dv s93-warn">+4,620 sat</div></div>
+                <div class="b09-s93-drow"><div class="b09-s93-dk">Status</div><div class="b09-s93-dv s93-bad" id="b09-s93-rbf-status">Stuck di mempool</div></div>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="b09-s93-btn-primary" id="b09-s93-rbf-btn">Ganti dengan RBF</button>
+              <button class="b09-s93-btn-sec" id="b09-s93-rbf-reset">Reset</button>
+            </div>
+            <div class="b09-s93-note s93-note-info" id="b09-s93-rbf-note">Transaksi dengan fee rate 2 sat/vB akan menunggu sangat lama. RBF memungkinkan kamu mengirim ulang transaksi yang sama dengan fee lebih tinggi, menggantikan yang lama di mempool.</div>
+          </div>
+
+          <!-- CPFP PANE -->
+          <div class="b09-s93-pane" id="b09-s93-p2">
+            <div class="b09-s93-hint">Kamu menerima pembayaran (parent tx) tapi transaksinya stuck karena fee rendah. Buat child tx dengan fee tinggi untuk menarik parent masuk ke block.</div>
+            <div class="b09-s93-queue" id="b09-s93-cpfp-queue"></div>
+            <div class="b09-s93-detail">
+              <div class="b09-s93-detail-head">Paket CPFP (Parent + Child)</div>
+              <div class="b09-s93-detail-body">
+                <div class="b09-s93-drow"><div class="b09-s93-dk">Parent fee rate</div><div class="b09-s93-dv s93-bad">2.0 sat/vB</div></div>
+                <div class="b09-s93-drow"><div class="b09-s93-dk">Child fee rate</div><div class="b09-s93-dv s93-purp" id="b09-s93-cpfp-cr">belum dibuat</div></div>
+                <div class="b09-s93-drow"><div class="b09-s93-dk">Fee rate gabungan</div><div class="b09-s93-dv s93-warn" id="b09-s93-cpfp-pkg">menunggu child...</div></div>
+                <div class="b09-s93-drow"><div class="b09-s93-dk">Status paket</div><div class="b09-s93-dv s93-warn" id="b09-s93-cpfp-status">Belum ada child tx</div></div>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="b09-s93-btn-primary" id="b09-s93-cpfp-btn">Buat Child Transaction</button>
+              <button class="b09-s93-btn-sec" id="b09-s93-cpfp-reset">Reset</button>
+            </div>
+            <div class="b09-s93-note s93-note-info" id="b09-s93-cpfp-note">Parent tx fee-nya terlalu rendah (2 sat/vB). Karena kamu sudah menerima output-nya, kamu bisa buat child tx dengan fee tinggi. Miner yang ingin ambil fee child HARUS memasukkan parent dulu.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-9-2" data-sb="sb-9-2">
+            ← 9.2 — Fee Rate dan Prioritas
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-9-4" data-sb="sb-9-4">
+            9.4 — Mempool saat Jaringan Ramai →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 9.3 -->
+
+      <!-- ==============================
+           SECTION 9.4 · Mempool saat Jaringan Ramai
+      ============================== -->
+      <div class="p-section" id="section-9-4">
+        <div class="p-eyebrow">Bab 9 · 9.4</div>
+        <div class="p-heading">Kenapa fee tiba-tiba melonjak dan apa yang bisa dilakukan</div>
+        <div class="p-title">Mempool saat Jaringan Ramai</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Ada saat-saat tertentu di mana mempool Bitcoin menjadi sangat ramai. Ribuan transaksi menumpuk, fee rate melonjak, dan pengguna yang membayar fee rendah harus menunggu berjam-jam atau bahkan berhari-hari. Memahami kapan dan kenapa ini terjadi membuat kamu bisa mengantisipasi dan mengambil keputusan yang lebih baik.</p>
+
+          <p><strong>Apa yang menyebabkan mempool ramai?</strong></p>
+          <p>Mempool ramai terjadi ketika laju transaksi masuk melebihi kapasitas block yang bisa dikonfirmasi. Setiap block punya kapasitas sekitar 4 juta weight unit. Weight unit adalah satuan resmi kapasitas block, dan hubungannya dengan vbyte yang kita pakai di 9.2 sederhana: 1 vbyte sama dengan 4 weight unit. Jadi 4 juta weight unit setara 1 juta vbyte. Karena data witness dihitung seperempat, satu block bisa memuat lebih banyak byte mentah daripada angka itu, biasanya sekitar 1,5 sampai 2,5 MB dalam praktik. Dengan block time rata-rata 10 menit, jaringan umumnya memproses sekitar 3 sampai 7 transaksi per detik, tergantung jenis transaksi yang sedang dominan. Beberapa kejadian yang secara historis menyebabkan lonjakan mempool: peluncuran Ordinals dan Inscriptions di 2023, bull market yang mendorong aktivitas trading tinggi, acara halving yang memicu spekulasi masif, dan serangan spam yang sengaja membanjiri jaringan dengan transaksi berbiaya rendah.</p>
+
+          <p><strong>Apa yang terjadi dengan transaksi fee rendah?</strong></p>
+          <p>Saat mempool ramai, miner dengan mudah bisa mengisi seluruh block hanya dengan transaksi fee tinggi. Transaksi fee rendah terdorong ke bagian bawah antrian dan mungkin tidak dikonfirmasi selama berhari-hari. Beberapa node bahkan akan drop transaksi fee rendah dari mempool mereka untuk menghemat memori, meskipun transaksinya valid.</p>
+
+          <p><strong>Bagaimana membaca kondisi mempool?</strong></p>
+          <p>Ada beberapa metrik yang bisa dipantau. Ukuran mempool dalam MB atau jumlah transaksi menunjukkan seberapa ramai antrian saat ini. Fee rate untuk konfirmasi dalam 1 block, 3 block, dan 6 block menunjukkan berapa yang perlu dibayar untuk kecepatan yang berbeda. Tools seperti mempool.space menampilkan visualisasi ini secara real-time dan sangat membantu.</p>
+
+          <p><strong>Strategi menghadapi mempool ramai</strong></p>
+          <p>Kalau tidak urgent, tunggu sampai mempool sepi. Biasanya akhir pekan atau tengah malam waktu Asia lebih sepi dari jam sibuk. Kalau sudah terlanjur kirim dengan fee rendah, gunakan RBF atau CPFP. Kalau mau kirim baru, pantau kondisi mempool dulu dan gunakan fee estimator yang akurat.</p>
+
+          <div class="p-callout">
+            <p>Mempool yang ramai bukan tanda bahwa Bitcoin rusak. Ini justru tanda bahwa Bitcoin berfungsi persis seperti yang dirancang: pasar bebas yang menentukan harga ruang block berdasarkan permintaan. Yang perlu dilakukan adalah memahami cara kerjanya dan menggunakannya dengan bijak.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualisasi — Mempool sepi vs ramai</div>
+          <div class="b09-s94-desc">
+            Toggle antara dua kondisi untuk melihat perbedaan ukuran mempool, fee rate, dan strategi yang tepat untuk masing-masing kondisi.
+          </div>
+
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
+            <div class="b09-s94-toggle">
+              <button class="b09-s94-tog quiet-tog" id="b09-s94-quiet">Mempool Sepi</button>
+              <button class="b09-s94-tog" id="b09-s94-busy">Mempool Ramai</button>
+            </div>
+            <div class="b09-s94-subtitle" id="b09-s94-subtitle">Kondisi normal — transaksi mengalir lancar</div>
+          </div>
+
+          <div class="b09-s94-grid">
+            <div class="b09-s94-card">
+              <div class="b09-s94-card-head quiet-head" id="b09-s94-head1">Ukuran mempool</div>
+              <div class="b09-s94-card-body">
+                <canvas class="b09-s94-cv" id="b09-s94-cv1" height="120"></canvas>
+                <div class="b09-s94-metric">
+                  <div class="b09-s94-metric-label">Total transaksi menunggu</div>
+                  <div class="b09-s94-metric-val s94-good" id="b09-s94-tx-count">~2,400 tx</div>
+                </div>
+                <div class="b09-s94-metric">
+                  <div class="b09-s94-metric-label">Ukuran mempool</div>
+                  <div class="b09-s94-metric-val s94-good" id="b09-s94-mp-size">~4 MB</div>
+                </div>
+              </div>
+            </div>
+            <div class="b09-s94-card">
+              <div class="b09-s94-card-head quiet-head" id="b09-s94-head2">Fee rate untuk konfirmasi</div>
+              <div class="b09-s94-card-body">
+                <div class="b09-s94-fee-table" id="b09-s94-fee-table"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b09-s94-strategy">
+            <div class="b09-s94-strategy-head" id="b09-s94-strat-head">Kondisi sepi: apa yang perlu dilakukan?</div>
+            <div class="b09-s94-strategy-body" id="b09-s94-strat-body"></div>
+          </div>
+
+          <div class="b09-s94-note quiet-note" id="b09-s94-note">Mempool sepi. Fee rendah sudah cukup untuk konfirmasi cepat. Ini saat terbaik untuk mengirim transaksi non-urgent.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-9-3" data-sb="sb-9-3">
+            ← 9.3 — RBF dan CPFP
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-9-5" data-sb="sb-9-5">
+            9.5 — Fee Estimation →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 9.4 -->
+
+      <!-- ==============================
+           SECTION 9.5 · Fee Estimation
+      ============================== -->
+      <div class="p-section" id="section-9-5">
+        <div class="p-eyebrow">Bab 9 · 9.5</div>
+        <div class="p-heading">Berapa fee yang tepat untuk situasi ini?</div>
+        <div class="p-title">Fee Estimation</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Menentukan fee yang tepat untuk transaksi Bitcoin bukan ilmu pasti. Terlalu rendah dan transaksi bisa stuck. Terlalu tinggi dan kamu membuang uang. Fee estimation adalah proses memperkirakan fee rate minimum yang diperlukan agar transaksi dikonfirmasi dalam target waktu tertentu.</p>
+
+          <p><strong>Bagaimana fee estimator bekerja?</strong></p>
+          <p>Fee estimator yang baik menganalisis kondisi mempool saat ini dan data historis konfirmasi untuk memprediksi berapa fee rate yang dibutuhkan. Ada dua pendekatan utama. Pendekatan pertama adalah mempool-based: melihat distribusi fee rate di mempool saat ini dan memperkirakan berapa block yang dibutuhkan untuk mengosongkan antrian sampai ke level fee tertentu. Pendekatan kedua adalah history-based: menganalisis data konfirmasi historis untuk membangun model prediksi berdasarkan kondisi mempool yang serupa.</p>
+
+          <p><strong>Target konfirmasi</strong></p>
+          <p>Pengguna biasanya bisa memilih target konfirmasi: next block (paling cepat, paling mahal), 3 block (sekitar 30 menit), 6 block (sekitar 1 jam), atau bahkan 1-2 hari untuk yang tidak urgent. Fee estimator memberikan fee rate yang disarankan untuk masing-masing target.</p>
+
+          <p><strong>Keterbatasan fee estimator</strong></p>
+          <p>Fee estimator punya beberapa kelemahan penting. Pertama, mempool bisa berubah sangat cepat sehingga estimasi yang akurat 5 menit lalu bisa sudah tidak relevan. Kedua, estimator tidak bisa memprediksi block yang kebetulan kosong karena mining luck. Ketiga, beberapa wallet menggunakan fee estimator yang outdated atau terlalu konservatif, sehingga selalu merekomendasikan fee yang terlalu tinggi.</p>
+
+          <p><strong>Fee sniping</strong></p>
+          <p>Ada juga fenomena menarik yang disebut fee sniping: situasi di mana miner mungkin lebih tertarik untuk menambang ulang block sebelumnya yang punya fee tinggi daripada menambang block baru. Ini diatasi dengan time-lock pada transaksi untuk memastikan transaksi hanya valid di block ketinggian tertentu atau lebih tinggi.</p>
+
+          <div class="p-callout">
+            <p>Fee estimation yang baik adalah kombinasi antara data real-time dan pemahaman tentang cara kerja mempool. Tools seperti mempool.space memberikan data yang dibutuhkan, tapi tetap butuh judgment manusia untuk membaca situasi dengan benar, terutama saat kondisi mempool sedang berubah cepat.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi — Fee estimator interaktif</div>
+          <div class="b09-s95-desc">
+            Pilih kondisi mempool dan target konfirmasi untuk melihat fee rate yang disarankan, estimasi waktu, dan penjelasan bagaimana angka itu didapat.
+          </div>
+
+          <div class="b09-s95-row">
+            <div class="b09-s95-group">
+              <div class="b09-s95-group-label">Kondisi mempool saat ini</div>
+              <div class="b09-s95-group-sub">Seberapa ramai antrian transaksi?</div>
+              <div class="b09-s95-opts">
+                <div class="b09-s95-opt sel" data-group="mp" data-val="quiet"><div class="b09-s95-radio"><div class="b09-s95-radio-dot"></div></div><div class="b09-s95-opt-label">Sepi</div><div class="b09-s95-opt-val">~4 MB</div></div>
+                <div class="b09-s95-opt" data-group="mp" data-val="normal"><div class="b09-s95-radio"></div><div class="b09-s95-opt-label">Normal</div><div class="b09-s95-opt-val">~50 MB</div></div>
+                <div class="b09-s95-opt" data-group="mp" data-val="busy"><div class="b09-s95-radio"></div><div class="b09-s95-opt-label">Ramai</div><div class="b09-s95-opt-val">~200 MB</div></div>
+                <div class="b09-s95-opt" data-group="mp" data-val="vbusy"><div class="b09-s95-radio"></div><div class="b09-s95-opt-label">Sangat ramai</div><div class="b09-s95-opt-val">>350 MB</div></div>
+              </div>
+            </div>
+            <div class="b09-s95-group">
+              <div class="b09-s95-group-label">Target konfirmasi</div>
+              <div class="b09-s95-group-sub">Seberapa cepat transaksi perlu dikonfirmasi?</div>
+              <div class="b09-s95-opts">
+                <div class="b09-s95-opt sel" data-group="tgt" data-val="next"><div class="b09-s95-radio"><div class="b09-s95-radio-dot"></div></div><div class="b09-s95-opt-label">Block berikutnya</div><div class="b09-s95-opt-val">~10 menit</div></div>
+                <div class="b09-s95-opt" data-group="tgt" data-val="3blk"><div class="b09-s95-radio"></div><div class="b09-s95-opt-label">3 block</div><div class="b09-s95-opt-val">~30 menit</div></div>
+                <div class="b09-s95-opt" data-group="tgt" data-val="6blk"><div class="b09-s95-radio"></div><div class="b09-s95-opt-label">6 block</div><div class="b09-s95-opt-val">~1 jam</div></div>
+                <div class="b09-s95-opt" data-group="tgt" data-val="1day"><div class="b09-s95-radio"></div><div class="b09-s95-opt-label">Tidak urgent</div><div class="b09-s95-opt-val">~1 hari</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b09-s95-result">
+            <div class="b09-s95-result-head">
+              <div class="b09-s95-result-label">Fee rate yang disarankan</div>
+              <div class="b09-s95-result-val" id="b09-s95-rate">2</div>
+              <div class="b09-s95-result-unit">sat/vB</div>
+            </div>
+            <div class="b09-s95-result-body">
+              <div class="b09-s95-result-row"><div class="b09-s95-result-key">Estimasi konfirmasi</div><div class="b09-s95-result-v s95-good" id="b09-s95-eta">Block berikutnya (~10 menit)</div></div>
+              <div class="b09-s95-result-row"><div class="b09-s95-result-key">Fee untuk tx 140 vbyte</div><div class="b09-s95-result-v" id="b09-s95-total">280 sat (~$0.02)</div></div>
+              <div class="b09-s95-result-row"><div class="b09-s95-result-key">Tingkat kepercayaan</div><div class="b09-s95-result-v s95-good" id="b09-s95-conf">Tinggi</div></div>
+              <div class="b09-s95-queue">
+                <div class="b09-s95-queue-label">Posisi di antrian (tiap kotak = 1 block):</div>
+                <div class="b09-s95-queue-track" id="b09-s95-blocks"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b09-s95-explain s95-good" id="b09-s95-explain">Mempool sepi. Hampir semua transaksi dikonfirmasi dalam block berikutnya bahkan dengan fee sangat rendah.</div>
+
+          <div class="b09-lab">
+            <div class="b09-lab-ctrl">
+              <label>Bentuk transaksimu</label>
+              <input type="range" id="b09-s95-size" min="1" max="10" step="1" value="1">
+              <span class="b09-lab-ctrl-val" id="b09-s95-size-val">1 input</span>
+            </div>
+            <div class="b09-lab-note" id="b09-s95-size-note"></div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-9-4" data-sb="sb-9-4">
+            ← 9.4 — Mempool saat Jaringan Ramai
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-9-6" data-sb="sb-9-6">
+            9.6 — Masa Depan Fee Market →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 9.5 -->
+
+      <!-- ==============================
+           SECTION 9.6 · Masa Depan Fee Market
+      ============================== -->
+      <div class="p-section" id="section-9-6">
+        <div class="p-eyebrow">Bab 9 · 9.6</div>
+        <div class="p-heading">Ketika block reward habis, siapa yang membayar miner?</div>
+        <div class="p-title">Masa Depan Fee Market</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Bitcoin dirancang agar block reward terus berkurang setiap halving. Pada akhirnya, sekitar tahun 2140, semua 21 juta bitcoin sudah ditambang dan block reward menjadi nol. Satu-satunya kompensasi untuk miner adalah fee transaksi. Inilah salah satu pertanyaan paling fundamental tentang keberlanjutan Bitcoin jangka panjang.</p>
+
+          <p><strong>Apakah fee cukup untuk menggantikan block reward?</strong></p>
+          <p>Ini adalah pertanyaan terbuka yang belum ada jawaban pasti. Kubu optimis berpendapat bahwa seiring adopsi Bitcoin meluas, volume transaksi akan terus meningkat. Lebih banyak transaksi berarti lebih banyak kompetisi untuk ruang block, yang berarti fee rate lebih tinggi. Lightning Network dan layer lain tidak menghilangkan fee on-chain: setiap pembukaan dan penutupan channel tetap butuh transaksi on-chain. Kubu skeptis berpendapat bahwa tekanan untuk efisiensi selalu ada. Batching transaksi, SegWit, Taproot, dan teknologi lain terus mengurangi ukuran transaksi. Kalau fee terlalu rendah, miner akan keluar dari bisnis, hash rate turun, dan keamanan jaringan terancam.</p>
+
+          <p><strong>Fee market dan keamanan</strong></p>
+          <p>Ada hubungan langsung antara fee market dan keamanan jaringan yang sering disalahpahami. Banyak orang berpikir: kalau miner keluar, difficulty adjustment akan menyesuaikan, jadi jaringan tetap aman. Ini benar sebagian, tapi melewatkan poin yang lebih penting.</p>
+          <p>Difficulty adjustment memang memastikan jaringan tetap berfungsi. Kalau hash rate turun 50%, difficulty turun 50%, dan block time kembali ke 10 menit. Transaksi tetap dikonfirmasi, jaringan tidak berhenti. Yang difficulty adjustment tidak lakukan adalah membuat serangan lebih mahal. Justru sebaliknya: kalau hash rate turun karena miner tidak profitable, biaya untuk melancarkan serangan 51% ikut turun secara proporsional.</p>
+          <p>Analoginya sederhana: bayangkan sistem keamanan sebuah gedung. Kalau separuh satpam dipecat karena anggaran habis, gedung tetap buka dan orang tetap bisa masuk. Tapi gedung itu jauh lebih mudah dirampok. Difficulty adjustment adalah mekanisme yang memastikan gedung tetap buka, bukan mekanisme yang mempertahankan jumlah satpam. Inilah mengapa fee market yang sehat bukan sekadar soal kenyamanan pengguna. Ini adalah fondasi dari keamanan jaringan jangka panjang.</p>
+
+          <p><strong>Tidak semua fee sama awetnya</strong></p>
+          <p>Tidak semua demand untuk ruang block itu setara nilainya dalam jangka panjang. Demand yang paling sehat datang dari adopsi Bitcoin yang organik dan meluas: semakin banyak orang bertransaksi, semakin banyak Lightning channel dibuka dan ditutup, semakin banyak institusi melakukan settlement on-chain. Fee tinggi dari sumber ini adalah tanda ekosistem yang tumbuh sehat, dan ini persis skenario yang diinginkan: jutaan pengguna biasa yang kebutuhan transaksinya menciptakan kompetisi alami untuk ruang block.</p>
+          <p>Sumber lain bersifat musiman. Gelombang Ordinals dan Inscriptions di 2023 yang kita sebut di 9.4 adalah contohnya: fee melonjak tinggi selama beberapa bulan, lalu surut. Untuk anggaran keamanan yang harus bertahan puluhan tahun, lonjakan seperti ini sulit dijadikan sandaran, karena tidak ada yang bisa memastikan gelombang berikutnya akan datang.</p>
+          <p>Di sinilah muncul salah satu perdebatan paling panas di Bitcoin belakangan ini, dan kamu berhak tahu kedua sisinya. Satu pihak berpendapat bahwa transaksi adalah transaksi: protokol Bitcoin tidak pernah membedakan tujuan, siapapun yang membayar fee berhak atas ruang block, dan miner tetap dibayar entah datanya berupa pembayaran atau gambar. Pihak lain berpendapat bahwa ruang block terbatas, dan ketika ia terisi oleh hal yang tidak butuh sifat-sifat khusus Bitcoin, orang yang butuh mengirim uang jadi terdorong keluar oleh fee yang melonjak.</p>
+          <p>Buku ini tidak akan memutuskan untukmu. Yang bisa dipegang sebagai alat analisis: yang menentukan keamanan jangka panjang bukan seberapa tinggi fee hari ini, melainkan seberapa bisa diandalkan fee itu datang lagi tahun depan dan sepuluh tahun lagi. Setiap kali kamu membaca berita tentang lonjakan fee, pertanyaan yang berguna adalah apakah ini gelombang atau permukaan air yang naik.</p>
+
+          <p><strong>Block space sebagai komoditas</strong></p>
+          <p>Ruang block Bitcoin adalah komoditas langka. Ada permintaan dari berbagai sumber yang sah: transaksi keuangan, Lightning channel management, protokol layer dua, dan aplikasi yang memberikan nilai nyata. Selama permintaan yang bermakna melebihi kapasitas, fee market akan tetap aktif secara organik.</p>
+
+          <div class="p-callout">
+            <p>Keberlanjutan fee market Bitcoin adalah salah satu eksperimen ekonomi terbesar yang pernah ada. Yang bisa dilakukan adalah memahami insentif yang terlibat, membedakan demand yang sehat dari yang tidak, dan mengamati bagaimana pasar merespons seiring waktu.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualisasi — Proyeksi fee market jangka panjang</div>
+          <div class="b09-s96-desc">
+            Ilustrasi konseptual, bukan prediksi. Tab pertama menunjukkan tren block reward vs fee. Tab kedua membandingkan dua skenario adopsi.
+          </div>
+
+          <div class="b09-s96-tabs">
+            <button class="b09-s96-tab s96-act" id="b09-s96-t1">Block reward vs Fee</button>
+            <button class="b09-s96-tab" id="b09-s96-t2">Dua skenario</button>
+          </div>
+
+          <div class="b09-s96-pane show" id="b09-s96-p1">
+            <canvas class="b09-s96-cv" id="b09-s96-cv1" height="260"></canvas>
+            <div class="b09-s96-legend">
+              <div class="b09-s96-leg"><div class="b09-s96-leg-line" style="background:#534AB7;"></div>Block reward</div>
+              <div class="b09-s96-leg"><div class="b09-s96-leg-line" style="background:#0F6E56;"></div>Fee revenue (proyeksi)</div>
+              <div class="b09-s96-leg"><div class="b09-s96-leg-line" style="background:#F0A050;border-top:1.5px dashed #F0A050;height:0;"></div>Total pendapatan miner</div>
+            </div>
+            <div class="b09-s96-halvings">
+              <div class="b09-s96-halvings-label">Halving events:</div>
+              <div class="b09-s96-halving-row">
+                <div class="b09-s96-chip past">2009 — 50 BTC</div>
+                <div class="b09-s96-chip past">2012 — 25 BTC</div>
+                <div class="b09-s96-chip past">2016 — 12.5 BTC</div>
+                <div class="b09-s96-chip past">2020 — 6.25 BTC</div>
+                <div class="b09-s96-chip past">2024 — 3.125 BTC</div>
+                <div class="b09-s96-chip next">2028 — 1.5625 BTC</div>
+                <div class="b09-s96-chip">2032 — 0.78 BTC</div>
+                <div class="b09-s96-chip">2036+ — ...</div>
+              </div>
+            </div>
+            <div class="b09-s96-note s96-neutral">Ini adalah ilustrasi konseptual, bukan prediksi. Yang penting adalah tren: block reward terus turun, dan fee harus tumbuh untuk mengimbanginya agar keamanan jaringan terjaga.</div>
+          </div>
+
+          <div class="b09-s96-pane" id="b09-s96-p2">
+            <div class="b09-s96-scenarios">
+              <div class="b09-s96-sc-card">
+                <div class="b09-s96-sc-head s96-opt">Skenario optimis</div>
+                <div class="b09-s96-sc-body">
+                  <div><b>Asumsi:</b> adopsi Bitcoin terus tumbuh secara organik</div>
+                  <div>Miliaran pengguna Lightning membuka dan menutup channel secara reguler</div>
+                  <div>Institusi dan negara melakukan settlement on-chain skala besar</div>
+                  <div>Demand organik melebihi kapasitas, fee market tetap kompetitif</div>
+                  <div>Miner tetap profitable tanpa block reward</div>
+                </div>
+              </div>
+              <div class="b09-s96-sc-card">
+                <div class="b09-s96-sc-head s96-pess">Skenario pesimis</div>
+                <div class="b09-s96-sc-body">
+                  <div><b>Asumsi:</b> efisiensi tumbuh lebih cepat dari adopsi</div>
+                  <div>Batching, SegWit, Taproot, dan protokol masa depan terus mengurangi kebutuhan ruang block</div>
+                  <div>Layer 2 terlalu efisien, jarang perlu settlement on-chain</div>
+                  <div>Fee tidak cukup mempertahankan hash rate yang aman</div>
+                  <div>Tekanan pada keamanan jaringan jangka panjang</div>
+                </div>
+              </div>
+            </div>
+            <canvas class="b09-s96-cv" id="b09-s96-cv2" height="200"></canvas>
+            <div class="b09-s96-legend">
+              <div class="b09-s96-leg"><div class="b09-s96-leg-line" style="background:#0F6E56;"></div>Skenario optimis</div>
+              <div class="b09-s96-leg"><div class="b09-s96-leg-line" style="background:#A32D2D;"></div>Skenario pesimis</div>
+              <div class="b09-s96-leg"><div class="b09-s96-leg-line" style="background:#534AB7;"></div>Block reward (referensi)</div>
+            </div>
+            <div class="b09-s96-note s96-neutral">Kedua skenario ini adalah ilustrasi konseptual. Kenyataan kemungkinan ada di antara keduanya. Fee market yang sehat harus datang dari adopsi nyata, bukan aktivitas artifisial.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-9-5" data-sb="sb-9-5">
+            ← 9.5 — Fee Estimation
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 9.6 -->
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 12 · BAB 9 -->
+
+

@@ -1,0 +1,630 @@
+<!-- ============================================================
+     PAGE 6 · BAB 3 · Anatomi Sebuah Transaksi
+     |-- 3.1 · Apa itu transaksi? [DONE]
+     |-- 3.2 · UTXO [LOCKED]
+     |-- 3.3 · Input dan Output [LOCKED]
+     |-- 3.4 · Transaction Fee [LOCKED]
+     |-- 3.5 · Mempool [LOCKED]
+     |-- 3.6 · Lifecycle sebuah transaksi [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab3">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b3">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b3">← Chapter List</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-heading">Bab 3</div>
+      <div class="sidebar-title">Anatomi Sebuah Transaksi</div>
+
+      <!-- 3.1 · DONE -->
+      <div class="sidebar-item active" id="sb-3-1">
+        <div class="sb-num">3.1</div>
+        <div class="sb-label">Apa itu transaksi?</div>
+      </div>
+      <!-- 3.2 · DONE -->
+      <div class="sidebar-item" id="sb-3-2">
+        <div class="sb-num">3.2</div>
+        <div class="sb-label">UTXO</div>
+      </div>
+      <!-- 3.3 · DONE -->
+      <div class="sidebar-item" id="sb-3-3">
+        <div class="sb-num">3.3</div>
+        <div class="sb-label">Input dan Output</div>
+      </div>
+      <!-- 3.4 · DONE -->
+      <div class="sidebar-item" id="sb-3-4">
+        <div class="sb-num">3.4</div>
+        <div class="sb-label">Transaction fee</div>
+      </div>
+      <!-- 3.5 · DONE -->
+      <div class="sidebar-item" id="sb-3-5">
+        <div class="sb-num">3.5</div>
+        <div class="sb-label">Mempool</div>
+      </div>
+      <!-- 3.6 · DONE -->
+      <div class="sidebar-item" id="sb-3-6">
+        <div class="sb-num">3.6</div>
+        <div class="sb-label">Lifecycle transaksi</div>
+      </div>
+    </div>
+    <!-- END SIDEBAR -->
+
+    <!-- CONTENT AREA -->
+    <div class="prologue-content" id="bab3-content">
+
+      <!-- ==============================
+           SECTION 3.1 · Apa itu transaksi?
+      ============================== -->
+      <div class="p-section active" id="section-3-1">
+        <div class="p-eyebrow">Bab 3 · 3.1</div>
+        <div class="p-heading">Bukan transfer saldo, tapi rantai kriptografi</div>
+        <div class="p-title">Apa itu Transaksi?</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Kalau kamu pernah transfer uang lewat bank, kamu terbiasa dengan model yang sederhana: saldo berkurang di satu rekening, bertambah di rekening lain. Bank mencatat perubahannya. Selesai.</p>
+          <p>Bitcoin tidak bekerja seperti itu.</p>
+          <p>Di Bitcoin, tidak ada yang namanya "saldo." Tidak ada angka yang tersimpan di suatu tempat yang bertuliskan "kamu punya 1 BTC." Yang ada adalah sejarah transaksi, dan dari sejarah itulah dihitung berapa Bitcoin yang bisa kamu gunakan saat ini.</p>
+
+          <p><strong>Transaksi adalah instruksi pemindahan</strong></p>
+          <p>Setiap transaksi Bitcoin adalah sebuah pesan yang ditandatangani secara kriptografi, berisi dua hal utama: dari mana Bitcoin ini berasal, dan ke mana Bitcoin ini akan pergi.</p>
+          <p>"Dari mana" adalah referensi ke transaksi sebelumnya yang memberikan Bitcoin kepadamu. "Ke mana" adalah instruksi kepada siapa Bitcoin ini dikirim dan berapa jumlahnya.</p>
+          <p>Jaringan memverifikasi bahwa kamu memang berhak memindahkan Bitcoin yang kamu referensikan, lalu menyiarkan transaksi ke seluruh node. Kalau valid, ia masuk ke dalam block, dan menjadi bagian permanen dari blockchain.</p>
+
+          <p><strong>Bukan angka, tapi rantai</strong></p>
+          <p>Ini yang membuat Bitcoin berbeda secara fundamental dari sistem keuangan konvensional. Kepemilikanmu bukan angka di database. Ia adalah rantai kriptografi yang bisa ditelusuri sampai ke block pertama, Genesis Block, yang ditambang Satoshi pada Januari 2009.</p>
+          <p>Setiap Bitcoin yang ada di dunia ini bisa dilacak asal-usulnya. Tidak ada yang bisa muncul dari ketiadaan.</p>
+
+          <div class="p-callout">
+            <p>Di Bitcoin, "memiliki" Bitcoin artinya memiliki kemampuan untuk menandatangani transaksi yang mereferensikan output yang belum digunakan. Bukan angka di database, tapi kunci yang membuka sebuah output. Konsep ini akan jadi jauh lebih jelas di 3.2.</p>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-3-2" data-sb="sb-3-2">
+            3.2 — UTXO →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 3.1 -->
+
+      <!-- ==============================
+           SECTION 3.2 · UTXO
+      ============================== -->
+      <div class="p-section" id="section-3-2">
+        <div class="p-eyebrow">Bab 3 · 3.2</div>
+        <div class="p-heading">Uang kertas digital yang tidak bisa dipotong</div>
+        <div class="p-title">UTXO — Unspent Transaction Output</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>UTXO adalah singkatan dari Unspent Transaction Output. Ini adalah konsep paling penting di Bab 3, dan mungkin salah satu konsep paling sering disalahpahami di Bitcoin.</p>
+
+          <p><strong>Lupakan konsep saldo</strong></p>
+          <p>Di sistem perbankan, kepemilikanmu direpresentasikan sebagai angka: saldo. Bank menyimpan angka itu di database mereka dan mengubahnya setiap kali ada transaksi.</p>
+          <p>Bitcoin tidak punya saldo. Yang Bitcoin punya adalah kumpulan output transaksi yang belum digunakan. Setiap output itu punya nilai tertentu dan hanya bisa digunakan sekali, oleh orang yang punya kunci yang tepat. Itulah UTXO.</p>
+
+          <p><strong>Analogi uang kertas</strong></p>
+          <p>Cara termudah memahami UTXO adalah membayangkan uang kertas fisik. Kalau kamu punya uang kertas Rp 100.000, kamu tidak punya "saldo Rp 100.000." Kamu punya selembar kertas bernilai Rp 100.000 yang fisiknya ada di tanganmu.</p>
+          <p>Kalau kamu mau membayar Rp 30.000, kamu tidak bisa memotong uang kertasnya. Kamu serahkan seluruh Rp 100.000, pedagang mengambil Rp 30.000, dan mengembalikan Rp 70.000 kepadamu. UTXO bekerja persis seperti itu. Kamu tidak bisa membelanjakan sebagian. Kamu harus membelanjakan seluruhnya, dan sisanya kembali kepadamu sebagai UTXO baru.</p>
+
+          <p><strong>"Saldo" Bitcoin sebenarnya</strong></p>
+          <p>Kalau wallet-mu menampilkan "0.55 BTC", itu bukan satu angka di satu tempat. Itu bisa saja hasil penjumlahan dari beberapa UTXO: misalnya satu UTXO bernilai 0.05 BTC dari Alice, satu UTXO bernilai 0.12 BTC dari Bob, satu UTXO bernilai 0.08 BTC dari mining reward, dan satu UTXO bernilai 0.30 BTC dari Charlie. Wallet-mu menjumlahkan semua UTXO yang bisa kamu tandatangani, dan menampilkannya sebagai satu angka.</p>
+
+          <p><strong>Kenapa UTXO?</strong></p>
+          <p>Model UTXO punya beberapa keunggulan. Pertama, ia memudahkan verifikasi: untuk mengecek apakah sebuah transaksi valid, node hanya perlu memastikan UTXO yang direferensikan ada dan belum digunakan. Kedua, ia mencegah double-spend secara alami: begitu sebuah UTXO dipakai, ia hilang dari set UTXO yang aktif dan tidak bisa dipakai lagi.</p>
+
+          <div class="p-callout">
+            <p>Seluruh state Bitcoin bisa diringkas dalam satu set data: UTXO set. Ini adalah daftar semua output transaksi yang belum digunakan di seluruh jaringan. Per pertengahan 2026 ukurannya sekitar 11 GB, berisi lebih dari 170 juta UTXO. Setiap full node menyimpannya dan menggunakannya untuk memvalidasi setiap transaksi baru.</p>
+
+          <p><strong>Siapa yang memilih UTXO untukmu?</strong></p>
+          <p>Di simulasi tadi kamu memilih sendiri UTXO mana yang dipakai. Dalam pemakaian sehari-hari kamu tidak pernah melakukan itu. Kamu mengetik jumlah dan alamat, lalu menekan kirim. Tapi keputusan itu tetap harus diambil oleh seseorang, dan yang mengambilnya adalah wallet-mu. Proses itu namanya <strong>coin selection</strong>, dan ia menjelaskan banyak hal yang terasa aneh bagi pengguna baru.</p>
+          <p>Kenapa penting? Karena seperti yang kita lihat di 3.4, ongkos transaksi ditentukan oleh <strong>bentuknya</strong>, bukan nilainya. Setiap UTXO yang ikut dipakai menambah satu input, dan setiap input menambah ukuran. Memilih tiga UTXO kecil alih-alih satu UTXO besar bisa melipatgandakan fee untuk pembayaran yang jumlahnya sama persis.</p>
+          <p>Wallet menghadapi beberapa tujuan yang saling bertabrakan. Ia ingin fee semurah mungkin, jadi sebaiknya memakai sesedikit mungkin input. Ia juga ingin menghindari kembalian yang terlalu kecil, karena kembalian receh hari ini akan jadi UTXO yang mahal dibelanjakan besok. Dan idealnya ia tidak membocorkan lebih banyak informasi daripada yang perlu, karena setiap UTXO yang disatukan dalam satu transaksi memberitahu dunia bahwa keduanya milik orang yang sama. Kita bahas akibat privasinya di Bab 10.</p>
+          <p>Cara paling ideal adalah menemukan kombinasi yang jumlahnya <strong>pas</strong>, sehingga tidak perlu ada output kembalian sama sekali. Transaksinya jadi lebih kecil, lebih murah, dan tidak menyisakan jejak kembalian yang bisa dianalisis. Bitcoin Core menyebut pencarian ini <em>branch and bound</em>, dan ia memang mencoba menemukan kecocokan pas itu lebih dulu. Masalahnya kecocokan seperti itu jarang ada, jadi kalau pencarian gagal, wallet jatuh ke cara lain yang menerima adanya kembalian.</p>
+          <p>Di sinilah beberapa hal yang membingungkan pengguna baru jadi masuk akal. Kenapa mengirim jumlah kecil kadang jauh lebih mahal dari biasanya? Karena danamu tersebar di banyak UTXO receh, dan wallet terpaksa menyatukan banyak input. Kenapa fee bisa berbeda padahal jumlah yang dikirim sama? Karena bentuk transaksinya berbeda, meski nilainya sama.</p>
+          <p>Itu juga sebabnya banyak wallet menyediakan pilihan memilih UTXO secara manual, biasanya bernama <em>coin control</em>. Untuk pemakaian biasa, membiarkan wallet memilih sudah cukup. Tapi begitu kamu peduli pada privasi atau sedang menghadapi fee tinggi, mengambil alih keputusan itu bisa sangat berarti. Dan kalau danamu sudah terlanjur tersebar di banyak UTXO kecil, ada langkah khusus untuk merapikannya yang kita bahas di 10.4.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi interaktif — UTXO dan Transaksi</div>
+
+          <div class="b03-s32-desc">
+            Tentukan jumlah yang ingin dikirim, lalu pilih UTXO yang akan digunakan. Setiap UTXO harus digunakan seluruhnya. Sisanya kembali sebagai UTXO baru.
+          </div>
+
+          <div class="utxo-send-wrap">
+            <div class="utxo-section-label">Jumlah yang ingin dikirim</div>
+            <div class="utxo-send-row">
+              <label>Kirim</label>
+              <input type="range" id="b03-s32-slider" min="1" max="200" step="1" value="50">
+              <span class="utxo-send-val" id="b03-s32-slider-val">0.050 BTC</span>
+            </div>
+          </div>
+
+          <div class="utxo-section-label">UTXO di wallet kamu</div>
+          <div class="utxo-coins-grid" id="b03-s32-coins"></div>
+
+          <div class="utxo-summary">
+            <div class="utxo-stat">
+              <div class="utxo-stat-label">UTXO dipilih</div>
+              <div class="utxo-stat-val" id="b03-s32-sel-count">0 UTXO</div>
+            </div>
+            <div class="utxo-stat">
+              <div class="utxo-stat-label">Total input</div>
+              <div class="utxo-stat-val" id="b03-s32-sel-total">0.000 BTC</div>
+            </div>
+            <div class="utxo-stat">
+              <div class="utxo-stat-label">Kembalian</div>
+              <div class="utxo-stat-val" id="b03-s32-change">0.000 BTC</div>
+            </div>
+          </div>
+
+          <div class="utxo-btn-row">
+            <button class="kp-btn kp-btn-gen" id="b03-s32-auto">Pilih otomatis ↗</button>
+            <button class="kp-btn kp-btn-gen" id="b03-s32-send" disabled>Kirim transaksi ↗</button>
+            <button class="kp-btn kp-btn-reset" id="b03-s32-reset">Reset</button>
+          </div>
+
+          <div class="utxo-result" id="b03-s32-result">
+            <div class="utxo-result-head">Hasil transaksi</div>
+            <div class="utxo-result-body" id="b03-s32-result-body"></div>
+          </div>
+
+          <div class="utxo-note" id="b03-s32-note">
+            Pilih UTXO secara manual atau klik "Pilih otomatis". Setiap UTXO harus digunakan seluruhnya. Sisanya kembali sebagai UTXO baru (kembalian).
+          </div>
+
+          <div class="raw-toggle-row">
+            <button class="raw-toggle-btn" id="b03-s32-raw-btn">
+              <span class="raw-toggle-icon">{}</span> Lihat Raw Data
+            </button>
+            <span class="raw-toggle-hint">Format asli UTXO seperti di Bitcoin Core — field <code>address</code> dihitung node dari scriptPubKey, bukan data on-chain</span>
+          </div>
+
+          <div class="raw-panel" id="b03-s32-raw-panel">
+            <div class="raw-panel-head">
+              <span>UTXO · Raw Format</span>
+              <span class="raw-panel-src">bitcoin-cli listunspent</span>
+            </div>
+            <pre class="raw-panel-body" id="b03-s32-raw-body">Kirim transaksi dulu untuk melihat raw data UTXO yang dikonsumsi.</pre>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-3-1" data-sb="sb-3-1">
+            ← 3.1 — Apa itu Transaksi?
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-3-3" data-sb="sb-3-3">
+            3.3 — Input dan Output →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 3.2 -->
+
+      <!-- ==============================
+           SECTION 3.3 · Input dan Output
+      ============================== -->
+      <div class="p-section" id="section-3-3">
+        <div class="p-eyebrow">Bab 3 · 3.3</div>
+        <div class="p-heading">Anatomi di dalam sebuah transaksi</div>
+        <div class="p-title">Input dan Output</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Setiap transaksi Bitcoin punya dua bagian utama: input dan output. Input adalah referensi ke UTXO yang kamu konsumsi. Output adalah instruksi ke mana Bitcoin pergi setelah transaksi ini.</p>
+
+          <p><strong>Input</strong></p>
+          <p>Input bukan angka. Input adalah pointer ke output transaksi sebelumnya yang belum digunakan. Ia berisi dua hal: referensi ke UTXO mana yang dikonsumsi, dan bukti bahwa kamu berhak menggunakannya berupa tanda tangan kriptografi dari private key-mu.</p>
+          <p>Satu transaksi bisa punya banyak input. Ini terjadi ketika kamu perlu menggabungkan beberapa UTXO kecil untuk membayar jumlah yang lebih besar, seperti menggabungkan beberapa lembar uang kertas kecil untuk membayar sesuatu yang nilainya lebih besar.</p>
+
+          <p><strong>Output</strong></p>
+          <p>Output menentukan ke mana Bitcoin pergi. Setiap output berisi dua hal: jumlah BTC yang dikirim, dan kondisi yang harus dipenuhi untuk membelanjakan output ini di masa depan. Kondisi itu biasanya sederhana: siapapun yang bisa membuktikan mereka memiliki private key yang sesuai dengan alamat ini boleh membelanjakan output ini.</p>
+          <p>Satu transaksi juga bisa punya banyak output. Kamu bisa mengirim ke beberapa alamat sekaligus dalam satu transaksi, dan output kembalian ke diri sendiri juga dihitung sebagai output terpisah.</p>
+
+          <p><strong>Fee tersembunyi</strong></p>
+          <p>Ada satu hal menarik: fee miner tidak ditulis secara eksplisit di dalam transaksi. Fee adalah selisih antara total nilai input dan total nilai output. Kalau kamu punya input senilai 0.1 BTC dan membuat output senilai 0.099 BTC, maka 0.001 BTC sisanya otomatis menjadi fee untuk miner yang memasukkan transaksimu ke dalam block.</p>
+
+          <p>Inilah kenapa sangat penting untuk selalu cek total output sebelum menandatangani transaksi. Kalau kamu lupa membuat output kembalian dan hanya membuat satu output ke penerima, seluruh selisihnya menjadi fee miner. Ada kasus nyata di mana seseorang membayar fee ribuan dolar karena lupa menambahkan output kembalian.</p>
+
+          <p>Selain jumlah dan tujuan, sebuah transaksi juga bisa membawa kondisi waktu: kapan paling awal ia boleh masuk ke block, atau berapa lama sebuah UTXO harus menunggu sebelum bisa dibelanjakan. Bitcoin punya empat mekanisme untuk itu, dan seluruhnya kita bongkar di Bab 15.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi interaktif — Anatomi Transaksi</div>
+          <div class="b03-s33-desc">
+            Pilih skenario transaksi dan klik setiap elemen untuk melihat penjelasannya.
+          </div>
+
+          <div class="tx-preset-row" id="b03-s33-presets"></div>
+
+          <div class="tx-anatomy">
+            <div>
+              <div class="tx-col-label">Input</div>
+              <div class="tx-items" id="b03-s33-inputs"></div>
+            </div>
+            <div class="tx-middle">
+              <div class="tx-box">
+                <div class="tx-box-label">TRANSAKSI</div>
+              </div>
+            </div>
+            <div>
+              <div class="tx-col-label">Output</div>
+              <div class="tx-items" id="b03-s33-outputs"></div>
+            </div>
+          </div>
+
+          <div class="tx-detail" id="b03-s33-detail">
+            <div class="tx-detail-head" id="b03-s33-detail-head"></div>
+            <div class="tx-detail-body" id="b03-s33-detail-body"></div>
+          </div>
+
+          <div class="tx-balance" id="b03-s33-balance"></div>
+
+          <div class="raw-toggle-row">
+            <button class="raw-toggle-btn" id="b03-s33-raw-btn">
+              <span class="raw-toggle-icon">{}</span> Lihat Raw Data
+            </button>
+            <span class="raw-toggle-hint">Format transaksi asli seperti di Bitcoin Core — field <code>address</code> dihitung node dari scriptPubKey, bukan data on-chain</span>
+          </div>
+
+          <div class="raw-panel" id="b03-s33-raw-panel">
+            <div class="raw-panel-head">
+              <span>Transaksi · Raw Format</span>
+              <span class="raw-panel-src">bitcoin-cli getrawtransaction</span>
+            </div>
+            <pre class="raw-panel-body" id="b03-s33-raw-body">Pilih skenario transaksi untuk melihat raw data-nya.</pre>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-3-2" data-sb="sb-3-2">
+            ← 3.2 — UTXO
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-3-4" data-sb="sb-3-4">
+            3.4 — Transaction Fee →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 3.3 -->
+
+      <!-- ==============================
+           SECTION 3.4 · Transaction fee
+      ============================== -->
+      <div class="p-section" id="section-3-4">
+        <div class="p-eyebrow">Bab 3 · 3.4</div>
+        <div class="p-heading">Bukan tarif, tapi tawaran kepada miner</div>
+        <div class="p-title">Transaction Fee</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Fee di Bitcoin tidak bekerja seperti biaya transfer di bank. Tidak ada tarif tetap, tidak ada persentase dari nilai yang dikirim, dan tidak ada yang menetapkannya secara terpusat.</p>
+          <p>Fee di Bitcoin ditentukan oleh pasar.</p>
+
+          <p><strong>Bagaimana fee dihitung</strong></p>
+          <p>Di Bitcoin, fee dihitung berdasarkan ukuran transaksi dalam bytes, bukan berdasarkan nilai Bitcoin yang dikirim. Mengirim 1 BTC dan mengirim 0.00001 BTC bisa punya fee yang sama persis kalau ukuran transaksinya sama.</p>
+          <p>Satuan yang dipakai adalah satoshi per vbyte (sat/vB). Satu satoshi adalah unit terkecil Bitcoin: 0.00000001 BTC. Satu vbyte adalah ukuran transaksi dalam virtual bytes, satuan yang memperhitungkan efisiensi format transaksi modern.</p>
+
+          <p><strong>Kenapa fee bisa naik turun</strong></p>
+          <p>Setiap block Bitcoin punya kapasitas terbatas, sekitar 1-4 MB per block, dan block baru muncul rata-rata setiap 10 menit. Ketika banyak orang ingin bertransaksi sekaligus, ruang di block menjadi rebutan.</p>
+          <p>Miner memilih transaksi mana yang masuk ke block mereka. Mereka akan memprioritaskan transaksi yang menawarkan fee per vbyte tertinggi karena itu memaksimalkan pendapatan mereka. Transaksi dengan fee rendah akan menunggu lebih lama, atau bahkan tidak masuk ke block sama sekali kalau jaringan sangat sibuk.</p>
+
+          <p><strong>Hubungan fee dan UTXO</strong></p>
+          <p>Semakin banyak input dalam transaksi, semakin besar ukuran transaksinya dalam bytes, semakin tinggi fee yang perlu dibayar. Inilah kenapa wallet modern berusaha mengelola UTXO dengan efisien, mengumpulkan UTXO kecil-kecil ketika fee sedang murah, supaya tidak perlu menggunakan banyak input saat fee sedang mahal.</p>
+
+          <p><strong>RBF (Replace by Fee)</strong></p>
+          <p>Kalau transaksimu sudah disiarkan ke jaringan tapi belum masuk ke block dan fee-nya terlalu rendah, ada mekanisme yang disebut RBF atau Replace by Fee. Kamu bisa mengirim ulang transaksi yang sama dengan fee lebih tinggi, dan miner akan memprioritaskan versi yang baru. Satu syarat yang sering terlewat: transaksi aslinya harus sudah ditandai sebagai replaceable sejak dibuat. Kalau tidak ditandai, banyak node akan menolak versi penggantinya. Detail mekanismenya, termasuk alternatif kalau kamu penerima dan bukan pengirim, kita bahas di 9.3.</p>
+
+          <div class="p-callout">
+            <p>Fee bukan biaya yang diambil oleh "Bitcoin." Fee adalah insentif yang kamu tawarkan kepada miner supaya mereka memprioritaskan transaksimu. Tidak ada perusahaan, tidak ada platform, tidak ada pihak ketiga yang menerimanya. Fee langsung masuk ke miner yang menemukan block-mu.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi interaktif — Fee Calculator</div>
+
+          <div class="b03-s34-desc">
+            Atur jumlah input dan output untuk melihat ukuran transaksi, lalu pilih fee rate untuk estimasi konfirmasi.
+          </div>
+
+          <div class="fee-controls">
+            <div class="fee-ctrl-row">
+              <label class="fee-ctrl-label">Jumlah input</label>
+              <input type="range" id="b03-s34-inputs" min="1" max="10" step="1" value="2">
+              <span class="fee-ctrl-val" id="b03-s34-inputs-val">2 input</span>
+            </div>
+            <div class="fee-ctrl-row">
+              <label class="fee-ctrl-label">Jumlah output</label>
+              <input type="range" id="b03-s34-outputs" min="1" max="5" step="1" value="2">
+              <span class="fee-ctrl-val" id="b03-s34-outputs-val">2 output</span>
+            </div>
+          </div>
+
+          <div class="fee-size-box">
+            <div class="fee-size-head">
+              <span>Ukuran transaksi</span>
+              <span class="fee-size-total" id="b03-s34-size-total">0 vB</span>
+            </div>
+            <div class="fee-size-body">
+              <div class="fee-size-bar-row" id="b03-s34-size-bar"></div>
+              <div class="fee-size-row">
+                <span class="fee-size-name">🟣 Overhead (header, version, locktime)</span>
+                <span class="fee-size-bytes" id="b03-s34-overhead-bytes">10 vB</span>
+              </div>
+              <div class="fee-size-row">
+                <span class="fee-size-name">🔴 Input (± 68 vB per input)</span>
+                <span class="fee-size-bytes" id="b03-s34-input-bytes">136 vB</span>
+              </div>
+              <div class="fee-size-row">
+                <span class="fee-size-name">🟢 Output (± 31 vB per output)</span>
+                <span class="fee-size-bytes" id="b03-s34-output-bytes">62 vB</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="fee-rates">
+            <div class="fee-rate-card" id="b03-s34-rate-low">
+              <div class="fee-rate-label">Hemat</div>
+              <div class="fee-rate-val">5 sat/vB</div>
+              <div class="fee-rate-time">~1-6 jam</div>
+            </div>
+            <div class="fee-rate-card active" id="b03-s34-rate-med">
+              <div class="fee-rate-label">Normal</div>
+              <div class="fee-rate-val">20 sat/vB</div>
+              <div class="fee-rate-time">~10-30 menit</div>
+            </div>
+            <div class="fee-rate-card" id="b03-s34-rate-high">
+              <div class="fee-rate-label">Prioritas</div>
+              <div class="fee-rate-val">100 sat/vB</div>
+              <div class="fee-rate-time">~block berikutnya</div>
+            </div>
+          </div>
+
+          <div class="fee-result">
+            <div class="fee-stat">
+              <div class="fee-stat-label">Fee total</div>
+              <div class="fee-stat-val" id="b03-s34-total-sat">0 sat</div>
+              <div class="fee-stat-sub" id="b03-s34-total-btc">0.000000 BTC</div>
+            </div>
+            <div class="fee-stat">
+              <div class="fee-stat-label">Rate dipilih</div>
+              <div class="fee-stat-val" id="b03-s34-rate-chosen">20 sat/vB</div>
+              <div class="fee-stat-sub" id="b03-s34-conf-time">~10-30 menit</div>
+            </div>
+            <div class="fee-stat">
+              <div class="fee-stat-label">Estimasi konfirmasi</div>
+              <div class="fee-stat-val" id="b03-s34-conf-blocks">~2 block</div>
+              <div class="fee-stat-sub">1 block ≈ 10 menit</div>
+            </div>
+          </div>
+
+          <div class="fee-mempool">
+            <div class="fee-mempool-label">Posisimu di antrian mempool</div>
+            <div class="fee-mempool-bar" id="b03-s34-mempool-bar"></div>
+            <div class="fee-mempool-legend">
+              <div class="fee-mempool-leg-item"><div class="fee-mempool-dot" style="background:#534AB7"></div> Fee tinggi (prioritas)</div>
+              <div class="fee-mempool-leg-item"><div class="fee-mempool-dot" style="background:#A58AE8"></div> Fee sedang</div>
+              <div class="fee-mempool-leg-item"><div class="fee-mempool-dot" style="background:#C4B5FD"></div> Fee rendah</div>
+              <div class="fee-mempool-leg-item"><div class="fee-mempool-dot" style="background:#3B6D11;border:1px solid #1A1A18"></div> Transaksimu</div>
+            </div>
+          </div>
+
+          <div class="raw-toggle-row">
+            <button class="raw-toggle-btn" id="b03-s34-raw-btn">
+              <span class="raw-toggle-icon">{}</span> Lihat Raw Data
+            </button>
+            <span class="raw-toggle-hint">Format fee data seperti di Bitcoin Core — <code>getmempoolentry</code></span>
+          </div>
+
+          <div class="raw-panel" id="b03-s34-raw-panel">
+            <div class="raw-panel-head">
+              <span>Fee & Mempool Entry · Raw Format</span>
+              <span class="raw-panel-src">bitcoin-cli getmempoolentry</span>
+            </div>
+            <pre class="raw-panel-body" id="b03-s34-raw-body">Atur slider dan pilih fee rate untuk melihat raw data-nya.</pre>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-3-3" data-sb="sb-3-3">
+            ← 3.3 — Input dan Output
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-3-5" data-sb="sb-3-5">
+            3.5 — Mempool →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 3.4 -->
+
+      <!-- ==============================
+           SECTION 3.5 · Mempool
+      ============================== -->
+      <div class="p-section" id="section-3-5">
+        <div class="p-eyebrow">Bab 3 · 3.5</div>
+        <div class="p-heading">Antrian sebelum masuk blockchain</div>
+        <div class="p-title">Mempool</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Ketika kamu mengirim transaksi Bitcoin, ia tidak langsung masuk ke blockchain. Ia masuk ke antrian dulu.</p>
+          <p>Antrian itu disebut mempool, kependekan dari memory pool. Setiap node di jaringan Bitcoin menyimpan mempool-nya sendiri, daftar transaksi yang sudah disiarkan, sudah divalidasi, tapi belum dikonfirmasi ke dalam block.</p>
+
+          <p><strong>Perjalanan sebuah transaksi</strong></p>
+          <p>Begitu kamu menandatangani dan menyiarkan transaksi, ia menyebar ke seluruh node jaringan dalam hitungan detik melalui proses yang disebut gossiping. Setiap node meneruskan transaksi yang valid ke node-node tetangganya. Tapi masuk ke mempool bukan berarti selesai. Transaksimu masih menunggu di sana sampai seorang miner memutuskan untuk memasukkannya ke dalam block yang sedang mereka tambang.</p>
+
+          <p><strong>Miner memilih transaksi</strong></p>
+          <p>Miner tidak wajib memasukkan semua transaksi di mempool. Mereka memilih transaksi mana yang menghasilkan total fee tertinggi untuk block mereka. Strategi yang paling umum adalah memilih transaksi dengan fee per vbyte tertinggi terlebih dahulu sampai kapasitas block penuh. Inilah kenapa fee rate yang kamu pilih menentukan seberapa cepat transaksimu dikonfirmasi.</p>
+
+          <p><strong>Mempool bisa penuh</strong></p>
+          <p>Saat jaringan sangat sibuk, ukuran mempool bisa membengkak sampai ratusan megabyte. Transaksi dengan fee terlalu rendah bisa terjebak di sana berjam-jam, bahkan berhari-hari. Beberapa node bahkan akan menghapus transaksi dengan fee sangat rendah dari mempool mereka kalau memori sudah penuh.</p>
+
+          <p><strong>Konfirmasi</strong></p>
+          <p>Begitu transaksimu masuk ke sebuah block, ia mendapat satu konfirmasi. Setiap block baru yang ditambang di atas block tersebut menambah satu konfirmasi lagi. Semakin banyak konfirmasi, semakin sulit untuk membalik transaksi itu, semakin final transaksimu. Untuk transaksi kecil sehari-hari, satu konfirmasi biasanya sudah cukup. Untuk transaksi besar, kebanyakan orang menunggu 6 konfirmasi sebelum menganggap transaksi benar-benar final.</p>
+
+          <div class="p-callout">
+            <p>Mempool bukan satu antrian global yang sama untuk semua orang. Setiap node punya mempool-nya sendiri dengan aturan dan kapasitas yang bisa berbeda. Tapi karena node saling berbagi transaksi, secara praktis sebagian besar node punya isi mempool yang mirip.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi interaktif — Dari Broadcast ke Konfirmasi</div>
+
+          <div class="b03-s35-desc">
+            Pilih fee rate lalu klik Broadcast. Simulasi berjalan otomatis sampai transaksimu mendapat 6 konfirmasi.
+          </div>
+
+          <div class="mp-pills" id="b03-s35-pills">
+            <div class="mp-pill" id="b03-s35-pill-low"><div class="mp-pill-label">Hemat</div><div class="mp-pill-val">5 sat/vB</div><div class="mp-pill-sub">risiko tunggu lama</div></div>
+            <div class="mp-pill active" id="b03-s35-pill-med"><div class="mp-pill-label">Normal</div><div class="mp-pill-val">20 sat/vB</div><div class="mp-pill-sub">~2 block</div></div>
+            <div class="mp-pill" id="b03-s35-pill-high"><div class="mp-pill-label">Prioritas</div><div class="mp-pill-val">100 sat/vB</div><div class="mp-pill-sub">block berikutnya</div></div>
+          </div>
+
+          <div class="mp-status" id="b03-s35-status">
+            <div class="mp-status-step">Langkah 1</div>
+            Pilih fee rate, lalu klik "Broadcast". Simulasi akan berjalan otomatis sampai transaksimu dikonfirmasi.
+          </div>
+
+          <div class="mp-stage">
+            <div class="mp-col"><div class="mp-col-head">Broadcast</div><div class="mp-col-body" id="b03-s35-broadcast"></div></div>
+            <div class="mp-col"><div class="mp-col-head">Mempool</div><div class="mp-col-body" id="b03-s35-mempool"></div></div>
+            <div class="mp-col"><div class="mp-col-head">Blockchain</div><div class="mp-col-body" id="b03-s35-blockchain"></div></div>
+          </div>
+
+          <div class="mp-conf" id="b03-s35-conf">
+            <div class="mp-conf-lbl">Konfirmasi transaksimu</div>
+            <div class="mp-dots" id="b03-s35-dots"></div>
+            <div class="mp-conf-note" id="b03-s35-conf-note"></div>
+            <div class="mp-conf-caveat">Jumlah konfirmasi yang dianggap "aman" tidak ada standarnya. 6 konfirmasi adalah konvensi yang umum dipakai, bukan aturan protokol. Transaksi kecil sehari-hari bisa dianggap cukup dengan 1 konfirmasi. Exchange besar bisa mensyaratkan lebih dari 6.</div>
+          </div>
+
+          <div class="mp-btns">
+            <button class="kp-btn kp-btn-gen" id="b03-s35-bc-btn">Broadcast transaksi ↗</button>
+            <button class="kp-btn kp-btn-reset" id="b03-s35-reset-btn">Reset</button>
+          </div>
+
+          <div class="raw-toggle-row">
+            <button class="raw-toggle-btn" id="b03-s35-raw-btn">
+              <span class="raw-toggle-icon">{}</span> Lihat Raw Data
+            </button>
+            <span class="raw-toggle-hint">Status transaksi dari mempool sampai dikonfirmasi</span>
+          </div>
+
+          <div class="raw-panel" id="b03-s35-raw-panel">
+            <div class="raw-panel-head">
+              <span>Transaction Status · Raw Format</span>
+              <span class="raw-panel-src">bitcoin-cli getmempoolentry / getrawtransaction</span>
+            </div>
+            <pre class="raw-panel-body" id="b03-s35-raw-body">Broadcast transaksi terlebih dahulu untuk melihat raw data-nya.</pre>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-3-4" data-sb="sb-3-4">
+            ← 3.4 — Transaction Fee
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-3-6" data-sb="sb-3-6">
+            3.6 — Lifecycle Transaksi →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 3.5 -->
+
+      <!-- ==============================
+           SECTION 3.6 · Lifecycle transaksi
+      ============================== -->
+      <div class="p-section" id="section-3-6">
+        <div class="p-eyebrow">Bab 3 · 3.6</div>
+        <div class="p-heading">Dari pembuatan sampai final</div>
+        <div class="p-title">Lifecycle Sebuah Transaksi</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Kita sudah belajar semua komponen: UTXO, input, output, fee, mempool, konfirmasi. Sekarang kita satukan semuanya dalam satu gambaran utuh.</p>
+          <p>Inilah perjalanan lengkap sebuah transaksi Bitcoin, dari awal sampai akhir.</p>
+
+          <p><strong>1. Pembuatan</strong></p>
+          <p>Wallet memilih UTXO yang cukup untuk menutupi jumlah yang ingin dikirim plus fee. Ia menyusun transaksi dengan input yang mereferensikan UTXO tersebut, output ke penerima, dan output kembalian ke pengirim kalau ada sisa.</p>
+
+          <p><strong>2. Penandatanganan</strong></p>
+          <p>Private key pengirim digunakan untuk membuat tanda tangan kriptografi yang membuktikan kepemilikan UTXO yang direferensikan. Tanda tangan ini unik untuk transaksi ini dan tidak bisa dipakai ulang untuk transaksi lain.</p>
+
+          <p><strong>3. Broadcast</strong></p>
+          <p>Transaksi yang sudah ditandatangani disiarkan ke jaringan. Node pertama yang menerimanya memvalidasi: apakah UTXO-nya ada dan belum dipakai? Apakah tanda tangannya valid? Kalau ya, ia meneruskan ke node-node tetangganya.</p>
+
+          <p><strong>4. Mempool</strong></p>
+          <p>Transaksi masuk ke mempool di setiap node yang menerimanya. Ia menunggu di sana bersama ribuan transaksi lain. Fee rate menentukan seberapa cepat miner memilihnya.</p>
+
+          <p><strong>5. Seleksi miner</strong></p>
+          <p>Ketika seorang miner sedang menyusun block baru, ia memilih transaksi dari mempool berdasarkan fee per vbyte tertinggi. Transaksimu masuk ke kandidat block yang sedang ditambang.</p>
+
+          <p><strong>6. Block ditemukan</strong></p>
+          <p>Miner menemukan bukti kerja yang valid dan menyiarkan block ke jaringan. Node-node lain memverifikasi dan menambahkannya ke blockchain. UTXO yang direferensikan ditandai spent. Output baru menjadi UTXO segar milik penerima.</p>
+
+          <p><strong>7. Konfirmasi bertambah</strong></p>
+          <p>Setiap block baru yang ditambang di atas block tersebut menambah satu konfirmasi. Semakin banyak konfirmasi, semakin dalam transaksi tertanam di blockchain, semakin tidak mungkin dibalik.</p>
+
+          <p><strong>PSBT: Partially Signed Bitcoin Transaction</strong></p>
+          <p>Lifecycle di atas menggambarkan transaksi yang ditandatangani oleh satu pihak. Tapi bagaimana kalau transaksi perlu ditandatangani oleh beberapa pihak, misalnya multisig 2-of-3, atau kalau penandatanganan dilakukan di hardware wallet yang terpisah dari wallet yang menyusun transaksi?</p>
+
+          <p>PSBT (BIP 174) adalah format standar untuk transaksi yang sedang "dalam proses" ditandatangani. Ia memisahkan dua peran yang sebelumnya selalu digabung: peran penyusun transaksi (yang memilih UTXO, menentukan output, dan menghitung fee) dan peran penandatangan (yang punya private key). Dengan PSBT, kedua peran ini bisa dilakukan oleh perangkat atau pihak yang berbeda.</p>
+
+          <p>Alurnya: wallet software menyusun transaksi dan mengekspornya sebagai file PSBT. File ini berisi semua informasi yang dibutuhkan untuk menandatangani: input mana yang perlu ditandatangani, script yang harus dipenuhi, dan metadata tambahan. Hardware wallet atau penandatangan lain membaca file PSBT, memverifikasi detailnya, menambahkan tanda tangannya, dan mengembalikan PSBT yang sudah sebagian ditandatangani. Setelah semua tanda tangan terkumpul, PSBT digabungkan dan difinalisasi menjadi transaksi yang siap di-broadcast.</p>
+
+          <div class="p-callout">
+            <p>Seluruh proses ini, dari pembuatan sampai konfirmasi pertama, bisa selesai dalam 10 menit kalau jaringan tidak sedang sibuk dan fee-mu cukup. Tanpa bank, tanpa izin, tanpa jam kerja, tanpa hari libur. Di manapun di dunia, kapanpun.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi interaktif — Lifecycle Transaksi</div>
+
+          <div class="b03-s36-desc">
+            Klik "Mulai simulasi" untuk melihat perjalanan transaksi dari pembuatan sampai konfirmasi. Klik setiap tahap untuk membaca penjelasannya.
+          </div>
+
+          <div class="lc-timeline" id="b03-s36-timeline"></div>
+
+          <div class="lc-controls">
+            <button class="kp-btn kp-btn-gen" id="b03-s36-start">Mulai simulasi ↗</button>
+            <button class="kp-btn kp-btn-reset" id="b03-s36-reset">Reset</button>
+          </div>
+        
+          <div class="lab-link"><span class="kode">F1</span><span class="isi"><span class="hd">Lanjut ke Laboratorium</span>Bentuk byte transaksi yang sebenarnya, termasuk di mana txid dan wtxid berpisah, dibedah di Laboratorium F1.</span></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-3-5" data-sb="sb-3-5">
+            ← 3.5 — Mempool
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 3.6 -->
+
+    </div>
+    <!-- END CONTENT AREA -->
+
+  </div>
+
+</div>
+<!-- END PAGE 6 · BAB 3 -->
+
+

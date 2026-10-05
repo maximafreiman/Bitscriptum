@@ -1,0 +1,861 @@
+<!-- ============================================================
+     PAGE 21 · BAB 18 · Wire Protocol & Block Propagation
+     |-- 18.1 · Arsitektur P2P & Struktur Pesan Wire [DONE]
+     |-- 18.2 · [LOCKED]
+     |-- 18.3 · [LOCKED]
+     |-- 18.4 · [LOCKED]
+     |-- 18.5 · [LOCKED]
+     |-- 18.6 · [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab18">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b18">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b18">← Daftar Bab</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab18">
+      <div class="sidebar-heading">Bab 18</div>
+      <div class="sidebar-title">Wire Protocol & Block Propagation</div>
+
+      <div class="sidebar-item active" id="sb-18-1">
+        <div class="sb-num">18.1</div>
+        <div class="sb-label">Arsitektur P2P & Struktur Pesan Wire</div>
+      </div>
+      <div class="sidebar-item" id="sb-18-2">
+        <div class="sb-num">18.2</div>
+        <div class="sb-label">Handshake & Message Flow</div>
+      </div>
+      <div class="sidebar-item" id="sb-18-3">
+        <div class="sb-num">18.3</div>
+        <div class="sb-label">Block Sync — Dari Satu Block ke Seluruh Blockchain</div>
+      </div>
+      <div class="sidebar-item" id="sb-18-4">
+        <div class="sb-num">18.4</div>
+        <div class="sb-label">Compact Blocks — Mempercepat Propagasi Block (BIP 152)</div>
+      </div>
+      <div class="sidebar-item" id="sb-18-5">
+        <div class="sb-num">18.5</div>
+        <div class="sb-label">Erlay — Propagasi Transaksi yang Lebih Efisien (BIP 330)</div>
+      </div>
+      <div class="sidebar-item" id="sb-18-6">
+        <div class="sb-num">18.6</div>
+        <div class="sb-label">Dandelion & Transaction Privacy (BIP 156)</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab18-content">
+
+      <!-- ==============================
+           SECTION 18.1 · Arsitektur P2P & Struktur Pesan Wire
+      ============================== -->
+      <div class="p-section active" id="section-18-1">
+        <div class="p-eyebrow">Bab 18 · 18.1</div>
+        <div class="p-heading">Di balik setiap transaksi Bitcoin yang kamu kirim, ada percakapan biner yang sangat ketat antara ribuan komputer</div>
+        <div class="p-title">Arsitektur P2P & Struktur Pesan Wire</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Bab 8 sudah menjelaskan jaringan P2P Bitcoin dari sisi apa yang terjadi. Bab 18 membahas sisi bagaimana: byte apa persisnya yang berpindah antar node. Kalau Bab 8 adalah peta kota, Bab 18 adalah rambu dan aturan lalu lintasnya.</p>
+          <p>Bayangkan dua orang bicara lewat walkie-talkie dengan protokol militer. Setiap transmisi harus dimulai dengan kode identifikasi stasiun, diikuti kode perintah, lalu isi pesan, lalu kode verifikasi. Tidak bisa asal bicara; kalau formatnya salah, transmisi diabaikan. Bitcoin wire protocol bekerja persis seperti itu, hanya saja bukan suara manusia yang dikirim, melainkan byte-byte biner yang mengikuti aturan yang sangat ketat.</p>
+
+          <p>Kalau kamu membuka Wireshark dan melihat traffic antara dua node Bitcoin, kamu tidak akan melihat HTTP, tidak ada JSON, tidak ada REST API. Yang kamu lihat adalah stream byte mentah, yaitu format biner yang dirancang untuk efisiensi maksimal, bukan keterbacaan manusia.</p>
+
+          <p><strong>Jaringan tanpa server pusat</strong></p>
+          <p>Bitcoin berjalan di atas jaringan peer-to-peer murni yang tidak terstruktur. Tidak ada server pusat, tidak ada koordinator, tidak ada single point of failure. Setiap node adalah klien sekaligus server, ia menerima data dari peer lain sekaligus melayani data ke peer lain. Ini berbeda dari cara kerja internet biasa di mana kamu adalah klien dan Google, YouTube, atau bank kamu adalah server.</p>
+
+          <p>Setiap node mempertahankan dua jenis koneksi. Outbound connections (8 koneksi reguler + 2 block-only) adalah koneksi yang kamu inisiasi sendiri, kamu yang memilih peer-nya. Inbound connections (sekitar 115, karena Bitcoin Core membatasi total koneksi di 125 dan 10 di antaranya sudah dipakai outbound) adalah koneksi yang diinisiasi peer lain yang datang kepadamu, kalau port 8333 terbuka. Outbound connections lebih dipercaya karena kamu yang memilih dengan siapa berbicara, bukan pasif menerima siapapun yang datang mengetuk pintu.</p>
+
+          <p><strong>Bagaimana node menemukan teman bicara?</strong></p>
+          <p>Saat pertama kali dijalankan, node Bitcoin belum kenal siapapun. Ia menggunakan DNS seeds, seperti buku telepon khusus, untuk mendapatkan daftar IP node-node aktif. Ada beberapa DNS seed yang dikelola kontributor terpercaya. Setelah terhubung ke beberapa peer, node bertukar daftar kenalan via pesan addr, seperti teman yang saling merekomendasikan kenalan baru. Daftar ini disimpan di peers.dat untuk digunakan saat restart.</p>
+
+          <p><strong>Anatomi satu pesan Bitcoin</strong></p>
+          <p>Setiap pesan P2P Bitcoin, apapun isinya, selalu punya struktur header yang sama persis. Ini seperti amplop standar yang selalu punya kolom "pengirim", "penerima", dan "isi" di tempat yang sama, sehingga siapapun yang menerima amplop langsung tahu cara membacanya.</p>
+
+          <p>Magic bytes (4 byte) adalah kode pengenal jaringan. Seperti kode area di nomor telepon: 0xF9BEB4D9 artinya "ini pesan Bitcoin mainnet." Kalau byte pertama yang diterima node berbeda dari yang diharapkan, koneksi langsung ditutup tanpa membaca sisanya.</p>
+
+          <p>Command (12 byte) adalah nama perintah dalam teks ASCII. "version", "inv", "tx", "block", selalu dipadding dengan null bytes sampai 12 karakter. Seperti subjek email yang selalu punya panjang persis sama.</p>
+
+          <p>Length (4 byte) memberitahu penerima berapa byte payload yang akan datang. Ini penting agar penerima tahu kapan satu pesan selesai dan pesan berikutnya dimulai di stream byte yang terus mengalir.</p>
+
+          <p>Checksum (4 byte) adalah 4 byte pertama dari SHA256(SHA256(payload)). Kalau payload rusak di tengah perjalanan, checksum tidak akan cocok dan pesan diabaikan. Seperti nomor seri di uang kertas yang bisa mendeteksi pemalsuan.</p>
+
+          <p><strong>Services Flags: Kartu Nama Kapabilitas Node</strong></p>
+          <p>Di dalam pesan version, setiap node mengiklankan apa yang bisa ia lakukan via services flags. Ini seperti profil LinkedIn yang menampilkan skill: NODE_NETWORK berarti "saya punya full blockchain dan bisa melayani block historis", NODE_COMPACT_FILTERS berarti "saya mendukung BIP 157/158 untuk SPV client modern", NODE_WITNESS berarti "saya mendukung SegWit." Peer membaca flags ini untuk memutuskan apa yang bisa diminta dari node tersebut.</p>
+
+          <div class="p-callout">
+            <p>Format wire Bitcoin yang biner dan minimal ini adalah keputusan desain yang disengaja. Tidak ada overhead dari format teks seperti HTTP atau JSON, setiap byte punya makna spesifik. Ini memungkinkan node memproses ribuan pesan per detik dengan overhead CPU yang sangat kecil. Kesederhanaan di level protokol adalah yang memungkinkan kompleksitas di level jaringan.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Wire Message Inspector & Topologi Jaringan P2P</div>
+          <div class="b18-s181-desc">
+            Tab pertama: pilih jenis pesan Bitcoin dan lihat breakdown byte per byte — tiap field dijelaskan dengan analogi sehari-hari. Tab kedua: diagram bagaimana node kamu terhubung ke jaringan P2P Bitcoin.
+          </div>
+
+          <div class="b18-s181-tabs">
+            <button class="b18-s181-tab s181-act" id="b18-s181-t1">Wire Message Inspector</button>
+            <button class="b18-s181-tab" id="b18-s181-t2">Topologi Jaringan P2P</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b18-s181-pane show" id="b18-s181-p1">
+            <div class="b18-s181-hint">Setiap pesan P2P Bitcoin adalah stream byte biner dengan format yang sama: magic bytes, command, length, checksum, lalu payload. Pilih jenis pesan untuk melihat breakdown byte per byte beserta analogi yang membantu.</div>
+
+            <div class="b18-s181-msg-label">Pilih jenis pesan:</div>
+            <div class="b18-s181-msgs" id="b18-s181-msgs"></div>
+
+            <div class="b18-s181-hex-wrap">
+              <div class="b18-s181-hex-bar">
+                <div class="b18-s181-hex-dot" style="background:#FF5F57;"></div>
+                <div class="b18-s181-hex-dot" style="background:#FEBC2E;"></div>
+                <div class="b18-s181-hex-dot" style="background:#28C840;"></div>
+                <div class="b18-s181-hex-title">Bitcoin Wire Protocol — Hex View</div>
+                <div class="b18-s181-hex-cmd" id="b18-s181-hex-cmd"></div>
+              </div>
+              <div class="b18-s181-hex-body" id="b18-s181-hex-body"></div>
+            </div>
+
+            <div class="b18-s181-legend">
+              <div class="b18-s181-leg"><div class="b18-s181-leg-dot" style="background:#534AB7;"></div>Magic (4B)</div>
+              <div class="b18-s181-leg"><div class="b18-s181-leg-dot" style="background:#854F0B;"></div>Command (12B)</div>
+              <div class="b18-s181-leg"><div class="b18-s181-leg-dot" style="background:#0F6E56;"></div>Length (4B)</div>
+              <div class="b18-s181-leg"><div class="b18-s181-leg-dot" style="background:#A32D2D;"></div>Checksum (4B)</div>
+              <div class="b18-s181-leg"><div class="b18-s181-leg-dot" style="background:#2A2A28;border:0.5px solid rgba(168,208,141,0.4);"></div>Payload</div>
+            </div>
+
+            <div class="b18-s181-fields" id="b18-s181-fields"></div>
+            <div class="b18-s181-flags" id="b18-s181-flags" style="display:none;">
+              <div class="b18-s181-flags-label">Services flags di payload version:</div>
+              <div id="b18-s181-flags-inner"></div>
+            </div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b18-s181-pane" id="b18-s181-p2">
+            <div class="b18-s181-hint">Jaringan P2P Bitcoin adalah unstructured P2P — tidak ada hierarki, tidak ada node yang lebih penting. Setiap node mempertahankan outbound connections yang dipilih sendiri dan menerima inbound connections dari peer lain.</div>
+            <div class="b18-s181-net">
+              <div class="b18-s181-net-label">Topologi node kamu di jaringan Bitcoin:</div>
+              <svg class="b18-s181-net-svg" id="b18-s181-net-svg" viewBox="0 0 560 280" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;max-width:560px;margin:0 auto;"></svg>
+              <div class="b18-s181-net-note" id="b18-s181-net-note"></div>
+            </div>
+            <div class="b18-s181-flags">
+              <div class="b18-s181-flags-label">Services flags — kapabilitas yang diiklankan node:</div>
+              <div id="b18-s181-svc-flags"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-18-2" data-sb="sb-18-2">
+            18.2 — Handshake & Message Flow →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 18.1 -->
+
+      <!-- ==============================
+           SECTION 18.2 · Handshake & Message Flow
+      ============================== -->
+      <div class="p-section" id="section-18-2">
+        <div class="p-eyebrow">Bab 18 · 18.2</div>
+        <div class="p-heading">Sebelum bisa bertukar data, dua node harus menyelesaikan ritual tiga langkah terlebih dahulu</div>
+        <div class="p-title">Handshake & Message Flow — Bahasa yang Dipakai Dua Node yang Baru Bertemu</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Bayangkan dua diplomat dari negara berbeda yang bertemu untuk pertama kalinya. Ada protokol yang harus diikuti sebelum bisa membahas urusan penting: perkenalan formal, verifikasi identitas, konfirmasi bahwa keduanya berbicara bahasa yang sama, baru kemudian masuk ke substansi. Bitcoin node bekerja persis seperti itu.</p>
+
+          <p><strong>Handshake: tiga langkah sebelum bisa bicara</strong></p>
+          <p>Ketika dua node pertama kali terhubung, mereka tidak langsung bertukar transaksi atau block. Ada ritual tiga langkah yang harus diselesaikan dulu. Node yang menginisiasi koneksi mengirim pesan version berisi versi software, services flags, timestamp, user agent, dan block height tertinggi yang diketahui. Node penerima membalas dengan version miliknya sendiri. Kemudian keduanya mengirim verack sebagai konfirmasi. Setelah kedua verack diterima, handshake selesai dan sesi komunikasi resmi dimulai.</p>
+
+          <p>Nonce di pesan version punya fungsi khusus: mendeteksi self-connection. Kalau node menerima version dengan nonce yang sama dengan yang ia kirim, berarti ia tidak sengaja terhubung ke dirinya sendiri melalui relay atau konfigurasi jaringan yang aneh. Koneksi langsung ditutup.</p>
+
+          <p><strong>Lifecycle transaksi: dari wallet ke jaringan</strong></p>
+          <p>Ketika kamu mengirim transaksi Bitcoin dari wallet, tiga pesan P2P bekerja secara berurutan. Pertama, node mengumumkan txid via inv tanpa mengirim data penuh, seperti poster "ada produk baru" tanpa memaksa semua orang mengambilnya. Peer yang belum punya transaksi tersebut membalas dengan getdata. Baru kemudian transaksi penuh dikirim via tx. Peer yang sudah punya transaksi dari node lain tidak perlu merespons sama sekali, sehingga tidak ada pengiriman data yang redundan.</p>
+
+          <p>Propagasi berlangsung seperti riak di air: satu transaksi bisa mencapai seluruh jaringan dalam hitungan detik via proses flooding ini.</p>
+
+          <p><strong>Propagasi block: tiga generasi mekanisme</strong></p>
+          <p>Saat miner menemukan block baru, propagasi harus secepat mungkin. Setiap detik keterlambatan meningkatkan risiko block lain ditemukan sebelum block ini menyebar, menyebabkan stale block yang membuang reward miner.</p>
+
+          <p>Cara lama menggunakan inv/getdata/block klasik, block penuh 1-2 MB harus dikirim ke setiap peer yang meminta. Cara yang lebih baik adalah headers-first: kirim header 80 byte dulu agar peer bisa memvalidasi proof-of-work sebelum memutuskan apakah perlu block penuh. Cara terbaik adalah compact blocks (BIP 152) yang dibahas di 18.4: kirim sketsa block yang bisa direkonstruksi dari mempool, sehingga hanya sebagian kecil data yang perlu ditransfer.</p>
+
+          <p><strong>Pesan-pesan pendukung lainnya</strong></p>
+          <p>getheaders meminta header block dari peer untuk membangun gambaran chain secara cepat tanpa mendownload block penuh. addr dan addrv2 berbagi daftar alamat IP peer yang dikenal, melanjutkan proses peer discovery yang dimulai dari DNS seeds. feefilter memungkinkan node memberitahu peer minimum fee yang ia terima di mempool sehingga transaksi dengan fee terlalu rendah tidak dikirimkan sama sekali.</p>
+
+          <div class="p-callout">
+            <p>Desain inv/getdata yang memisahkan pengumuman dari pengiriman data adalah keputusan efisiensi yang sangat penting. Tanpanya, setiap transaksi baru akan langsung dikirim penuh ke semua peer secara redundan. Dengan inv/getdata, setiap data hanya dikirim ke peer yang benar-benar butuh, menghemat bandwidth jaringan secara signifikan.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Handshake Timeline & Message Flow</div>
+          <div class="b18-s182-desc">
+            Tiga tab: handshake dan lifecycle transaksi step-by-step, propagasi block dari cara lama ke compact blocks, dan referensi lengkap semua pesan P2P Bitcoin.
+          </div>
+
+          <div class="b18-s182-tabs">
+            <button class="b18-s182-tab s182-act" id="b18-s182-t1">Handshake & Transaksi</button>
+            <button class="b18-s182-tab" id="b18-s182-t2">Propagasi Block</button>
+            <button class="b18-s182-tab" id="b18-s182-t3">Referensi Pesan</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b18-s182-pane show" id="b18-s182-p1">
+            <div class="b18-s182-hint">Handshake tiga langkah lalu lifecycle transaksi. Klik "Langkah Berikutnya" untuk maju satu langkah.</div>
+            <div class="b18-s182-actors">
+              <div class="b18-s182-actor s182-left">Node Kamu (Initiator)<div class="b18-s182-actor-sub">yang menginisiasi koneksi</div></div>
+              <div class="b18-s182-actor s182-right">Peer (Responder)<div class="b18-s182-actor-sub">yang menerima koneksi</div></div>
+            </div>
+            <div class="b18-s182-timeline" id="b18-s182-tl1"></div>
+            <div class="b18-s182-detail s182-d-idle" id="b18-s182-detail1">
+              <div class="b18-s182-detail-label">Menunggu</div>
+              <div class="b18-s182-detail-title">Koneksi TCP baru saja dibuka</div>
+              <div class="b18-s182-detail-text">Dua node baru saja terhubung di level TCP. Handshake harus diselesaikan sebelum komunikasi Bitcoin bisa dimulai.</div>
+            </div>
+            <div class="b18-s182-ctrl">
+              <button class="b18-s182-btn-primary" id="b18-s182-next1">Langkah Berikutnya →</button>
+              <button class="b18-s182-btn-sec" id="b18-s182-rst1">Reset</button>
+              <div class="b18-s182-step-ind" id="b18-s182-ind1">0 / 9 langkah</div>
+            </div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b18-s182-pane" id="b18-s182-p2">
+            <div class="b18-s182-hint">Evolusi mekanisme propagasi block dari cara lama ke compact blocks. Klik untuk melihat tiap langkah.</div>
+            <div class="b18-s182-actors">
+              <div class="b18-s182-actor s182-left">Miner / Node Pertama<div class="b18-s182-actor-sub">yang pertama punya block baru</div></div>
+              <div class="b18-s182-actor s182-right">Node Lain<div class="b18-s182-actor-sub">yang belum punya block ini</div></div>
+            </div>
+            <div class="b18-s182-timeline" id="b18-s182-tl2"></div>
+            <div class="b18-s182-detail s182-d-idle" id="b18-s182-detail2">
+              <div class="b18-s182-detail-label">Menunggu</div>
+              <div class="b18-s182-detail-title">Miner baru saja menemukan block #870.143</div>
+              <div class="b18-s182-detail-text">Block baru valid. Harus disebarkan ke seluruh jaringan secepat mungkin sebelum miner lain menemukan block di height yang sama.</div>
+            </div>
+            <div class="b18-s182-ctrl">
+              <button class="b18-s182-btn-primary" id="b18-s182-next2">Langkah Berikutnya →</button>
+              <button class="b18-s182-btn-sec" id="b18-s182-rst2">Reset</button>
+              <div class="b18-s182-step-ind" id="b18-s182-ind2">0 / 8 langkah</div>
+            </div>
+          </div>
+
+          <!-- PANE 3 -->
+          <div class="b18-s182-pane" id="b18-s182-p3">
+            <div class="b18-s182-hint">Ringkasan semua pesan P2P Bitcoin yang penting, dikelompokkan berdasarkan fungsinya.</div>
+            <div class="b18-s182-refs">
+              <div class="b18-s182-ref s182-r-h">
+                <div class="b18-s182-ref-label">HANDSHAKE</div>
+                <div class="b18-s182-ref-msg"><code>version</code> — perkenalan: versi, services, height</div>
+                <div class="b18-s182-ref-msg"><code>verack</code> — konfirmasi handshake selesai</div>
+              </div>
+              <div class="b18-s182-ref s182-r-t">
+                <div class="b18-s182-ref-label">TRANSAKSI</div>
+                <div class="b18-s182-ref-msg"><code>inv</code> — umumkan txid yang dimiliki</div>
+                <div class="b18-s182-ref-msg"><code>getdata</code> — minta data spesifik dari peer</div>
+                <div class="b18-s182-ref-msg"><code>tx</code> — kirim transaksi penuh</div>
+                <div class="b18-s182-ref-msg"><code>mempool</code> — minta daftar tx di mempool peer</div>
+              </div>
+              <div class="b18-s182-ref s182-r-b">
+                <div class="b18-s182-ref-label">BLOCK & SYNC</div>
+                <div class="b18-s182-ref-msg"><code>block</code> — kirim block penuh (~1-2 MB)</div>
+                <div class="b18-s182-ref-msg"><code>headers</code> — kirim header saja (80 byte/block)</div>
+                <div class="b18-s182-ref-msg"><code>getheaders</code> — minta headers dari peer</div>
+                <div class="b18-s182-ref-msg"><code>getblocks</code> — minta inv dari block yang belum dimiliki</div>
+                <div class="b18-s182-ref-msg"><code>cmpctblock</code> — compact block (BIP 152)</div>
+                <div class="b18-s182-ref-msg"><code>getblocktxn</code> — minta tx yang hilang dari compact block</div>
+              </div>
+              <div class="b18-s182-ref s182-r-g">
+                <div class="b18-s182-ref-label">NETWORK & MISC</div>
+                <div class="b18-s182-ref-msg"><code>ping</code> / <code>pong</code> — keepalive koneksi</div>
+                <div class="b18-s182-ref-msg"><code>addr</code> / <code>addrv2</code> — berbagi daftar peer</div>
+                <div class="b18-s182-ref-msg"><code>getaddr</code> — minta daftar peer dari node lain</div>
+                <div class="b18-s182-ref-msg"><code>feefilter</code> — set minimum fee yang diterima</div>
+                <div class="b18-s182-ref-msg"><code>sendcmpct</code> — negosiasi compact block mode</div>
+                <div class="b18-s182-ref-msg"><code>wtxidrelay</code> — aktifkan relay via witness txid</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-18-1" data-sb="sb-18-1">
+            ← 18.1 — Arsitektur P2P
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-18-3" data-sb="sb-18-3">
+            18.3 — Block Sync →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 18.2 -->
+
+      <!-- ==============================
+           SECTION 18.3 · Block Sync
+      ============================== -->
+      <div class="p-section" id="section-18-3">
+        <div class="p-eyebrow">Bab 18 · 18.3</div>
+        <div class="p-heading">Node baru tidak bisa begitu saja percaya data dari satu peer — ia harus tahu chain mana yang benar sebelum mulai download</div>
+        <div class="p-title">Block Sync — Dari Satu Block ke Seluruh Blockchain</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Di Bab 16 kita membahas IBD dari sudut pandang node: apa yang diverifikasi dan berapa lama. Di sini kita lihat dari sudut pandang yang berbeda: pesan-pesan P2P apa yang sebenarnya dikirim selama proses sync, dan mengapa ada dua strategi sync yang sangat berbeda efisiensinya.</p>
+
+          <p><strong>Strategi 1: Blocks-first sync, cara yang sudah ditinggalkan</strong></p>
+          <p>Cara paling naif adalah meminta block satu per satu dari satu peer. Node mengirim getblocks dengan block locator, peer membalas dengan inv berisi hingga 500 hash block berikutnya, lalu node meminta setiap block via getdata dan menunggu divalidasi sebelum meminta berikutnya. Masalahnya: seluruh sync bergantung pada satu peer. Kalau peer lambat, semuanya lambat. Node juga tidak bisa tahu apakah ia sedang di chain yang benar sampai sudah terlanjur download banyak block.</p>
+
+          <p><strong>Strategi 2: Headers-first sync, cara modern sejak 2015</strong></p>
+          <p>Headers-first memecahkan masalah ini dengan memisahkan dua fase. Fase pertama: download semua header via getheaders. Peer membalas dengan hingga 2.000 header setiap respons (setiap header 80 byte plus 1 byte varint, total sekitar 162 KB per respons). Dalam beberapa menit, node sudah punya semua header dari genesis hingga tip, sekitar 70 MB total. Dari header chain ini, node bisa menghitung accumulated proof-of-work dari setiap chain yang ditawarkan berbagai peer dan tahu mana yang valid, bahkan sebelum mendownload satu block penuh pun.</p>
+
+          <p>Fase kedua: download block secara paralel dari banyak peer berbeda. Karena urutan sudah diketahui dari header chain, node bisa minta block dari peer manapun tanpa risiko ditipu urutan yang salah.</p>
+
+          <p><strong>Block locator algorithm</strong></p>
+          <p>Block locator adalah daftar hash yang cerdas dan hemat. Node tidak mengirimkan hash semua block yang dimilikinya, melainkan memilih secara exponentially sparse: 10 block terbaru satu per satu, lalu setiap 2 block, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, dan seterusnya hingga genesis block. Ini memungkinkan peer menemukan titik divergensi chain dengan efisien meski ada reorg yang sangat panjang, hanya dengan sekitar 40 hash, bahkan untuk chain sepanjang ratusan ribu block.</p>
+
+          <p><strong>Minimum chain work threshold</strong></p>
+          <p>Untuk keamanan tambahan, node modern punya minimum chain work threshold: jumlah accumulated proof-of-work minimum yang harus dimiliki sebuah chain sebelum dianggap layak diikuti. Ini mencegah node tertipu untuk mengikuti chain palsu yang sangat pendek dengan PoW yang sangat sedikit, bahkan sebelum header chain selesai diverifikasi sepenuhnya.</p>
+
+          <div class="p-callout">
+            <p>Pergeseran dari blocks-first ke headers-first adalah salah satu peningkatan terbesar dalam sejarah Bitcoin Core (versi 0.10.0, 2015). Dengan memisahkan verifikasi chain dari download data, IBD menjadi jauh lebih cepat, lebih aman, dan lebih tahan terhadap peer yang berperilaku buruk.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Block Sync Visualizer</div>
+          <div class="b18-s183-desc">
+            Tab pertama: bandingkan blocks-first vs headers-first — klik untuk lihat fase, pesan, dan perbandingan kecepatan. Tab kedua: visualisasi block locator algorithm yang menentukan hash mana yang dikirim saat sync.
+          </div>
+
+          <div class="b18-s183-tabs">
+            <button class="b18-s183-tab s183-act" id="b18-s183-t1">Blocks-first vs Headers-first</button>
+            <button class="b18-s183-tab" id="b18-s183-t2">Block Locator Algorithm</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b18-s183-pane show" id="b18-s183-p1">
+            <div class="b18-s183-hint">Pilih strategi sync untuk melihat urutan langkah, pesan P2P yang digunakan, dan mengapa headers-first jauh lebih efisien.</div>
+            <div class="b18-s183-strats" id="b18-s183-strats">
+              <div class="b18-s183-strat s183-act s183-red" data-strat="blocks">
+                <div class="b18-s183-strat-icon">🐌</div>
+                <div class="b18-s183-strat-body">
+                  <div class="b18-s183-strat-title">Blocks-first Sync — Cara Lama</div>
+                  <div class="b18-s183-strat-desc">Download block satu per satu dari satu peer. Lambat, tidak bisa paralel, rentan ke peer yang lambat atau tidak jujur.</div>
+                </div>
+              </div>
+              <div class="b18-s183-strat s183-green" data-strat="headers">
+                <div class="b18-s183-strat-icon">🚀</div>
+                <div class="b18-s183-strat-body">
+                  <div class="b18-s183-strat-title">Headers-first Sync — Cara Modern (sejak 2015)</div>
+                  <div class="b18-s183-strat-desc">Download semua header dulu (~70 MB), lalu download block paralel dari banyak peer. Lebih cepat dan lebih aman.</div>
+                </div>
+              </div>
+            </div>
+            <div class="b18-s183-phases" id="b18-s183-phases"></div>
+            <div class="b18-s183-compare-label">Perbandingan waktu sync:</div>
+            <div class="b18-s183-compare-rows">
+              <div class="b18-s183-compare-row"><div class="b18-s183-compare-name">Blocks-first (lama)</div><div class="b18-s183-compare-bar-wrap"><div class="b18-s183-compare-bar" style="width:100%;background:#A32D2D;"><span class="b18-s183-compare-bar-txt">~3-7 hari IBD (hardware rata-rata)</span></div></div><div class="b18-s183-compare-val">~3-7 hari</div></div>
+              <div class="b18-s183-compare-row"><div class="b18-s183-compare-name">Headers-first (modern)</div><div class="b18-s183-compare-bar-wrap"><div class="b18-s183-compare-bar" style="width:35%;background:#0F6E56;"><span class="b18-s183-compare-bar-txt">~4-24 jam</span></div></div><div class="b18-s183-compare-val">~4-24 jam</div></div>
+              <div class="b18-s183-compare-row"><div class="b18-s183-compare-name">Header chain saja</div><div class="b18-s183-compare-bar-wrap"><div class="b18-s183-compare-bar" style="width:3%;background:#534AB7;"><span class="b18-s183-compare-bar-txt">~5 menit</span></div></div><div class="b18-s183-compare-val">~5 menit</div></div>
+            </div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b18-s183-pane" id="b18-s183-p2">
+            <div class="b18-s183-hint">Block locator memilih hash secara exponentially sparse — 10 terbaru dense, lalu semakin jarang ke belakang. Hanya ~30-40 hash untuk chain 870.000 block.</div>
+            <div class="b18-s183-locator-label">Visualisasi block locator dari node di block #870.142:</div>
+            <div class="b18-s183-locator-chain" id="b18-s183-locator-chain"></div>
+            <div class="b18-s183-locator-cards">
+              <div class="b18-s183-lcard s183-lcard-purple">
+                <div class="b18-s183-lcard-label">Cara locator dipilih:</div>
+                <div class="b18-s183-lcard-text">10 block terbaru satu per satu (#870.142 sampai #870.133), lalu setiap 2 block, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048... hingga genesis block #0. Total hanya ~30-40 hash untuk chain 870.000 block.</div>
+              </div>
+              <div class="b18-s183-lcard s183-lcard-green">
+                <div class="b18-s183-lcard-label">Mengapa ini cerdas:</div>
+                <div class="b18-s183-lcard-text">Reorg pendek (1-5 block) langsung terdeteksi dari hash dense di awal. Reorg panjang terdeteksi dari hash sparse. Peer hanya perlu kirim headers mulai dari titik divergensi, tanpa transfer data besar.</div>
+              </div>
+              <div class="b18-s183-lcard s183-lcard-amber">
+                <div class="b18-s183-lcard-label">Pesan yang digunakan:</div>
+                <div class="b18-s183-lcard-text"><code>getheaders</code> — dikirim dengan block locator, minta headers dari titik divergensi hingga tip (max 2.000 per respons, ~162 KB).<br><code>headers</code> — balasan peer dengan hingga 2.000 header.<br><code>getblocks</code> — versi lama: minta inv block (max 500 per respons).</div>
+              </div>
+            </div>
+            <div class="b18-s183-note">Analogi block locator: daripada menyebutkan setiap pohon yang dilewati (ribuan), kamu sebut 10 pohon terakhir secara detail, lalu setiap persimpangan besar, lalu setiap desa besar yang diingat. Tim penyelamat langsung tahu dari mana mulai mencari.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-18-2" data-sb="sb-18-2">
+            ← 18.2 — Handshake & Message Flow
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-18-4" data-sb="sb-18-4">
+            18.4 — Compact Blocks →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 18.3 -->
+
+      <!-- ==============================
+           SECTION 18.4 · Compact Blocks (BIP 152)
+      ============================== -->
+      <div class="p-section" id="section-18-4">
+        <div class="p-eyebrow">Bab 18 · 18.4</div>
+        <div class="p-heading">Mengapa harus download data yang sudah kamu punya? Compact blocks memecahkan inefisiensi terbesar dalam propagasi block</div>
+        <div class="p-title">Compact Blocks — Mempercepat Propagasi Block (BIP 152)</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Bayangkan seseorang mengirimkanmu salinan koran 200 halaman, padahal kamu sudah punya 198 halamannya. Buang-buang waktu dan kertas, bukan? Itulah yang terjadi dengan propagasi block sebelum compact blocks: setiap node harus mendownload block penuh (~1-2 MB) meski sudah mengetahui hampir semua transaksi di dalamnya dari mempoolnya sendiri.</p>
+
+          <p><strong>Masalah yang dipecahkan</strong></p>
+          <p>Node yang terhubung baik ke jaringan biasanya sudah punya 95-99% transaksi yang ada di dalam block sebelum block ditemukan. Ini karena transaksi disebarkan ke seluruh jaringan saat pertama kali dikirim, jauh sebelum masuk ke dalam block. Compact blocks (BIP 152, 2016) memanfaatkan fakta ini: daripada kirim seluruh block, kirim daftar ID pendek transaksi saja dan biarkan penerima merekonstruksi sisanya dari mempool lokalnya.</p>
+
+          <p><strong>Format pesan cmpctblock</strong></p>
+          <p>Pesan cmpctblock berisi tiga komponen utama. Header block (80 byte) yang sama seperti biasa, berisi proof-of-work, merkle root, dan timestamp. Shortids berukuran 6 byte untuk setiap transaksi dalam block (jauh lebih kecil dari txid 32 byte), dibuat dengan SipHash-2-4 menggunakan nonce unik per block sehingga hanya valid untuk block ini saja. Prefill transactions yaitu beberapa transaksi yang dikirim langsung tanpa shortid, terutama coinbase transaction yang dipastikan tidak ada di mempool manapun.</p>
+
+          <p>Penerima mencocokkan setiap shortid dengan transaksi di mempoolnya. Transaksi yang ditemukan langsung dipakai untuk rekonstruksi block. Kalau ada shortid yang tidak cocok, penerima mengirim getblocktxn berisi daftar index transaksi yang dibutuhkan, dan pengirim membalas dengan blocktxn berisi hanya transaksi tersebut.</p>
+
+          <p><strong>High-bandwidth vs low-bandwidth mode</strong></p>
+          <p>Dua mode ini dinegosiasikan via pesan sendcmpct saat handshake. High-bandwidth mode (sendcmpct(1)): node langsung mengirimkan cmpctblock tanpa diminta begitu block baru ditemukan, cocok untuk maksimum 3 peer dengan koneksi terpercaya dan latensi rendah. Low-bandwidth mode (sendcmpct(0)): node mengumumkan via inv atau headers dulu, dan hanya mengirim cmpctblock kalau peer memintanya via getdata.</p>
+
+          <p><strong>Dampak nyata</strong></p>
+          <p>Compact blocks mengurangi data yang ditransfer dari ~1.500 KB menjadi ~20-60 KB dalam kondisi normal. Ini setara dengan pengurangan 95-98% bandwidth untuk propagasi block. Latensi propagasi block turun drastis karena lebih sedikit data yang harus ditransfer dan diverifikasi.</p>
+
+          <div class="p-callout">
+            <p>Compact blocks adalah contoh elegan dari prinsip "jangan kirim data yang sudah dimiliki penerima." Dengan memanfaatkan fakta bahwa mempool node-node yang terhubung baik hampir selalu sinkron, BIP 152 mengubah propagasi block dari operasi yang membutuhkan bandwidth besar menjadi operasi yang hampir real-time.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Compact Block Simulator</div>
+          <div class="b18-s184-desc">
+            Tab pertama: geser slider untuk lihat berapa data yang harus ditransfer dengan compact blocks vs block penuh, tergantung berapa persen tx yang sudah ada di mempool. Tab kedua: perbedaan high-bandwidth dan low-bandwidth mode.
+          </div>
+
+          <div class="b18-s184-tabs">
+            <button class="b18-s184-tab s184-act" id="b18-s184-t1">Simulator Compact Block</button>
+            <button class="b18-s184-tab" id="b18-s184-t2">High-bandwidth vs Low-bandwidth</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b18-s184-pane show" id="b18-s184-p1">
+            <div class="b18-s184-hint">Compact blocks memanfaatkan fakta bahwa node yang terhubung baik sudah punya hampir semua transaksi di mempoolnya. Geser slider untuk lihat dampaknya.</div>
+
+            <div class="b18-s184-analogy">
+              <div class="b18-s184-analogy-label">Analogi</div>
+              <div class="b18-s184-analogy-text">Daripada mengirimkan salinan lengkap koran 200 halaman, temanmu cukup mengirimkan <em>daftar nomor halaman</em> yang ada di edisi itu. Kamu cocokkan dengan koran lama yang sudah kamu punya — dan hanya minta halaman yang belum ada. Transfer dari 200 halaman menjadi hanya 2-3 halaman.</div>
+            </div>
+
+            <div class="b18-s184-slider-wrap">
+              <div class="b18-s184-slider-label">Berapa persen transaksi yang sudah ada di mempool node penerima?</div>
+              <div class="b18-s184-slider-sub">Node yang terhubung baik ke jaringan biasanya sudah punya 95-99% transaksi sebelum block ditemukan.</div>
+              <div class="b18-s184-slider-row">
+                <span class="b18-s184-slider-mm">80%</span>
+                <input type="range" class="b18-s184-slider" id="b18-s184-sl" min="80" max="100" value="97" step="1">
+                <span class="b18-s184-slider-mm">100%</span>
+                <div class="b18-s184-slider-val" id="b18-s184-sl-val">97% sudah ada</div>
+              </div>
+            </div>
+
+            <div class="b18-s184-stats">
+              <div class="b18-s184-stat s184-purple">
+                <div class="b18-s184-stat-label">Total transaksi di block</div>
+                <div class="b18-s184-stat-val">3.000 tx</div>
+                <div class="b18-s184-stat-sub">Block tipikal Bitcoin modern</div>
+              </div>
+              <div class="b18-s184-stat s184-green">
+                <div class="b18-s184-stat-label">Sudah ada di mempool</div>
+                <div class="b18-s184-stat-val" id="b18-s184-known">2.910 tx</div>
+                <div class="b18-s184-stat-sub">Rekonstruksi lokal, tidak perlu download</div>
+              </div>
+              <div class="b18-s184-stat s184-amber">
+                <div class="b18-s184-stat-label">Perlu didownload</div>
+                <div class="b18-s184-stat-val" id="b18-s184-missing">90 tx</div>
+                <div class="b18-s184-stat-sub">Via getblocktxn + blocktxn</div>
+              </div>
+            </div>
+
+            <div class="b18-s184-bw-label">Perbandingan data yang ditransfer:</div>
+            <div class="b18-s184-bw-rows">
+              <div class="b18-s184-bw-row"><div class="b18-s184-bw-name">Block penuh (cara lama)</div><div class="b18-s184-bw-wrap"><div class="b18-s184-bw-bar" style="width:100%;background:#A32D2D;"><span class="b18-s184-bw-txt">~1.500 KB (block penuh)</span></div></div><div class="b18-s184-bw-val">~1.500 KB</div></div>
+              <div class="b18-s184-bw-row"><div class="b18-s184-bw-name">cmpctblock (header+shortids)</div><div class="b18-s184-bw-wrap"><div class="b18-s184-bw-bar" id="b18-s184-bar-cmpct" style="background:#534AB7;"><span class="b18-s184-bw-txt" id="b18-s184-bar-cmpct-txt"></span></div></div><div class="b18-s184-bw-val" id="b18-s184-val-cmpct"></div></div>
+              <div class="b18-s184-bw-row"><div class="b18-s184-bw-name">blocktxn (tx belum dikenal)</div><div class="b18-s184-bw-wrap"><div class="b18-s184-bw-bar" id="b18-s184-bar-extra" style="background:#854F0B;"><span class="b18-s184-bw-txt" id="b18-s184-bar-extra-txt"></span></div></div><div class="b18-s184-bw-val" id="b18-s184-val-extra"></div></div>
+              <div class="b18-s184-bw-row"><div class="b18-s184-bw-name" style="font-weight:500;color:#0F6E56;">Total compact blocks</div><div class="b18-s184-bw-wrap"><div class="b18-s184-bw-bar" id="b18-s184-bar-total" style="background:#0F6E56;"><span class="b18-s184-bw-txt" id="b18-s184-bar-total-txt"></span></div></div><div class="b18-s184-bw-val" id="b18-s184-val-total" style="color:#0F6E56;font-weight:600;"></div></div>
+            </div>
+
+            <div class="b18-s184-breakdown-label">Breakdown komponen cmpctblock:</div>
+            <div class="b18-s184-breakdown-rows">
+              <div class="b18-s184-bdr br-header"><div class="b18-s184-bdr-name">Header block</div><div class="b18-s184-bdr-val">80 byte</div><div class="b18-s184-bdr-desc">Header 80 byte yang sama seperti biasa — proof-of-work, merkle root, timestamp</div></div>
+              <div class="b18-s184-bdr br-shortid"><div class="b18-s184-bdr-name">Shortids (6 byte × 3.000 tx)</div><div class="b18-s184-bdr-val" id="b18-s184-shortid-val">18.000 byte</div><div class="b18-s184-bdr-desc">ID pendek 6 byte per transaksi. Dibuat dengan SipHash-2-4 + nonce unik per block — hanya valid untuk block ini</div></div>
+              <div class="b18-s184-bdr br-prefill"><div class="b18-s184-bdr-name">Prefill tx (coinbase + beberapa)</div><div class="b18-s184-bdr-val">~500 byte</div><div class="b18-s184-bdr-desc">Tx yang pasti tidak ada di mempool (coinbase) dikirim langsung tanpa diminta</div></div>
+              <div class="b18-s184-bdr br-missing"><div class="b18-s184-bdr-name">blocktxn (tx yang belum dikenal)</div><div class="b18-s184-bdr-val" id="b18-s184-missing-val">~45.000 byte</div><div class="b18-s184-bdr-desc">Dikirim via getblocktxn/blocktxn hanya kalau ada tx yang tidak ditemukan di mempool</div></div>
+              <div class="b18-s184-bdr br-total"><div class="b18-s184-bdr-name">Total compact vs block penuh</div><div class="b18-s184-bdr-val" id="b18-s184-total-val">~63 KB vs 1.500 KB</div><div class="b18-s184-bdr-desc" id="b18-s184-saving-desc">Hemat ~96% bandwidth.</div></div>
+            </div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b18-s184-pane" id="b18-s184-p2">
+            <div class="b18-s184-hint">Dua mode dinegosiasikan via sendcmpct saat handshake. Node bisa pakai mode berbeda untuk peer yang berbeda.</div>
+            <div class="b18-s184-analogy">
+              <div class="b18-s184-analogy-label">Analogi</div>
+              <div class="b18-s184-analogy-text"><strong>High-bandwidth</strong>: langsung WhatsApp 3 teman terpercaya begitu ada berita baru, tanpa nunggu mereka tanya. <strong>Low-bandwidth</strong>: posting di status dulu, dan hanya yang bertanya aktif yang kamu kirimi detail lengkap.</div>
+            </div>
+            <div class="b18-s184-modes">
+              <div class="b18-s184-mode s184-m-high">
+                <div class="b18-s184-mode-label">HIGH-BANDWIDTH MODE</div>
+                <div class="b18-s184-mode-title">sendcmpct(1) — Langsung kirim</div>
+                <div class="b18-s184-mode-desc">Node langsung mengirimkan cmpctblock ke peer saat block baru ditemukan, tanpa menunggu peer meminta.</div>
+                <div class="b18-s184-mode-item">Latensi paling rendah — block sampai dalam milidetik</div>
+                <div class="b18-s184-mode-item">Dipakai untuk maksimum 3 peer per node</div>
+                <div class="b18-s184-mode-item">Cocok untuk peer dengan koneksi cepat dan latensi rendah</div>
+                <div class="b18-s184-mode-analogy">Seperti push notification — langsung diberitahu tanpa perlu cek sendiri</div>
+              </div>
+              <div class="b18-s184-mode s184-m-low">
+                <div class="b18-s184-mode-label">LOW-BANDWIDTH MODE</div>
+                <div class="b18-s184-mode-title">sendcmpct(0) — Kirim kalau diminta</div>
+                <div class="b18-s184-mode-desc">Node umumkan via inv atau headers dulu. Peer yang tertarik meminta cmpctblock via getdata.</div>
+                <div class="b18-s184-mode-item">Latensi lebih tinggi tapi bandwidth lebih hemat</div>
+                <div class="b18-s184-mode-item">Peer yang sudah dapat dari tempat lain tidak perlu minta</div>
+                <div class="b18-s184-mode-item">Default untuk sebagian besar koneksi</div>
+                <div class="b18-s184-mode-analogy">Seperti headline berita — lihat judul dulu, baru klik kalau tertarik</div>
+              </div>
+            </div>
+            <div class="b18-s184-flow-wrap">
+              <div class="b18-s184-flow-label">Flow pesan per mode:</div>
+              <div class="b18-s184-flows">
+                <div class="b18-s184-flow s184-flow-high">
+                  <div class="b18-s184-flow-title">High-bandwidth:</div>
+                  <div class="b18-s184-flow-msgs">Node → <code>cmpctblock</code><br>[jika ada tx hilang:]<br>Peer → <code>getblocktxn</code><br>Node → <code>blocktxn</code></div>
+                </div>
+                <div class="b18-s184-flow s184-flow-low">
+                  <div class="b18-s184-flow-title">Low-bandwidth:</div>
+                  <div class="b18-s184-flow-msgs">Node → <code>inv</code> / <code>headers</code><br>Peer → <code>getdata</code> (MSG_CMPCT_BLOCK)<br>Node → <code>cmpctblock</code><br>[jika ada tx hilang:]<br>Peer → <code>getblocktxn</code><br>Node → <code>blocktxn</code></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-18-3" data-sb="sb-18-3">
+            ← 18.3 — Block Sync
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-18-5" data-sb="sb-18-5">
+            18.5 — Erlay →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 18.4 -->
+
+      <!-- ==============================
+           SECTION 18.5 · Erlay (BIP 330)
+      ============================== -->
+      <div class="p-section" id="section-18-5">
+        <div class="p-eyebrow">Bab 18 · 18.5</div>
+        <div class="p-heading">Kalau compact blocks memecahkan propagasi block, Erlay memecahkan propagasi transaksi — dengan pendekatan matematika yang sangat elegan</div>
+        <div class="p-title">Erlay — Propagasi Transaksi yang Lebih Efisien (BIP 330)</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Bayangkan kamu tinggal di kampung dengan 1.000 warga. Ada berita baru: "Pak RT menikah lagi." Cara lama: setiap orang yang tahu langsung memberitahu semua tetangganya. Berita yang sama bisa didengar seseorang dari 10 orang berbeda sebelum sempat meneruskannya. Buang-buang waktu ngobrol. Erlay adalah cara yang lebih cerdas: tukar daftar berita secara periodik, dan hanya ceritakan yang benar-benar baru.</p>
+
+          <p><strong>Masalah flooding yang ada sekarang</strong></p>
+          <p>Saat ini propagasi transaksi menggunakan mekanisme flooding via inv/getdata/tx. Setiap transaksi baru di-announce ke semua peer via inv. Hasilnya: setiap transaksi di-announce rata-rata 8-16 kali ke setiap node, hampir semua redundan. Di jaringan dengan 10.000+ node dan ratusan ribu transaksi per hari, overhead bandwidth dari redundansi ini sangat signifikan dan membatasi berapa banyak koneksi yang bisa dipelihara node tanpa bandwidth yang besar.</p>
+
+          <p><strong>Set reconciliation: ide inti Erlay</strong></p>
+          <p>Erlay (BIP 330) memperkenalkan teknik bernama set reconciliation. Untuk sebagian kecil peer terpilih, node tetap menggunakan flooding seperti biasa (fanout) untuk memastikan propagasi cepat. Untuk peer lainnya, node secara periodik bertukar sketch yang sangat compact dari set transaksinya menggunakan struktur data bernama minisketch. Dari dua sketch yang dipertukarkan, keduanya bisa mengetahui transaksi mana yang hanya dimiliki salah satu pihak, tanpa perlu kirim daftar penuh.</p>
+
+          <p><strong>Minisketch: matematika yang cerdas</strong></p>
+          <p>Minisketch adalah implementasi PinSketch, sebuah teknik set reconciliation berbasis kode BCH. Ia memungkinkan dua pihak mengetahui perbedaan set mereka hanya dengan mentransfer data sebesar perbedaannya, bukan sebesar set totalnya. Kalau node A dan node B masing-masing punya 10.000 transaksi dan hanya berbeda 50 transaksi, sketch yang dikirim hanya sebesar ~50 elemen, bukan 10.000. Ini seperti "sidik jari" koleksi yang kecil tapi cukup untuk mengungkap perbedaan secara matematis.</p>
+
+          <p><strong>Dampak jangka panjang</strong></p>
+          <p>Erlay mengurangi bandwidth propagasi transaksi sekitar 40%. Yang lebih penting: karena setiap koneksi peer butuh lebih sedikit bandwidth, node bisa memelihara lebih banyak koneksi peer tanpa overhead yang proporsional. Lebih banyak koneksi berarti jaringan lebih terdesentralisasi dan lebih tahan terhadap eclipse attack. Latensi propagasi transaksi hampir tidak berubah karena fanout ke beberapa peer tetap dilakukan.</p>
+
+          <div class="p-callout">
+            <p>Erlay adalah contoh bagaimana teori matematika (kode koreksi galat dan set reconciliation) bisa diterapkan untuk memecahkan masalah praktis di jaringan P2P. Hasilnya bukan hanya penghematan bandwidth, tapi peningkatan desentralisasi jaringan yang merupakan salah satu properti paling berharga dari Bitcoin.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Erlay Visualizer — Flooding vs Set Reconciliation</div>
+          <div class="b18-s185-desc">
+            Tab pertama: perbandingan visual flooding vs Erlay — berapa banyak panah redundan yang dihilangkan. Tab kedua: cara kerja set reconciliation langkah per langkah dengan analogi yang mudah dipahami.
+          </div>
+
+          <div class="b18-s185-tabs">
+            <button class="b18-s185-tab s185-act" id="b18-s185-t1">Flooding vs Erlay</button>
+            <button class="b18-s185-tab" id="b18-s185-t2">Cara Kerja Set Reconciliation</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b18-s185-pane show" id="b18-s185-p1">
+            <div class="b18-s185-hint">Setiap transaksi baru harus disebarkan ke ribuan node. Flooding menghasilkan banyak duplikasi. Erlay menggantikan sebagian besar flooding dengan set reconciliation yang jauh lebih efisien.</div>
+            <div class="b18-s185-analogy">
+              <div class="b18-s185-analogy-label">Analogi</div>
+              <div class="b18-s185-analogy-text"><strong>Flooding:</strong> Dapat berita baru dan langsung cerita ke semua 8 tetangga. Hasilnya banyak orang dapat berita yang sama dari banyak orang berbeda.<br><strong>Erlay:</strong> Cerita ke 2-3 tetangga terdekat saja. Sisanya: secara periodik tukar "daftar berita" dengan tetangga. Hanya yang benar-benar baru yang diceritakan. Hasilnya sama, 40% lebih hemat.</div>
+            </div>
+            <div class="b18-s185-nets">
+              <div class="b18-s185-net-wrap">
+                <div class="b18-s185-net-head s185-h-flood">Flooding (Cara Lama)</div>
+                <svg class="b18-s185-net-svg" id="b18-s185-svg-flood" viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:180px;border-radius:var(--border-radius-lg);background:#F4F4F0;"></svg>
+                <div class="b18-s185-net-stat">
+                  <div class="b18-s185-badge s185-b-red">~16 inv per tx per node</div>
+                  <div class="b18-s185-badge s185-b-red">~93% redundan</div>
+                </div>
+              </div>
+              <div class="b18-s185-net-wrap">
+                <div class="b18-s185-net-head s185-h-erlay">Erlay (BIP 330)</div>
+                <svg class="b18-s185-net-svg" id="b18-s185-svg-erlay" viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:180px;border-radius:var(--border-radius-lg);background:#F4F4F0;"></svg>
+                <div class="b18-s185-net-stat">
+                  <div class="b18-s185-badge s185-b-green">2-3 fanout langsung</div>
+                  <div class="b18-s185-badge s185-b-amber">sisanya via sketch</div>
+                  <div class="b18-s185-badge s185-b-green">~40% hemat bandwidth</div>
+                </div>
+              </div>
+            </div>
+            <div class="b18-s185-stats">
+              <div class="b18-s185-stat s185-s-red">
+                <div class="b18-s185-stat-label">Rata-rata announce redundan (flooding)</div>
+                <div class="b18-s185-stat-val">~8-16×</div>
+                <div class="b18-s185-stat-sub">Setiap tx di-announce ke node yang sudah punya</div>
+              </div>
+              <div class="b18-s185-stat s185-s-green">
+                <div class="b18-s185-stat-label">Penghematan bandwidth Erlay</div>
+                <div class="b18-s185-stat-val">~40%</div>
+                <div class="b18-s185-stat-sub">Untuk propagasi transaksi di seluruh jaringan</div>
+              </div>
+              <div class="b18-s185-stat s185-s-purple">
+                <div class="b18-s185-stat-label">Manfaat utama</div>
+                <div class="b18-s185-stat-val">+koneksi</div>
+                <div class="b18-s185-stat-sub">Bandwidth hemat = bisa maintain lebih banyak peer</div>
+              </div>
+            </div>
+            <div class="b18-s185-bw-label">Perbandingan bandwidth propagasi transaksi:</div>
+            <div class="b18-s185-bw-rows">
+              <div class="b18-s185-bw-row"><div class="b18-s185-bw-name">Flooding (cara lama)</div><div class="b18-s185-bw-track"><div class="b18-s185-bw-fill" style="width:100%;background:#A32D2D;"><span class="b18-s185-bw-txt">100% bandwidth</span></div></div><div class="b18-s185-bw-val">100%</div></div>
+              <div class="b18-s185-bw-row"><div class="b18-s185-bw-name">Erlay (BIP 330)</div><div class="b18-s185-bw-track"><div class="b18-s185-bw-fill" style="width:60%;background:#0F6E56;"><span class="b18-s185-bw-txt">~60% bandwidth</span></div></div><div class="b18-s185-bw-val">~60%</div></div>
+            </div>
+            <div class="b18-s185-note">Erlay tidak memperlambat propagasi transaksi. Transaksi tetap menyebar cepat via fanout ke beberapa peer langsung. Yang dihemat adalah pengiriman redundan ke peer yang sudah punya transaksi tersebut.</div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b18-s185-pane" id="b18-s185-p2">
+            <div class="b18-s185-hint">Set reconciliation memungkinkan dua node mengetahui perbedaan koleksi transaksi mereka hanya dengan tukar data sangat kecil — tanpa kirim seluruh daftar.</div>
+            <div class="b18-s185-analogy">
+              <div class="b18-s185-analogy-label">Analogi minisketch</div>
+              <div class="b18-s185-analogy-text">Kamu dan temanmu masing-masing punya 10.000 lagu. Kalian ingin tahu lagu mana yang hanya dimiliki salah satu pihak, tapi tidak mau kirim daftar 10.000 lagu. Minisketch memungkinkan kalian menukar "sidik jari" koleksi yang sangat kecil (~50 entri). Dari dua sidik jari itu, kalian tahu persis: "kamu punya lagu X dan Y yang saya tidak punya" — tanpa pernah kirim daftar lengkap.</div>
+            </div>
+            <div class="b18-s185-steps-label">Cara kerja Erlay langkah per langkah:</div>
+            <div class="b18-s185-steps">
+              <div class="b18-s185-step s185-step-erlay">
+                <div class="b18-s185-step-num">1</div>
+                <div class="b18-s185-step-body">
+                  <div class="b18-s185-step-title">Fanout: announce langsung ke 2-3 peer terpilih</div>
+                  <div class="b18-s185-step-desc">Seperti biasa (inv/getdata/tx), transaksi baru langsung dikirim ke sejumlah kecil peer terpilih untuk memastikan propagasi cepat ke jaringan.</div>
+                  <div class="b18-s185-step-analogy">Seperti cerita ke 2-3 teman terpercaya dulu agar berita cepat menyebar.</div>
+                </div>
+              </div>
+              <div class="b18-s185-step s185-step-sketch">
+                <div class="b18-s185-step-num">2</div>
+                <div class="b18-s185-step-body">
+                  <div class="b18-s185-step-title">Akumulasi: kumpulkan perbedaan selama ~2 detik</div>
+                  <div class="b18-s185-step-desc">Untuk peer lain, node mengakumulasi transaksi baru yang dimiliki tapi belum dikirimkan. Setiap ~2 detik, dilakukan satu putaran rekonsiliasi.</div>
+                  <div class="b18-s185-step-analogy">Seperti mencatat semua berita baru selama 2 detik sebelum berbagi daftar dengan tetangga.</div>
+                </div>
+              </div>
+              <div class="b18-s185-step s185-step-sketch">
+                <div class="b18-s185-step-num">3</div>
+                <div class="b18-s185-step-body">
+                  <div class="b18-s185-step-title">Sketch: kirim "sidik jari" set transaksi via minisketch</div>
+                  <div class="b18-s185-step-desc">Node mengirim sketch compact dari set transaksinya menggunakan minisketch (implementasi PinSketch). Ukurannya sebanding dengan jumlah perbedaan, bukan ukuran set total.</div>
+                  <div class="b18-s185-step-analogy">Seperti tukar sidik jari koleksi lagu — kecil tapi cukup untuk tahu perbedaannya.</div>
+                </div>
+              </div>
+              <div class="b18-s185-step s185-step-sketch">
+                <div class="b18-s185-step-num">4</div>
+                <div class="b18-s185-step-body">
+                  <div class="b18-s185-step-title">Decode: temukan perbedaan dari dua sketch via XOR</div>
+                  <div class="b18-s185-step-desc">Penerima menggabungkan sketch yang diterima dengan sketch miliknya. Operasi XOR mengungkapkan set perbedaan tanpa perlu kirim data lebih besar.</div>
+                  <div class="b18-s185-step-analogy">Dua sidik jari digabungkan menghasilkan daftar perbedaan langsung secara matematis.</div>
+                </div>
+              </div>
+              <div class="b18-s185-step s185-step-erlay">
+                <div class="b18-s185-step-num">5</div>
+                <div class="b18-s185-step-body">
+                  <div class="b18-s185-step-title">Request: minta hanya transaksi yang benar-benar belum ada</div>
+                  <div class="b18-s185-step-desc">Setelah tahu perbedaannya, node meminta via getdata hanya txid yang belum dimiliki. Tidak ada redundansi.</div>
+                  <div class="b18-s185-step-analogy">Baru setelah tahu lagu mana yang belum ada, kamu minta spesifik lagu itu saja.</div>
+                </div>
+              </div>
+            </div>
+            <div class="b18-s185-impact">
+              <div class="b18-s185-impact-label">Dampak Erlay terhadap desentralisasi:</div>
+              <div class="b18-s185-impact-text">Karena setiap koneksi peer butuh lebih sedikit bandwidth dengan Erlay, node bisa memelihara lebih banyak koneksi peer tanpa overhead yang proporsional. Lebih banyak koneksi berarti jaringan lebih terdesentralisasi dan lebih tahan terhadap eclipse attack.</div>
+            </div>
+            <div class="b18-s185-status">
+              <div class="b18-s185-status-label">Status implementasi (per 2025):</div>
+              <div class="b18-s185-status-text">Erlay sudah di-merge ke Bitcoin Core sebagai fitur opsional. Kedua peer harus mendukung BIP 330 untuk menggunakan set reconciliation. Selama masa transisi, node yang mendukung Erlay tetap bisa beroperasi normal dengan node lama menggunakan flooding biasa.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-18-4" data-sb="sb-18-4">
+            ← 18.4 — Compact Blocks
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-18-6" data-sb="sb-18-6">
+            18.6 — Dandelion →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 18.5 -->
+
+      <!-- ==============================
+           SECTION 18.6 · Dandelion & Transaction Privacy
+      ============================== -->
+      <div class="p-section" id="section-18-6">
+        <div class="p-eyebrow">Bab 18 · 18.6</div>
+        <div class="p-heading">Kamu bisa memverifikasi transaksi tanpa diketahui identitasmu — tapi propagasi transaksi bisa mengekspos IP address-mu sebelum transaksi masuk block</div>
+        <div class="p-title">Dandelion & Transaction Privacy (BIP 156)</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Dandelion sempat kita sebut di 8.3 sebagai solusi yang paling banyak dibahas untuk masalah privasi propagasi. Di sini kita lihat cara kerjanya, dan juga kenapa sampai sekarang ia belum masuk ke Bitcoin Core.</p>
+          <p>Bayangkan kamu berdiri di tengah kerumunan dan berteriak "Saya punya surat ini!" Semua orang langsung tahu kamu pengirimnya. Itulah yang terjadi dengan propagasi transaksi Bitcoin saat ini: node yang pertama menyebarkan transaksi ke jaringan hampir pasti adalah node pengirimnya.</p>
+
+          <p><strong>Bagaimana propagasi transaksi mengekspos IP pengirim</strong></p>
+          <p>Saat kamu membuat transaksi, node kamu adalah yang pertama menyebarkannya via flooding. Attacker yang menjalankan banyak node bisa mengamati dari node mana transaksi pertama terlihat. Node yang pertama menyiarkan transaksi ke banyak peer berbeda kemungkinan besar adalah sumber aslinya. Ini bukan serangan teoritis, dan perusahaan analitik blockchain sudah lama menggunakan teknik ini untuk menghubungkan transaksi Bitcoin dengan IP address pengirimnya.</p>
+
+          <p><strong>Dandelion: stem phase dan fluff phase</strong></p>
+          <p>Dandelion (BIP 156) memecahkan masalah ini dengan cara yang elegan. Namanya diambil dari bunga dandelion: batang tipis di awal, lalu meledak menyebar ke segala arah. Dalam stem phase, transaksi baru tidak langsung di-flood ke semua peer. Sebaliknya, ia diteruskan ke satu peer secara acak, lalu peer itu ke satu peer lagi, selama beberapa hop. Selama stem phase, transaksi tidak masuk ke mempool normal, melainkan hanya diteruskan secara senyap. Dalam fluff phase, setelah beberapa hop, salah satu node secara acak memutuskan untuk mulai menyebarkan transaksi secara normal via flooding. Node yang memulai fluff bukan pengirim asli, sehingga attacker tidak bisa menentukan sumber sebenarnya.</p>
+
+          <p><strong>Dandelion++: Penyempurnaan dari Versi Asli</strong></p>
+          <p>BIP 156 asli punya kelemahan: kalau attacker ada di stem path, ia bisa melacak jalurnya. Dandelion++ memperbaiki ini dengan memilih stem peer yang berbeda untuk setiap transaksi dari subset peer yang stabil dan acak, sehingga attacker tidak bisa memprediksi atau mempengaruhi stem path.</p>
+
+          <p><strong>Status implementasi</strong></p>
+          <p>Dandelion++ belum di-merge ke Bitcoin Core karena kompleksitas implementasi dan kekhawatiran tentang potensi serangan DoS baru yang bisa dieksploitasi via stem phase. Sebagai gantinya, Bitcoin Core menggunakan teknik yang lebih sederhana: transaksi dikirim dengan delay acak untuk mempersulit timing analysis, meski tidak seefektif Dandelion.</p>
+
+          <div class="p-callout">
+            <p>Privasi di Bitcoin bukan hanya tentang menyembunyikan jumlah transaksi atau identitas on-chain, melainkan juga tentang menyembunyikan dari mana transaksi berasal di level jaringan P2P. Dandelion adalah salah satu upaya paling cerdas untuk memecahkan masalah ini tanpa mengorbankan kecepatan propagasi transaksi.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Dandelion Visualizer — Stem Phase & Fluff Phase</div>
+          <div class="b18-s186-desc">
+            Tab pertama: perbandingan flooding biasa vs Dandelion — seberapa sulit attacker menentukan sumber transaksi. Tab kedua: cara kerja stem phase dan fluff phase secara visual.
+          </div>
+
+          <div class="b18-s186-tabs">
+            <button class="b18-s186-tab s186-act" id="b18-s186-t1">Flooding vs Dandelion</button>
+            <button class="b18-s186-tab" id="b18-s186-t2">Stem Phase & Fluff Phase</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b18-s186-pane show" id="b18-s186-p1">
+            <div class="b18-s186-hint">Saat kamu mengirim transaksi, siapapun yang memonitor jaringan bisa melihat dari node mana transaksi pertama muncul. Dandelion menyembunyikan sumber asli dengan menyebarkan transaksi secara senyap dulu sebelum di-flood.</div>
+            <div class="b18-s186-analogy">
+              <div class="b18-s186-analogy-label">Analogi</div>
+              <div class="b18-s186-analogy-text"><strong>Flooding biasa:</strong> Kamu berdiri di tengah kerumunan dan berteriak "Saya punya surat ini!" Semua orang langsung tahu kamu pengirimnya.<br><br><strong>Dandelion:</strong> Kamu bisikkan surat ke satu orang. Dia bisikkan ke orang berikutnya. Setelah beberapa bisikan, barulah seseorang mengumumkannya keras-keras. Tidak ada yang tahu surat itu berasal dari kamu.</div>
+            </div>
+            <div class="b18-s186-nets">
+              <div class="b18-s186-net-wrap">
+                <div class="b18-s186-net-head s186-h-flood">Flooding Biasa — Sumber Mudah Dilacak</div>
+                <svg id="b18-s186-svg-flood" viewBox="0 0 220 190" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:190px;border-radius:var(--border-radius-lg);background:#F4F4F0;"></svg>
+                <div class="b18-s186-badge-row">
+                  <div class="b18-s186-badge s186-b-red">sumber langsung terlihat</div>
+                  <div class="b18-s186-badge s186-b-red">IP mudah dilacak</div>
+                </div>
+              </div>
+              <div class="b18-s186-net-wrap">
+                <div class="b18-s186-net-head s186-h-dan">Dandelion — Sumber Tersembunyi</div>
+                <svg id="b18-s186-svg-dan" viewBox="0 0 220 190" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:190px;border-radius:var(--border-radius-lg);background:#F4F4F0;"></svg>
+                <div class="b18-s186-badge-row">
+                  <div class="b18-s186-badge s186-b-green">stem phase tersembunyi</div>
+                  <div class="b18-s186-badge s186-b-amber">fluff dari node acak</div>
+                  <div class="b18-s186-badge s186-b-purple">sumber tidak jelas</div>
+                </div>
+              </div>
+            </div>
+            <div class="b18-s186-privacy-label">Kemampuan attacker menentukan sumber transaksi:</div>
+            <div class="b18-s186-privacy-rows">
+              <div class="b18-s186-privacy-row"><div class="b18-s186-privacy-name">Flooding biasa</div><div class="b18-s186-privacy-track"><div class="b18-s186-privacy-fill" style="width:90%;background:#A32D2D;"><span class="b18-s186-privacy-txt">~90% akurat — hampir pasti bisa dilacak</span></div></div><div class="b18-s186-privacy-val" style="color:#A32D2D;">~90%</div></div>
+              <div class="b18-s186-privacy-row"><div class="b18-s186-privacy-name">Dandelion (BIP 156)</div><div class="b18-s186-privacy-track"><div class="b18-s186-privacy-fill" style="width:12%;background:#0F6E56;"><span class="b18-s186-privacy-txt">~12%</span></div></div><div class="b18-s186-privacy-val" style="color:#0F6E56;">~12%</div></div>
+              <div class="b18-s186-privacy-row"><div class="b18-s186-privacy-name">Random delay (Bitcoin Core)</div><div class="b18-s186-privacy-track"><div class="b18-s186-privacy-fill" style="width:55%;background:#854F0B;"><span class="b18-s186-privacy-txt">~55% — lebih sulit tapi masih bisa</span></div></div><div class="b18-s186-privacy-val" style="color:#854F0B;">~55%</div></div>
+            </div>
+            <div class="b18-s186-status s186-st-warn">
+              <div class="b18-s186-status-label">Status implementasi (per 2025):</div>
+              Dandelion++ belum di-merge ke Bitcoin Core karena kompleksitas dan kekhawatiran potensi serangan DoS via stem phase. Bitcoin Core saat ini menggunakan random delay sederhana. Beberapa node software lain sudah mengimplementasikan Dandelion++.
+            </div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b18-s186-pane" id="b18-s186-p2">
+            <div class="b18-s186-hint">Dandelion membagi propagasi transaksi menjadi dua fase yang sangat berbeda. Stem phase tersembunyi, fluff phase seperti flooding biasa tapi dari titik yang tidak terduga.</div>
+            <div class="b18-s186-analogy">
+              <div class="b18-s186-analogy-label">Mengapa disebut Dandelion (bunga dandelion)?</div>
+              <div class="b18-s186-analogy-text">Bunga dandelion punya batang tipis dan panjang (stem), lalu di ujungnya biji-biji kecil menyebar ke segala arah saat angin bertiup (fluff). Transaksi Bitcoin dalam Dandelion bergerak persis seperti itu: senyap dan linear di awal, lalu meledak menyebar ke seluruh jaringan dari satu titik yang tidak terduga.</div>
+            </div>
+            <div class="b18-s186-phase-cards">
+              <div class="b18-s186-phase s186-ph-stem">
+                <div class="b18-s186-phase-label">FASE 1 — STEM PHASE</div>
+                <div class="b18-s186-phase-title">Batang Dandelion — Propagasi Senyap</div>
+                <div class="b18-s186-phase-desc">Transaksi diteruskan satu per satu secara linear, tidak masuk mempool normal.</div>
+                <div class="b18-s186-phase-item">Node pilih satu peer secara acak</div>
+                <div class="b18-s186-phase-item">Peer itu teruskan ke satu peer lagi</div>
+                <div class="b18-s186-phase-item">Berlanjut selama ~2-10 hop</div>
+                <div class="b18-s186-phase-item">Tidak ada flooding, tidak ada mempool</div>
+                <div class="b18-s186-phase-item">Attacker tidak bisa bedakan sumber asli dari forwarder</div>
+                <div class="b18-s186-phase-analogy">Seperti berbisik dari telinga ke telinga — tidak ada yang bisa dengar dari luar</div>
+              </div>
+              <div class="b18-s186-phase s186-ph-fluff">
+                <div class="b18-s186-phase-label">FASE 2 — FLUFF PHASE</div>
+                <div class="b18-s186-phase-title">Meledak Dandelion — Flooding Normal</div>
+                <div class="b18-s186-phase-desc">Setelah beberapa hop, satu node memutuskan untuk mulai flooding seperti biasa.</div>
+                <div class="b18-s186-phase-item">Node pilih secara acak: terus stem atau mulai fluff</div>
+                <div class="b18-s186-phase-item">Probabilitas fluff: ~10% per hop</div>
+                <div class="b18-s186-phase-item">Saat fluff: transaksi masuk mempool dan di-flood ke semua peer</div>
+                <div class="b18-s186-phase-item">Dari sini, propagasi seperti biasa</div>
+                <div class="b18-s186-phase-item">Node yang mulai fluff bukan pengirim asli</div>
+                <div class="b18-s186-phase-analogy">Seperti seseorang di tengah kerumunan tiba-tiba mengumumkan — bukan berarti dia pengirimnya</div>
+              </div>
+            </div>
+            <div class="b18-s186-flow-wrap">
+              <div class="b18-s186-flow-label">Visualisasi alur Dandelion:</div>
+              <svg id="b18-s186-flow-svg" viewBox="0 0 520 100" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:100px;"></svg>
+            </div>
+            <div class="b18-s186-status s186-st-info">
+              <div class="b18-s186-status-label">Dandelion++ vs Dandelion asli (BIP 156):</div>
+              Dandelion asli rentan: kalau attacker ada di stem path, ia bisa melacak jalurnya. Dandelion++ memperbaiki ini dengan memilih stem peer berbeda untuk setiap transaksi dari subset peer yang stabil, sehingga attacker tidak bisa memprediksi atau mempengaruhi stem path.
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-18-5" data-sb="sb-18-5">
+            ← 18.5 — Erlay
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 18.6 -->
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 21 · BAB 18 -->
+
+

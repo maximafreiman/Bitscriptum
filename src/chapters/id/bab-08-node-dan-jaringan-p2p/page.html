@@ -1,0 +1,537 @@
+<!-- ============================================================
+     PAGE 11 · BAB 8 · Node dan Jaringan P2P
+     |-- 8.1 · Apa itu Node Bitcoin? [DONE]
+     |-- 8.2 · Jaringan P2P [LOCKED]
+     |-- 8.3 · Propagasi Transaksi [LOCKED]
+     |-- 8.4 · Propagasi Block [LOCKED]
+     |-- 8.5 · Koneksi dan Peer Discovery [LOCKED]
+     |-- 8.6 · Menjaga Jaringan Tetap Sehat [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab8">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b8">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b8">← Daftar Bab</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab8">
+      <div class="sidebar-heading">Bab 8</div>
+      <div class="sidebar-title">Node dan Jaringan P2P</div>
+
+      <div class="sidebar-item active" id="sb-8-1">
+        <div class="sb-num">8.1</div>
+        <div class="sb-label">Apa itu Node Bitcoin?</div>
+      </div>
+      <div class="sidebar-item" id="sb-8-2">
+        <div class="sb-num">8.2</div>
+        <div class="sb-label">Jaringan P2P</div>
+      </div>
+      <div class="sidebar-item" id="sb-8-3">
+        <div class="sb-num">8.3</div>
+        <div class="sb-label">Propagasi Transaksi</div>
+      </div>
+      <div class="sidebar-item" id="sb-8-4">
+        <div class="sb-num">8.4</div>
+        <div class="sb-label">Propagasi Block</div>
+      </div>
+      <div class="sidebar-item" id="sb-8-5">
+        <div class="sb-num">8.5</div>
+        <div class="sb-label">Koneksi dan Peer Discovery</div>
+      </div>
+      <div class="sidebar-item" id="sb-8-6">
+        <div class="sb-num">8.6</div>
+        <div class="sb-label">Menjaga Jaringan Tetap Sehat</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab8-content">
+
+      <!-- ==============================
+           SECTION 8.1 · Apa itu Node Bitcoin?
+      ============================== -->
+      <div class="p-section active" id="section-8-1">
+        <div class="p-eyebrow">Bab 8 · 8.1</div>
+        <div class="p-heading">Ribuan komputer yang menjaga aturan tanpa pemimpin</div>
+        <div class="p-title">Apa itu Node Bitcoin?</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Ketika orang membicarakan "Bitcoin", mereka sering hanya memikirkan harga atau wallet. Tapi di balik semua itu ada ribuan komputer di seluruh dunia yang terus berjalan, memverifikasi setiap transaksi dan menyimpan salinan lengkap blockchain. Komputer-komputer inilah yang disebut node.</p>
+
+          <p><strong>Node adalah penjaga aturan</strong></p>
+          <p>Node Bitcoin bukan sekadar database. Ia adalah penjaga aturan konsensus. Setiap node secara mandiri memverifikasi setiap transaksi dan setiap block menggunakan aturan yang sama. Tidak ada yang bisa memaksanya menerima block yang tidak valid, bahkan kalau block itu datang dari miner terbesar sekalipun. Inilah inti desentralisasi Bitcoin: tidak ada otoritas pusat yang memutuskan apa yang valid. Setiap node memutuskan sendiri, berdasarkan aturan yang sama.</p>
+
+          <p><strong>Jenis-jenis node</strong></p>
+          <p>Full node menyimpan seluruh blockchain dari genesis block sampai hari ini, lebih dari 700 GB per pertengahan 2026 dan terus bertambah puluhan GB setiap tahun. Ia memverifikasi setiap transaksi dan block secara independen. Inilah node yang memberikan keamanan paling tinggi. Pruned node adalah full node yang telah menghapus data lama setelah diverifikasi. Ia tetap memverifikasi semua aturan, tapi hanya menyimpan beberapa GB block terbaru. SPV node hanya mengunduh block header, tidak memverifikasi transaksi secara penuh. Mining node adalah full node yang juga aktif menambang block baru.</p>
+
+          <p><strong>Kenapa menjalankan node sendiri?</strong></p>
+          <p>Menjalankan full node sendiri berarti tidak perlu mempercayai siapapun. Tidak ada SPV yang bisa menipu dengan transaksi palsu kalau kamu punya node sendiri. Tidak ada exchange atau wallet provider yang bisa menyembunyikan informasi. Ini bukan sekadar soal keamanan individu. Semakin banyak orang menjalankan full node, semakin sulit bagi siapapun untuk mengubah aturan Bitcoin tanpa persetujuan mayoritas. Node adalah suara dalam demokrasi Bitcoin.</p>
+
+          <div class="p-callout">
+            <p>Menjalankan full node tidak membutuhkan hardware khusus. Sebuah Raspberry Pi dengan hard drive eksternal sudah cukup. Biayanya kurang dari sejuta rupiah, dan kontribusinya terhadap desentralisasi Bitcoin nyata.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualisasi — Jaringan P2P Bitcoin</div>
+          <div class="b08-s81-desc">
+            Klik node manapun untuk melihat detail: jenis, data yang disimpan, cara verifikasi, dan fungsinya di jaringan.
+          </div>
+
+          <div class="b08-s81-legend">
+            <div class="b08-s81-leg"><div class="b08-s81-dot" style="background:#534AB7;"></div>Full node</div>
+            <div class="b08-s81-leg"><div class="b08-s81-dot" style="background:#0F6E56;"></div>Mining node</div>
+            <div class="b08-s81-leg"><div class="b08-s81-dot" style="background:#854F0B;"></div>Pruned node</div>
+            <div class="b08-s81-leg"><div class="b08-s81-dot" style="background:#52524C;"></div>SPV node</div>
+          </div>
+
+          <canvas id="b08-s81-canvas" height="300"></canvas>
+          <div class="b08-s81-hint" id="b08-s81-hint">Klik node manapun untuk melihat detail</div>
+
+          <div class="b08-s81-detail" id="b08-s81-detail">
+            <div class="b08-s81-dhead" id="b08-s81-dhead"></div>
+            <div class="b08-s81-dbody" id="b08-s81-dbody"></div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-8-2" data-sb="sb-8-2">
+            8.2 — Jaringan P2P →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 8.1 -->
+
+      <!-- ==============================
+           SECTION 8.2 · Jaringan P2P
+      ============================== -->
+      <div class="p-section" id="section-8-2">
+        <div class="p-eyebrow">Bab 8 · 8.2</div>
+        <div class="p-heading">Tidak ada pusat, tidak ada titik kegagalan tunggal</div>
+        <div class="p-title">Jaringan P2P</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Bitcoin tidak punya server pusat. Tidak ada kantor pusat, tidak ada data center yang bisa dimatikan, tidak ada satu titik yang kalau diserang akan menghancurkan semuanya. Yang ada adalah jaringan peer-to-peer: ribuan node yang terhubung langsung satu sama lain.</p>
+
+          <p><strong>Apa itu jaringan P2P?</strong></p>
+          <p>Dalam jaringan tradisional seperti bank atau media sosial, ada server pusat yang melayani semua klien. Kalau server mati, semua klien tidak bisa terhubung. Kalau pemilik server memutuskan untuk memblokir seseorang, tidak ada yang bisa dilakukan. Jaringan P2P berbeda. Setiap peserta adalah sejajar, tidak ada yang lebih "pusat" dari yang lain. Informasi menyebar dari node ke node seperti gosip. Tidak ada satu titik kegagalan.</p>
+
+          <p><strong>Bagaimana node terhubung?</strong></p>
+          <p>Saat node Bitcoin pertama kali dijalankan, ia perlu menemukan peer untuk terhubung. Ada beberapa cara: DNS seed (server yang menyediakan daftar node aktif), hardcoded seed nodes (daftar IP yang tertanam di software), dan peer exchange (bertanya ke node yang sudah terhubung untuk dikenalkan ke peer lain). Setelah terhubung, node mempertahankan sekitar 8 koneksi outbound reguler ditambah 2 koneksi khusus block, dan sisanya diisi koneksi inbound. Bitcoin Core membatasi total koneksi di angka 125, jadi ruang untuk inbound sekitar 115.</p>
+
+          <p><strong>Bagaimana informasi menyebar?</strong></p>
+          <p>Saat Alice mengirim transaksi, walletnya menyiarkan transaksi tersebut ke node yang terhubung. Node menerima transaksi, memverifikasi validitasnya, dan meneruskan ke semua peer-nya. Peer tersebut melakukan hal yang sama. Dalam hitungan detik, transaksi sudah menyebar ke ribuan node di seluruh dunia. Proses ini disebut gossiping. Setiap node hanya meneruskan transaksi yang valid.</p>
+
+          <p><strong>Kenapa P2P membuat Bitcoin kuat?</strong></p>
+          <p>Untuk menyensor Bitcoin, seorang penyerang harus memblokir koneksi ke setiap node di dunia. Selama ada satu node yang bisa diakses, Bitcoin bisa digunakan. Bitcoin sudah diblokir di berbagai negara, tapi pengguna di sana terus bisa mengakses jaringan melalui VPN, Tor, atau sambungan satelit seperti Blockstream Satellite.</p>
+
+          <div class="p-callout">
+            <p>Desentralisasi bukan fitur yang bisa ditambahkan belakangan. Ia adalah arsitektur fundamental Bitcoin sejak hari pertama. Jaringan P2P bukan hanya cara Bitcoin beroperasi, ia adalah alasan Bitcoin tidak bisa dihentikan.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi — Ketahanan terhadap serangan</div>
+          <div class="b08-s82-desc">
+            Klik node untuk menyerangnya, klik lagi untuk memulihkan. Di jaringan P2P, menyerang satu node tidak mempengaruhi yang lain. Di jaringan terpusat, menyerang server pusat melumpuhkan segalanya.
+          </div>
+
+          <div class="b08-s82-tabs">
+            <button class="b08-s82-tab active-p2p" id="b08-s82-t1">P2P — tanpa pusat</button>
+            <button class="b08-s82-tab" id="b08-s82-t2">Terpusat — server pusat</button>
+          </div>
+
+          <!-- P2P PANE -->
+          <div class="b08-s82-pane show" id="b08-s82-p1">
+            <div class="b08-s82-hint">Klik node untuk menyerangnya. Klik lagi untuk memulihkan.</div>
+            <canvas class="b08-s82-cv" id="b08-s82-c1" height="300"></canvas>
+            <div class="b08-s82-ctrl">
+              <button class="kp-btn kp-btn-reset" id="b08-s82-r1">Reset</button>
+              <div class="b08-s82-stat" id="b08-s82-s1">Aktif: 10 / 10</div>
+            </div>
+            <div class="b08-s82-note safe-note" id="b08-s82-n1">Jaringan P2P berjalan penuh. Coba klik beberapa node untuk menyerangnya.</div>
+          </div>
+
+          <!-- CENTRAL PANE -->
+          <div class="b08-s82-pane" id="b08-s82-p2">
+            <div class="b08-s82-hint">Klik node klien untuk menyerang satu node. Klik server (tengah) untuk menyerang pusat.</div>
+            <canvas class="b08-s82-cv" id="b08-s82-c2" height="300"></canvas>
+            <div class="b08-s82-ctrl">
+              <button class="kp-btn kp-btn-reset" id="b08-s82-r2">Reset</button>
+              <div class="b08-s82-stat" id="b08-s82-s2">Aktif: 10 / 10 &nbsp;|&nbsp; Server: online</div>
+            </div>
+            <div class="b08-s82-note safe-note" id="b08-s82-n2">Server pusat online. Coba serang server pusat (hijau di tengah).</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-8-1" data-sb="sb-8-1">
+            ← 8.1 — Apa itu Node Bitcoin?
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-8-3" data-sb="sb-8-3">
+            8.3 — Propagasi Transaksi →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 8.2 -->
+
+      <!-- ==============================
+           SECTION 8.3 · Propagasi Transaksi
+      ============================== -->
+      <div class="p-section" id="section-8-3">
+        <div class="p-eyebrow">Bab 8 · 8.3</div>
+        <div class="p-heading">Dari satu wallet ke ribuan node dalam hitungan detik</div>
+        <div class="p-title">Propagasi Transaksi</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Kamu menekan tombol kirim di wallet. Apa yang terjadi selanjutnya?</p>
+
+          <p><strong>Dari wallet ke jaringan</strong></p>
+          <p>Wallet membuat transaksi yang sudah ditandatangani dan menyiarkannya ke satu atau beberapa node yang terhubung. Node pertama yang menerima transaksi ini disebut node asal dari sudut pandang pengguna, meskipun jaringan tidak benar-benar mencatatnya demikian.</p>
+
+          <p><strong>Verifikasi sebelum diteruskan</strong></p>
+          <p>Node yang menerima transaksi tidak langsung meneruskannya. Ia melakukan serangkaian verifikasi terlebih dahulu: apakah format transaksi valid, apakah tanda tangan kriptografis benar, apakah UTXO yang digunakan benar-benar ada dan belum dipakai, apakah fee-nya masuk akal. Kalau semua lolos, transaksi masuk ke mempool node tersebut dan diteruskan ke semua peer-nya. Kalau gagal verifikasi, transaksi dibuang dan tidak diteruskan. Ini adalah mekanisme pertahanan alami: spam dan transaksi tidak valid mati di node pertama yang menerimanya.</p>
+
+          <p><strong>Node policy vs konsensus rules</strong></p>
+          <p>Ada perbedaan penting yang sering disalahpahami: konsensus rules dan node policy adalah dua hal yang berbeda. Konsensus rules adalah aturan yang menentukan apakah sebuah transaksi atau block valid secara protokol. Semua node harus sepakat soal ini, kalau tidak sepakat mereka akan fork. Node policy adalah keputusan individual node tentang transaksi apa yang mau diterima ke mempool dan diteruskan ke peer, terlepas dari apakah transaksi itu valid secara konsensus atau tidak.</p>
+
+          <p>Contoh konkret: <span style="font-family:'Courier Prime',monospace;font-size:0.95em;">datacarrier</span> dan <span style="font-family:'Courier Prime',monospace;font-size:0.95em;">datacarriersize</span> adalah dua pengaturan node policy yang tersedia di software node seperti Bitcoin Core dan Bitcoin Knots. <span style="font-family:'Courier Prime',monospace;font-size:0.95em;">datacarrier</span> mengontrol apakah node mau meneruskan transaksi yang menggunakan OP_RETURN untuk menyematkan data arbitrer. <span style="font-family:'Courier Prime',monospace;font-size:0.95em;">datacarriersize</span> menentukan batas maksimal ukuran data tersebut dalam bytes. Angka batas ini bukan aturan protokol — nilai default-nya berbeda antar implementasi dan berubah antar versi. Konvensi yang bertahan bertahun-tahun adalah 83 bytes (80 bytes data), dan sejak 2025 angka ini menjadi pusat perdebatan besar: satu kubu ingin melonggarkan batas relay, kubu lain ingin mempertahankan filter. Setiap operator node bebas menyetel nilainya sendiri. Node yang mematikan <span style="font-family:'Courier Prime',monospace;font-size:0.95em;">datacarrier</span> tidak akan memasukkan transaksi OP_RETURN ke mempoolnya dan tidak meneruskannya ke peer lain. Tapi kalau miner tetap memasukkan transaksi itu ke block, node tersebut tetap menerima blocknya karena transaksi OP_RETURN valid secara konsensus. Policy berhenti di mempool, bukan di validasi block.</p>
+
+          <p>Ini juga yang mendasari perdebatan tentang Ocean Pool yang kita bahas di Bab 11: pool tersebut menerapkan filtering transaksi berdasarkan policy mereka sendiri, bukan karena transaksi yang difilter itu tidak valid. Satu node atau pool bisa memilih policy yang berbeda dari mayoritas tanpa melanggar konsensus, tapi konsekuensinya adalah transaksi yang mereka tolak tetap akan masuk ke blockchain melalui miner atau node lain yang tidak menerapkan filtering yang sama.</p>
+
+          <p><strong>Flooding dan deduplication</strong></p>
+          <p>Propagasi transaksi menggunakan mekanisme flooding: setiap node yang menerima transaksi valid meneruskannya ke semua peer. Tapi ini menimbulkan masalah karena sebuah node bisa menerima transaksi yang sama dari banyak peer secara bersamaan. Solusinya adalah deduplication. Setiap node menyimpan daftar transaksi yang sudah pernah dilihat. Kalau transaksi yang sama datang lagi, ia langsung dibuang tanpa diproses ulang.</p>
+
+          <p><strong>Berapa lama sampai ke seluruh jaringan?</strong></p>
+          <p>Dalam kondisi normal, sebuah transaksi menyebar ke sebagian besar node di seluruh dunia dalam waktu kurang dari 5 detik. Untuk mencapai 90% node biasanya butuh sekitar 10-15 detik. Ini jauh sebelum transaksi dikonfirmasi di blockchain yang butuh rata-rata 10 menit.</p>
+
+          <p><strong>Privasi dalam propagasi</strong></p>
+          <p>Ada masalah privasi yang menarik: node pertama yang menyiarkan transaksi kemungkinan besar adalah pengirim asli atau terhubung langsung dengannya. Pengamat yang memantau banyak node bisa mencoba mengidentifikasi asal transaksi. Solusi yang paling banyak dibahas untuk ini adalah Dandelion++: transaksi pertama kali diteruskan secara diam-diam melalui satu jalur (stem phase) sebelum akhirnya disebarkan ke seluruh jaringan (fluff phase). Ini membuat asal transaksi jauh lebih sulit dilacak. Perlu dicatat, Dandelion++ belum masuk ke Bitcoin Core, dan alasannya kita bahas di 18.6.</p>
+
+          <div class="p-callout">
+            <p>Propagasi transaksi adalah salah satu proses paling elegan di Bitcoin. Ribuan node yang tidak saling kenal, tidak ada koordinasi terpusat, tapi dalam hitungan detik informasi sudah tersebar ke seluruh penjuru dunia. Semua karena setiap node mengikuti aturan yang sama.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi — Propagasi transaksi di jaringan P2P</div>
+          <div class="b08-s83-desc">
+            Klik "Kirim Transaksi" untuk memulai. Amati bagaimana transaksi menyebar dari node ke node, termasuk log verifikasi dan deteksi duplikat.
+          </div>
+
+          <div class="b08-s83-top">
+            <button class="b08-s83-btn-primary" id="b08-s83-send">Kirim Transaksi</button>
+            <button class="b08-s83-btn-reset" id="b08-s83-reset">Reset</button>
+            <div class="b08-s83-stat" id="b08-s83-stat">Node menerima: 0 / 12</div>
+            <div class="b08-s83-stat" id="b08-s83-timer">0.0 dtk</div>
+          </div>
+          <canvas class="b08-s83-cv" id="b08-s83-cv" height="300"></canvas>
+          <div class="b08-s83-log" id="b08-s83-log">
+            <div class="b08-s83-log-row"><span class="b08-s83-log-t">—</span><span class="b08-s83-log-m">Klik "Kirim Transaksi" untuk memulai simulasi</span></div>
+          </div>
+          <div class="b08-s83-note idle-note" id="b08-s83-note">Transaksi akan menyebar dari node pengirim ke seluruh jaringan melalui mekanisme gossiping. Setiap node memverifikasi sebelum meneruskan.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-8-2" data-sb="sb-8-2">
+            ← 8.2 — Jaringan P2P
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-8-4" data-sb="sb-8-4">
+            8.4 — Propagasi Block →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 8.3 -->
+
+      <!-- ==============================
+           SECTION 8.4 · Propagasi Block
+      ============================== -->
+      <div class="p-section" id="section-8-4">
+        <div class="p-eyebrow">Bab 8 · 8.4</div>
+        <div class="p-heading">Block baru harus menyebar secepat mungkin — milidetik berarti uang</div>
+        <div class="p-title">Propagasi Block</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Propagasi transaksi dan propagasi block punya tujuan yang sama: menyebarkan informasi ke seluruh jaringan secepat mungkin. Tapi block jauh lebih besar dari transaksi, dan ada taruhan yang jauh lebih tinggi: miner yang menemukan block baru ingin seluruh jaringan mengakuinya secepat mungkin sebelum miner lain menemukan block berikutnya.</p>
+
+          <p><strong>Dari miner ke jaringan</strong></p>
+          <p>Saat miner menemukan nonce yang valid, ia langsung menyiarkan block baru ke semua peer-nya. Setiap node yang menerima block melakukan verifikasi penuh: apakah proof of work valid, apakah semua transaksi di dalamnya valid, apakah block header terhubung ke block sebelumnya dengan benar. Kalau semua lolos, block diterima, ditambahkan ke chain lokal, dan diteruskan ke semua peer.</p>
+
+          <p><strong>Masalah: block terlalu besar</strong></p>
+          <p>Block Bitcoin bisa berukuran hingga 4 MB dengan SegWit weight. Menyebarkan 4 MB ke ribuan node membutuhkan bandwidth yang signifikan. Di era awal Bitcoin ini tidak masalah karena block jarang penuh. Tapi saat jaringan ramai, delay propagasi bisa menyebabkan masalah serius.</p>
+
+          <p><strong>Compact Block dan Header-First</strong></p>
+          <p>Solusi utama adalah Compact Block (BIP 152): daripada mengirim seluruh block, node mengirim block header plus daftar ID transaksi yang sudah disingkat. Penerima kemungkinan besar sudah punya hampir semua transaksi tersebut di mempool-nya. Ia hanya perlu meminta transaksi yang belum dimilikinya. Ini mengurangi data yang dikirim secara drastis, dari megabytes menjadi kilobytes. Header-First propagation adalah teknik lain: node menyiarkan header block terlebih dahulu sebelum seluruh block siap, memungkinkan validasi proof of work dimulai lebih awal.</p>
+
+          <p><strong>Orphan block dan kenapa kecepatan penting</strong></p>
+          <p>Ada fenomena yang disebut orphan block: dua miner menemukan block valid di waktu yang hampir bersamaan. Jaringan sementara terpecah menjadi dua versi chain. Akhirnya chain yang lebih panjang menang, dan block di chain yang lebih pendek menjadi orphan, valid tapi tidak diakui. Semakin lambat propagasi, semakin besar kemungkinan orphan block terjadi. Compact Block sudah mengurangi orphan rate secara signifikan.</p>
+
+          <div class="p-callout">
+            <p>Kecepatan propagasi block adalah salah satu metrik kesehatan jaringan Bitcoin yang paling penting. Berkat Compact Block, block baru bisa menjangkau sebagian besar jaringan dalam hitungan detik saja. Di era sebelum Compact Block, proses yang sama bisa memakan waktu berkali-kali lipat lebih lama karena seluruh isi block harus dikirim ulang ke setiap peer.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi — Block biasa vs Compact Block dan Orphan Block</div>
+          <div class="b08-s84-desc">
+            Tab pertama: bandingkan kecepatan dan bandwidth block biasa vs Compact Block secara bersamaan. Tab kedua: visualisasi orphan block saat dua miner menemukan block hampir bersamaan.
+          </div>
+
+          <div class="b08-s84-tabs">
+            <button class="b08-s84-tab s84-act" id="b08-s84-t1">Block biasa vs Compact Block</button>
+            <button class="b08-s84-tab" id="b08-s84-t2">Orphan Block</button>
+          </div>
+
+          <!-- PANE 1: COMPARISON -->
+          <div class="b08-s84-pane show" id="b08-s84-p1">
+            <div class="b08-s84-compare">
+              <div class="b08-s84-col">
+                <div class="b08-s84-col-head s84-full">Block biasa (Full)</div>
+                <canvas class="b08-s84-cv" id="b08-s84-c1" height="200"></canvas>
+                <div class="b08-s84-col-stat s84-full-stat">Data: <span id="b08-s84-data1">0 KB</span> | Waktu: <span id="b08-s84-time1">0.0 dtk</span> | Selesai: <span id="b08-s84-done1">0/8</span></div>
+              </div>
+              <div class="b08-s84-col">
+                <div class="b08-s84-col-head s84-compact">Compact Block (BIP 152)</div>
+                <canvas class="b08-s84-cv" id="b08-s84-c2" height="200"></canvas>
+                <div class="b08-s84-col-stat s84-compact-stat">Data: <span id="b08-s84-data2">0 KB</span> | Waktu: <span id="b08-s84-time2">0.0 dtk</span> | Selesai: <span id="b08-s84-done2">0/8</span></div>
+              </div>
+            </div>
+            <div class="b08-s84-ctrl">
+              <button class="b08-s84-btn-primary" id="b08-s84-run">Jalankan Simulasi</button>
+              <button class="b08-s84-btn-sec" id="b08-s84-reset">Reset</button>
+            </div>
+            <div class="b08-s84-note idle-note" id="b08-s84-note1">Block biasa mengirim seluruh data. Compact Block hanya mengirim header + ID transaksi karena node penerima sudah punya transaksinya di mempool.</div>
+          </div>
+
+          <!-- PANE 2: ORPHAN -->
+          <div class="b08-s84-pane" id="b08-s84-p2">
+            <div class="b08-s84-chain-label">Situasi: dua miner menemukan block #840,001 hampir bersamaan</div>
+            <div class="b08-s84-chain-row">
+              <div class="b08-s84-block s84-confirmed">840,000<br>✓</div>
+              <div class="b08-s84-arrow">→</div>
+              <div class="b08-s84-block s84-main">840,001A<br>Miner A</div>
+              <div class="b08-s84-arrow">→</div>
+              <div class="b08-s84-block s84-main">840,002<br>✓</div>
+              <div class="b08-s84-arrow">→</div>
+              <div class="b08-s84-block s84-main">840,003<br>✓</div>
+              <div class="b08-s84-chain-tag">chain terpanjang, menang</div>
+            </div>
+            <div class="b08-s84-chain-row">
+              <div class="b08-s84-block s84-confirmed">840,000<br>✓</div>
+              <div class="b08-s84-arrow">→</div>
+              <div class="b08-s84-block s84-orphan">840,001B<br>Miner B</div>
+              <div class="b08-s84-chain-tag s84-tag-orphan">orphan: valid tapi ditinggalkan</div>
+            </div>
+            <div class="b08-s84-orphan-note">⚠️ Block 840,001B adalah orphan block. Ia valid secara kriptografis — proof of work-nya benar, transaksi di dalamnya sah. Tapi karena chain yang mengandung 840,001A lebih panjang, seluruh jaringan memilih chain itu. Miner B kehilangan seluruh block reward-nya.</div>
+            <div class="b08-s84-sub-label">Kenapa Compact Block mengurangi orphan rate?</div>
+            <div class="b08-s84-note idle-note">Block biasa butuh beberapa detik untuk menyebar ke seluruh jaringan. Selama window itu, miner lain yang belum menerima block baru terus menambang di atas block lama, meningkatkan risiko orphan. Compact Block mempersingkat window ini menjadi kurang dari 1 detik dan risiko orphan turun drastis.</div>
+            <div class="b08-s84-sub-label">Apa yang terjadi dengan transaksi di orphan block?</div>
+            <div class="b08-s84-note idle-note">Transaksi di orphan block dikembalikan ke mempool dan bisa dikonfirmasi di block berikutnya. Tidak ada bitcoin yang hilang. Satu-satunya yang rugi adalah miner yang menemukan orphan block.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-8-3" data-sb="sb-8-3">
+            ← 8.3 — Propagasi Transaksi
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-8-5" data-sb="sb-8-5">
+            8.5 — Koneksi dan Peer Discovery →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 8.4 -->
+
+      <!-- ==============================
+           SECTION 8.5 · Koneksi dan Peer Discovery
+      ============================== -->
+      <div class="p-section" id="section-8-5">
+        <div class="p-eyebrow">Bab 8 · 8.5</div>
+        <div class="p-heading">Bagaimana node baru menemukan tempatnya di jaringan?</div>
+        <div class="p-title">Koneksi dan Peer Discovery</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Di 8.2 kita sebut sekilas tiga cara node menemukan peer. Section ini membedah ketiganya satu per satu, karena justru di sinilah letak salah satu jawaban kenapa Bitcoin sulit diblokir.</p>
+          <p>Node Bitcoin baru yang pertama kali dijalankan menghadapi satu masalah mendasar: bagaimana caranya menemukan node lain untuk terhubung? Ia tidak tahu alamat siapapun. Jaringan P2P tidak punya direktori terpusat. Tapi dalam hitungan menit, node baru itu sudah terhubung ke puluhan peer di seluruh dunia.</p>
+
+          <p><strong>DNS Seed</strong></p>
+          <p>Cara pertama dan paling umum adalah melalui DNS seed. Software node Bitcoin, seperti Bitcoin Core, Bitcoin Knots, atau implementasi lainnya, umumnya sudah menanam beberapa nama domain khusus di dalam kodenya. Saat node pertama kali dijalankan, ia melakukan DNS query ke domain-domain ini dan mendapat daftar IP address dari node-node yang sedang aktif. DNS seed dikelola oleh orang-orang terpercaya di komunitas Bitcoin. Ini bukan titik kepercayaan yang berbahaya karena node hanya menggunakannya untuk menemukan peer awal dan setelah itu semua verifikasi dilakukan secara mandiri.</p>
+
+          <p><strong>Peer Exchange</strong></p>
+          <p>Setelah terhubung ke beberapa node pertama, node baru bisa meminta daftar peer yang dikenal melalui pesan <code>getaddr</code>. Node yang menerima permintaan ini membalas dengan pesan <code>addr</code> yang berisi daftar alamat IP node lain yang diketahuinya. Dari sini jaringan koneksi berkembang secara organik tanpa koordinasi terpusat.</p>
+
+          <p><strong>Hardcoded Seeds</strong></p>
+          <p>Kalau DNS seed tidak bisa diakses, ada fallback: daftar IP address yang ditanam langsung di dalam kode software. Ini adalah node-node yang diketahui stabil dan sudah lama berjalan. Daftar ini diperbarui setiap beberapa rilis oleh masing-masing tim pengembang.</p>
+
+          <p><strong>Mempertahankan koneksi</strong></p>
+          <p>Node Bitcoin umumnya mempertahankan sekitar 8 koneksi outbound yang dipilihnya sendiri dan menerima koneksi inbound dari peer lain. Koneksi dijaga dengan pesan <code>ping</code> dan <code>pong</code> secara berkala. Node yang tidak merespons akan diputus dan digantikan. Node juga menyimpan database peer address secara lokal sehingga saat dimatikan dan dinyalakan kembali, ia bisa langsung terhubung ke peer yang sudah dikenal tanpa harus memulai peer discovery dari awal.</p>
+
+          <p><strong>Mengapa ini penting untuk desentralisasi?</strong></p>
+          <p>Sistem peer discovery Bitcoin dirancang untuk tidak bergantung pada satu titik. DNS seed bisa gagal atau diblokir, tapi masih ada hardcoded seeds. Hardcoded seeds bisa kadaluwarsa, tapi masih ada database peer dari sesi sebelumnya. Dan kalau semua itu gagal, pengguna bisa memasukkan alamat peer secara manual.</p>
+
+          <div class="p-callout">
+            <p>Salah satu cara paling efektif untuk mendukung jaringan Bitcoin adalah menjalankan node dengan koneksi inbound yang terbuka. Node seperti ini membantu node baru menemukan peer dan memperkuat ketahanan jaringan secara keseluruhan.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualisasi — Proses peer discovery</div>
+          <div class="b08-s85-desc">
+            Lima langkah bagaimana node baru bergabung ke jaringan Bitcoin, dari terisolasi hingga terhubung penuh.
+          </div>
+
+          <div class="b08-s85-steps" id="b08-s85-steps"></div>
+          <canvas class="b08-s85-cv" id="b08-s85-cv" height="300"></canvas>
+          <div class="b08-s85-detail">
+            <div class="b08-s85-dhead" id="b08-s85-dhead"></div>
+            <div class="b08-s85-dbody" id="b08-s85-dbody"></div>
+          </div>
+          <div class="b08-s85-note" id="b08-s85-note"></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-8-4" data-sb="sb-8-4">
+            ← 8.4 — Propagasi Block
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-8-6" data-sb="sb-8-6">
+            8.6 — Menjaga Jaringan Tetap Sehat →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 8.5 -->
+
+      <!-- ==============================
+           SECTION 8.6 · Menjaga Jaringan Tetap Sehat
+      ============================== -->
+      <div class="p-section" id="section-8-6">
+        <div class="p-eyebrow">Bab 8 · 8.6</div>
+        <div class="p-heading">Teknis dan sosial, keduanya sama pentingnya</div>
+        <div class="p-title">Menjaga Jaringan Tetap Sehat</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Jaringan Bitcoin yang sehat bukan hanya soal jumlah node. Ini soal kualitas koneksi, keberagaman lokasi, keberagaman software, dan yang sering dilupakan: keberagaman manusia di balik node-node itu.</p>
+
+          <p><strong>Kesehatan teknis jaringan</strong></p>
+          <p>Ada beberapa indikator kesehatan teknis yang bisa dipantau. Jumlah full node yang reachable adalah indikator paling dasar. Semakin banyak, semakin kuat. Distribusi geografis node juga penting: jaringan yang semua node-nya terkonsentrasi di satu negara jauh lebih rentan terhadap regulasi atau pemadaman internet dibanding jaringan yang tersebar merata di seluruh dunia. Keberagaman software juga krusial. Kalau hampir semua node menjalankan satu implementasi yang sama, sebuah bug kritis di implementasi itu bisa mempengaruhi jaringan secara luas.</p>
+
+          <p><strong>Apa yang bisa dilakukan sebagai node runner</strong></p>
+          <p>Pertama, biarkan koneksi inbound terbuka. Node yang menerima koneksi inbound membantu node baru menemukan peer dan memperkuat jaringan. Kedua, jaga uptime. Node yang sering offline tidak banyak berkontribusi. Sebuah perangkat kecil yang berjalan 24 jam jauh lebih berharga dari komputer yang hanya menyala sesekali. Ketiga, perbarui software secara berkala, bukan karena mengikuti satu tim pengembang, tapi karena patch keamanan penting untuk melindungi diri sendiri dan jaringan.</p>
+
+          <p><strong>Kesehatan sosial jaringan</strong></p>
+          <p>Ini bagian yang sering diabaikan tapi sama pentingnya. Node runner adalah orang-orang yang paling berkomitmen terhadap Bitcoin. Mereka meluangkan waktu, uang, dan energi untuk menjalankan infrastruktur yang membuat Bitcoin berfungsi. Dan justru karena komitmen yang besar itulah, perdebatan di antara mereka bisa menjadi sangat panas.</p>
+
+          <p>Perdebatan tentang ukuran block, mempool policy, soft fork, pilihan software, cara mengoperasikan node: semua ini adalah perdebatan yang sah dan penting. Tidak setuju adalah hal yang sehat. Ketidaksetujuan adalah tanda bahwa banyak orang berpikir secara mandiri, bukan sekadar mengikuti satu pemimpin.</p>
+
+          <p>Tapi ada perbedaan antara tidak setuju dan tidak menghormati. Seseorang bisa memiliki pendapat yang berbeda tentang mempool policy sambil tetap menghargai bahwa orang lain telah meluangkan waktu dan energi untuk menjalankan node mereka sendiri. Seseorang bisa mengkritik keputusan teknis tanpa menyerang karakter orangnya.</p>
+
+          <p><strong>Ekosistem bukan monolith</strong></p>
+          <p>Bitcoin adalah protokol terbuka. Tidak ada satu entitas yang bisa mengklaim otoritas penuh atasnya. Tidak ada satu tim pengembang, tidak ada satu implementasi software, tidak ada satu forum diskusi yang memegang kebenaran tunggal. Ini bukan kelemahan. Ini adalah salah satu kekuatan terbesar Bitcoin. Selama orang-orang dengan pandangan berbeda masih bisa menemukan ground yang sama dalam menjalankan jaringan, Bitcoin akan terus bertahan.</p>
+
+          <div class="p-callout">
+            <p>Menjalankan node adalah tindakan nyata, bukan sekadar opini di internet. Apapun perdebatan yang sedang terjadi di luar sana, node yang tetap menyala adalah kontribusi yang selalu bermakna. Dan memperlakukan sesama node runner dengan hormat, walau berbeda pendapat, adalah bagian dari menjaga jaringan tetap sehat.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Dashboard — Kesehatan jaringan Bitcoin</div>
+          <div class="b08-s86-desc">
+            Metrik teknis dan prinsip sosial yang sama-sama menentukan kesehatan jaringan Bitcoin dalam jangka panjang.
+          </div>
+
+          <div class="b08-s86-grid">
+            <div class="b08-s86-card">
+              <div class="b08-s86-card-head">Node reachable</div>
+              <div class="b08-s86-card-body">
+                <div class="b08-s86-metric">
+                  <div class="b08-s86-metric-val good-val">18,432</div>
+                  <div class="b08-s86-metric-sub">full node yang menerima koneksi inbound</div>
+                </div>
+                <div class="b08-s86-inds">
+                  <div class="b08-s86-ind"><div class="b08-s86-dot" style="background:#0F6E56;"></div><div class="b08-s86-ind-label">Node dengan inbound terbuka</div><div class="b08-s86-ind-val good-val">18,432</div></div>
+                  <div class="b08-s86-ind"><div class="b08-s86-dot" style="background:#52524C;"></div><div class="b08-s86-ind-label">Node hanya outbound</div><div class="b08-s86-ind-val" style="color:#52524C;">~40,000+</div></div>
+                </div>
+                <div class="b08-s86-footnote">Node dengan inbound terbuka membantu node baru bergabung ke jaringan.</div>
+              </div>
+            </div>
+
+            <div class="b08-s86-card">
+              <div class="b08-s86-card-head">Distribusi software</div>
+              <div class="b08-s86-card-body">
+                <div class="b08-s86-bars">
+                  <div class="b08-s86-bar-row"><div class="b08-s86-bar-label">Bitcoin Core</div><div class="b08-s86-bar-track"><div class="b08-s86-bar-fill" style="width:76%;background:#534AB7;"></div></div><div class="b08-s86-bar-pct">76%</div></div>
+                  <div class="b08-s86-bar-row"><div class="b08-s86-bar-label">Bitcoin Knots</div><div class="b08-s86-bar-track"><div class="b08-s86-bar-fill" style="width:14%;background:#7C3AED;"></div></div><div class="b08-s86-bar-pct">14%</div></div>
+                  <div class="b08-s86-bar-row"><div class="b08-s86-bar-label">btcd</div><div class="b08-s86-bar-track"><div class="b08-s86-bar-fill" style="width:4%;background:#0F6E56;"></div></div><div class="b08-s86-bar-pct">4%</div></div>
+                  <div class="b08-s86-bar-row"><div class="b08-s86-bar-label">Lainnya</div><div class="b08-s86-bar-track"><div class="b08-s86-bar-fill" style="width:6%;background:#52524C;"></div></div><div class="b08-s86-bar-pct">6%</div></div>
+                </div>
+                <div class="b08-s86-footnote">Keberagaman software penting. Satu bug di satu implementasi tidak boleh mempengaruhi seluruh jaringan.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b08-s86-grid">
+            <div class="b08-s86-card">
+              <div class="b08-s86-card-head">Distribusi geografis</div>
+              <div class="b08-s86-card-body">
+                <canvas class="b08-s86-donut" id="b08-s86-donut" height="140"></canvas>
+                <div class="b08-s86-footnote">Konsentrasi di satu wilayah membuat jaringan rentan terhadap regulasi atau pemadaman internet lokal.</div>
+              </div>
+            </div>
+
+            <div class="b08-s86-card">
+              <div class="b08-s86-card-head">Indikator kesehatan</div>
+              <div class="b08-s86-card-body">
+                <div class="b08-s86-inds">
+                  <div class="b08-s86-ind"><div class="b08-s86-dot" style="background:#0F6E56;"></div><div class="b08-s86-ind-label">Propagasi block</div><div class="b08-s86-ind-val good-val">&lt;1 dtk</div></div>
+                  <div class="b08-s86-ind"><div class="b08-s86-dot" style="background:#0F6E56;"></div><div class="b08-s86-ind-label">Orphan rate</div><div class="b08-s86-ind-val good-val">~0.1%</div></div>
+                  <div class="b08-s86-ind"><div class="b08-s86-dot" style="background:#0F6E56;"></div><div class="b08-s86-ind-label">Node aktif 30 hari</div><div class="b08-s86-ind-val good-val">87%</div></div>
+                  <div class="b08-s86-ind"><div class="b08-s86-dot" style="background:#854F0B;"></div><div class="b08-s86-ind-label">Node dengan inbound</div><div class="b08-s86-ind-val warn-val">~31%</div></div>
+                  <div class="b08-s86-ind"><div class="b08-s86-dot" style="background:#0F6E56;"></div><div class="b08-s86-ind-label">Koneksi via Tor</div><div class="b08-s86-ind-val good-val">~28%</div></div>
+                  <div class="b08-s86-ind"><div class="b08-s86-dot" style="background:#0F6E56;"></div><div class="b08-s86-ind-label">Negara yang terwakili</div><div class="b08-s86-ind-val good-val">100+</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b08-s86-social">
+            <div class="b08-s86-social-head">Kesehatan sosial jaringan</div>
+            <div class="b08-s86-social-items">
+              <div class="b08-s86-social-item"><div class="b08-s86-social-icon">🤝</div><div class="b08-s86-social-text"><b>Tidak setuju itu sehat.</b> Beda pendapat soal mempool policy, ukuran block, atau pilihan software adalah tanda bahwa orang berpikir mandiri, bukan sekadar mengikuti satu pemimpin.</div></div>
+              <div class="b08-s86-social-item"><div class="b08-s86-social-icon">🗣️</div><div class="b08-s86-social-text"><b>Kritik teknis bukan serangan personal.</b> Seseorang bisa mengkritik keputusan teknis tanpa menyerang karakter orangnya. Perdebatan yang baik memperkuat ekosistem.</div></div>
+              <div class="b08-s86-social-item"><div class="b08-s86-social-icon">⚙️</div><div class="b08-s86-social-text"><b>Node yang menyala lebih bermakna dari opini di internet.</b> Apapun perdebatan yang terjadi di luar sana, kontribusi nyata adalah infrastruktur yang tetap berjalan.</div></div>
+              <div class="b08-s86-social-item"><div class="b08-s86-social-icon">🌐</div><div class="b08-s86-social-text"><b>Bitcoin bukan milik satu kelompok.</b> Tidak ada satu tim, satu software, atau satu forum yang memegang kebenaran tunggal. Jaringan paling kuat saat banyak pihak berbeda masih bisa bekerja sama.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-8-5" data-sb="sb-8-5">
+            ← 8.5 — Koneksi dan Peer Discovery
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 8.6 -->
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 11 · BAB 8 -->
+
+

@@ -1,0 +1,128 @@
+/* ============================================================
+   PAGE 16 · BAB 13 · Soft Fork: Sejarah, Proses, dan Governance
+============================================================ */
+
+/* ============================================================
+   PAGE 16 · BAB 13 · 13.1 SIMULATION (Fork Viz)
+============================================================ */
+.b13-s131-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b13-s131-tabs { display:flex; gap:0; border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-md); overflow:hidden; margin-bottom:1rem; }
+.b13-s131-tab { flex:1; padding:8px 12px; font-size:12px; font-weight:500; background:transparent; color:#3A3A35; border:none; cursor:pointer; font-family:'Sora',sans-serif; transition:all 0.15s; }
+.b13-s131-tab.s131-act { background:#534AB7; color:#fff; }
+.b13-s131-pane { display:none; flex-direction:column; gap:10px; }
+.b13-s131-pane.show { display:flex; }
+.b13-s131-hint { font-size:11px; color:#3A3A35; font-family:'Sora',sans-serif; line-height:1.6; }
+.b13-s131-canvas { width:100%; background:#F4F4F0; border-radius:var(--border-radius-lg); border:0.5px solid rgba(124,58,237,0.1); overflow:hidden; }
+.b13-s131-canvas canvas { display:block; width:100%; }
+.b13-s131-legend { display:flex; gap:8px; flex-wrap:wrap; }
+.b13-s131-leg { display:flex; align-items:center; gap:5px; font-size:10px; color:#3A3A35; font-family:'Sora',sans-serif; }
+.b13-s131-leg-box { width:13px; height:13px; border-radius:3px; flex-shrink:0; }
+.b13-s131-callout { padding:8px 12px; border-radius:var(--border-radius-md); font-size:11px; font-family:'Sora',sans-serif; line-height:1.5; }
+.b13-s131-callout.s131-red { background:#FCEBEB; color:#791F1F; border:0.5px solid rgba(163,45,45,0.2); }
+.b13-s131-callout.s131-grn { background:#EAF3DE; color:#27500A; border:0.5px solid rgba(59,109,17,0.2); }
+.b13-s131-nodes { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.b13-s131-node-card { padding:8px 12px; border-radius:var(--border-radius-md); border:0.5px solid transparent; display:flex; flex-direction:column; gap:4px; }
+.b13-s131-node-card.s131-a { background:#EEEDFE; border-color:rgba(83,74,183,0.2); }
+.b13-s131-node-card.s131-b { background:#FAEEDA; border-color:rgba(133,79,11,0.2); }
+.b13-s131-node-head { font-size:11px; font-weight:500; font-family:'Sora',sans-serif; }
+.b13-s131-node-card.s131-a .b13-s131-node-head { color:#534AB7; }
+.b13-s131-node-card.s131-b .b13-s131-node-head { color:#854F0B; }
+.b13-s131-node-body { font-size:10px; font-family:'Sora',sans-serif; color:#3A3A35; line-height:1.5; }
+.b13-s131-badge { font-size:10px; font-weight:500; font-family:'Sora',sans-serif; padding:2px 8px; border-radius:99px; display:inline-block; margin-top:2px; }
+.b13-s131-badge.s131-split { background:#FCEBEB; color:#791F1F; }
+.b13-s131-badge.s131-win   { background:#EAF3DE; color:#27500A; }
+.b13-s131-badge.s131-lose  { background:#FAEEDA; color:#633806; }
+.b13-s131-note { padding:10px 14px; border-radius:var(--border-radius-md); font-size:12px; line-height:1.6; font-family:'Sora',sans-serif; }
+.b13-s131-note.s131-warn { background:#FCEBEB; color:#791F1F; border:0.5px solid rgba(163,45,45,0.2); }
+.b13-s131-note.s131-good { background:#EAF3DE; color:#27500A; border:0.5px solid rgba(59,109,17,0.2); }
+
+/* ============================================================
+   PAGE 16 · BAB 13 · 13.2 SIMULATION (BIP Lifecycle)
+============================================================ */
+.b13-s132-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b13-s132-tabs { display:flex; gap:0; border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-md); overflow:hidden; margin-bottom:1rem; }
+.b13-s132-tab { flex:1; padding:8px 12px; font-size:12px; font-weight:500; background:transparent; color:#3A3A35; border:none; cursor:pointer; font-family:'Sora',sans-serif; transition:all 0.15s; }
+.b13-s132-tab.s132-act { background:#534AB7; color:#fff; }
+.b13-s132-pane { display:none; flex-direction:column; gap:10px; }
+.b13-s132-pane.show { display:flex; }
+.b13-s132-hint { font-size:11px; color:#3A3A35; font-family:'Sora',sans-serif; line-height:1.6; }
+.b13-s132-stages { display:flex; align-items:flex-start; gap:0; padding-bottom:4px; }
+.b13-s132-stage { display:flex; flex-direction:column; align-items:center; gap:6px; flex:1; min-width:64px; }
+.b13-s132-stage-dot { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; border:2px solid transparent; flex-shrink:0; }
+.b13-s132-stage-dot.s132-draft   { background:#F4F4F0; border-color:rgba(124,58,237,0.2); }
+.b13-s132-stage-dot.s132-discuss { background:#FAEEDA; border-color:rgba(133,79,11,0.3); }
+.b13-s132-stage-dot.s132-review  { background:#EEEDFE; border-color:rgba(83,74,183,0.3); }
+.b13-s132-stage-dot.s132-final   { background:#EAF3DE; border-color:rgba(15,110,86,0.3); }
+.b13-s132-stage-dot.s132-reject  { background:#FCEBEB; border-color:rgba(163,45,45,0.3); }
+.b13-s132-stage-label { font-size:10px; font-weight:500; font-family:'Sora',sans-serif; color:#1A1A18; text-align:center; }
+.b13-s132-stage-sub   { font-size:9px; color:#52524C; font-family:'Sora',sans-serif; text-align:center; line-height:1.3; max-width:70px; }
+.b13-s132-stage-conn  { flex:1; height:2px; background:rgba(124,58,237,0.15); margin-top:17px; flex-shrink:0; }
+.b13-s132-stage-conn.s132-split { background:linear-gradient(to right,rgba(124,58,237,0.15),transparent); }
+.b13-s132-bips-label { font-size:11px; font-weight:500; color:#1A1A18; font-family:'Sora',sans-serif; }
+.b13-s132-bips { display:flex; flex-direction:column; gap:5px; }
+.b13-s132-bip { display:flex; align-items:center; gap:10px; padding:8px 12px; border-radius:var(--border-radius-md); border:0.5px solid transparent; cursor:pointer; transition:all 0.15s; }
+.b13-s132-bip:hover { border-color:rgba(124,58,237,0.3); }
+.b13-s132-bip.active { border-color:#534AB7; background:#EEEDFE; }
+.b13-s132-bip-num  { font-size:12px; font-weight:700; font-family:'Courier Prime',monospace; min-width:54px; flex-shrink:0; }
+.b13-s132-bip-info { display:flex; flex-direction:column; gap:1px; flex:1; }
+.b13-s132-bip-name { font-size:11px; font-weight:500; font-family:'Sora',sans-serif; color:#1A1A18; }
+.b13-s132-bip-meta { font-size:10px; color:#52524C; font-family:'Sora',sans-serif; }
+.b13-s132-bip-status { font-size:9px; padding:2px 7px; border-radius:99px; font-family:'Sora',sans-serif; flex-shrink:0; }
+.b13-s132-bip-status.s132-final  { background:#EAF3DE; color:#27500A; }
+.b13-s132-bip-status.s132-active { background:#EEEDFE; color:#534AB7; }
+.b13-s132-detail { border:0.5px solid rgba(124,58,237,0.15); border-radius:var(--border-radius-lg); overflow:hidden; }
+.b13-s132-detail-head { padding:10px 14px; display:flex; align-items:center; gap:10px; background:#F4F4F0; }
+.b13-s132-detail-num   { font-size:18px; font-weight:700; font-family:'Courier Prime',monospace; color:#534AB7; }
+.b13-s132-detail-title { font-size:12px; font-weight:600; font-family:'Sora',sans-serif; color:#1A1A18; flex:1; }
+.b13-s132-detail-body  { padding:10px 14px; display:flex; flex-direction:column; gap:8px; }
+.b13-s132-detail-row   { display:flex; gap:8px; align-items:baseline; }
+.b13-s132-detail-key   { font-size:10px; color:#52524C; font-family:'Sora',sans-serif; min-width:80px; flex-shrink:0; }
+.b13-s132-detail-val   { font-size:11px; font-family:'Sora',sans-serif; color:#1A1A18; line-height:1.5; flex:1; }
+.b13-s132-detail-desc  { font-size:11px; color:#3A3A35; font-family:'Sora',sans-serif; line-height:1.6; padding:8px 10px; background:#F4F4F0; border-radius:var(--border-radius-md); }
+.b13-s132-types { display:flex; flex-direction:column; gap:8px; }
+.b13-s132-type-card { border:0.5px solid transparent; border-radius:var(--border-radius-lg); overflow:hidden; }
+.b13-s132-type-head { padding:10px 14px; display:flex; align-items:center; gap:10px; cursor:pointer; }
+.b13-s132-type-icon  { font-size:18px; flex-shrink:0; }
+.b13-s132-type-title { font-size:12px; font-weight:600; font-family:'Sora',sans-serif; flex:1; }
+.b13-s132-type-badge { font-size:10px; padding:2px 8px; border-radius:99px; font-family:'Sora',sans-serif; flex-shrink:0; }
+.b13-s132-type-body { display:none; padding:0 14px 12px; border-top:0.5px solid rgba(0,0,0,0.06); }
+.b13-s132-type-body.open { display:block; }
+.b13-s132-type-desc { font-size:11px; color:#3A3A35; font-family:'Sora',sans-serif; line-height:1.6; margin-top:8px; }
+.b13-s132-type-examples { margin-top:8px; display:flex; flex-direction:column; gap:4px; }
+.b13-s132-type-ex { font-size:10px; font-family:'Courier Prime',monospace; padding:3px 8px; border-radius:4px; display:inline-block; }
+.b13-s132-type-card.s132-standards { border-color:rgba(83,74,183,0.2); }
+.b13-s132-type-card.s132-standards .b13-s132-type-head  { background:#EEEDFE; }
+.b13-s132-type-card.s132-standards .b13-s132-type-title { color:#534AB7; }
+.b13-s132-type-card.s132-standards .b13-s132-type-badge { background:#534AB7; color:#fff; }
+.b13-s132-type-card.s132-standards .b13-s132-type-ex    { background:#EEEDFE; color:#534AB7; }
+.b13-s132-type-card.s132-info { border-color:rgba(15,110,86,0.2); }
+.b13-s132-type-card.s132-info .b13-s132-type-head  { background:#EAF3DE; }
+.b13-s132-type-card.s132-info .b13-s132-type-title { color:#0F6E56; }
+.b13-s132-type-card.s132-info .b13-s132-type-badge { background:#0F6E56; color:#fff; }
+.b13-s132-type-card.s132-info .b13-s132-type-ex    { background:#EAF3DE; color:#0F6E56; }
+.b13-s132-type-card.s132-process { border-color:rgba(133,79,11,0.2); }
+.b13-s132-type-card.s132-process .b13-s132-type-head  { background:#FAEEDA; }
+.b13-s132-type-card.s132-process .b13-s132-type-title { color:#854F0B; }
+.b13-s132-type-card.s132-process .b13-s132-type-badge { background:#854F0B; color:#fff; }
+.b13-s132-type-card.s132-process .b13-s132-type-ex    { background:#FAEEDA; color:#854F0B; }
+.b13-s132-sublayers { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:8px; }
+.b13-s132-sublayer { padding:6px 10px; border-radius:var(--border-radius-md); background:#EEEDFE; border:0.5px solid rgba(83,74,183,0.15); }
+.b13-s132-sublayer-title { font-size:10px; font-weight:500; color:#534AB7; font-family:'Sora',sans-serif; }
+.b13-s132-sublayer-desc  { font-size:10px; color:#3A3A35; font-family:'Sora',sans-serif; line-height:1.4; margin-top:2px; }
+
+/* ============================================================
+   PAGE 16 · BAB 13 · 13.3 SIMULATION (Soft Fork Activation)
+============================================================ */
+/* Bagan ini padat teks. Kalau dibiarkan menyusut mengikuti layar sempit,
+   labelnya jatuh di bawah 3px dan tidak terbaca. Jadi diberi lebar minimum
+   dan digeser horizontal di dalam wadahnya sendiri. */
+.bs-flow { padding:4px 0 2px; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+.bs-flow svg { width:100%; height:auto; min-width:680px; display:block; }
+.bs-flow-hint { font-family:'Courier Prime',monospace; font-size:9px;
+  letter-spacing:0.1em; color:#7C6FD6; text-transform:uppercase; padding-top:6px; }
+
+.bs-flow-note { font-size:11px; line-height:1.7; color:#3A3A35; font-family:'Sora',sans-serif;
+  padding-top:11px; margin-top:11px; border-top:0.5px solid rgba(124,58,237,0.12); }
+.bs-flow-note b { color:#534AB7; font-weight:600; }
+
+

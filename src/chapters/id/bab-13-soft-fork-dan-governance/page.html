@@ -1,0 +1,809 @@
+<!-- ============================================================
+     PAGE 16 · BAB 13 · Soft Fork: Sejarah, Proses, dan Governance
+     |-- 13.1 · Apa itu Soft Fork dan Hard Fork? [DONE]
+     |-- 13.2 · [LOCKED]
+     |-- 13.3 · [LOCKED]
+     |-- 13.4 · [LOCKED]
+     |-- 13.5 · [LOCKED]
+     |-- 13.6 · [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab13">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b13">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b13">← Daftar Bab</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab13">
+      <div class="sidebar-heading">Bab 13</div>
+      <div class="sidebar-title">Soft Fork: Sejarah, Proses, dan Governance</div>
+
+      <div class="sidebar-item active" id="sb-13-1">
+        <div class="sb-num">13.1</div>
+        <div class="sb-label">Apa itu Soft Fork dan Hard Fork?</div>
+      </div>
+      <div class="sidebar-item" id="sb-13-2">
+        <div class="sb-num">13.2</div>
+        <div class="sb-label">BIP — Bagaimana Ide Masuk ke Bitcoin</div>
+      </div>
+      <div class="sidebar-item" id="sb-13-3">
+        <div class="sb-num">13.3</div>
+        <div class="sb-label">Jenis-jenis Soft Fork Activation</div>
+      </div>
+      <div class="sidebar-item" id="sb-13-4">
+        <div class="sb-num">13.4</div>
+        <div class="sb-label">SegWit — Soft Fork Paling Kontroversial</div>
+      </div>
+      <div class="sidebar-item" id="sb-13-5">
+        <div class="sb-num">13.5</div>
+        <div class="sb-label">Taproot — Soft Fork yang Lebih Mulus</div>
+      </div>
+      <div class="sidebar-item" id="sb-13-6">
+        <div class="sb-num">13.6</div>
+        <div class="sb-label">Governance Bitcoin — Siapa yang Sebenarnya Memutuskan?</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab13-content">
+
+      <!-- ==============================
+           SECTION 13.1 · Apa itu Soft Fork dan Hard Fork?
+      ============================== -->
+      <div class="p-section active" id="section-13-1">
+        <div class="p-eyebrow">Bab 13 · 13.1</div>
+        <div class="p-heading">Bagaimana protokol yang tidak punya pemilik bisa berubah?</div>
+        <div class="p-title">Apa itu Soft Fork dan Hard Fork?</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Istilah soft fork dan hard fork sudah kita kenalkan sekilas di 5.1 waktu membahas konsensus. Di sini kita bongkar keduanya sampai tuntas, karena seluruh Bab 13 berdiri di atas perbedaan ini. Kalau bagian ini terasa familiar di awal, itu memang disengaja.</p>
+          <p>Bitcoin adalah protokol yang hidup. Ia perlu berevolusi untuk memperbaiki bug, menambah fitur, atau merespons ancaman baru. Tapi bagaimana caranya mengubah sebuah protokol yang tidak punya pemilik, tidak punya CEO, dan dijalankan oleh ribuan node independen di seluruh dunia? Di sinilah konsep fork menjadi penting.</p>
+
+          <p><strong>Hard fork vs soft fork</strong></p>
+          <p>Hard fork adalah perubahan protokol yang tidak kompatibel ke belakang. Node yang tidak upgrade tidak bisa lagi mengikuti chain yang baru. Kalau sebagian node upgrade dan sebagian tidak, jaringan akan terbagi menjadi dua chain yang terpisah permanen. Keduanya punya rantai terpanjangnya sendiri, tapi tidak berkompetisi satu sama lain karena block satu pihak tidak relevan bagi pihak lain. Hard fork membutuhkan koordinasi hampir universal dari seluruh ekosistem.</p>
+
+          <p>Soft fork adalah perubahan protokol yang kompatibel ke belakang. Node lama yang tidak upgrade masih bisa mengikuti chain baru, karena aturan baru hanya memperketat aturan yang sudah ada. Block yang valid menurut aturan baru juga valid menurut aturan lama. Ini berarti masih satu jaringan dengan dua kandidat chain, dan yang terpanjang menang. Karena mayoritas hash rate biasanya ada di node yang sudah upgrade, chain mereka yang selalu terpanjang.</p>
+
+          <p><strong>Analogi sederhana</strong></p>
+          <p>Bayangkan permainan kartu dengan aturan: "kartu bernilai lebih dari 5 menang." Hard fork adalah mengubah aturan menjadi "kartu bernilai lebih dari 3 menang", pemain lama yang tidak tahu aturan baru tidak bisa bermain di meja yang sama. Soft fork adalah mengubah aturan menjadi "kartu bernilai lebih dari 5 menang, dan harus berwarna merah", aturan jadi lebih ketat, tapi pemain lama masih bisa bermain di meja yang sama meski bermain suboptimal.</p>
+
+          <p><strong>Mengapa Bitcoin lebih memilih soft fork</strong></p>
+          <p>Soft fork lebih aman karena tidak memaksa semua pengguna untuk upgrade sekaligus. Node lama tetap bisa berpartisipasi dalam jaringan. Ini mengurangi risiko perpecahan komunitas dan memungkinkan perubahan dilakukan secara bertahap. Hard fork di Bitcoin dianggap sangat berisiko dan hampir tidak pernah dilakukan untuk fitur baru, hanya untuk perbaikan kritis yang benar-benar tidak bisa dilakukan dengan soft fork.</p>
+
+          <div class="p-callout">
+            <p>Pilihan antara soft fork dan hard fork bukan hanya teknis, tapi juga politis dan sosial. Soft fork memungkinkan perubahan tanpa memaksa konsensus universal, tapi juga berarti fitur baru harus dirancang dengan sangat hati-hati agar kompatibel ke belakang. Ini adalah salah satu alasan mengapa pengembangan Bitcoin terasa lambat dibanding proyek kripto lain.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualisasi — Hard fork vs Soft fork</div>
+          <div class="b13-s131-desc">
+            Hard fork membelah jaringan jadi dua secara permanen. Soft fork tetap satu jaringan — kandidat chain yang tidak conforming ditinggalkan karena kalah terpanjang.
+          </div>
+
+          <div class="b13-s131-tabs">
+            <button class="b13-s131-tab s131-act" id="b13-s131-t1">Hard Fork</button>
+            <button class="b13-s131-tab" id="b13-s131-t2">Soft Fork</button>
+          </div>
+
+          <div class="b13-s131-pane show" id="b13-s131-p1">
+            <div class="b13-s131-hint">Hard fork: dua jaringan terpisah. Masing-masing punya rantai terpanjangnya sendiri — tapi keduanya tidak berkompetisi karena block satu pihak tidak relevan bagi pihak lain.</div>
+            <div class="b13-s131-canvas"><canvas id="b13-s131-cv-hard"></canvas></div>
+            <div class="b13-s131-legend">
+              <div class="b13-s131-leg"><div class="b13-s131-leg-box" style="background:#EEEDFE;border:1.5px solid rgba(83,74,183,0.3);"></div>Block bersama (sebelum fork)</div>
+              <div class="b13-s131-leg"><div class="b13-s131-leg-box" style="background:#534AB7;"></div>Chain A — node upgrade</div>
+              <div class="b13-s131-leg"><div class="b13-s131-leg-box" style="background:#FAEEDA;border:1.5px solid rgba(133,79,11,0.3);"></div>Chain B — node lama</div>
+            </div>
+            <div class="b13-s131-callout s131-red">Block chain A tidak relevan bagi node B, dan sebaliknya — bukan karena kalah terpanjang, tapi karena aturannya sudah berbeda. Tidak ada kompetisi antar chain.</div>
+            <div class="b13-s131-nodes">
+              <div class="b13-s131-node-card s131-a">
+                <div class="b13-s131-node-head">Node upgrade (Jaringan A)</div>
+                <div class="b13-s131-node-body">Jaringan A punya rantai terpanjangnya sendiri. Block dari jaringan B tidak relevan.</div>
+                <span class="b13-s131-badge s131-split">Jaringan terpisah</span>
+              </div>
+              <div class="b13-s131-node-card s131-b">
+                <div class="b13-s131-node-head">Node lama (Jaringan B)</div>
+                <div class="b13-s131-node-body">Jaringan B punya rantai terpanjangnya sendiri. Block dari jaringan A tidak relevan.</div>
+                <span class="b13-s131-badge s131-split">Jaringan terpisah</span>
+              </div>
+            </div>
+            <div class="b13-s131-note s131-warn">Hard fork = dua jaringan, dua konsensus. Bitcoin Cash (2017) adalah contoh nyata. Setelah fork, tidak ada "pemenang" antar chain — keduanya hidup sendiri-sendiri.</div>
+          </div>
+
+          <div class="b13-s131-pane" id="b13-s131-p2">
+            <div class="b13-s131-hint">Soft fork: satu jaringan, dua kandidat chain. Yang terpanjang menang — dan karena mayoritas hash rate ada di node yang sudah upgrade, chain mereka yang selalu terpanjang.</div>
+            <div class="b13-s131-canvas"><canvas id="b13-s131-cv-soft"></canvas></div>
+            <div class="b13-s131-legend">
+              <div class="b13-s131-leg"><div class="b13-s131-leg-box" style="background:#EEEDFE;border:1.5px solid rgba(83,74,183,0.3);"></div>Block bersama</div>
+              <div class="b13-s131-leg"><div class="b13-s131-leg-box" style="background:#EAF3DE;border:1.5px solid rgba(15,110,86,0.3);"></div>Block valid di kedua aturan (mayoritas)</div>
+              <div class="b13-s131-leg"><div class="b13-s131-leg-box" style="background:#FCEBEB;border:1.5px solid rgba(163,45,45,0.3);"></div>Block non-conforming (ditolak mayoritas)</div>
+            </div>
+            <div class="b13-s131-callout s131-grn">Ini masih satu jaringan. Node lama bisa mengikuti chain mayoritas. Yang terpanjang menang — dan mayoritas selalu lebih cepat tumbuh karena hash rate lebih besar.</div>
+            <div class="b13-s131-nodes">
+              <div class="b13-s131-node-card s131-a">
+                <div class="b13-s131-node-head">Mayoritas (node upgrade)</div>
+                <div class="b13-s131-node-body">Hash rate terbesar, chain tumbuh paling cepat. Block non-conforming dari minoritas ditolak. Chain ini selalu jadi yang terpanjang.</div>
+                <span class="b13-s131-badge s131-win">✓ Chain terpanjang — menang</span>
+              </div>
+              <div class="b13-s131-node-card s131-b">
+                <div class="b13-s131-node-head">Minoritas (tidak upgrade)</div>
+                <div class="b13-s131-node-body">Block non-conforming mereka ditolak mayoritas. Hash rate kecil membuat chain mereka selalu lebih pendek dan ditinggalkan.</div>
+                <span class="b13-s131-badge s131-lose">Chain lebih pendek — ditinggalkan</span>
+              </div>
+            </div>
+            <div class="b13-s131-note s131-good">Soft fork menjaga satu jaringan. Selama mayoritas hash rate mendukung aturan baru, chain non-conforming tidak pernah bisa jadi terpanjang.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-13-2" data-sb="sb-13-2">
+            13.2 — BIP: Bagaimana Ide Masuk ke Bitcoin →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 13.1 -->
+
+      <!-- ==============================
+           SECTION 13.2 · BIP — Bagaimana Ide Masuk ke Bitcoin
+      ============================== -->
+      <div class="p-section" id="section-13-2">
+        <div class="p-eyebrow">Bab 13 · 13.2</div>
+        <div class="p-heading">Tidak ada CEO, tapi ada proses — begitu ide masuk ke Bitcoin</div>
+        <div class="p-title">BIP — Bagaimana Ide Masuk ke Bitcoin</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Bitcoin tidak punya CEO, tidak punya kantor pusat, tidak punya dewan direksi. Tapi Bitcoin bukan tanpa proses. Ada mekanisme formal untuk mengusulkan, mendiskusikan, dan mengimplementasikan perubahan pada protokol. Mekanisme ini disebut BIP, singkatan dari Bitcoin Improvement Proposal.</p>
+
+          <p><strong>Apa itu BIP?</strong></p>
+          <p>BIP adalah dokumen tertulis yang mengusulkan perubahan atau penambahan pada protokol Bitcoin, proses pengembangannya, atau standar yang digunakan. BIP pertama kali diperkenalkan oleh Amir Taaki pada 2011, terinspirasi dari Python Enhancement Proposals (PEP) yang digunakan komunitas Python. Setiap BIP punya nomor unik: BIP 32 untuk HD wallet, BIP 141 untuk SegWit, BIP 340-342 untuk Taproot, BIP 352 untuk Silent Payments. Nomor ini menjadi cara komunitas mereferensikan proposal secara konsisten.</p>
+
+          <p><strong>Siapa yang bisa mengajukan BIP?</strong></p>
+          <p>Siapapun. BIP bukan dokumen eksklusif developer inti. Siapapun bisa menulis dan mengajukan BIP. Tapi kualitas argumen, kejelasan spesifikasi teknis, dan dukungan dari komunitas yang menentukan apakah BIP akan dipertimbangkan serius atau diabaikan.</p>
+
+          <p><strong>Proses BIP</strong></p>
+          <p>BIP yang diajukan pertama kali melewati review oleh BIP editor yang memastikan format dan kelengkapan dokumen. Editor tidak memutuskan apakah BIP bagus atau buruk secara teknikal. Setelah diterima sebagai draft, BIP mulai didiskusikan di berbagai forum: mailing list bitcoin-dev, GitHub, forum, dan konferensi. Diskusi ini bisa berlangsung berbulan-bulan bahkan bertahun-tahun. Tidak ada voting formal, tidak ada keputusan tunggal. Konsensus terbentuk secara organik dari diskusi yang panjang.</p>
+
+          <p><strong>Jenis-jenis BIP</strong></p>
+          <p>Ada tiga jenis BIP. Standards Track BIP adalah yang paling penting: mengusulkan perubahan pada protokol Bitcoin yang mempengaruhi kompatibilitas, dibagi lagi menjadi beberapa lapisan mulai dari consensus layer hingga applications layer. Informational BIP memberikan informasi atau panduan tanpa mengusulkan fitur baru. Process BIP mengusulkan perubahan pada proses pengembangan Bitcoin itu sendiri.</p>
+
+          <p><strong>Mengapa proses ini lambat?</strong></p>
+          <p>Karena Bitcoin tidak punya otoritas pusat yang bisa memutuskan. Setiap perubahan pada protokol yang digunakan oleh jutaan orang dan menyimpan nilai miliaran dolar harus dipertimbangkan dengan sangat hati-hati. Satu bug dalam kode konsensus bisa berakibat bencana. Kelambatan adalah fitur, bukan bug.</p>
+
+          <div class="p-callout">
+            <p>BIP adalah cara komunitas terdesentralisasi mengkoordinasikan perubahan tanpa otoritas pusat. Prosesnya lambat dan sering penuh perdebatan, tapi itulah yang membuat legitimasi hasilnya bergantung pada konsensus nyata, bukan keputusan satu pihak.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualisasi — Lifecycle dan jenis-jenis BIP</div>
+          <div class="b13-s132-desc">
+            Tab pertama: lifecycle sebuah BIP dari draft hingga final, dengan contoh BIP terkenal yang bisa diklik. Tab kedua: tiga jenis BIP dan perbedaannya.
+          </div>
+
+          <div class="b13-s132-tabs">
+            <button class="b13-s132-tab s132-act" id="b13-s132-t1">Lifecycle BIP</button>
+            <button class="b13-s132-tab" id="b13-s132-t2">Jenis-jenis BIP</button>
+          </div>
+
+          <!-- PANE 1: LIFECYCLE -->
+          <div class="b13-s132-pane show" id="b13-s132-p1">
+            <div class="b13-s132-stages">
+              <div class="b13-s132-stage"><div class="b13-s132-stage-dot s132-draft">✍️</div><div class="b13-s132-stage-label">Draft</div><div class="b13-s132-stage-sub">Ditulis, diajukan ke editor</div></div>
+              <div class="b13-s132-stage-conn"></div>
+              <div class="b13-s132-stage"><div class="b13-s132-stage-dot s132-discuss">💬</div><div class="b13-s132-stage-label">Proposed</div><div class="b13-s132-stage-sub">Diskusi komunitas, review teknis</div></div>
+              <div class="b13-s132-stage-conn"></div>
+              <div class="b13-s132-stage"><div class="b13-s132-stage-dot s132-review">🔍</div><div class="b13-s132-stage-label">Review</div><div class="b13-s132-stage-sub">Implementasi, testing, feedback</div></div>
+              <div class="b13-s132-stage-conn s132-split"></div>
+              <div class="b13-s132-stage"><div class="b13-s132-stage-dot s132-final">✅</div><div class="b13-s132-stage-label">Final</div><div class="b13-s132-stage-sub">Diterima dan diimplementasi</div></div>
+              <div class="b13-s132-stage" style="opacity:0.6;"><div class="b13-s132-stage-dot s132-reject">✗</div><div class="b13-s132-stage-label">Rejected</div><div class="b13-s132-stage-sub">Ditolak atau ditarik</div></div>
+            </div>
+
+            <div class="b13-s132-bips-label">Contoh BIP terkenal — klik untuk detail:</div>
+            <div class="b13-s132-bips">
+              <div class="b13-s132-bip active" data-bip="32"><div class="b13-s132-bip-num" style="color:#0F6E56;">BIP 32</div><div class="b13-s132-bip-info"><div class="b13-s132-bip-name">Hierarchical Deterministic Wallets</div><div class="b13-s132-bip-meta">2012 · Pieter Wuille · Standards Track</div></div><span class="b13-s132-bip-status s132-final">Final</span></div>
+              <div class="b13-s132-bip" data-bip="141"><div class="b13-s132-bip-num" style="color:#534AB7;">BIP 141</div><div class="b13-s132-bip-info"><div class="b13-s132-bip-name">Segregated Witness (SegWit)</div><div class="b13-s132-bip-meta">2015 · Eric Lombrozo, Johnson Lau, Pieter Wuille · Standards Track</div></div><span class="b13-s132-bip-status s132-final">Final</span></div>
+              <div class="b13-s132-bip" data-bip="148"><div class="b13-s132-bip-num" style="color:#854F0B;">BIP 148</div><div class="b13-s132-bip-info"><div class="b13-s132-bip-name">UASF — Mandatory activation of segwit</div><div class="b13-s132-bip-meta">2017 · Shaolin Fry · Standards Track</div></div><span class="b13-s132-bip-status s132-final">Final</span></div>
+              <div class="b13-s132-bip" data-bip="340"><div class="b13-s132-bip-num" style="color:#534AB7;">BIP 340</div><div class="b13-s132-bip-info"><div class="b13-s132-bip-name">Schnorr Signatures (bagian dari Taproot)</div><div class="b13-s132-bip-meta">2020 · Pieter Wuille, Jonas Nick, Tim Ruffing · Standards Track</div></div><span class="b13-s132-bip-status s132-final">Final</span></div>
+              <div class="b13-s132-bip" data-bip="352"><div class="b13-s132-bip-num" style="color:#534AB7;">BIP 352</div><div class="b13-s132-bip-info"><div class="b13-s132-bip-name">Silent Payments</div><div class="b13-s132-bip-meta">2022 · josibake, Ruben Somsen · Standards Track</div></div><span class="b13-s132-bip-status s132-active">Active</span></div>
+            </div>
+
+            <div class="b13-s132-detail" id="b13-s132-detail"></div>
+          </div>
+
+          <!-- PANE 2: JENIS BIP -->
+          <div class="b13-s132-pane" id="b13-s132-p2">
+            <div class="b13-s132-hint">Ada tiga jenis BIP. Masing-masing punya tujuan dan bobot yang berbeda dalam ekosistem Bitcoin.</div>
+            <div class="b13-s132-types">
+
+              <div class="b13-s132-type-card s132-standards">
+                <div class="b13-s132-type-head" data-type="0"><div class="b13-s132-type-icon">⚙️</div><div class="b13-s132-type-title">Standards Track BIP</div><div class="b13-s132-type-badge">Paling penting</div></div>
+                <div class="b13-s132-type-body open">
+                  <div class="b13-s132-type-desc">Mengusulkan perubahan pada protokol Bitcoin, format transaksi, atau standar teknis yang mempengaruhi kompatibilitas antar implementasi. Dibagi menjadi beberapa lapisan:</div>
+                  <div class="b13-s132-sublayers">
+                    <div class="b13-s132-sublayer"><div class="b13-s132-sublayer-title">Consensus layer</div><div class="b13-s132-sublayer-desc">Mengubah aturan konsensus. Butuh soft fork atau hard fork. Contoh: SegWit, Taproot.</div></div>
+                    <div class="b13-s132-sublayer"><div class="b13-s132-sublayer-title">Peer Services layer</div><div class="b13-s132-sublayer-desc">Cara node berkomunikasi satu sama lain di jaringan P2P.</div></div>
+                    <div class="b13-s132-sublayer"><div class="b13-s132-sublayer-title">API/RPC layer</div><div class="b13-s132-sublayer-desc">Standar komunikasi antara software dan node Bitcoin.</div></div>
+                    <div class="b13-s132-sublayer"><div class="b13-s132-sublayer-title">Applications layer</div><div class="b13-s132-sublayer-desc">Standar untuk wallet, address, transaksi. Contoh: BIP 32 (HD wallet), BIP 173 (bech32).</div></div>
+                  </div>
+                  <div class="b13-s132-type-examples">
+                    <span class="b13-s132-type-ex">BIP 32 — HD Wallet</span>
+                    <span class="b13-s132-type-ex">BIP 141 — SegWit</span>
+                    <span class="b13-s132-type-ex">BIP 340-342 — Taproot</span>
+                    <span class="b13-s132-type-ex">BIP 352 — Silent Payments</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="b13-s132-type-card s132-info">
+                <div class="b13-s132-type-head" data-type="1"><div class="b13-s132-type-icon">📄</div><div class="b13-s132-type-title">Informational BIP</div><div class="b13-s132-type-badge">Panduan dan referensi</div></div>
+                <div class="b13-s132-type-body">
+                  <div class="b13-s132-type-desc">Memberikan informasi, panduan, atau dokumentasi untuk komunitas Bitcoin tanpa mengusulkan fitur baru atau perubahan protokol. Tidak membutuhkan konsensus untuk diadopsi — bebas diikuti atau diabaikan.</div>
+                  <div class="b13-s132-type-examples">
+                    <span class="b13-s132-type-ex">BIP 1 — BIP Purpose and Guidelines</span>
+                    <span class="b13-s132-type-ex">BIP 44 — Derivation path untuk HD wallet multi-akun</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="b13-s132-type-card s132-process">
+                <div class="b13-s132-type-head" data-type="2"><div class="b13-s132-type-icon">🔄</div><div class="b13-s132-type-title">Process BIP</div><div class="b13-s132-type-badge">Meta dan tata kelola</div></div>
+                <div class="b13-s132-type-body">
+                  <div class="b13-s132-type-desc">Mengusulkan perubahan pada proses pengembangan Bitcoin itu sendiri, bukan protokolnya. Termasuk panduan atau prosedur yang berdampak pada cara komunitas mengembangkan Bitcoin. Mirip Informational BIP tapi lebih bersifat mengikat dalam praktik komunitas.</div>
+                  <div class="b13-s132-type-examples">
+                    <span class="b13-s132-type-ex">BIP 2 — BIP Workflow (revisi proses BIP)</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-13-1" data-sb="sb-13-1">
+            ← 13.1 — Apa itu Soft Fork dan Hard Fork?
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-13-3" data-sb="sb-13-3">
+            13.3 — Jenis-jenis Soft Fork Activation →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 13.2 -->
+
+      <!-- ==============================
+           SECTION 13.3 · Jenis-jenis Soft Fork Activation
+      ============================== -->
+      <div class="p-section" id="section-13-3">
+        <div class="p-eyebrow">Bab 13 · 13.3</div>
+        <div class="p-heading">Siapa yang punya kekuatan untuk mengaktifkan perubahan?</div>
+        <div class="p-title">Jenis-jenis Soft Fork Activation</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Soft fork sudah jelas lebih aman dari hard fork. Tapi bagaimana tepatnya sebuah soft fork "diaktifkan"? Ternyata ada beberapa mekanisme aktivasi yang berbeda, masing-masing dengan trade-off yang berbeda antara kecepatan, keamanan, dan siapa yang punya kekuatan untuk mengaktifkan perubahan.</p>
+
+          <p><strong>MASF: Miner Activated Soft Fork</strong></p>
+          <p>MASF adalah mekanisme aktivasi yang paling awal digunakan. Miner menandai block yang mereka buat dengan sinyal dukungan terhadap soft fork tertentu. Sinyal ini ditempatkan di field version pada block header. Kalau threshold tertentu, misalnya 95% dari 2016 block dalam satu difficulty period, tercapai maka soft fork otomatis diaktifkan. Keunggulan MASF adalah prosesnya terukur dan ada kepastian kapan aktivasi terjadi. Kelemahannya: miner punya veto de facto.</p>
+
+          <p><strong>UASF: User Activated Soft Fork</strong></p>
+          <p>UASF adalah respons terhadap kelemahan MASF. Node ekonomi, pengguna, exchange, dan bisnis yang menggunakan Bitcoin mengaktifkan aturan baru pada tanggal tertentu, terlepas dari apakah miner sudah mensinyalkan atau belum. Ini menciptakan tekanan balik terhadap miner: kalau miner tidak ikut aturan baru, block mereka akan ditolak oleh mayoritas ekonomi jaringan, dan reward mereka tidak akan bernilai. BIP 148 yang mengaktifkan SegWit pada 2017 adalah contoh UASF yang paling terkenal dan berhasil.</p>
+
+          <p><strong>URSF: User Resisted Soft Fork</strong></p>
+          <p>URSF adalah kebalikan UASF. Kalau UASF adalah pengguna yang memaksa aktivasi, URSF adalah pengguna yang memaksa penolakan. Node ekonomi berkoordinasi untuk menolak soft fork yang sudah diaktifkan oleh miner tapi tidak diinginkan oleh komunitas pengguna. URSF belum pernah digunakan secara penuh dalam sejarah Bitcoin, tapi keberadaannya sebagai opsi menunjukkan bahwa pengguna punya kekuatan untuk menolak perubahan yang dipaksakan miner.</p>
+
+          <p><strong>Version Bits: Bagaimana Miner Mensinyalkan</strong></p>
+          <p>Soft fork modern menggunakan mekanisme version bits yang didefinisikan di BIP 9. Block header punya field version 32 bit. Setiap bit bisa digunakan untuk mensinyalkan dukungan terhadap soft fork tertentu. Ini memungkinkan beberapa soft fork berjalan secara paralel tanpa konflik. Sinyal miner bersifat indikatif, bukan mengikat: miner bisa mensinyalkan tanpa benar-benar mengimplementasikan aturan baru.</p>
+
+          <p><strong>Speedy Trial: Evolusi MASF</strong></p>
+          <p>Speedy Trial adalah variasi MASF yang digunakan untuk mengaktifkan Taproot pada 2021. Ide utamanya: berikan window aktivasi yang lebih pendek sekitar 3 bulan dengan threshold 90%. Kalau threshold tercapai dalam window itu, soft fork diaktifkan. Kalau tidak, prosesnya bisa diulang dengan mekanisme berbeda. Speedy Trial berhasil: Taproot diaktifkan pada November 2021 setelah miner mencapai threshold dalam waktu yang relatif singkat, tanpa drama seperti SegWit.</p>
+
+          <div class="p-callout">
+            <p>Pilihan mekanisme aktivasi bukan hanya masalah teknis. Ia mencerminkan siapa yang dianggap paling berhak memutuskan perubahan dalam jaringan terdesentralisasi: miner yang menyediakan komputasi, atau pengguna yang memberikan nilai ekonomi. Sejarah Bitcoin menunjukkan bahwa keduanya saling membutuhkan, dan tidak ada satu pihak yang bisa memaksakan kehendak sepenuhnya.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi interaktif — Mekanisme aktivasi soft fork</div>
+          <div class="b13-s133-desc">
+            Pilih salah satu mekanisme untuk melihat bagaimana prosesnya bekerja, siapa yang punya kekuatan, dan contoh nyatanya dalam sejarah Bitcoin.
+          </div>
+
+          <div class="b13-s133-cards">
+            <div class="b13-s133-card active" data-mech="masf" style="--card-color:#534AB7;--card-bg:#EEEDFE;">
+              <div class="b13-s133-card-tag" style="background:#534AB7;color:#fff;">MASF</div>
+              <div class="b13-s133-card-title">Miner Activated</div>
+              <div class="b13-s133-card-sub">Miner mensinyalkan lewat block header, threshold tercapai lalu aktif</div>
+            </div>
+            <div class="b13-s133-card" data-mech="uasf" style="--card-color:#0F6E56;--card-bg:#EAF3DE;">
+              <div class="b13-s133-card-tag" style="background:#0F6E56;color:#fff;">UASF</div>
+              <div class="b13-s133-card-title">User Activated</div>
+              <div class="b13-s133-card-sub">Node ekonomi mengaktifkan pada tanggal tertentu, miner dipaksa ikut</div>
+            </div>
+            <div class="b13-s133-card" data-mech="ursf" style="--card-color:#A32D2D;--card-bg:#FCEBEB;">
+              <div class="b13-s133-card-tag" style="background:#A32D2D;color:#fff;">URSF</div>
+              <div class="b13-s133-card-title">User Resisted</div>
+              <div class="b13-s133-card-sub">Node ekonomi menolak soft fork yang dipaksakan miner</div>
+            </div>
+            <div class="b13-s133-card" data-mech="speedy" style="--card-color:#854F0B;--card-bg:#FAEEDA;">
+              <div class="b13-s133-card-tag" style="background:#854F0B;color:#fff;">Speedy Trial</div>
+              <div class="b13-s133-card-title">Speedy Trial</div>
+              <div class="b13-s133-card-sub">Variasi MASF dengan window aktivasi pendek, dipakai untuk Taproot</div>
+            </div>
+          </div>
+
+          <div class="b13-s133-detail" id="b13-s133-detail"></div>
+
+          <div class="b13-lab">
+            <div class="b13-lab-head">Coba sendiri: berapa banyak miner yang harus setuju?</div>
+            <div class="b13-lab-body">
+              <div class="b13-lab-ctrl">
+                <label>Miner yang mensinyalkan</label>
+                <input type="range" id="b13-s133-sig" min="0" max="100" step="1" value="70">
+                <span class="b13-lab-ctrl-val" id="b13-s133-sig-val">70%</span>
+              </div>
+              <div class="b13-lab-scale"><span>0%</span><span>50%</span><span>90%</span><span>95%</span><span>100%</span></div>
+              <div class="b13-lab-rows" id="b13-s133-rows"></div>
+              <div class="b13-lab-note" id="b13-s133-lab-note"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-13-2" data-sb="sb-13-2">
+            ← 13.2 — BIP: Bagaimana Ide Masuk ke Bitcoin
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-13-4" data-sb="sb-13-4">
+            13.4 — SegWit: Soft Fork Paling Kontroversial →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 13.3 -->
+
+      <!-- ==============================
+           SECTION 13.4 · SegWit — Soft Fork Paling Kontroversial
+      ============================== -->
+      <div class="p-section" id="section-13-4">
+        <div class="p-eyebrow">Bab 13 · 13.4</div>
+        <div class="p-heading">Dua tahun perang politik yang mengubah cara Bitcoin membuat keputusan</div>
+        <div class="p-title">SegWit — Soft Fork Paling Kontroversial</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Kalau ada satu momen dalam sejarah Bitcoin yang benar-benar menguji apakah jaringan terdesentralisasi bisa membuat keputusan sulit tanpa otoritas pusat, itu adalah perdebatan SegWit. Berlangsung dari 2015 hingga 2017, ini bukan hanya debat teknis, ini adalah perang politik yang melibatkan developer, miner, exchange, pengguna, dan bisnis Bitcoin di seluruh dunia.</p>
+
+          <p><strong>Apa itu SegWit?</strong></p>
+          <p>SegWit, kependekan dari Segregated Witness, adalah soft fork yang memisahkan data tanda tangan (witness data) dari data transaksi utama. Secara teknis, ini memindahkan witness data ke bagian terpisah dari block yang tidak dihitung dalam batasan ukuran block 1 MB. Hasilnya: transaksi dengan SegWit menjadi lebih kecil secara efektif, meningkatkan kapasitas jaringan tanpa mengubah batas 1 MB secara eksplisit. Selain kapasitas, SegWit juga memperbaiki transaction malleability, kelemahan yang menjadi salah satu hambatan utama implementasi Lightning Network.</p>
+
+          <p><strong>Mengapa kontroversial?</strong></p>
+          <p>Perdebatan dimulai bukan karena SegWit sendiri, tapi karena konteks yang lebih besar: scaling debate Bitcoin. Sebagian komunitas, terutama beberapa miner dan bisnis besar, menginginkan solusi yang lebih sederhana: langsung naikkan batas block dari 1 MB menjadi 2 MB atau lebih melalui hard fork. Mereka melihat SegWit sebagai solusi yang terlalu rumit dan tidak cukup. Di sisi lain, core developer dan sebagian besar pengguna menginginkan SegWit karena selain kapasitas, ia membawa perbaikan penting lainnya dan bisa dilakukan tanpa hard fork yang berisiko.</p>
+
+          <p><strong>New York Agreement dan UASF</strong></p>
+          <p>Pada Mei 2017, sekelompok besar bisnis dan miner Bitcoin menandatangani New York Agreement, berjanji untuk mengaktifkan SegWit sekaligus menaikkan batas block menjadi 2 MB melalui hard fork, yang dikenal sebagai SegWit2x. Tapi banyak developer Bitcoin Core dan pengguna menolak bagian hard fork ini. Ketika miner tampak tidak akan mengaktifkan SegWit tanpa jaminan hard fork, komunitas pengguna meluncurkan BIP 148: UASF. Node yang menjalankan BIP 148 akan menolak block miner yang tidak mendukung SegWit mulai 1 Agustus 2017.</p>
+
+          <p><strong>Hasilnya</strong></p>
+          <p>Tekanan berhasil. Miner mengaktifkan SegWit sebelum deadline 1 Agustus. SegWit resmi aktif pada 24 Agustus 2017 di block 481.824. Bagian hard fork dari New York Agreement, SegWit2x, akhirnya dibatalkan pada November 2017 karena tidak cukup dukungan. Sebagian komunitas yang menginginkan block besar memisahkan diri membuat Bitcoin Cash melalui hard fork pada 1 Agustus 2017.</p>
+
+          <div class="p-callout">
+            <p>SegWit mengajarkan beberapa pelajaran penting tentang governance Bitcoin: miner tidak punya veto absolut, pengguna dan node ekonomi punya kekuatan nyata melalui UASF, dan konsensus di Bitcoin tidak bisa dipaksakan oleh satu pihak manapun. Tapi prosesnya juga menunjukkan betapa sulitnya membuat keputusan kolektif tanpa otoritas pusat.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Timeline — Perdebatan SegWit 2015 hingga 2017</div>
+          <div class="b13-s134-desc">
+            Klik tiap event untuk melihat detail. Filter berdasarkan pihak yang terlibat.
+          </div>
+
+          <div class="b13-s134-filters">
+            <div class="b13-s134-filter s134-act" data-f="all">Semua</div>
+            <div class="b13-s134-filter" data-f="dev">Developer</div>
+            <div class="b13-s134-filter" data-f="miner">Miner</div>
+            <div class="b13-s134-filter" data-f="community">Komunitas</div>
+            <div class="b13-s134-filter" data-f="result">Hasil</div>
+          </div>
+
+          <div class="b13-s134-legend">
+            <div class="b13-s134-leg"><div class="b13-s134-leg-dot" style="background:#0F6E56;"></div>Developer</div>
+            <div class="b13-s134-leg"><div class="b13-s134-leg-dot" style="background:#854F0B;"></div>Miner</div>
+            <div class="b13-s134-leg"><div class="b13-s134-leg-dot" style="background:#534AB7;"></div>Komunitas</div>
+            <div class="b13-s134-leg"><div class="b13-s134-leg-dot" style="background:#1A1A18;"></div>Hasil</div>
+            <div class="b13-s134-leg"><div class="b13-s134-leg-dot" style="background:#A32D2D;"></div>Split</div>
+          </div>
+
+          <div class="b13-s134-timeline">
+
+            <div class="b13-s134-event" data-t="dev">
+              <div class="b13-s134-date">Des 2015</div>
+              <div class="b13-s134-dot-wrap"><div class="b13-s134-dot s134-dev"></div></div>
+              <div class="b13-s134-card">
+                <div class="b13-s134-tag s134-dev">Developer</div>
+                <div class="b13-s134-title">BIP 141 diajukan — SegWit pertama kali diperkenalkan</div>
+                <div class="b13-s134-summary">Pieter Wuille, Eric Lombrozo, dan Johnson Lau mengajukan proposal SegWit sebagai soft fork.</div>
+                <div class="b13-s134-detail">SegWit memisahkan witness data dari transaksi utama. Ini memperbaiki transaction malleability dan meningkatkan kapasitas jaringan secara efektif tanpa mengubah batas 1 MB secara eksplisit. Proposal ini diterima dengan baik oleh developer tapi langsung memicu perdebatan di komunitas yang lebih luas.</div>
+              </div>
+            </div>
+
+            <div class="b13-s134-event" data-t="community">
+              <div class="b13-s134-date">2016</div>
+              <div class="b13-s134-dot-wrap"><div class="b13-s134-dot s134-community"></div></div>
+              <div class="b13-s134-card">
+                <div class="b13-s134-tag s134-community">Komunitas</div>
+                <div class="b13-s134-title">Scaling debate memanas — block size war dimulai</div>
+                <div class="b13-s134-summary">Sebagian komunitas menginginkan solusi lebih sederhana: naikkan batas block langsung melalui hard fork.</div>
+                <div class="b13-s134-detail">Dua kubu terbentuk. Kubu big blocks dipimpin miner besar dan bisnis seperti Roger Ver, menginginkan hard fork menaikkan batas block. Kubu small blocks bersama Bitcoin Core developer menginginkan SegWit sebagai solusi yang lebih hati-hati. Perdebatan berlangsung sengit di forum, media sosial, dan konferensi.</div>
+              </div>
+            </div>
+
+            <div class="b13-s134-event" data-t="miner">
+              <div class="b13-s134-date">2016-2017</div>
+              <div class="b13-s134-dot-wrap"><div class="b13-s134-dot s134-miner"></div></div>
+              <div class="b13-s134-card">
+                <div class="b13-s134-tag s134-miner">Miner</div>
+                <div class="b13-s134-title">Miner tidak mensinyalkan SegWit — deadlock</div>
+                <div class="b13-s134-summary">Meskipun SegWit sudah siap secara teknis, sebagian besar miner menolak mensinyalkan dukungan.</div>
+                <div class="b13-s134-detail">Miner besar, terutama yang berbasis di China, menolak mensinyalkan SegWit tanpa jaminan bahwa batas block juga akan dinaikkan. Ini menciptakan deadlock: developer tidak mau hard fork, miner tidak mau SegWit tanpa hard fork. Fee transaksi mulai melonjak karena kapasitas jaringan penuh.</div>
+              </div>
+            </div>
+
+            <div class="b13-s134-event" data-t="community">
+              <div class="b13-s134-date">Mar 2017</div>
+              <div class="b13-s134-dot-wrap"><div class="b13-s134-dot s134-community"></div></div>
+              <div class="b13-s134-card">
+                <div class="b13-s134-tag s134-community">Komunitas</div>
+                <div class="b13-s134-title">BIP 148 diajukan — UASF sebagai senjata pengguna</div>
+                <div class="b13-s134-summary">Shaolin Fry mengajukan BIP 148: node yang mendukung akan menolak block miner yang tidak mendukung SegWit mulai 1 Agustus 2017.</div>
+                <div class="b13-s134-detail">BIP 148 adalah gerakan dari bawah, bukan dari developer inti. Pengguna, exchange, dan bisnis yang lelah dengan deadlock mengancam untuk menggunakan kekuatan ekonomi mereka. Jika cukup banyak node menjalankan BIP 148, miner yang tidak mensinyalkan SegWit akan menghasilkan block yang ditolak oleh jaringan ekonomi.</div>
+              </div>
+            </div>
+
+            <div class="b13-s134-event" data-t="community">
+              <div class="b13-s134-date">Mei 2017</div>
+              <div class="b13-s134-dot-wrap"><div class="b13-s134-dot s134-community"></div></div>
+              <div class="b13-s134-card">
+                <div class="b13-s134-tag s134-community">Komunitas</div>
+                <div class="b13-s134-title">New York Agreement — kompromi yang tidak bertahan</div>
+                <div class="b13-s134-summary">Lebih dari 50 perusahaan Bitcoin menandatangani perjanjian: aktifkan SegWit, lalu naikkan block size menjadi 2 MB (SegWit2x).</div>
+                <div class="b13-s134-detail">New York Agreement ditandatangani oleh mayoritas hash rate dan banyak bisnis Bitcoin. Rencananya: aktifkan SegWit via MASF, lalu dalam 3 bulan lakukan hard fork menaikkan block menjadi 2 MB. Developer Bitcoin Core menolak terlibat karena menentang bagian hard fork. Perjanjian ini menciptakan ilusi konsensus yang rapuh.</div>
+              </div>
+            </div>
+
+            <div class="b13-s134-event" data-t="miner">
+              <div class="b13-s134-date">Jul 2017</div>
+              <div class="b13-s134-dot-wrap"><div class="b13-s134-dot s134-miner"></div></div>
+              <div class="b13-s134-card">
+                <div class="b13-s134-tag s134-miner">Miner</div>
+                <div class="b13-s134-title">Miner mulai mensinyalkan SegWit — tekanan UASF berhasil</div>
+                <div class="b13-s134-summary">Di bawah ancaman BIP 148, miner mulai mengaktifkan sinyal SegWit sebelum deadline 1 Agustus.</div>
+                <div class="b13-s134-detail">Dalam minggu-minggu menjelang 1 Agustus, persentase sinyal SegWit dari miner melonjak drastis. Bukan karena keyakinan, tapi karena kalkulasi ekonomi: menghasilkan block yang mungkin ditolak jaringan ekonomi adalah risiko yang tidak worth it. Momen ini membuktikan bahwa miner tidak punya veto absolut.</div>
+              </div>
+            </div>
+
+            <div class="b13-s134-event" data-t="split">
+              <div class="b13-s134-date">1 Agt 2017</div>
+              <div class="b13-s134-dot-wrap"><div class="b13-s134-dot s134-split"></div></div>
+              <div class="b13-s134-card">
+                <div class="b13-s134-tag s134-split">Split</div>
+                <div class="b13-s134-title">Bitcoin Cash lahir — hard fork oleh kubu big blocks</div>
+                <div class="b13-s134-summary">Komunitas yang menginginkan block besar memisahkan diri dan membuat Bitcoin Cash dengan batas block 8 MB.</div>
+                <div class="b13-s134-detail">Pada block 478.558, Bitcoin Cash memisahkan diri dari Bitcoin. Ini adalah hard fork nyata pertama yang signifikan dalam sejarah Bitcoin. Pemegang Bitcoin otomatis mendapat jumlah BCH yang sama. Bitcoin Cash menggunakan replay protection untuk memastikan transaksi di satu chain tidak valid di chain lain.</div>
+              </div>
+            </div>
+
+            <div class="b13-s134-event" data-t="result">
+              <div class="b13-s134-date">24 Agt 2017</div>
+              <div class="b13-s134-dot-wrap"><div class="b13-s134-dot s134-result"></div></div>
+              <div class="b13-s134-card">
+                <div class="b13-s134-tag s134-result">Hasil</div>
+                <div class="b13-s134-title">SegWit resmi aktif di Bitcoin — block 481.824</div>
+                <div class="b13-s134-summary">Setelah hampir dua tahun perdebatan, SegWit akhirnya diaktifkan di jaringan Bitcoin utama.</div>
+                <div class="b13-s134-detail">SegWit lock-in terjadi pada 8 Agustus 2017 setelah threshold tercapai, dan aktif penuh pada 24 Agustus di block 481.824. Ini membuka jalan untuk Lightning Network dan perbaikan teknis lainnya. Kapasitas efektif jaringan meningkat dan transaction malleability terperbaiki.</div>
+              </div>
+            </div>
+
+            <div class="b13-s134-event" data-t="result">
+              <div class="b13-s134-date">Nov 2017</div>
+              <div class="b13-s134-dot-wrap"><div class="b13-s134-dot s134-result"></div></div>
+              <div class="b13-s134-card">
+                <div class="b13-s134-tag s134-result">Hasil</div>
+                <div class="b13-s134-title">SegWit2x dibatalkan — hard fork tidak jadi terjadi</div>
+                <div class="b13-s134-summary">Bagian hard fork dari New York Agreement resmi dibatalkan karena tidak cukup dukungan komunitas.</div>
+                <div class="b13-s134-detail">Para penandatangan New York Agreement mengumumkan pembatalan SegWit2x pada 8 November 2017. Alasannya: tidak cukup dukungan untuk membagi komunitas. Ini mengakhiri babak paling dramatis dalam sejarah Bitcoin. SegWit berjalan tanpa hard fork, persis seperti yang diinginkan developer Bitcoin Core dari awal.</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-13-3" data-sb="sb-13-3">
+            ← 13.3 — Jenis-jenis Soft Fork Activation
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-13-5" data-sb="sb-13-5">
+            13.5 — Taproot: Soft Fork yang Lebih Mulus →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 13.4 -->
+
+      <!-- ==============================
+           SECTION 13.5 · Taproot — Soft Fork yang Lebih Mulus
+      ============================== -->
+      <div class="p-section" id="section-13-5">
+        <div class="p-eyebrow">Bab 13 · 13.5</div>
+        <div class="p-heading">Dari konsep ke aktivasi dalam 3 tahun, tanpa satu pun drama</div>
+        <div class="p-title">Taproot — Soft Fork yang Lebih Mulus</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Setelah drama SegWit, komunitas Bitcoin belajar banyak tentang bagaimana tidak seharusnya sebuah upgrade besar dilakukan. Taproot adalah kesempatan untuk membuktikan bahwa Bitcoin bisa berubah dengan cara yang lebih dewasa dan terkoordinasi.</p>
+
+          <p><strong>Apa itu Taproot?</strong></p>
+          <p>Taproot adalah paket tiga BIP yang diaktifkan bersamaan pada November 2021: BIP 340 (Schnorr Signatures), BIP 341 (Taproot sendiri), dan BIP 342 (Tapscript). Ketiganya saling terkait dan dirancang untuk bekerja bersama. Schnorr Signatures menggantikan ECDSA sebagai skema tanda tangan Bitcoin. Schnorr lebih efisien secara matematis dan memungkinkan signature aggregation: beberapa tanda tangan dalam satu transaksi bisa digabungkan menjadi satu tanda tangan tunggal. Ini mengurangi ukuran transaksi dan meningkatkan privasi karena transaksi multi-signature terlihat seperti transaksi biasa dari luar.</p>
+
+          <p>Tapscript memperkenalkan cara baru untuk menulis smart contract di Bitcoin menggunakan struktur MAST (Merkelized Alternative Script Trees). Dengan MAST, hanya cabang script yang benar-benar dieksekusi yang perlu diungkapkan di blockchain. Kontrak kompleks dengan banyak kondisi terlihat seperti pembayaran biasa dari luar selama jalur yang dieksekusi adalah "happy path".</p>
+
+          <p><strong>Mengapa lebih mulus dari SegWit?</strong></p>
+          <p>Taproot diaktifkan menggunakan Speedy Trial dengan window aktivasi pendek dan threshold 90%. Tidak ada drama UASF, tidak ada ancaman, tidak ada perpecahan. Miner mencapai threshold dalam waktu hanya 6 minggu setelah window dibuka. Beberapa faktor berkontribusi: semua pihak sudah lelah dengan drama SegWit, tidak ada trade-off yang kontroversial seperti block size debate, manfaat teknis Taproot jelas, dan Speedy Trial memberikan mekanisme yang fair dengan batas waktu yang jelas.</p>
+
+          <p><strong>Apa yang berubah setelah Taproot?</strong></p>
+          <p>Taproot aktif pada block 709.632 di tanggal 14 November 2021. Adopsi awalnya lambat karena wallet dan layanan perlu diupdate untuk mendukung format address baru P2TR (Pay-to-Taproot). Taproot membuka jalan untuk Lightning Network yang lebih privat dengan PTLCs (Point Time Lock Contracts) menggantikan HTLCs, dan untuk ekosistem smart contract yang lebih kaya di Bitcoin.</p>
+
+          <div class="p-callout">
+            <p>Taproot adalah bukti bahwa Bitcoin bisa berubah tanpa konflik besar. Tapi ini bukan berarti governance Bitcoin sudah sempurna. Taproot berhasil karena manfaatnya tidak kontroversial dan tidak ada kepentingan ekonomi besar yang terancam. Upgrade berikutnya yang lebih kontroversial bisa saja membutuhkan proses yang sama sulitnya seperti SegWit.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualisasi — Taproot: sebelum, sesudah, dan aktivasi</div>
+          <div class="b13-s135-desc">
+            Tab pertama: perbandingan transaksi sebelum dan sesudah Taproot. Tab kedua: timeline aktivasi via Speedy Trial dari 2018 hingga November 2021.
+          </div>
+
+          <div class="b13-s135-tabs">
+            <button class="b13-s135-tab s135-act" id="b13-s135-t1">Sebelum vs Sesudah Taproot</button>
+            <button class="b13-s135-tab" id="b13-s135-t2">Aktivasi via Speedy Trial</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b13-s135-pane show" id="b13-s135-p1">
+            <div class="b13-s135-hint">Taproot membawa tiga perubahan besar sekaligus. Dari luar, transaksi yang kompleks sekarang terlihat seperti transaksi biasa.</div>
+
+            <div class="b13-s135-bips">
+              <div class="b13-s135-bip"><div class="b13-s135-bip-num">BIP 340</div><div class="b13-s135-bip-name">Schnorr Signatures</div><div class="b13-s135-bip-desc">Menggantikan ECDSA. Lebih efisien, memungkinkan signature aggregation.</div></div>
+              <div class="b13-s135-bip"><div class="b13-s135-bip-num">BIP 341</div><div class="b13-s135-bip-name">Taproot</div><div class="b13-s135-bip-desc">Script kompleks bisa disembunyikan. Hanya jalur yang dieksekusi yang terlihat.</div></div>
+              <div class="b13-s135-bip"><div class="b13-s135-bip-num">BIP 342</div><div class="b13-s135-bip-name">Tapscript</div><div class="b13-s135-bip-desc">Update bahasa script Bitcoin untuk mendukung Schnorr dan fitur baru.</div></div>
+            </div>
+
+            <div class="b13-s135-grid">
+              <div class="b13-s135-col">
+                <div class="b13-s135-col-head s135-before">
+                  <div class="b13-s135-col-head-title">Sebelum Taproot</div>
+                  <div class="b13-s135-col-head-sub">ECDSA, script terekspos</div>
+                </div>
+                <div class="b13-s135-feature">
+                  <div class="b13-s135-feature-head">Skema tanda tangan</div>
+                  <div class="b13-s135-feature-body">
+                    <div class="b13-s135-feature-val">ECDSA</div>
+                    Setiap input punya tanda tangan sendiri. Transaksi multi-sig dengan 3 penandatangan punya 3 tanda tangan terpisah yang semuanya terlihat di blockchain.
+                  </div>
+                </div>
+                <div class="b13-s135-tx">
+                  <div class="b13-s135-tx-head s135-before">Transaksi 2-of-3 Multi-sig (terlihat di blockchain)</div>
+                  <div class="b13-s135-tx-body">
+                    <div class="b13-s135-tx-row"><div class="b13-s135-tx-label">Script type</div><div class="b13-s135-tx-val s135-bad">P2SH multisig</div></div>
+                    <div class="b13-s135-tx-divider"></div>
+                    <div class="b13-s135-tx-row"><div class="b13-s135-tx-label">Sig #1</div><div class="b13-s135-tx-val s135-bad">3045022100a4...3044</div></div>
+                    <div class="b13-s135-tx-row"><div class="b13-s135-tx-label">Sig #2</div><div class="b13-s135-tx-val s135-bad">3044021f5b...2201</div></div>
+                    <div class="b13-s135-tx-row"><div class="b13-s135-tx-label">Redeem script</div><div class="b13-s135-tx-val s135-bad">OP_2 key1 key2 key3 OP_3</div></div>
+                    <div class="b13-s135-tx-divider"></div>
+                    <div class="b13-s135-tx-row"><div class="b13-s135-tx-label">Privasi</div><div class="b13-s135-tx-val"><span class="b13-s135-badge s135-bad">Terekspos — jelas ini multi-sig</span></div></div>
+                    <div class="b13-s135-tx-row"><div class="b13-s135-tx-label">Ukuran</div><div class="b13-s135-tx-val s135-bad">250-350 vbytes</div></div>
+                  </div>
+                </div>
+                <div class="b13-s135-feature">
+                  <div class="b13-s135-feature-head">Smart contract / kondisi script</div>
+                  <div class="b13-s135-feature-body s135-bad">Semua kondisi script terekspos di blockchain, bahkan kondisi yang tidak digunakan.</div>
+                </div>
+              </div>
+
+              <div class="b13-s135-col">
+                <div class="b13-s135-col-head s135-after">
+                  <div class="b13-s135-col-head-title">Sesudah Taproot</div>
+                  <div class="b13-s135-col-head-sub">Schnorr, script tersembunyi</div>
+                </div>
+                <div class="b13-s135-feature">
+                  <div class="b13-s135-feature-head">Skema tanda tangan</div>
+                  <div class="b13-s135-feature-body">
+                    <div class="b13-s135-feature-val">Schnorr + MuSig2</div>
+                    Signature aggregation: beberapa tanda tangan bisa digabung menjadi satu. Transaksi multi-sig 3 penandatangan terlihat persis seperti transaksi 1 penandatangan biasa.
+                  </div>
+                </div>
+                <div class="b13-s135-tx">
+                  <div class="b13-s135-tx-head s135-after">Transaksi 2-of-3 Multi-sig via Taproot (terlihat di blockchain)</div>
+                  <div class="b13-s135-tx-body">
+                    <div class="b13-s135-tx-row"><div class="b13-s135-tx-label">Script type</div><div class="b13-s135-tx-val s135-good">P2TR (Pay-to-Taproot)</div></div>
+                    <div class="b13-s135-tx-divider"></div>
+                    <div class="b13-s135-tx-row"><div class="b13-s135-tx-label">Signature</div><div class="b13-s135-tx-val s135-good">a1b2c3d4...e5f6 (64 bytes)</div></div>
+                    <div class="b13-s135-tx-row"><div class="b13-s135-tx-label">Jumlah sig</div><div class="b13-s135-tx-val s135-good">1 (diagregasi)</div></div>
+                    <div class="b13-s135-tx-row"><div class="b13-s135-tx-label">Script</div><div class="b13-s135-tx-val s135-neutral">tersembunyi</div></div>
+                    <div class="b13-s135-tx-divider"></div>
+                    <div class="b13-s135-tx-row"><div class="b13-s135-tx-label">Privasi</div><div class="b13-s135-tx-val"><span class="b13-s135-badge s135-good">Terlihat seperti tx biasa</span></div></div>
+                    <div class="b13-s135-tx-row"><div class="b13-s135-tx-label">Ukuran</div><div class="b13-s135-tx-val s135-good">57 vbytes (key-path spend)</div></div>
+                  </div>
+                </div>
+                <div class="b13-s135-feature">
+                  <div class="b13-s135-feature-head">Smart contract / kondisi script</div>
+                  <div class="b13-s135-feature-body s135-good">Dengan MAST, hanya cabang script yang dieksekusi yang perlu diungkapkan. Kondisi lain tetap tersembunyi.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="b13-s135-note s135-info">Kunci insight Taproot: kalau semua pihak setuju (happy path), transaksi apapun terlihat identik dari luar, baik itu pembayaran biasa, 2-of-3 multisig, Lightning channel close, atau smart contract kompleks.</div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b13-s135-pane" id="b13-s135-p2">
+            <div class="b13-s135-hint">Taproot diaktifkan menggunakan Speedy Trial, window aktivasi pendek 3 bulan dengan threshold 90%. Berbeda jauh dari drama 2 tahun SegWit.</div>
+            <div class="b13-s135-tl">
+              <div class="b13-s135-tl-event">
+                <div class="b13-s135-tl-dot" style="background:#534AB7;">1</div>
+                <div class="b13-s135-tl-content">
+                  <div class="b13-s135-tl-date">Jan 2018 — awal</div>
+                  <div class="b13-s135-tl-title">Pieter Wuille mulai mengerjakan Schnorr/Taproot</div>
+                  <div class="b13-s135-tl-desc">Ide dasar Taproot pertama kali dipresentasikan secara informal. Butuh waktu 3 tahun dari konsep ke aktivasi.</div>
+                </div>
+              </div>
+              <div class="b13-s135-tl-event">
+                <div class="b13-s135-tl-dot" style="background:#534AB7;">2</div>
+                <div class="b13-s135-tl-content">
+                  <div class="b13-s135-tl-date">Jan 2020</div>
+                  <div class="b13-s135-tl-title">BIP 340, 341, 342 diajukan secara resmi</div>
+                  <div class="b13-s135-tl-desc">Tiga BIP diajukan sekaligus sebagai paket. Review teknis berlangsung hampir setahun penuh.</div>
+                </div>
+              </div>
+              <div class="b13-s135-tl-event">
+                <div class="b13-s135-tl-dot" style="background:#534AB7;">3</div>
+                <div class="b13-s135-tl-content">
+                  <div class="b13-s135-tl-date">Okt 2020</div>
+                  <div class="b13-s135-tl-title">Bitcoin Core 0.21.1 merilis kode Taproot</div>
+                  <div class="b13-s135-tl-desc">Kode siap diimplementasi tapi mekanisme aktivasi masih didiskusikan. Komunitas sepakat menggunakan Speedy Trial.</div>
+                </div>
+              </div>
+              <div class="b13-s135-tl-event">
+                <div class="b13-s135-tl-dot" style="background:#854F0B;">4</div>
+                <div class="b13-s135-tl-content">
+                  <div class="b13-s135-tl-date">1 Mei 2021</div>
+                  <div class="b13-s135-tl-title">Speedy Trial window dibuka — miner mulai mensinyalkan</div>
+                  <div class="b13-s135-tl-desc">Window aktivasi 3 bulan dimulai. Threshold: 90% dari 2016 block dalam satu retarget period harus mensinyalkan.</div>
+                </div>
+              </div>
+              <div class="b13-s135-tl-event">
+                <div class="b13-s135-tl-dot" style="background:#0F6E56;">5</div>
+                <div class="b13-s135-tl-content">
+                  <div class="b13-s135-tl-date">12 Jun 2021</div>
+                  <div class="b13-s135-tl-title">Threshold 90% tercapai — Taproot lock-in</div>
+                  <div class="b13-s135-tl-desc">Hanya 6 minggu setelah window dibuka, threshold tercapai. Taproot dikunci dan tidak bisa dibatalkan.</div>
+                </div>
+              </div>
+              <div class="b13-s135-tl-event">
+                <div class="b13-s135-tl-dot" style="background:#0F6E56;">6</div>
+                <div class="b13-s135-tl-content">
+                  <div class="b13-s135-tl-date">14 Nov 2021</div>
+                  <div class="b13-s135-tl-title">Taproot aktif — block 709.632</div>
+                  <div class="b13-s135-tl-desc">Taproot resmi aktif di jaringan Bitcoin. Grace period antara lock-in dan aktivasi memberi waktu semua node untuk upgrade.</div>
+                </div>
+              </div>
+            </div>
+            <div class="b13-s135-note s135-good">Taproot: dari window dibuka ke aktivasi kurang dari 6 bulan. Bandingkan dengan SegWit yang butuh hampir 2 tahun penuh perdebatan.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-13-4" data-sb="sb-13-4">
+            ← 13.4 — SegWit: Soft Fork Paling Kontroversial
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-13-6" data-sb="sb-13-6">
+            13.6 — Governance Bitcoin →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 13.5 -->
+
+      <!-- ==============================
+           SECTION 13.6 · Governance Bitcoin — Siapa yang Sebenarnya Memutuskan?
+      ============================== -->
+      <div class="p-section" id="section-13-6">
+        <div class="p-eyebrow">Bab 13 · 13.6</div>
+        <div class="p-heading">Tidak ada yang memutuskan — semua orang mempengaruhi</div>
+        <div class="p-title">Governance Bitcoin — Siapa yang Sebenarnya Memutuskan?</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Setelah mempelajari BIP, soft fork, UASF, SegWit, dan Taproot, pertanyaan yang wajar muncul: siapa sebenarnya yang punya kekuatan untuk mengubah Bitcoin? Jawabannya tidak sederhana, dan itulah yang membuatnya menarik.</p>
+
+          <p><strong>Tidak ada yang memutuskan, semua orang mempengaruhi</strong></p>
+          <p>Bitcoin tidak punya governance formal. Tidak ada voting, tidak ada dewan direksi, tidak ada mekanisme keputusan yang terdefinisi. Tapi perubahan tetap terjadi, melalui proses organik di mana berbagai pihak saling mempengaruhi dan pada akhirnya mencapai konsensus atau tidak.</p>
+
+          <p><strong>Developer</strong></p>
+          <p>Developer yang berkontribusi ke berbagai implementasi Bitcoin seperti Bitcoin Core, Bitcoin Knots, dan lainnya adalah orang-orang yang menulis dan mereview kode yang dijalankan node. Mereka punya pengaruh besar karena merekalah yang mengimplementasikan perubahan teknis. Tapi mereka tidak bisa memaksa siapapun menjalankan kode mereka, dan siapapun bebas fork implementasi tersebut.</p>
+
+          <p><strong>Miner</strong></p>
+          <p>Miner adalah pihak yang memproduksi block dan mengamankan jaringan. Dalam MASF, sinyal miner menentukan kapan soft fork diaktifkan. Tapi kasus UASF SegWit membuktikan bahwa miner bisa dipaksa oleh node ekonomi: block yang ditolak node ekonomi tidak menghasilkan pendapatan nyata.</p>
+
+          <p><strong>Node</strong></p>
+          <p>Node adalah aktor yang paling sering diabaikan tapi paling fundamental dalam governance Bitcoin. Ada dua jenis: node independen yang dijalankan oleh individu, komunitas, atau organisasi tanpa motif ekonomi langsung, dan node ekonomi yang dijalankan oleh exchange, wallet, dan bisnis. Yang penting: satu node rumahan punya bobot yang sama dengan satu exchange besar dalam hal validasi dan penegakan aturan konsensus. Merekalah penjaga aturan yang sesungguhnya.</p>
+
+          <p><strong>Pengguna dan Pelaku Ekonomi</strong></p>
+          <p>Pengguna biasa adalah yang paling sulit diukur pengaruhnya, tapi dalam jangka panjang mereka yang menentukan nilai Bitcoin. Pelaku ekonomi dan bisnis seperti exchange, merchant, payment processor, dan institusi punya kekuatan ekonomi yang signifikan: exchange bisa menentukan chain mana yang mendapat likuiditas, merchant yang menerima Bitcoin memberi nilai nyata pada jaringan. Tapi mereka juga punya keterbatasan, bergantung pada kepercayaan pengguna dan tidak bisa memaksa perubahan protokol secara langsung.</p>
+
+          <p><strong>Mengapa tidak ada yang bisa memaksa?</strong></p>
+          <p>Karena Bitcoin bersifat opt-in. Setiap node bebas memilih software apa yang dijalankan. Kalau suatu implementasi merilis versi baru yang tidak disukai komunitas, orang bisa terus menjalankan versi lama atau fork implementasinya. Proses governance yang tidak formal ini punya kelebihan: tidak ada single point of failure dan tidak ada yang bisa membajak Bitcoin untuk kepentingan sendiri. Kekurangannya: prosesnya sangat lambat dan perdebatan bisa berlangsung bertahun-tahun.</p>
+
+          <div class="p-callout">
+            <p>Governance Bitcoin bukan demokrasi, bukan otokrasi, dan bukan anarki. Ia adalah sistem di mana kekuatan tersebar di antara banyak pihak yang tidak saling mempercayai, tapi terpaksa berkoordinasi karena mereka semua bergantung pada jaringan yang sama. Ini mungkin adalah eksperimen governance yang paling menarik di era digital.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Peta Kekuatan — Governance Bitcoin</div>
+          <div class="b13-s136-desc">
+            Tidak ada satu pihak yang punya otoritas absolut. Klik tiap aktor untuk melihat kekuatan, keterbatasan, dan contoh nyata pengaruh mereka dalam sejarah Bitcoin.
+          </div>
+
+          <div class="b13-s136-actors">
+            <div class="b13-s136-actor active" data-actor="dev" style="--ac:#534AB7;--ab:#EEEDFE;">
+              <div class="b13-s136-actor-top"><div class="b13-s136-actor-icon">💻</div><div><div class="b13-s136-actor-name">Developer</div><div class="b13-s136-actor-sub">Berbagai implementasi Bitcoin</div></div></div>
+              <div class="b13-s136-actor-bar-wrap"><div class="b13-s136-actor-bar-bg"><div class="b13-s136-actor-bar-fill" style="width:70%;background:#534AB7;"></div></div><div class="b13-s136-actor-bar-label" style="color:#534AB7;">Tinggi</div></div>
+            </div>
+            <div class="b13-s136-actor" data-actor="miner" style="--ac:#854F0B;--ab:#FAEEDA;">
+              <div class="b13-s136-actor-top"><div class="b13-s136-actor-icon">⛏️</div><div><div class="b13-s136-actor-name">Miner</div><div class="b13-s136-actor-sub">Produksi block, sinyal aktivasi</div></div></div>
+              <div class="b13-s136-actor-bar-wrap"><div class="b13-s136-actor-bar-bg"><div class="b13-s136-actor-bar-fill" style="width:60%;background:#854F0B;"></div></div><div class="b13-s136-actor-bar-label" style="color:#854F0B;">Sedang</div></div>
+            </div>
+            <div class="b13-s136-actor" data-actor="node" style="--ac:#0F6E56;--ab:#EAF3DE;">
+              <div class="b13-s136-actor-top"><div class="b13-s136-actor-icon">🖥️</div><div><div class="b13-s136-actor-name">Node</div><div class="b13-s136-actor-sub">Independen dan node ekonomi</div></div></div>
+              <div class="b13-s136-actor-bar-wrap"><div class="b13-s136-actor-bar-bg"><div class="b13-s136-actor-bar-fill" style="width:85%;background:#0F6E56;"></div></div><div class="b13-s136-actor-bar-label" style="color:#0F6E56;">Sangat tinggi</div></div>
+            </div>
+            <div class="b13-s136-actor" data-actor="user" style="--ac:#534AB7;--ab:#EEEDFE;">
+              <div class="b13-s136-actor-top"><div class="b13-s136-actor-icon">👤</div><div><div class="b13-s136-actor-name">Pengguna</div><div class="b13-s136-actor-sub">Penentu nilai jangka panjang</div></div></div>
+              <div class="b13-s136-actor-bar-wrap"><div class="b13-s136-actor-bar-bg"><div class="b13-s136-actor-bar-fill" style="width:50%;background:#534AB7;"></div></div><div class="b13-s136-actor-bar-label" style="color:#534AB7;">Sedang</div></div>
+            </div>
+            <div class="b13-s136-actor" data-actor="biz" style="--ac:#1A1A18;--ab:#F4F4F0;">
+              <div class="b13-s136-actor-top"><div class="b13-s136-actor-icon">🏢</div><div><div class="b13-s136-actor-name">Pelaku Ekonomi dan Bisnis</div><div class="b13-s136-actor-sub">Exchange, merchant, institusi, payment processor</div></div></div>
+              <div class="b13-s136-actor-bar-wrap"><div class="b13-s136-actor-bar-bg"><div class="b13-s136-actor-bar-fill" style="width:65%;background:#1A1A18;"></div></div><div class="b13-s136-actor-bar-label" style="color:#1A1A18;">Tinggi</div></div>
+            </div>
+          </div>
+
+          <div class="b13-s136-detail" id="b13-s136-detail"></div>
+
+          <div class="b13-s136-note">Governance Bitcoin bukan demokrasi, bukan otokrasi, dan bukan anarki. Kekuatan tersebar di antara banyak pihak yang tidak saling mempercayai, tapi terpaksa berkoordinasi karena semua bergantung pada jaringan yang sama.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-13-5" data-sb="sb-13-5">
+            ← 13.5 — Taproot: Soft Fork yang Lebih Mulus
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 13.6 -->
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 16 · BAB 13 -->
+
+

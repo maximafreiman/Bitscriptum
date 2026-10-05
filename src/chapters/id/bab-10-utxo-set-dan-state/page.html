@@ -1,0 +1,652 @@
+<!-- ============================================================
+     PAGE 13 · BAB 10 · UTXO Set dan State Bitcoin
+     |-- 10.1 · Apa itu UTXO Set? [DONE]
+     |-- 10.2 · [LOCKED]
+     |-- 10.3 · [LOCKED]
+     |-- 10.4 · [LOCKED]
+     |-- 10.5 · [LOCKED]
+     |-- 10.6 · [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab10">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b10">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b10">← Daftar Bab</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab10">
+      <div class="sidebar-heading">Bab 10</div>
+      <div class="sidebar-title">UTXO Set dan State Bitcoin</div>
+
+      <div class="sidebar-item active" id="sb-10-1">
+        <div class="sb-num">10.1</div>
+        <div class="sb-label">Apa itu UTXO Set?</div>
+      </div>
+      <div class="sidebar-item" id="sb-10-2">
+        <div class="sb-num">10.2</div>
+        <div class="sb-label">Bagaimana UTXO Set Diperbarui</div>
+      </div>
+      <div class="sidebar-item" id="sb-10-3">
+        <div class="sb-num">10.3</div>
+        <div class="sb-label">UTXO Set dan Verifikasi Transaksi</div>
+      </div>
+      <div class="sidebar-item" id="sb-10-4">
+        <div class="sb-num">10.4</div>
+        <div class="sb-label">Ukuran dan Pertumbuhan UTXO Set</div>
+      </div>
+      <div class="sidebar-item" id="sb-10-5">
+        <div class="sb-num">10.5</div>
+        <div class="sb-label">UTXO Set dan Privacy</div>
+      </div>
+      <div class="sidebar-item" id="sb-10-6">
+        <div class="sb-num">10.6</div>
+        <div class="sb-label">Masa Depan UTXO Set</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab10-content">
+
+      <!-- ==============================
+           SECTION 10.1 · Apa itu UTXO Set?
+      ============================== -->
+      <div class="p-section active" id="section-10-1">
+        <div class="p-eyebrow">Bab 10 · 10.1</div>
+        <div class="p-heading">Bitcoin tidak menyimpan saldo — ia menyimpan output</div>
+        <div class="p-title">Apa itu UTXO Set?</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Bitcoin tidak menyimpan saldo. Ini salah satu hal yang paling sering disalahpahami oleh orang yang baru mengenal Bitcoin. Wallet kamu tidak punya "saldo 0.5 BTC" yang tersimpan di suatu tempat. Yang ada adalah kumpulan output transaksi yang belum dihabiskan, yang jika dijumlahkan, memberikan angka yang kita sebut saldo.</p>
+
+          <p><strong>Rekap UTXO</strong></p>
+          <p>Setiap transaksi Bitcoin mengonsumsi UTXO yang ada sebagai input dan menciptakan UTXO baru sebagai output. UTXO yang sudah dipakai tidak bisa dipakai lagi. UTXO yang baru dibuat menunggu untuk dipakai di transaksi berikutnya. UTXO set adalah kumpulan semua UTXO yang saat ini ada di seluruh jaringan Bitcoin, yaitu semua output yang sudah dibuat tapi belum dihabiskan. Ini adalah "state" Bitcoin saat ini.</p>
+
+          <p><strong>Mengapa UTXO set penting?</strong></p>
+          <p>UTXO set adalah sumber kebenaran tunggal tentang kepemilikan bitcoin. Setiap full node menyimpan salinan lengkap UTXO set dan memperbarui setiap kali ada block baru. Saat kamu mengirim transaksi, node memverifikasi bahwa UTXO yang kamu klaim sebagai input benar-benar ada di UTXO set dan belum dihabiskan. Ini adalah mekanisme yang mencegah double spend: kalau kamu mencoba menggunakan UTXO yang sama dua kali, node akan mendeteksi bahwa UTXO itu sudah tidak ada di UTXO set setelah transaksi pertama dikonfirmasi.</p>
+
+          <p><strong>Ukuran UTXO set</strong></p>
+          <p>UTXO set jauh lebih kecil dari blockchain penuh. Blockchain menyimpan seluruh sejarah semua transaksi sejak genesis block, yang per pertengahan 2026 sudah lebih dari 700 GB. UTXO set hanya menyimpan output yang belum dihabiskan, yang ukurannya sekitar 11 GB. Ini yang memungkinkan full node bisa memverifikasi transaksi baru dengan sangat cepat tanpa perlu membaca seluruh blockchain.</p>
+
+          <p><strong>UTXO set dan memori</strong></p>
+          <p>Full node menyimpan UTXO set di memori atau database yang dioptimalkan untuk akses cepat. Setiap kali block baru masuk, node menghapus UTXO yang dihabiskan dan menambahkan UTXO baru. Operasi ini harus sangat efisien karena terjadi setiap 10 menit.</p>
+
+          <div class="p-callout">
+            <p>UTXO set adalah salah satu desain paling elegan di Bitcoin. Dengan hanya menyimpan "apa yang ada sekarang" bukan "semua yang pernah terjadi", Bitcoin memungkinkan verifikasi transaksi yang cepat dan efisien tanpa harus membaca seluruh sejarah blockchain.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi — UTXO Set</div>
+          <div class="b10-s101-desc">
+            Lihat bagaimana UTXO dikonsumsi dan UTXO baru dibuat saat transaksi terjadi. UTXO set selalu mencerminkan state terkini kepemilikan bitcoin.
+          </div>
+
+          <div class="b10-s101-top">
+            <button class="b10-s101-btn-primary" id="b10-s101-send">Kirim Transaksi</button>
+            <button class="b10-s101-btn-sec" id="b10-s101-reset">Reset</button>
+          </div>
+
+          <div class="b10-s101-stat-row">
+            <div class="b10-s101-stat count" id="b10-s101-count">UTXO: 8 output</div>
+            <div class="b10-s101-stat size" id="b10-s101-size">Total: 4.850 BTC</div>
+          </div>
+
+          <div class="b10-s101-label">UTXO Set — semua output yang belum dihabiskan</div>
+          <div class="b10-s101-grid" id="b10-s101-grid"></div>
+
+          <div class="b10-s101-tx" id="b10-s101-tx" style="display:none;">
+            <div class="b10-s101-tx-head">Transaksi yang sedang diproses</div>
+            <div class="b10-s101-tx-body">
+              <div class="b10-s101-tx-col">
+                <div class="b10-s101-tx-col-label">Input (dikonsumsi)</div>
+                <div class="b10-s101-tx-item inp">utxo_a1: 1.500 BTC</div>
+                <div class="b10-s101-tx-item inp">utxo_a2: 0.300 BTC</div>
+              </div>
+              <div class="b10-s101-tx-arrow">→</div>
+              <div class="b10-s101-tx-col">
+                <div class="b10-s101-tx-col-label">Output (dibuat baru)</div>
+                <div class="b10-s101-tx-item out">Bob: 1.200 BTC</div>
+                <div class="b10-s101-tx-item out">Alice (kembalian): 0.585 BTC</div>
+                <div class="b10-s101-tx-item fee">Fee miner: 0.015 BTC</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b10-s101-note idle-note" id="b10-s101-note">Klik "Kirim Transaksi" untuk melihat bagaimana UTXO dikonsumsi dan UTXO baru dibuat. UTXO set selalu mencerminkan state terkini kepemilikan bitcoin.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-10-2" data-sb="sb-10-2">
+            10.2 — Bagaimana UTXO Set Diperbarui →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 10.1 -->
+
+      <!-- ==============================
+           SECTION 10.2 · Bagaimana UTXO Set Diperbarui
+      ============================== -->
+      <div class="p-section" id="section-10-2">
+        <div class="p-eyebrow">Bab 10 · 10.2</div>
+        <div class="p-heading">Setiap block mengubah state Bitcoin secara deterministik</div>
+        <div class="p-title">Bagaimana UTXO Set Diperbarui</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Setiap kali block baru ditambahkan ke blockchain, UTXO set harus diperbarui. Ini adalah operasi yang terjadi ribuan kali sehari di setiap full node di seluruh jaringan, dan harus berjalan dengan sangat efisien.</p>
+
+          <p><strong>Dua operasi dasar</strong></p>
+          <p>Ada dua operasi yang terjadi saat UTXO set diperbarui: penghapusan dan penambahan. Setiap transaksi dalam block mengonsumsi beberapa UTXO sebagai input, dan UTXO-UTXO ini dihapus dari set. Setiap transaksi juga menciptakan UTXO baru sebagai output, dan UTXO-UTXO ini ditambahkan ke set. Setelah semua transaksi dalam block diproses, UTXO set mencerminkan state Bitcoin yang baru.</p>
+
+          <p><strong>Urutan pemrosesan</strong></p>
+          <p>Urutan pemrosesan dalam sebuah block penting. Transaksi pertama dalam setiap block selalu coinbase transaction: transaksi khusus yang tidak punya input dan hanya punya output. Ini adalah cara miner mendapatkan block reward plus semua fee transaksi dalam block tersebut. UTXO dari coinbase transaction ditambahkan ke UTXO set, tapi ada aturan khusus: UTXO coinbase tidak bisa dihabiskan selama 100 block ke depan. Ini disebut coinbase maturity. Transaksi-transaksi berikutnya diproses secara berurutan. Kalau transaksi B menggunakan output transaksi A dalam block yang sama, A harus muncul lebih dulu. Ini disebut topological ordering.</p>
+
+          <p><strong>Rollback saat reorganisasi</strong></p>
+          <p>Kadang terjadi reorganisasi chain: node menemukan chain yang lebih panjang yang berbeda dari chain yang sedang diikutinya. Saat ini terjadi, node harus melakukan rollback UTXO set ke state sebelumnya, lalu menerapkan block-block dari chain baru. Ini adalah operasi yang kompleks dan membutuhkan node untuk menyimpan informasi tentang perubahan UTXO set di setiap block agar bisa di-undo.</p>
+
+          <p><strong>Efisiensi database</strong></p>
+          <p>UTXO set disimpan dalam database key-value yang dioptimalkan untuk lookup cepat. Kuncinya adalah pasangan (txid, output index) yang secara unik mengidentifikasi setiap UTXO. Nilainya adalah data UTXO: jumlah satoshi, script yang harus dipenuhi untuk membelanjakannya, dan block height saat UTXO dibuat. Lookup ini harus selesai dalam milidetik karena node harus memverifikasi setiap input dari setiap transaksi yang masuk.</p>
+
+          <div class="p-callout">
+            <p>Proses pembaruan UTXO set adalah jantung dari operasi full node. Setiap node di seluruh dunia melakukan operasi yang sama persis saat memproses block yang sama, dan hasilnya selalu identik. Dari state yang sama, input yang sama selalu menghasilkan state yang sama.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi — Pembaruan UTXO set per block</div>
+          <div class="b10-s102-desc">
+            Proses block #840,512 dan lihat bagaimana setiap transaksi memperbarui UTXO set secara berurutan, dimulai dari coinbase transaction.
+          </div>
+
+          <div class="b10-s102-top">
+            <button class="b10-s102-btn-primary" id="b10-s102-run">Proses Block #840,512</button>
+            <button class="b10-s102-btn-sec" id="b10-s102-rst">Reset</button>
+          </div>
+
+          <div class="b10-s102-stats">
+            <div class="b10-s102-stat s102-before" id="b10-s102-bef">Sebelum: 12 UTXO</div>
+            <div class="b10-s102-stat s102-delta"  id="b10-s102-dlt">Perubahan: -</div>
+            <div class="b10-s102-stat s102-after"  id="b10-s102-aft">Sesudah: 12 UTXO</div>
+          </div>
+
+          <div class="b10-s102-block">
+            <div class="b10-s102-block-head"><span>Block #840,512</span><span>4 transaksi</span></div>
+            <div class="b10-s102-block-body" id="b10-s102-blk"></div>
+          </div>
+
+          <div class="b10-s102-set-label">UTXO Set saat ini</div>
+          <div class="b10-s102-set" id="b10-s102-set"></div>
+
+          <div class="b10-s102-set-label">Log perubahan</div>
+          <div class="b10-s102-log" id="b10-s102-log"></div>
+
+          <div class="b10-s102-note idle-note" id="b10-s102-note">Klik "Proses Block" untuk melihat bagaimana setiap transaksi dalam block memperbarui UTXO set secara berurutan, dimulai dari coinbase transaction.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-10-1" data-sb="sb-10-1">
+            ← 10.1 — Apa itu UTXO Set?
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-10-3" data-sb="sb-10-3">
+            10.3 — UTXO Set dan Verifikasi Transaksi →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 10.2 -->
+
+      <!-- ==============================
+           SECTION 10.3 · UTXO Set dan Verifikasi Transaksi
+      ============================== -->
+      <div class="p-section" id="section-10-3">
+        <div class="p-eyebrow">Bab 10 · 10.3</div>
+        <div class="p-heading">Node memverifikasi transaksi hanya dengan data lokal</div>
+        <div class="p-title">UTXO Set dan Verifikasi Transaksi</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Salah satu fungsi paling kritis dari UTXO set adalah memungkinkan verifikasi transaksi yang cepat dan andal. Saat sebuah transaksi baru tiba di node, node tidak perlu membaca seluruh blockchain untuk memverifikasinya. Ia hanya perlu memeriksa UTXO set.</p>
+
+          <p><strong>Apa yang diverifikasi?</strong></p>
+          <p>Saat node menerima transaksi baru, ada beberapa hal yang diperiksa secara berurutan. Pertama, apakah setiap UTXO yang diklaim sebagai input benar-benar ada di UTXO set? Kalau tidak ada, transaksi ditolak karena mencoba membelanjakan sesuatu yang tidak ada. Kedua, apakah total nilai input lebih besar atau sama dengan total nilai output? Selisihnya adalah fee untuk miner. Ketiga, apakah script locking di setiap UTXO terpenuhi oleh script unlocking yang disediakan pengirim? Ini adalah verifikasi kriptografis bahwa pengirim memang berhak membelanjakan UTXO tersebut.</p>
+
+          <p><strong>Kecepatan verifikasi</strong></p>
+          <p>Karena UTXO set disimpan dalam database yang dioptimalkan untuk lookup cepat, verifikasi ini bisa selesai dalam hitungan milidetik bahkan untuk transaksi dengan banyak input. Node tidak perlu menelusuri seluruh sejarah blockchain, cukup query UTXO set dengan txid dan output index sebagai kunci.</p>
+
+          <p><strong>Double spend detection</strong></p>
+          <p>Double spend adalah upaya menggunakan UTXO yang sama lebih dari sekali. UTXO set membuat ini mustahil untuk transaksi yang sudah dikonfirmasi: begitu UTXO dikonsumsi dan dihapus dari set, ia tidak bisa digunakan lagi. Untuk transaksi unconfirmed di mempool, node memantau apakah ada dua transaksi yang mengklaim UTXO yang sama dan menolak yang datang belakangan.</p>
+
+          <p><strong>Coinbase maturity</strong></p>
+          <p>Ada satu pengecualian khusus dalam verifikasi: coinbase UTXO. UTXO yang berasal dari coinbase transaction tidak bisa dibelanjakan selama 100 block setelah block di mana coinbase itu ada. Ini disebut coinbase maturity. Tujuannya adalah memberi buffer waktu kalau terjadi reorganisasi chain yang menghapus block tersebut. Sebelum 100 block, coinbase UTXO memang ada di UTXO set tapi node menolak transaksi yang mencoba menggunakannya.</p>
+
+          <div class="p-callout">
+            <p>Desain UTXO set yang memungkinkan verifikasi cepat adalah salah satu alasan Bitcoin bisa beroperasi sebagai sistem desentralisasi tanpa server pusat. Setiap node bisa memverifikasi setiap transaksi secara mandiri, hanya dengan data lokal yang jauh lebih kecil dari blockchain penuh.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi — Verifikasi transaksi dan deteksi double spend</div>
+          <div class="b10-s103-desc">
+            Tab pertama: lihat proses verifikasi transaksi yang valid step by step. Tab kedua: lihat bagaimana double spend terdeteksi saat UTXO sudah tidak ada di set.
+          </div>
+
+          <div class="b10-s103-tabs">
+            <button class="b10-s103-tab s103-act" id="b10-s103-t1">Transaksi Valid</button>
+            <button class="b10-s103-tab" id="b10-s103-t2">Double Spend (Ditolak)</button>
+          </div>
+
+          <!-- PANE 1: VALID -->
+          <div class="b10-s103-pane show" id="b10-s103-p1">
+            <div class="b10-s103-tx-card">
+              <div class="b10-s103-tx-head">
+                <span>tx_f1a2b3c4 — masuk ke node</span>
+                <span class="b10-s103-tx-badge s103-pending" id="b10-s103-badge1">menunggu verifikasi</span>
+              </div>
+              <div class="b10-s103-tx-body">
+                <div class="b10-s103-tx-col">
+                  <div class="b10-s103-tx-col-label">Input</div>
+                  <div class="b10-s103-tx-item s103-inp" id="b10-s103-inp1a">u_A1 — 1.500 BTC</div>
+                  <div class="b10-s103-tx-item s103-inp" id="b10-s103-inp1b">u_B1 — 0.750 BTC</div>
+                </div>
+                <div class="b10-s103-tx-arrow">→</div>
+                <div class="b10-s103-tx-col">
+                  <div class="b10-s103-tx-col-label">Output</div>
+                  <div class="b10-s103-tx-item s103-out">Carol: 2.100 BTC</div>
+                  <div class="b10-s103-tx-item s103-out">Alice (kembalian): 0.135 BTC</div>
+                  <div class="b10-s103-tx-item s103-fee">Fee: 0.015 BTC</div>
+                </div>
+              </div>
+            </div>
+            <div class="b10-s103-steps" id="b10-s103-steps1"></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="b10-s103-btn-primary" id="b10-s103-run1">Verifikasi Transaksi</button>
+              <button class="b10-s103-btn-sec" id="b10-s103-rst1">Reset</button>
+            </div>
+            <div class="b10-s103-note s103-idle" id="b10-s103-note1">Klik "Verifikasi Transaksi" untuk melihat bagaimana node memeriksa transaksi ini step by step menggunakan UTXO set.</div>
+          </div>
+
+          <!-- PANE 2: DOUBLE SPEND -->
+          <div class="b10-s103-pane" id="b10-s103-p2">
+            <div class="b10-s103-tx-card">
+              <div class="b10-s103-tx-head">
+                <span>tx_9x8y7z6w — masuk ke node</span>
+                <span class="b10-s103-tx-badge s103-pending" id="b10-s103-badge2">menunggu verifikasi</span>
+              </div>
+              <div class="b10-s103-tx-body">
+                <div class="b10-s103-tx-col">
+                  <div class="b10-s103-tx-col-label">Input</div>
+                  <div class="b10-s103-tx-item s103-inp" id="b10-s103-inp2a">u_A1 — 1.500 BTC</div>
+                  <div class="b10-s103-tx-item s103-inp" id="b10-s103-inp2b">u_C1 — 0.650 BTC</div>
+                </div>
+                <div class="b10-s103-tx-arrow">→</div>
+                <div class="b10-s103-tx-col">
+                  <div class="b10-s103-tx-col-label">Output</div>
+                  <div class="b10-s103-tx-item s103-out">Eve: 2.100 BTC</div>
+                  <div class="b10-s103-tx-item s103-fee">Fee: 0.050 BTC</div>
+                </div>
+              </div>
+            </div>
+            <div class="b10-s103-ctx">Konteks: u_A1 sudah dikonsumsi oleh tx_f1a2b3c4 sebelumnya dan sudah tidak ada di UTXO set.</div>
+            <div class="b10-s103-steps" id="b10-s103-steps2"></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="b10-s103-btn-primary" id="b10-s103-run2">Verifikasi Transaksi</button>
+              <button class="b10-s103-btn-sec" id="b10-s103-rst2">Reset</button>
+            </div>
+            <div class="b10-s103-note s103-idle" id="b10-s103-note2">Klik "Verifikasi Transaksi" untuk melihat bagaimana node mendeteksi double spend saat u_A1 sudah tidak ada di UTXO set.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-10-2" data-sb="sb-10-2">
+            ← 10.2 — Bagaimana UTXO Set Diperbarui
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-10-4" data-sb="sb-10-4">
+            10.4 — Ukuran dan Pertumbuhan UTXO Set →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 10.3 -->
+
+      <!-- ==============================
+           SECTION 10.4 · Ukuran dan Pertumbuhan UTXO Set
+      ============================== -->
+      <div class="p-section" id="section-10-4">
+        <div class="p-eyebrow">Bab 10 · 10.4</div>
+        <div class="p-heading">Setiap UTXO yang tidak perlu adalah beban kecil yang ditanggung seluruh jaringan</div>
+        <div class="p-title">Ukuran dan Pertumbuhan UTXO Set</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>UTXO set bukan angka yang statis. Ia terus berubah seiring aktivitas jaringan. Memahami bagaimana ukuran UTXO set tumbuh dan bagaimana hal itu mempengaruhi node adalah bagian penting dari memahami ekonomi dan teknis Bitcoin jangka panjang.</p>
+
+          <p><strong>Berapa besar UTXO set saat ini?</strong></p>
+          <p>Per pertengahan 2026, UTXO set Bitcoin berisi lebih dari 170 juta UTXO dengan ukuran total sekitar 11 GB. Ini jauh lebih kecil dari blockchain penuh yang sudah lebih dari 700 GB. Tapi tidak berarti UTXO set tidak bisa menjadi masalah di masa depan.</p>
+
+          <p><strong>Apa yang membuat UTXO set bertumbuh?</strong></p>
+          <p>UTXO set bertumbuh saat lebih banyak UTXO dibuat daripada yang dikonsumsi. Ini terjadi dalam beberapa situasi: transaksi yang menghasilkan banyak output kecil tanpa batching yang baik, dust output yang tidak ekonomis untuk dihabiskan karena fee-nya lebih besar dari nilainya sendiri, dan lost coins yaitu UTXO yang private key-nya sudah hilang dan tidak akan pernah dikonsumsi tapi tetap ada di UTXO set selamanya.</p>
+
+          <p><strong>UTXO bloat dan dust</strong></p>
+          <p>Dust adalah UTXO dengan nilai satoshi yang sangat kecil, sering di bawah 546 satoshi untuk transaksi P2PKH. Output ini muncul di UTXO set tapi mungkin tidak pernah bisa dibelanjakan secara ekonomis. Setiap node harus menyimpan entry ini di database mereka. Seiring waktu, dust yang terakumulasi berkontribusi pada pertumbuhan UTXO set yang tidak produktif.</p>
+
+          <p><strong>Mengapa ukuran UTXO set penting?</strong></p>
+          <p>UTXO set harus bisa diakses dengan cepat, idealnya seluruhnya di RAM atau SSD yang cepat. Kalau UTXO set tumbuh terlalu besar, node dengan hardware terbatas akan kesulitan. Ini adalah salah satu alasan kenapa ada tekanan untuk menjaga UTXO set tetap ramping: semakin kecil UTXO set, semakin mudah menjalankan full node, dan semakin kuat desentralisasi jaringan.</p>
+
+          <p><strong>UTXO consolidation</strong></p>
+          <p>Saat fee mempool sedang rendah, pengguna bisa melakukan UTXO consolidation: mengirim banyak UTXO kecil ke dirinya sendiri dalam satu transaksi untuk menggabungkannya menjadi satu UTXO yang lebih besar. Ini mengurangi jumlah UTXO di set dan mempersiapkan diri untuk fee yang lebih efisien di masa depan saat mempool ramai.</p>
+
+          <div class="p-callout">
+            <p>UTXO set yang ramping adalah kepentingan bersama seluruh jaringan. Setiap UTXO yang tidak perlu dibuat adalah beban kecil yang harus ditanggung setiap full node di dunia. Praktik seperti batching transaksi dan UTXO consolidation bukan hanya efisiensi personal, tapi kontribusi nyata terhadap kesehatan jaringan.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualisasi — Pertumbuhan dan konsolidasi UTXO set</div>
+          <div class="b10-s104-desc">
+            Lihat UTXO set dengan berbagai ukuran dan trend pertumbuhannya. Klik "Konsolidasi UTXO Kecil" untuk menggabungkan UTXO kecil dan dust menjadi satu UTXO yang lebih efisien.
+          </div>
+
+          <div class="b10-s104-top">
+            <button class="b10-s104-btn-primary" id="b10-s104-consolidate">Konsolidasi UTXO Kecil</button>
+            <button class="b10-s104-btn-sec" id="b10-s104-reset">Reset</button>
+          </div>
+
+          <div class="b10-s104-stat-row">
+            <div class="b10-s104-stat s104-count" id="b10-s104-count">20 UTXO</div>
+            <div class="b10-s104-stat s104-total" id="b10-s104-total">Total: 12.845 BTC</div>
+            <div class="b10-s104-stat s104-dust"  id="b10-s104-dust">Dust: 6 UTXO</div>
+          </div>
+
+          <div class="b10-s104-legend">
+            <div class="b10-s104-leg"><div class="b10-s104-leg-box" style="width:14px;height:14px;background:#EEEDFE;border:0.5px solid rgba(83,74,183,0.25);border-radius:3px;"></div>Besar (&gt;0.5 BTC)</div>
+            <div class="b10-s104-leg"><div class="b10-s104-leg-box" style="width:12px;height:12px;background:#EAF3DE;border:0.5px solid rgba(15,110,86,0.25);border-radius:3px;"></div>Sedang (0.01-0.5 BTC)</div>
+            <div class="b10-s104-leg"><div class="b10-s104-leg-box" style="width:10px;height:10px;background:#FAEEDA;border:0.5px solid rgba(133,79,11,0.25);border-radius:3px;"></div>Kecil (&lt;0.01 BTC)</div>
+            <div class="b10-s104-leg"><div class="b10-s104-leg-box" style="width:8px;height:8px;background:#FCEBEB;border:0.5px solid rgba(163,45,45,0.2);border-radius:3px;"></div>Dust (&lt;546 sat)</div>
+          </div>
+
+          <div class="b10-s104-grid">
+            <div class="b10-s104-panel">
+              <div class="b10-s104-panel-label">UTXO Set kamu</div>
+              <div class="b10-s104-set" id="b10-s104-set"></div>
+            </div>
+            <div class="b10-s104-panel">
+              <div class="b10-s104-panel-label">Trend ukuran UTXO set jaringan</div>
+              <div class="b10-s104-chart-label">Jumlah UTXO (jutaan)</div>
+              <div class="b10-s104-bars" id="b10-s104-bars"></div>
+            </div>
+          </div>
+
+          <div class="b10-s104-note s104-idle" id="b10-s104-note">UTXO kecil dan dust menambah beban pada setiap full node. Klik "Konsolidasi UTXO Kecil" untuk menggabungkan UTXO kecil menjadi satu saat fee sedang rendah.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-10-3" data-sb="sb-10-3">
+            ← 10.3 — UTXO Set dan Verifikasi Transaksi
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-10-5" data-sb="sb-10-5">
+            10.5 — UTXO Set dan Privacy →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 10.4 -->
+
+      <!-- ==============================
+           SECTION 10.5 · UTXO Set dan Privacy
+      ============================== -->
+      <div class="p-section" id="section-10-5">
+        <div class="p-eyebrow">Bab 10 · 10.5</div>
+        <div class="p-heading">Cara kamu mengelola UTXO bisa mengungkapkan lebih banyak dari yang kamu sadari</div>
+        <div class="p-title">UTXO Set dan Privacy</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>UTXO set bukan hanya soal teknis dan efisiensi. Ada dimensi privasi yang penting untuk dipahami. Karena UTXO set adalah data publik yang bisa dianalisis oleh siapapun, cara kamu mengelola UTXO-mu bisa mengungkapkan lebih banyak informasi tentang keuanganmu daripada yang kamu sadari.</p>
+
+          <p><strong>UTXO sebagai jejak</strong></p>
+          <p>Setiap UTXO punya sejarah yang bisa dilacak. Dari mana asalnya, transaksi apa yang menciptakannya, dan siapa yang mungkin terlibat. Analisis blockchain bisa menghubungkan UTXO-UTXO yang berbeda ke pemilik yang sama dengan beberapa heuristik. Heuristik paling umum adalah common input ownership: kalau dua UTXO digunakan sebagai input dalam transaksi yang sama, analis blockchain berasumsi keduanya dimiliki oleh orang yang sama. Ini masuk akal karena untuk menggunakan UTXO, kamu harus membuktikan kepemilikan dengan menandatangani.</p>
+
+          <p><strong>Change output dan privasi</strong></p>
+          <p>Saat kamu mengirim Bitcoin dan ada kembalian, kembalian itu menciptakan UTXO baru di address-mu. Address mana yang merupakan kembalian dan mana yang merupakan pembayaran seringkali bisa ditebak oleh analis: biasanya kembalian adalah output dengan nilai yang tidak bulat, sementara pembayaran adalah angka yang lebih bulat.</p>
+
+          <p><strong>Address reuse</strong></p>
+          <p>Salah satu kesalahan privasi paling umum adalah menggunakan address yang sama berulang kali. Kalau kamu menerima Bitcoin di address yang sama dua kali, analis bisa menghubungkan kedua penerimaan itu dan mulai membangun gambaran tentang berapa total bitcoin yang kamu miliki. Wallet modern menggunakan HD wallet yang menghasilkan address baru untuk setiap transaksi, tapi tidak semua pengguna mengerti kenapa ini penting.</p>
+
+          <p><strong>UTXO consolidation dan privasi</strong></p>
+          <p>UTXO consolidation yang kita bahas di 10.4 sangat berguna secara teknis, tapi punya trade-off privasi. Saat kamu menggabungkan banyak UTXO dalam satu transaksi, kamu mengonfirmasi kepada analis bahwa semua UTXO tersebut milik orang yang sama. Kalau UTXO-UTXO itu berasal dari sumber yang berbeda, konsolidasi bisa mengungkapkan pola yang tidak ingin kamu ungkapkan.</p>
+
+          <p><strong>CoinJoin sebagai solusi</strong></p>
+          <p>CoinJoin adalah teknik di mana beberapa pengguna menggabungkan transaksi mereka menjadi satu transaksi bersama. Hasilnya adalah transaksi dengan banyak input dari banyak pengguna berbeda dan banyak output dengan nilai yang sama. Analis tidak bisa lagi menggunakan heuristik common input ownership karena input memang berasal dari banyak orang. Ini akan dibahas lebih dalam di Bab 12.</p>
+
+          <div class="p-callout">
+            <p>Privasi di Bitcoin bukan tentang menyembunyikan sesuatu yang ilegal. Ini tentang hak dasar untuk mengelola informasi keuanganmu sendiri. Sama seperti kamu tidak ingin semua orang tahu berapa saldo rekening bankmu, kamu juga berhak memilih siapa yang tahu berapa bitcoin yang kamu miliki dan dari mana asalnya.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualisasi — Analisis UTXO dan heuristik privasi</div>
+          <div class="b10-s105-desc">
+            Tab pertama: lihat bagaimana analis menghubungkan UTXO lewat common input heuristik. Tab kedua: bandingkan address reuse vs address baru setiap transaksi.
+          </div>
+
+          <div class="b10-s105-tabs">
+            <button class="b10-s105-tab s105-act" id="b10-s105-t1">Common Input Heuristik</button>
+            <button class="b10-s105-tab" id="b10-s105-t2">Address Reuse</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b10-s105-pane show" id="b10-s105-p1">
+            <div class="b10-s105-hint">Empat UTXO dari address berbeda. Analis belum tahu siapa pemiliknya. Klik "Kirim Transaksi" untuk menggabungkan dua UTXO sebagai input dan lihat bagaimana analis langsung menghubungkannya.</div>
+            <div class="b10-s105-graph" id="b10-s105-graph">
+              <svg id="b10-s105-svg" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;"></svg>
+            </div>
+            <div class="b10-s105-legend">
+              <div class="b10-s105-leg"><div class="b10-s105-leg-dot" style="background:#F4F4F0;border:1.5px solid rgba(124,58,237,0.2);"></div>Tidak diketahui</div>
+              <div class="b10-s105-leg"><div class="b10-s105-leg-dot" style="background:#FCEBEB;border:1.5px solid rgba(163,45,45,0.4);"></div>Teridentifikasi sama</div>
+              <div class="b10-s105-leg"><div class="b10-s105-leg-dot" style="background:#534AB7;"></div>Transaksi</div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="b10-s105-btn-primary" id="b10-s105-send">Kirim Transaksi (gabung 2 input)</button>
+              <button class="b10-s105-btn-sec" id="b10-s105-rst1">Reset</button>
+            </div>
+            <div class="b10-s105-note s105-idle" id="b10-s105-note1">UTXO A dan B belum diketahui hubungannya. Begitu digunakan bersama dalam satu transaksi, analis blockchain akan langsung menghubungkan keduanya.</div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b10-s105-pane" id="b10-s105-p2">
+            <div class="b10-s105-hint">Bandingkan dua pendekatan: address yang sama digunakan berulang vs address baru setiap transaksi.</div>
+            <div class="b10-s105-addr-list">
+              <div class="b10-s105-addr-section-label">Pendekatan buruk — address dipakai ulang</div>
+              <div class="b10-s105-addr-item s105-reused"><span class="b10-s105-addr-badge s105-reused-badge">reused</span>1A2B3C...xyz<span class="b10-s105-addr-count">menerima 4x — analis tahu total saldo</span></div>
+              <div class="b10-s105-addr-item s105-reused"><span class="b10-s105-addr-badge s105-reused-badge">reused</span>1A2B3C...xyz<span class="b10-s105-addr-count">transaksi ke-2 — terhubung ke yang lain</span></div>
+              <div class="b10-s105-addr-item s105-reused"><span class="b10-s105-addr-badge s105-reused-badge">reused</span>1A2B3C...xyz<span class="b10-s105-addr-count">transaksi ke-3 — pola terlihat jelas</span></div>
+              <div class="b10-s105-addr-item s105-reused"><span class="b10-s105-addr-badge s105-reused-badge">reused</span>1A2B3C...xyz<span class="b10-s105-addr-count">transaksi ke-4 — total: 2.350 BTC terlacak</span></div>
+            </div>
+            <div class="b10-s105-addr-list">
+              <div class="b10-s105-addr-section-label">Pendekatan baik — address baru setiap transaksi (HD wallet)</div>
+              <div class="b10-s105-addr-item s105-fresh"><span class="b10-s105-addr-badge s105-fresh-badge">fresh</span>bc1q...a1b2<span class="b10-s105-addr-count">transaksi ke-1 — address unik</span></div>
+              <div class="b10-s105-addr-item s105-fresh"><span class="b10-s105-addr-badge s105-fresh-badge">fresh</span>bc1q...c3d4<span class="b10-s105-addr-count">transaksi ke-2 — address berbeda</span></div>
+              <div class="b10-s105-addr-item s105-fresh"><span class="b10-s105-addr-badge s105-fresh-badge">fresh</span>bc1q...e5f6<span class="b10-s105-addr-count">transaksi ke-3 — tidak terhubung</span></div>
+              <div class="b10-s105-addr-item s105-fresh"><span class="b10-s105-addr-badge s105-fresh-badge">fresh</span>bc1q...g7h8<span class="b10-s105-addr-count">transaksi ke-4 — analis tidak bisa gabungkan</span></div>
+            </div>
+            <div class="b10-s105-note s105-info">Wallet modern (HD wallet) menghasilkan address baru secara otomatis untuk setiap transaksi. Ini tidak mempersulit pemakaian — wallet tetap melacak semua address milikmu — tapi mempersulit analis untuk menghubungkan transaksimu.</div>
+          </div>
+        
+          <div class="lab-link"><span class="kode">D2</span><span class="isi"><span class="hd">Lanjut ke Laboratorium</span>Berapa banyak Bitcoin yang public key-nya sudah terpapar karena kebiasaan ini, ada angkanya di Laboratorium D2.</span></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-10-4" data-sb="sb-10-4">
+            ← 10.4 — Ukuran dan Pertumbuhan UTXO Set
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-10-6" data-sb="sb-10-6">
+            10.6 — Masa Depan UTXO Set →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 10.5 -->
+
+      <!-- ==============================
+           SECTION 10.6 · Masa Depan UTXO Set
+      ============================== -->
+      <div class="p-section" id="section-10-6">
+        <div class="p-eyebrow">Bab 10 · 10.6</div>
+        <div class="p-heading">Tantangan dan solusi untuk UTXO set jangka panjang</div>
+        <div class="p-title">Masa Depan UTXO Set</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>UTXO set adalah komponen yang akan terus berevolusi seiring Bitcoin berkembang. Ada beberapa tantangan dan solusi yang sedang didiskusikan atau dikembangkan terkait bagaimana UTXO set dikelola di masa depan.</p>
+
+          <p><strong>Pertumbuhan jangka panjang</strong></p>
+          <p>Bayangkan sebuah buku catatan yang harus disalin ulang oleh setiap orang yang ingin memverifikasi transaksi Bitcoin. Semakin tebal buku itu, semakin lama proses penyalinannya dan semakin besar ruang yang dibutuhkan. Itulah analogi UTXO set. Kalau Bitcoin terus diadopsi secara masif, jumlah UTXO akan terus bertumbuh. UTXO set bisa mencapai puluhan gigabyte dalam beberapa dekade. Ini masih jauh lebih kecil dari blockchain penuh, tapi cukup untuk menjadi hambatan bagi node dengan hardware terbatas, terutama di negara berkembang di mana hardware mahal dan koneksi internet lambat.</p>
+
+          <p><strong>Stateless validation dan UTXO commitments</strong></p>
+          <p>Saat ini, untuk memverifikasi sebuah transaksi, node harus punya salinan lengkap UTXO set di komputernya sendiri. Ini seperti kasir yang harus hafal seluruh daftar barang di gudang sebelum bisa melayani pembeli. Ada ide yang sedang didiskusikan bernama stateless validation: daripada node yang menyimpan UTXO set, pengirim transaksilah yang membuktikan bahwa UTXO mereka memang ada dan valid. Bukti ini disebut UTXO commitment, semacam sertifikat kriptografis yang bisa diverifikasi tanpa perlu mengecek database lokal. Analoginya: daripada kasir hafal semua stok, pembeli membawa nota resmi dari gudang yang membuktikan barang itu ada. Kasir cukup verifikasi notanya. Ini masih dalam tahap penelitian dan membutuhkan perubahan signifikan pada protokol Bitcoin.</p>
+
+          <p><strong>Assumevalid dan assumeutxo</strong></p>
+          <p>Bitcoin sudah punya beberapa cara untuk mempercepat node baru bergabung ke jaringan tanpa harus memverifikasi ulang seluruh sejarah dari awal. Assumevalid adalah optimasi pertama: node baru bisa melewati verifikasi tanda tangan kriptografis untuk block-block yang sudah sangat lama. Alasannya masuk akal secara ekonomis: kalau jutaan node sudah sepakat bahwa block-block lama itu valid, hampir tidak mungkin semuanya salah. Assumeutxo adalah optimasi yang lebih baru dan lebih canggih: node baru bisa langsung menggunakan snapshot UTXO set yang sudah diverifikasi sebelumnya, dan mulai beroperasi normal dalam hitungan menit. Sementara itu, di latar belakang, node perlahan-lahan memverifikasi seluruh sejarah blockchain dari awal untuk memastikan snapshot itu memang benar.</p>
+
+          <p><strong>Archival node vs pruned node</strong></p>
+          <p>Tidak semua node menyimpan seluruh sejarah Bitcoin. Archival node menyimpan segalanya dari genesis block hingga hari ini dan inilah yang benar-benar menopang jaringan: tanpa cukup archival node, node baru tidak bisa bergabung karena tidak ada yang menyediakan data historis. Pruned node hanya menyimpan UTXO set dan beberapa ratus block terbaru. Ia bisa memverifikasi transaksi untuk dirinya sendiri, tapi tidak bisa membantu node lain yang baru sync. Pruned node berguna untuk keperluan verifikasi pribadi, bukan pengganti archival node.</p>
+
+          <p><strong>UTXO set sebagai ukuran kesehatan</strong></p>
+          <p>Ukuran dan komposisi UTXO set adalah salah satu indikator kesehatan jaringan yang bisa dipantau. UTXO set yang tumbuh terlalu cepat bisa mengindikasikan spam atau aktivitas yang tidak efisien. UTXO set yang stabil atau bahkan menyusut menunjukkan pengguna yang efisien dalam mengelola output mereka. Dust limit, batas minimum nilai UTXO yang diterima oleh node sebagai bagian dari mempool policy, adalah salah satu mekanisme untuk mencegah UTXO set dibanjiri output yang tidak berguna.</p>
+
+          <div class="p-callout">
+            <p>UTXO set adalah salah satu batasan sumber daya paling nyata dalam Bitcoin. Tidak seperti blockchain yang hanya perlu disimpan, UTXO set harus bisa diakses dan diquery dengan cepat. Ini menciptakan tekanan alami untuk tetap efisien, tekanan yang pada akhirnya menguntungkan seluruh pengguna jaringan.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualisasi — Perbandingan tipe node</div>
+          <div class="b10-s106-desc">
+            Klik tiap card untuk melihat detail storage, kemampuan, dan peran masing-masing tipe node dalam jaringan Bitcoin. Perhatikan perbedaan fundamental antara archival dan pruned node.
+          </div>
+
+          <div class="b10-s106-cards" id="b10-s106-cards">
+
+            <div class="b10-s106-card active" id="b10-s106-c1">
+              <div class="b10-s106-card-head">
+                <div class="b10-s106-icon archival-icon">🗄️</div>
+                <div>
+                  <div class="b10-s106-card-title">Archival Node</div>
+                  <div class="b10-s106-card-sub">Simpan segalanya — tulang punggung jaringan</div>
+                </div>
+                <div class="b10-s106-chevron">›</div>
+              </div>
+              <div class="b10-s106-card-body">
+                <div class="b10-s106-metrics">
+                  <div class="b10-s106-metric"><div class="b10-s106-metric-label">Storage dibutuhkan</div><div class="b10-s106-metric-val s106-bad">600+ GB</div><div class="b10-s106-metric-bar"><div class="b10-s106-metric-bar-fill" style="width:100%;background:#A32D2D;"></div></div></div>
+                  <div class="b10-s106-metric"><div class="b10-s106-metric-label">Waktu sync pertama</div><div class="b10-s106-metric-val s106-bad">2-5 hari</div><div class="b10-s106-metric-bar"><div class="b10-s106-metric-bar-fill" style="width:100%;background:#A32D2D;"></div></div></div>
+                  <div class="b10-s106-metric"><div class="b10-s106-metric-label">Verifikasi mandiri</div><div class="b10-s106-metric-val s106-good">Penuh</div></div>
+                  <div class="b10-s106-metric"><div class="b10-s106-metric-label">Menopang jaringan</div><div class="b10-s106-metric-val s106-good">Ya, penuh</div></div>
+                </div>
+                <div class="b10-s106-caps">
+                  <div class="b10-s106-caps-label">Kemampuan:</div>
+                  <div class="b10-s106-cap"><span class="b10-s106-cap-icon">✓</span>Memverifikasi semua transaksi baru secara mandiri</div>
+                  <div class="b10-s106-cap"><span class="b10-s106-cap-icon">✓</span>Menyediakan data historis ke node lain yang sync</div>
+                  <div class="b10-s106-cap"><span class="b10-s106-cap-icon">✓</span>Membantu node baru bergabung ke jaringan</div>
+                  <div class="b10-s106-cap"><span class="b10-s106-cap-icon">✓</span>Mendukung riset, audit, dan block explorer</div>
+                </div>
+                <div class="b10-s106-desc-box">Archival node menyimpan seluruh sejarah Bitcoin sejak block pertama tahun 2009. Storage besar dan sync lama, tapi ini adalah kontribusi nyata ke jaringan. Tanpa cukup archival node, node baru tidak bisa bergabung dan jaringan melemah.</div>
+              </div>
+            </div>
+
+            <div class="b10-s106-card" id="b10-s106-c2">
+              <div class="b10-s106-card-head">
+                <div class="b10-s106-icon pruned-icon">✂️</div>
+                <div>
+                  <div class="b10-s106-card-title">Pruned Node</div>
+                  <div class="b10-s106-card-sub">Verifikasi mandiri, tapi tidak menopang jaringan</div>
+                </div>
+                <div class="b10-s106-chevron">›</div>
+              </div>
+              <div class="b10-s106-card-body">
+                <div class="b10-s106-metrics">
+                  <div class="b10-s106-metric"><div class="b10-s106-metric-label">Storage dibutuhkan</div><div class="b10-s106-metric-val s106-good">10-15 GB</div><div class="b10-s106-metric-bar"><div class="b10-s106-metric-bar-fill" style="width:22%;background:#0F6E56;"></div></div></div>
+                  <div class="b10-s106-metric"><div class="b10-s106-metric-label">Waktu sync pertama</div><div class="b10-s106-metric-val s106-warn">1-2 hari</div><div class="b10-s106-metric-bar"><div class="b10-s106-metric-bar-fill" style="width:50%;background:#854F0B;"></div></div></div>
+                  <div class="b10-s106-metric"><div class="b10-s106-metric-label">Verifikasi mandiri</div><div class="b10-s106-metric-val s106-warn">Untuk diri sendiri</div></div>
+                  <div class="b10-s106-metric"><div class="b10-s106-metric-label">Menopang jaringan</div><div class="b10-s106-metric-val s106-bad">Tidak</div></div>
+                </div>
+                <div class="b10-s106-caps">
+                  <div class="b10-s106-caps-label">Kemampuan:</div>
+                  <div class="b10-s106-cap"><span class="b10-s106-cap-icon">✓</span>Memverifikasi transaksi baru untuk diri sendiri</div>
+                  <div class="b10-s106-cap"><span class="b10-s106-cap-icon">✓</span>Menyimpan UTXO set lengkap</div>
+                  <div class="b10-s106-cap"><span class="b10-s106-cap-icon">✗</span>Tidak bisa membantu node baru sync ke jaringan</div>
+                  <div class="b10-s106-cap"><span class="b10-s106-cap-icon">✗</span>Tidak menyediakan data historis ke node lain</div>
+                </div>
+                <div class="b10-s106-desc-box">Pruned node memverifikasi seluruh blockchain saat sync awal, tapi kemudian membuang data historis lama. Ia bisa memverifikasi transaksi untuk dirinya sendiri, tapi tidak bisa membantu node lain yang baru bergabung.</div>
+                <div class="b10-s106-warn-box">⚠️ Pruned node bukan pengganti archival node. Kalau semua orang hanya menjalankan pruned node, jaringan akan kesulitan menerima anggota baru karena tidak ada yang bisa menyediakan data historis. Pruned node berguna untuk verifikasi pribadi, bukan untuk menopang jaringan.</div>
+              </div>
+            </div>
+
+            <div class="b10-s106-card" id="b10-s106-c3">
+              <div class="b10-s106-card-head">
+                <div class="b10-s106-icon assume-icon">⚡</div>
+                <div>
+                  <div class="b10-s106-card-title">AssumeUTXO</div>
+                  <div class="b10-s106-card-sub">Optimasi startup — bukan tipe node tersendiri</div>
+                </div>
+                <div class="b10-s106-chevron">›</div>
+              </div>
+              <div class="b10-s106-card-body">
+                <div class="b10-s106-metrics">
+                  <div class="b10-s106-metric"><div class="b10-s106-metric-label">Storage dibutuhkan</div><div class="b10-s106-metric-val s106-good">10-15 GB+</div><div class="b10-s106-metric-bar"><div class="b10-s106-metric-bar-fill" style="width:22%;background:#0F6E56;"></div></div></div>
+                  <div class="b10-s106-metric"><div class="b10-s106-metric-label">Mulai beroperasi</div><div class="b10-s106-metric-val s106-good">Hitungan menit</div><div class="b10-s106-metric-bar"><div class="b10-s106-metric-bar-fill" style="width:5%;background:#0F6E56;"></div></div></div>
+                  <div class="b10-s106-metric"><div class="b10-s106-metric-label">Verifikasi mandiri</div><div class="b10-s106-metric-val s106-warn">Penuh (bertahap)</div></div>
+                  <div class="b10-s106-metric"><div class="b10-s106-metric-label">Menopang jaringan</div><div class="b10-s106-metric-val s106-warn">Tergantung konfigurasi</div></div>
+                </div>
+                <div class="b10-s106-caps">
+                  <div class="b10-s106-caps-label">Cara kerja:</div>
+                  <div class="b10-s106-cap"><span class="b10-s106-cap-icon">✓</span>Langsung bisa verifikasi transaksi baru dari snapshot</div>
+                  <div class="b10-s106-cap"><span class="b10-s106-cap-icon">✓</span>Verifikasi sejarah penuh berjalan di background</div>
+                  <div class="b10-s106-cap"><span class="b10-s106-cap-icon">~</span>Kepercayaan penuh setelah verifikasi background selesai</div>
+                  <div class="b10-s106-cap"><span class="b10-s106-cap-icon">~</span>Bisa dikombinasikan dengan archival atau pruned</div>
+                </div>
+                <div class="b10-s106-desc-box">AssumeUTXO adalah optimasi cara node baru memulai, bukan kategori node yang berdiri sendiri. Node yang menggunakan AssumeUTXO bisa langsung beroperasi dalam menit menggunakan snapshot UTXO set, sambil memverifikasi sejarah penuh di background. Apakah ia menopang jaringan atau tidak tergantung apakah ia archival atau pruned.</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="b10-s106-table-label">Perbandingan ringkas</div>
+          <table class="b10-s106-table">
+            <thead>
+              <tr><th>Tipe</th><th>Storage</th><th>Verifikasi mandiri</th><th>Menopang jaringan</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>🗄️ Archival</td><td class="b10-s106-bad">600+ GB</td><td class="b10-s106-good">Penuh</td><td class="b10-s106-good">Ya</td></tr>
+              <tr><td>✂️ Pruned</td><td class="b10-s106-good">10-15 GB</td><td class="b10-s106-warn">Untuk diri sendiri</td><td class="b10-s106-bad">Tidak</td></tr>
+              <tr><td>⚡ AssumeUTXO</td><td class="b10-s106-good">10-15 GB+</td><td class="b10-s106-warn">Bertahap</td><td class="b10-s106-warn">Tergantung konfigurasi</td></tr>
+            </tbody>
+          </table>
+
+          <div class="b10-s106-callout">Jaringan Bitcoin membutuhkan archival node yang cukup agar node baru bisa bergabung. Kalau semua orang hanya menjalankan pruned node, jaringan akan kesulitan menerima anggota baru. Menjalankan archival node adalah salah satu kontribusi paling nyata yang bisa dilakukan seseorang untuk Bitcoin.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-10-5" data-sb="sb-10-5">
+            ← 10.5 — UTXO Set dan Privacy
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 10.6 -->
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 13 · BAB 10 -->
+
+

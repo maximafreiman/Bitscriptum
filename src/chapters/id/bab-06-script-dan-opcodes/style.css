@@ -1,0 +1,242 @@
+/* ============================================================
+   PAGE 9 · BAB 6 · Bitcoin Script dan Opcodes
+============================================================ */
+
+/* ============================================================
+   PAGE 9 · BAB 6 · 6.1 SIMULATION (Stack Visualizer)
+============================================================ */
+.b06-s61-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.sv-scripts-sim { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:1rem; }
+.sv-btn-sim { padding:6px 14px; font-size:12px; border-radius:99px; border:0.5px solid rgba(124,58,237,0.2); background:transparent; color:#3A3A35; cursor:pointer; font-family:'Sora',sans-serif; transition:all 0.15s; }
+.sv-btn-sim:hover { border-color:#534AB7; color:#534AB7; }
+.sv-btn-sim.active { background:#534AB7; color:#fff; border-color:#534AB7; }
+.sv-display-sim { padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); display:flex; flex-wrap:wrap; gap:6px; align-items:center; min-height:44px; margin-bottom:1rem; }
+.sv-tok-sim { padding:4px 10px; border-radius:4px; font-size:12px; font-family:'Courier Prime',monospace; border:0.5px solid rgba(124,58,237,0.1); background:#FAFAF8; color:#3A3A35; white-space:nowrap; }
+.sv-tok-sim.data-sim { background:#534AB7; color:#fff; border-color:#534AB7; }
+.sv-tok-sim.op-sim { background:#F4F4F0; color:#1A1A18; border-color:rgba(124,58,237,0.2); }
+.sv-tok-sim.current-sim { outline:2px solid #FAC775; outline-offset:2px; }
+.sv-tok-sim.done-sim { opacity:0.25; }
+.sv-main-sim { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:1rem; align-items:start; }
+.sv-stack-wrap-sim { display:flex; flex-direction:column; gap:6px; }
+.sv-stack-lbl-sim { font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:#52524C; font-family:'Sora',sans-serif; }
+.sv-stack-sim { min-height:180px; border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-md); padding:8px; display:flex; flex-direction:column-reverse; gap:6px; background:#FAFAF8; }
+.sv-empty-sim { font-size:12px; color:#52524C; text-align:center; padding:20px 0; font-family:'Sora',sans-serif; }
+.sv-info-sim { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-md); padding:14px; background:#F4F4F0; display:flex; flex-direction:column; gap:8px; }
+.sv-info-lbl-sim { font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:#52524C; font-family:'Sora',sans-serif; }
+.sv-info-op-sim { font-size:13px; font-weight:500; color:#1A1A18; font-family:'Courier Prime',monospace; word-break:break-all; }
+.sv-info-desc-sim { font-size:13px; color:#3A3A35; line-height:1.6; font-family:'Sora',sans-serif; }
+.sv-result-sim { padding:12px 14px; border-radius:var(--border-radius-md); font-size:13px; font-weight:500; text-align:center; display:none; margin-bottom:1rem; font-family:'Sora',sans-serif; }
+.sv-result-sim.show-sim { display:block; }
+.sv-result-sim.ok-sim { background:#3B6D11; color:#fff; }
+.sv-result-sim.fail-sim { background:#A32D2D; color:#fff; }
+.sv-ctrl-sim { display:flex; gap:8px; flex-wrap:wrap; }
+
+/* ============================================================
+   PAGE 9 · BAB 6 · 6.2 SIMULATION (Opcode Stack Demo + Kamus)
+============================================================ */
+.b06-s62-demo-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b06-s62-ref-desc  { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:0; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.od-ops-sim { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:1rem; }
+.od-op-sim { padding:5px 12px; font-size:11px; font-family:'Courier Prime',monospace; border-radius:6px; border:0.5px solid rgba(124,58,237,0.2); background:transparent; color:#3A3A35; cursor:pointer; transition:all 0.15s; }
+.od-op-sim:hover { border-color:#534AB7; color:#534AB7; }
+.od-op-sim.active { background:#534AB7; color:#fff; border-color:#534AB7; }
+.od-info-sim { padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); display:flex; flex-direction:column; gap:4px; margin-bottom:1rem; }
+.od-info-name-sim { font-size:13px; font-weight:500; font-family:'Courier Prime',monospace; color:#1A1A18; }
+.od-info-long-sim { font-size:11px; color:#52524C; font-family:'Sora',sans-serif; }
+.od-info-desc-sim { font-size:12px; color:#3A3A35; line-height:1.6; margin-top:2px; font-family:'Sora',sans-serif; }
+.od-inputs-sim { display:flex; flex-direction:column; gap:8px; margin-bottom:1rem; }
+.od-input-row-sim { display:flex; align-items:center; gap:8px; }
+.od-input-lbl-sim { font-size:11px; color:#3A3A35; min-width:100px; font-family:'Sora',sans-serif; }
+.od-input-sim { flex:1; padding:6px 10px; border:0.5px solid rgba(124,58,237,0.2); border-radius:var(--border-radius-md); font-size:12px; font-family:'Courier Prime',monospace; background:#FAFAF8; color:#1A1A18; }
+.od-stage-sim { display:grid; grid-template-columns:1fr auto 1fr; gap:12px; align-items:center; margin-bottom:1rem; }
+.od-stack-wrap-sim { display:flex; flex-direction:column; gap:6px; }
+.od-stack-lbl-sim { font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:#52524C; font-family:'Sora',sans-serif; }
+.od-stack-sim { min-height:140px; border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-md); padding:8px; display:flex; flex-direction:column-reverse; gap:5px; background:#FAFAF8; }
+.od-arrow-sim { font-size:20px; color:#52524C; text-align:center; }
+.od-empty-sim { font-size:11px; color:#52524C; text-align:center; padding:16px 0; font-family:'Sora',sans-serif; }
+.od-note-sim { padding:8px 12px; border-radius:var(--border-radius-md); font-size:12px; line-height:1.6; font-family:'Sora',sans-serif; }
+.od-note-sim.ok-sim   { background:#EAF3DE; color:#27500A; }
+.od-note-sim.fail-sim { background:#FCEBEB; color:#791F1F; }
+.od-note-sim.warn-sim { background:#FAEEDA; color:#633806; }
+.or-cats-sim { display:flex; gap:6px; flex-wrap:wrap; margin-top:1rem; }
+.or-cat-sim { padding:5px 12px; font-size:11px; border-radius:99px; border:0.5px solid rgba(124,58,237,0.2); background:transparent; color:#3A3A35; cursor:pointer; transition:all 0.15s; font-family:'Sora',sans-serif; }
+.or-cat-sim:hover { border-color:#534AB7; color:#534AB7; }
+.or-cat-sim.active { background:#534AB7; color:#fff; border-color:#534AB7; }
+.or-table-sim { width:100%; border-collapse:collapse; font-size:12px; }
+.or-th-sim { padding:8px 10px; text-align:left; font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:#52524C; border-bottom:0.5px solid rgba(124,58,237,0.1); font-weight:500; white-space:nowrap; font-family:'Sora',sans-serif; }
+.or-td-sim { padding:9px 10px; border-bottom:0.5px solid rgba(124,58,237,0.07); vertical-align:top; }
+.or-tr-sim:last-child .or-td-sim { border-bottom:none; }
+.or-tr-sim:hover .or-td-sim { background:#F4F4F0; }
+.or-name-sim { font-family:'Courier Prime',monospace; font-size:12px; font-weight:500; color:#1A1A18; white-space:nowrap; }
+.or-hex-sim  { font-family:'Courier Prime',monospace; font-size:11px; color:#52524C; white-space:nowrap; }
+.or-long-sim { font-size:11px; color:#3A3A35; white-space:nowrap; font-family:'Sora',sans-serif; }
+.or-desc-sim { font-size:12px; color:#3A3A35; line-height:1.5; font-family:'Sora',sans-serif; }
+.or-reason-sim { font-size:11px; color:#A32D2D; margin-top:3px; line-height:1.4; font-family:'Sora',sans-serif; }
+.or-badge-sim { display:inline-block; padding:2px 7px; border-radius:99px; font-size:10px; font-weight:500; white-space:nowrap; font-family:'Sora',sans-serif; }
+.or-badge-sim.stack    { background:rgba(83,74,183,0.12); color:#534AB7; }
+.or-badge-sim.arith    { background:rgba(59,109,17,0.12); color:#3B6D11; }
+.or-badge-sim.crypto   { background:rgba(163,45,45,0.12); color:#A32D2D; }
+.or-badge-sim.flow     { background:rgba(133,79,11,0.12); color:#854F0B; }
+.or-badge-sim.lock     { background:rgba(20,100,120,0.12); color:#146478; }
+.or-badge-sim.bit      { background:rgba(80,80,80,0.12); color:#3A3A35; }
+.or-badge-sim.disabled { background:rgba(160,160,152,0.15); color:#52524C; }
+
+/* ============================================================
+   PAGE 9 · BAB 6 · 6.3 SIMULATION (P2PKH)
+============================================================ */
+.b06-s63-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b06-s63-script { padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); display:flex; flex-wrap:wrap; gap:6px; align-items:center; min-height:44px; }
+.b06-s63-tok { padding:4px 10px; border-radius:4px; font-size:11px; font-family:'Courier Prime',monospace; white-space:nowrap; }
+.b06-s63-tok.data-tok { background:#534AB7; color:#fff; }
+.b06-s63-tok.op-tok { background:#F4F4F0; color:#1A1A18; border:0.5px solid rgba(124,58,237,0.2); }
+.b06-s63-tok.hash-tok { background:#854F0B; color:#FAEEDA; }
+.b06-s63-tok.current-tok { outline:2px solid #FAC775; outline-offset:2px; }
+.b06-s63-tok.done-tok { opacity:0.25; }
+.b06-s63-main { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:1rem; }
+.b06-s63-stack-wrap { display:flex; flex-direction:column; gap:6px; }
+.b06-s63-stack-lbl { font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:#52524C; font-family:'Sora',sans-serif; }
+.b06-s63-stack { min-height:180px; border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-md); padding:8px; display:flex; flex-direction:column-reverse; gap:5px; background:#FAFAF8; }
+.b06-s63-empty { font-size:11px; color:#52524C; text-align:center; padding:20px 0; font-family:'Sora',sans-serif; }
+.b06-s63-info { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-md); padding:12px 14px; background:#F4F4F0; display:flex; flex-direction:column; gap:6px; }
+.b06-s63-info-lbl { font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:#52524C; font-family:'Sora',sans-serif; }
+.b06-s63-info-op { font-size:13px; font-weight:500; color:#1A1A18; font-family:'Courier Prime',monospace; }
+.b06-s63-info-desc { font-size:12px; color:#3A3A35; line-height:1.6; font-family:'Sora',sans-serif; }
+.b06-s63-result { padding:10px 14px; border-radius:var(--border-radius-md); font-size:12px; font-weight:500; text-align:center; display:none; margin-bottom:1rem; font-family:'Sora',sans-serif; }
+.b06-s63-result.show-ok { display:block; background:#3B6D11; color:#fff; }
+.b06-s63-result.show-fail { display:block; background:#A32D2D; color:#fff; }
+.b06-s63-ctrl { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+.b06-s63-raw-btn { font-size:11px; color:#52524C; background:none; border:0.5px solid rgba(124,58,237,0.2); border-radius:99px; padding:3px 10px; cursor:pointer; font-family:'Sora',sans-serif; }
+.b06-s63-raw-panel { display:none; margin-top:8px; border-radius:var(--border-radius-md); background:#0F0F0E; padding:12px 14px; font-size:11px; font-family:'Courier Prime',monospace; line-height:1.8; overflow-x:auto; }
+.b06-s63-raw-panel.show { display:block; }
+.b06-rk { color:#AFA9EC; }
+.b06-rs { color:#5DCAA5; }
+.b06-rc { color:#888780; }
+
+/* ============================================================
+   PAGE 9 · BAB 6 · 6.4 SIMULATION (P2WPKH vs P2PKH)
+============================================================ */
+.b06-s64-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b06-s64-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+.b06-s64-card { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-lg); overflow:hidden; }
+.b06-s64-head { padding:8px 14px; font-size:11px; font-weight:500; display:flex; justify-content:space-between; align-items:center; font-family:'Sora',sans-serif; }
+.b06-s64-head.legacy { background:#534AB7; color:#fff; }
+.b06-s64-head.segwit { background:#1D9E75; color:#fff; }
+.b06-s64-badge { font-size:9px; padding:2px 8px; border-radius:99px; background:rgba(255,255,255,0.2); color:#fff; font-family:'Sora',sans-serif; }
+.b06-s64-section { border-bottom:0.5px solid rgba(124,58,237,0.08); }
+.b06-s64-section:last-child { border-bottom:none; }
+.b06-s64-sh { padding:5px 12px; font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:#52524C; background:#F4F4F0; font-family:'Sora',sans-serif; }
+.b06-s64-field { display:flex; align-items:center; padding:6px 12px; border-bottom:0.5px solid rgba(124,58,237,0.06); gap:8px; }
+.b06-s64-field:last-child { border-bottom:none; }
+.b06-s64-fn { font-size:11px; color:#52524C; min-width:80px; flex-shrink:0; font-family:'Sora',sans-serif; }
+.b06-s64-fv { font-size:11px; font-family:'Courier Prime',monospace; flex:1; }
+.purple-fv { color:#534AB7; font-weight:500; }
+.green-fv  { color:#1D9E75; font-weight:500; }
+.dim-fv    { color:#52524C; }
+.witness-section { background:rgba(29,158,117,0.04); border-left:2px solid #1D9E75; }
+.witness-sh { background:rgba(29,158,117,0.08); color:#0F6E56; }
+.b06-s64-empty { padding:10px 12px; font-size:11px; color:#52524C; font-style:italic; text-align:center; font-family:'Sora',sans-serif; }
+.b06-s64-stats { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+.b06-s64-stat-card { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-md); padding:12px 14px; display:flex; flex-direction:column; gap:10px; }
+.b06-s64-stat-title { font-size:11px; font-weight:500; color:#1A1A18; font-family:'Sora',sans-serif; }
+.b06-s64-bar-wrap { display:flex; flex-direction:column; gap:4px; }
+.b06-s64-bar-lbl { font-size:11px; display:flex; justify-content:space-between; font-family:'Sora',sans-serif; }
+.b06-s64-bar-bg { background:#F4F4F0; border-radius:99px; height:8px; }
+.b06-s64-bar { height:8px; border-radius:99px; }
+.b06-s64-benefits { display:flex; flex-direction:column; gap:6px; }
+.b06-s64-benefit { display:flex; align-items:flex-start; gap:8px; font-size:11px; color:#3A3A35; font-family:'Sora',sans-serif; }
+.b06-s64-check { color:#1D9E75; flex-shrink:0; }
+.b06-s64-raw-btn { font-size:11px; color:#52524C; background:none; border:0.5px solid rgba(124,58,237,0.2); border-radius:99px; padding:3px 10px; cursor:pointer; font-family:'Sora',sans-serif; }
+.b06-s64-raw-panel { display:none; margin-top:8px; border-radius:var(--border-radius-md); background:#0F0F0E; padding:12px 14px; font-size:11px; font-family:'Courier Prime',monospace; line-height:1.8; overflow-x:auto; }
+.b06-s64-raw-panel.show { display:block; }
+.b06-rn { color:#FAC775; }
+
+/* ============================================================
+   PAGE 9 · BAB 6 · 6.5 SIMULATION (P2MS vs P2SH)
+============================================================ */
+.b06-s65-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b06-s65-tabs { display:flex; gap:0; border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-md); overflow:hidden; margin-bottom:1rem; }
+.b06-s65-tab { flex:1; padding:8px 12px; font-size:12px; font-weight:500; background:transparent; color:#3A3A35; border:none; cursor:pointer; transition:all 0.15s; font-family:'Sora',sans-serif; }
+.b06-s65-tab:hover { background:#F4F4F0; }
+.b06-s65-tab.active-amber { background:#854F0B; color:#FAEEDA; }
+.b06-s65-tab.active-purp  { background:#534AB7; color:#fff; }
+.b06-s65-pane { display:none; flex-direction:column; gap:12px; }
+.b06-s65-pane.show { display:flex; }
+.b06-s65-card { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-lg); overflow:hidden; }
+.b06-s65-head { padding:8px 14px; font-size:11px; font-weight:500; display:flex; justify-content:space-between; align-items:center; font-family:'Sora',sans-serif; }
+.b06-s65-head.s65-amber { background:#854F0B; color:#FAEEDA; }
+.b06-s65-head.s65-purp  { background:#534AB7; color:#fff; }
+.b06-s65-head.s65-green { background:#0F6E56; color:#E1F5EE; }
+.b06-s65-badge { font-size:9px; padding:2px 8px; border-radius:99px; background:rgba(0,0,0,0.15); font-family:'Sora',sans-serif; }
+.b06-s65-section { border-bottom:0.5px solid rgba(124,58,237,0.07); }
+.b06-s65-section:last-child { border-bottom:none; }
+.b06-s65-sh { padding:5px 12px; font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:#52524C; background:#F4F4F0; font-family:'Sora',sans-serif; }
+.b06-s65-field { display:flex; align-items:flex-start; padding:7px 12px; border-bottom:0.5px solid rgba(124,58,237,0.05); gap:8px; }
+.b06-s65-field:last-child { border-bottom:none; }
+.b06-s65-fn { font-size:11px; color:#52524C; min-width:88px; flex-shrink:0; font-family:'Sora',sans-serif; padding-top:1px; }
+.b06-s65-fv { font-size:11px; font-family:'Courier Prime',monospace; flex:1; word-break:break-word; }
+.s65-amber-v { color:#854F0B; font-weight:500; }
+.s65-purp-v  { color:#534AB7; font-weight:500; }
+.s65-green-v { color:#0F6E56; font-weight:500; }
+.s65-dim-v   { color:#52524C; }
+.b06-s65-empty { padding:10px 12px; font-size:11px; color:#52524C; font-style:italic; text-align:center; font-family:'Sora',sans-serif; }
+.b06-s65-alert { padding:8px 12px; font-size:11px; line-height:1.5; font-family:'Sora',sans-serif; border-radius:var(--border-radius-md); }
+.b06-s65-alert.warn-alert { background:#FAEEDA; border-left:2px solid #854F0B; color:#633806; }
+.b06-s65-alert.ok-alert   { background:#EAF3DE; border-left:2px solid #3B6D11; color:#27500A; }
+.b06-s65-arrow { text-align:center; font-size:11px; color:#52524C; font-family:'Sora',sans-serif; padding:2px 0; }
+.b06-s65-raw-btn { font-size:11px; color:#52524C; background:none; border:0.5px solid rgba(124,58,237,0.2); border-radius:99px; padding:3px 10px; cursor:pointer; font-family:'Sora',sans-serif; }
+.b06-s65-raw-panel { display:none; margin-top:8px; border-radius:var(--border-radius-md); background:#0F0F0E; padding:12px 14px; font-size:11px; font-family:'Courier Prime',monospace; line-height:1.8; overflow-x:auto; }
+.b06-s65-raw-panel.show { display:block; }
+.b06-rk { color:#AFA9EC; }
+.b06-rs { color:#5DCAA5; }
+.b06-rc { color:#888780; }
+
+/* ============================================================
+   PAGE 9 · BAB 6 · 6.6 SIMULATION (Taproot P2TR)
+============================================================ */
+.b06-s66-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b06-s66-card { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-lg); overflow:hidden; }
+.b06-s66-head { padding:8px 14px; font-size:11px; font-weight:500; display:flex; justify-content:space-between; align-items:center; font-family:'Sora',sans-serif; }
+.b06-s66-head.s66-dark { background:#1A1A18; color:#C4B5FD; }
+.b06-s66-head.s66-purp { background:#534AB7; color:#fff; }
+.b06-s66-head.s66-teal { background:#0F6E56; color:#fff; }
+.b06-s66-badge { font-size:9px; padding:2px 8px; border-radius:99px; background:rgba(255,255,255,0.2); font-family:'Sora',sans-serif; }
+.b06-s66-section { border-bottom:0.5px solid rgba(124,58,237,0.07); }
+.b06-s66-section:last-child { border-bottom:none; }
+.b06-s66-sh { padding:5px 12px; font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:#52524C; background:#F4F4F0; font-family:'Sora',sans-serif; }
+.b06-s66-field { display:flex; align-items:flex-start; padding:7px 12px; border-bottom:0.5px solid rgba(124,58,237,0.05); gap:8px; }
+.b06-s66-field:last-child { border-bottom:none; }
+.b06-s66-fn { font-size:11px; color:#52524C; min-width:100px; flex-shrink:0; font-family:'Sora',sans-serif; padding-top:1px; }
+.b06-s66-fv { font-size:11px; font-family:'Courier Prime',monospace; flex:1; word-break:break-word; }
+.s66-purp-v { color:#534AB7; font-weight:500; }
+.s66-teal-v { color:#0F6E56; font-weight:500; }
+.s66-dim-v  { color:#52524C; }
+.b06-s66-divider { display:flex; align-items:center; gap:10px; font-size:11px; color:#52524C; font-family:'Sora',sans-serif; margin:0 0 1rem; }
+.b06-s66-divider-line { flex:1; height:0.5px; background:rgba(124,58,237,0.12); }
+.b06-s66-tabs { display:flex; gap:0; border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-md); overflow:hidden; margin-bottom:1rem; }
+.b06-s66-tab { flex:1; padding:8px 12px; font-size:12px; font-weight:500; background:transparent; color:#3A3A35; border:none; cursor:pointer; transition:all 0.15s; font-family:'Sora',sans-serif; }
+.b06-s66-tab:hover { background:#F4F4F0; }
+.b06-s66-tab.active-purp { background:#534AB7; color:#fff; }
+.b06-s66-tab.active-teal { background:#0F6E56; color:#fff; }
+.b06-s66-pane { display:none; flex-direction:column; gap:12px; }
+.b06-s66-pane.show { display:flex; }
+.b06-s66-alert { padding:10px 12px; font-size:12px; line-height:1.6; font-family:'Sora',sans-serif; border-radius:var(--border-radius-md); }
+.b06-s66-alert.info-alert { background:#EEEDFE; border-left:2px solid #534AB7; color:#3C3489; }
+.b06-s66-alert.ok-alert   { background:#EAF3DE; border-left:2px solid #3B6D11; color:#27500A; }
+.b06-s66-mast { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-md); overflow:hidden; }
+.b06-s66-mast-head { padding:7px 12px; font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:#52524C; background:#F4F4F0; font-family:'Sora',sans-serif; display:flex; justify-content:space-between; }
+.b06-s66-tree { padding:12px 14px; display:flex; flex-direction:column; gap:10px; align-items:center; }
+.b06-s66-tree-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:center; }
+.b06-s66-node { padding:5px 12px; border-radius:6px; font-size:11px; font-family:'Sora',sans-serif; text-align:center; }
+.b06-s66-node.s66-root     { background:#534AB7; color:#fff; }
+.b06-s66-node.s66-branch   { background:#F4F4F0; color:#3A3A35; border:0.5px solid rgba(124,58,237,0.15); }
+.b06-s66-node.s66-revealed { background:#0F6E56; color:#fff; outline:2px solid #FAC775; outline-offset:2px; }
+.b06-s66-node.s66-hidden   { background:#F4F4F0; color:#52524C; border:0.5px solid rgba(0,0,0,0.08); font-style:italic; }
+.b06-s66-conn { color:#52524C; font-size:13px; }
+.b06-s66-proof { padding:8px 12px; background:rgba(15,110,86,0.08); border:0.5px solid rgba(15,110,86,0.3); border-radius:var(--border-radius-md); font-size:11px; font-family:'Courier Prime',monospace; color:#0F6E56; }
+.b06-s66-raw-btn { font-size:11px; color:#52524C; background:none; border:0.5px solid rgba(124,58,237,0.2); border-radius:99px; padding:3px 10px; cursor:pointer; font-family:'Sora',sans-serif; }
+.b06-s66-raw-panel { display:none; border-radius:var(--border-radius-md); background:#0F0F0E; padding:12px 14px; font-size:11px; font-family:'Courier Prime',monospace; line-height:1.8; overflow-x:auto; margin-top:8px; }
+.b06-s66-raw-panel.show { display:block; }
+.b06-trk { color:#AFA9EC; }
+.b06-trs { color:#5DCAA5; }
+.b06-trc { color:#888780; }
+

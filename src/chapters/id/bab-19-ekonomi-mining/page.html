@@ -1,0 +1,898 @@
+<!-- ============================================================
+     PAGE 22 · BAB 19 · Mining Economics & Incentive Design
+     |-- 19.1 · Anatomi Revenue Miner [DONE]
+     |-- 19.2 · [LOCKED]
+     |-- 19.3 · [LOCKED]
+     |-- 19.4 · [LOCKED]
+     |-- 19.5 · [LOCKED]
+     |-- 19.6 · [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab19">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b19">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b19">← Daftar Bab</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab19">
+      <div class="sidebar-heading">Bab 19</div>
+      <div class="sidebar-title">Mining Economics & Incentive Design</div>
+
+      <div class="sidebar-item active" id="sb-19-1">
+        <div class="sb-num">19.1</div>
+        <div class="sb-label">Anatomi Revenue Miner</div>
+      </div>
+      <div class="sidebar-item" id="sb-19-2">
+        <div class="sb-num">19.2</div>
+        <div class="sb-label">Difficulty Adjustment — Bagaimana Bitcoin Mempertahankan 10 Menit</div>
+      </div>
+      <div class="sidebar-item" id="sb-19-3">
+        <div class="sb-num">19.3</div>
+        <div class="sb-label">Halving & Security Budget</div>
+      </div>
+      <div class="sidebar-item" id="sb-19-4">
+        <div class="sb-num">19.4</div>
+        <div class="sb-label">Mining Pool Economics</div>
+      </div>
+      <div class="sidebar-item" id="sb-19-5">
+        <div class="sb-num">19.5</div>
+        <div class="sb-label">Selfish Mining & Miner Behavior</div>
+      </div>
+      <div class="sidebar-item" id="sb-19-6">
+        <div class="sb-num">19.6</div>
+        <div class="sb-label">Ekosistem Mining — Hardware, Energi, dan Protokol</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab19-content">
+
+      <!-- ==============================
+           SECTION 19.1 · Anatomi Revenue Miner
+      ============================== -->
+      <div class="p-section active" id="section-19-1">
+        <div class="p-eyebrow">Bab 19 · 19.1</div>
+        <div class="p-heading">Miner dibayar oleh dua sumber yang sangat berbeda karakternya — dan proporsinya akan berubah drastis seiring waktu</div>
+        <div class="p-title">Anatomi Revenue Miner — Block Reward, Fee, dan Coinbase Transaction</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Sebelum bicara tentang mining economics, perlu dipahami dulu dari mana uang miner sebenarnya berasal. Jawabannya sederhana tapi sering disalahpahami: miner mendapat dua sumber pendapatan yang sangat berbeda karakternya.</p>
+
+          <p><strong>Block reward: bitcoin yang dicetak oleh protokol</strong></p>
+          <p>Block reward adalah bitcoin baru yang diciptakan dalam setiap block sesuai jadwal yang sudah ditentukan sejak genesis block. Ini bukan uang yang diambil dari siapapun, melainkan benar-benar baru dicetak oleh protokol. Saat ini block reward adalah 3,125 BTC per block. Jumlah ini berkurang setengah setiap 210.000 block (sekitar 4 tahun) dalam proses yang disebut halving.</p>
+
+          <p><strong>Transaction fees: pasar terbuka yang fluktuatif</strong></p>
+          <p>Sumber pendapatan kedua adalah transaction fees dari semua transaksi yang dimasukkan ke dalam block. Fee adalah selisih antara total input dan total output sebuah transaksi, dan yang "hilang" dari UTXO set ini otomatis menjadi milik miner yang memasukkan transaksi tersebut ke block. Tidak seperti block reward yang tetap dan terprediksi, fee sangat fluktuatif. Pengirim transaksi bersaing untuk masuk ke block berikutnya dengan menawarkan fee yang cukup tinggi untuk menarik minat miner.</p>
+
+          <p><strong>Coinbase transaction: satu-satunya cara bitcoin baru diciptakan</strong></p>
+          <p>Block reward diklaim miner melalui coinbase transaction, yaitu transaksi pertama dalam setiap block yang tidak punya input dari UTXO manapun. Ini adalah satu-satunya transaksi yang bisa menciptakan bitcoin baru, dan valid sesuai aturan konsensus. Output coinbase tidak bisa dibelanjakan selama 100 block berikutnya, dikenal sebagai coinbase maturity rule, untuk melindungi ekosistem dari kondisi di mana block di-orphan setelah miner sudah membelanjakan reward.</p>
+
+          <p><strong>Proporsi yang berubah seiring waktu</strong></p>
+          <p>Saat ini block reward mendominasi pendapatan miner, sekitar 95-99% dari total revenue. Ini akan berubah seiring halving-halving berikutnya. Pada akhirnya, sesuai jadwal yang sudah ditentukan sejak genesis block, block reward akan mencapai nol sekitar tahun 2140 dan miner hanya bergantung sepenuhnya pada fee. Pertanyaan apakah fee saja cukup untuk mengamankan jaringan adalah salah satu pertanyaan terbuka paling penting dalam ekonomi Bitcoin.</p>
+
+          <p><strong>Mengapa ini penting untuk keamanan jaringan</strong></p>
+          <p>Revenue miner adalah yang membayar hashrate. Hashrate yang tinggi berarti serangan 51% menjadi sangat mahal. Kalau revenue miner turun karena harga Bitcoin turun atau block reward berkurang tanpa kenaikan fee yang cukup, hashrate bisa turun dan jaringan menjadi lebih rentan. Memahami dari mana uang miner berasal adalah dasar untuk memahami keamanan ekonomi Bitcoin.</p>
+
+          <div class="p-callout">
+            <p>Dua sumber revenue miner ini bukan kebetulan, melainkan desain yang disengaja. Block reward memastikan miner punya insentif kuat di awal saat transaksi masih sedikit. Fee memastikan insentif tetap ada setelah block reward habis. Yang menjadi pertanyaan besar adalah apakah transisi dari block reward ke fee sebagai sumber utama bisa berjalan mulus tanpa mengorbankan keamanan jaringan.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Revenue Miner — Proporsi per Era & Anatomi Coinbase Transaction</div>
+          <div class="b19-s191-desc">
+            Tab pertama: pilih era Bitcoin untuk melihat komposisi block reward vs fee dan bagaimana proporsinya berubah dari 2009 hingga endpoint protokol tahun 2140. Tab kedua: struktur coinbase transaction yang menciptakan bitcoin baru di setiap block.
+          </div>
+
+          <div class="b19-s191-tabs">
+            <button class="b19-s191-tab s191-act" id="b19-s191-t1">Proporsi Revenue per Era</button>
+            <button class="b19-s191-tab" id="b19-s191-t2">Anatomi Coinbase Transaction</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b19-s191-pane show" id="b19-s191-p1">
+            <div class="b19-s191-hint">Miner mendapat block reward (bitcoin baru yang dicetak protokol) dan transaction fees. Proporsinya berubah drastis seiring halving. Pilih era untuk melihat angkanya.</div>
+            <div class="b19-s191-era-label">Pilih era Bitcoin:</div>
+            <div class="b19-s191-eras" id="b19-s191-eras"></div>
+            <div class="b19-s191-cards">
+              <div class="b19-s191-card s191-c-reward">
+                <div class="b19-s191-card-label">Block Reward</div>
+                <div class="b19-s191-card-val" id="b19-s191-reward-val">3,125 BTC</div>
+                <div class="b19-s191-card-sub">per block, ~setiap 10 menit</div>
+              </div>
+              <div class="b19-s191-card s191-c-fee">
+                <div class="b19-s191-card-label">Rata-rata Fee per Block</div>
+                <div class="b19-s191-card-val" id="b19-s191-fee-val">~0,15 BTC</div>
+                <div class="b19-s191-card-sub">fluktuatif, tergantung demand</div>
+              </div>
+              <div class="b19-s191-card s191-c-total">
+                <div class="b19-s191-card-label">Proporsi Fee dari Total</div>
+                <div class="b19-s191-card-val" id="b19-s191-pct-val">~4,6%</div>
+                <div class="b19-s191-card-sub" id="b19-s191-pct-sub">sisanya dari block reward</div>
+              </div>
+            </div>
+            <div class="b19-s191-bar-label">Komposisi revenue per block:</div>
+            <div class="b19-s191-bar-track">
+              <div class="b19-s191-bar-reward" id="b19-s191-bar-r"><span class="b19-s191-bar-txt" id="b19-s191-bar-r-txt">Block Reward</span></div>
+              <div class="b19-s191-bar-fee" id="b19-s191-bar-f"><span class="b19-s191-bar-txt" id="b19-s191-bar-f-txt"></span></div>
+            </div>
+            <div class="b19-s191-tl-label">Proporsi fee dari total revenue — semua era:</div>
+            <div id="b19-s191-tl-rows"></div>
+            <div class="b19-s191-note" id="b19-s191-note"></div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b19-s191-pane" id="b19-s191-p2">
+            <div class="b19-s191-hint">Coinbase transaction adalah transaksi pertama di setiap block dan satu-satunya cara bitcoin baru bisa diciptakan sesuai jadwal protokol.</div>
+            <div class="b19-s191-cb-label">Struktur coinbase transaction:</div>
+            <div class="b19-s191-cb-rows">
+              <div class="b19-s191-cb-row s191-r-header">
+                <div class="b19-s191-cb-name">Posisi di block</div>
+                <div class="b19-s191-cb-val">Index 0 (pertama)</div>
+                <div class="b19-s191-cb-desc">Selalu transaksi pertama di setiap block. Node otomatis tahu ini adalah coinbase karena posisinya.<div class="b19-s191-cb-analogy">Seperti halaman pertama buku yang selalu berisi judul dan nama penerbit.</div></div>
+              </div>
+              <div class="b19-s191-cb-row s191-r-input">
+                <div class="b19-s191-cb-name">Input (coinbase input)</div>
+                <div class="b19-s191-cb-val">Tidak ada UTXO</div>
+                <div class="b19-s191-cb-desc">Tidak mereferensikan UTXO manapun. Satu-satunya transaksi yang valid tanpa input dari UTXO set yang sudah ada.<div class="b19-s191-cb-analogy">Seperti sertifikat lahir yang diterbitkan negara — bukan salinan dokumen sebelumnya, tapi dokumen yang dibuat baru.</div></div>
+              </div>
+              <div class="b19-s191-cb-row s191-r-reward">
+                <div class="b19-s191-cb-name">Output 1 — Block Reward</div>
+                <div class="b19-s191-cb-val" id="b19-s191-cb-reward">3,125 BTC</div>
+                <div class="b19-s191-cb-desc">Bitcoin baru yang dicetak sesuai jadwal konsensus. Tidak bisa melebihi jumlah yang ditentukan protokol — node lain akan menolak block yang melanggar ini.<div class="b19-s191-cb-analogy">Seperti gaji resmi yang ditetapkan dalam kontrak — tidak bisa melebihi angka yang tertulis.</div></div>
+              </div>
+              <div class="b19-s191-cb-row s191-r-fee">
+                <div class="b19-s191-cb-name">Output 2 — Transaction Fees</div>
+                <div class="b19-s191-cb-val">Σ (input − output) semua tx</div>
+                <div class="b19-s191-cb-desc">Total selisih antara input dan output semua transaksi dalam block. Dikumpulkan otomatis oleh protokol.<div class="b19-s191-cb-analogy">Seperti tip yang otomatis masuk ke laci kasir setiap akhir hari — tidak perlu diminta satu per satu.</div></div>
+              </div>
+              <div class="b19-s191-cb-row s191-r-mature">
+                <div class="b19-s191-cb-name">Coinbase Maturity</div>
+                <div class="b19-s191-cb-val">100 block (~16,7 jam)</div>
+                <div class="b19-s191-cb-desc">Output coinbase tidak bisa dibelanjakan sampai 100 block setelahnya. Melindungi ekosistem dari kondisi di mana block di-orphan setelah miner sudah membelanjakan reward.<div class="b19-s191-cb-analogy">Seperti cek yang baru bisa dicairkan setelah 100 hari — memastikan cek tidak ditarik kembali sebelum sempat digunakan.</div></div>
+              </div>
+            </div>
+            <div class="b19-s191-verify-card">
+              <div class="b19-s191-verify-label">Mengapa jumlah output coinbase diverifikasi ketat?</div>
+              <div class="b19-s191-verify-text">Setiap full node memverifikasi bahwa total output coinbase transaction tidak melebihi block reward yang diizinkan ditambah total fee dari semua transaksi dalam block. Kalau miner mencoba membuat lebih dari yang diizinkan, block langsung ditolak oleh seluruh jaringan. Ini adalah salah satu aturan konsensus paling fundamental — tidak ada cara untuk mencetak bitcoin melebihi jadwal yang sudah ditentukan sejak genesis block.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-19-2" data-sb="sb-19-2">
+            19.2 — Difficulty Adjustment →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 19.1 -->
+
+      <!-- ==============================
+           SECTION 19.2 · Difficulty Adjustment
+      ============================== -->
+      <div class="p-section" id="section-19-2">
+        <div class="p-eyebrow">Bab 19 · 19.2</div>
+        <div class="p-heading">Tidak peduli berapa banyak atau sedikit miner yang aktif, Bitcoin selalu menemukan satu block setiap 10 menit — bagaimana ini bisa terjadi?</div>
+        <div class="p-title">Difficulty Adjustment — Bagaimana Bitcoin Mempertahankan 10 Menit</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Difficulty adjustment sudah kita bahas mekanismenya di 5.4. Di sana pertanyaannya teknis: bagaimana cara kerjanya. Di sini pertanyaannya ekonomi: apa akibatnya bagi uang miner, dan kenapa mekanisme ini yang membuat mining tidak pernah benar-benar mati.</p>
+          <p>Salah satu mekanisme paling elegan dalam Bitcoin adalah difficulty adjustment: sistem yang secara otomatis menyesuaikan seberapa sulit menemukan block baru, sehingga rata-rata satu block ditemukan setiap 10 menit, tidak peduli berapa banyak atau sedikit miner yang aktif.</p>
+
+          <p><strong>Mengapa 10 menit?</strong></p>
+          <p>Sepuluh menit adalah trade-off yang disengaja. Terlalu cepat berarti block baru ditemukan sebelum block sebelumnya sempat menyebar ke seluruh jaringan, meningkatkan risiko fork yang tidak disengaja dan memberikan keuntungan kepada miner dengan koneksi paling cepat. Terlalu lambat berarti konfirmasi transaksi pertama butuh terlalu lama. Sepuluh menit memberi waktu cukup untuk propagasi block ke seluruh jaringan sambil tetap memberikan konfirmasi yang cukup cepat.</p>
+
+          <p><strong>Mekanisme difficulty adjustment</strong></p>
+          <p>Setiap 2.016 block (sekitar 2 minggu kalau rata-rata tetap 10 menit), seluruh jaringan secara otomatis menghitung ulang difficulty target. Caranya: hitung berapa lama 2.016 block terakhir diselesaikan, bandingkan dengan target 20.160 menit (2 minggu ideal), lalu sesuaikan secara proporsional.</p>
+
+          <p>Kalau 2.016 block terakhir diselesaikan dalam 7 hari karena hashrate naik, difficulty dinaikkan agar block kembali butuh rata-rata 10 menit. Kalau diselesaikan dalam 28 hari karena hashrate turun, difficulty diturunkan. Ada batasan penting: difficulty tidak bisa naik atau turun lebih dari 4 kali dalam satu penyesuaian, untuk mencegah perubahan ekstrem yang bisa destabilisasi jaringan.</p>
+
+          <p><strong>Difficulty target sebagai angka</strong></p>
+          <p>Difficulty target adalah angka 256-bit yang harus lebih besar dari hash block yang valid. Semakin kecil angka target, semakin sulit menemukan hash yang valid karena miner harus mencoba lebih banyak kombinasi sebelum menemukan hash yang cukup kecil. Tidak ada server pusat yang menghitung difficulty, karena setiap node menghitung sendiri dari data blockchain yang sama dan karena prosesnya deterministik, semua node mendapat angka yang identik.</p>
+
+          <p><strong>Implikasi ekonomis</strong></p>
+          <p>Difficulty adjustment membuat Bitcoin self-regulating dari sisi produksi. Kalau harga Bitcoin naik dan lebih banyak miner masuk, difficulty naik dan biaya per block ikut naik sampai profitabilitas kembali ke ekuilibrium. Kalau harga turun dan miner keluar, difficulty turun sehingga mining kembali ekonomis bagi miner yang tersisa. Ini juga yang membuat jadwal emisi Bitcoin bisa diprediksi: meski hashrate berubah drastis, halving tetap terjadi setiap ~210.000 block karena difficulty adjustment mempertahankan 10 menit per block.</p>
+
+          <div class="p-callout">
+            <p>Difficulty adjustment adalah salah satu inovasi terpenting Satoshi yang sering tidak mendapat perhatian cukup. Tanpanya, Bitcoin tidak bisa berfungsi sebagai sistem yang bisa diprediksi: jadwal emisi bisa kacau, propagasi block bisa tidak konsisten, dan seluruh mekanisme konsensus bisa rusak. Kesederhanaan formulanya menyembunyikan betapa fundamentalnya peran yang dimainkan.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Difficulty Adjustment Visualizer</div>
+          <div class="b19-s192-desc">
+            Tab pertama: pilih skenario perubahan hashrate dan lihat bagaimana difficulty adjustment bekerja langkah per langkah, plus simulasi 5 epoch menuju ekuilibrium. Tab kedua: formula aktual yang digunakan dan penjelasan batas 4×.
+          </div>
+
+          <div class="b19-s192-tabs">
+            <button class="b19-s192-tab s192-act" id="b19-s192-t1">Simulator Adjustment</button>
+            <button class="b19-s192-tab" id="b19-s192-t2">Formula & Batas Adjustment</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b19-s192-pane show" id="b19-s192-p1">
+            <div class="b19-s192-hint">Setiap 2.016 block, jaringan menghitung ulang difficulty. Pilih skenario untuk lihat bagaimana adjustment bekerja dan bagaimana hashrate yang berubah dikompensasi oleh protokol.</div>
+            <div class="b19-s192-scenarios" id="b19-s192-scenarios">
+              <div class="b19-s192-scenario s192-act s192-sc-up" data-sc="up2x">
+                <div class="b19-s192-sc-icon">📈</div>
+                <div class="b19-s192-sc-body">
+                  <div class="b19-s192-sc-title">Hashrate naik 2× — block terlalu cepat</div>
+                  <div class="b19-s192-sc-desc">Banyak miner baru bergabung. 2.016 block diselesaikan dalam 7 hari, lebih cepat dari target 14 hari.</div>
+                </div>
+              </div>
+              <div class="b19-s192-scenario s192-sc-down" data-sc="down50">
+                <div class="b19-s192-sc-icon">📉</div>
+                <div class="b19-s192-sc-body">
+                  <div class="b19-s192-sc-title">Hashrate turun 50% — block terlalu lambat</div>
+                  <div class="b19-s192-sc-desc">Banyak miner keluar. 2.016 block diselesaikan dalam 28 hari, lebih lambat dari target 14 hari.</div>
+                </div>
+              </div>
+              <div class="b19-s192-scenario s192-sc-same" data-sc="same">
+                <div class="b19-s192-sc-icon">➡️</div>
+                <div class="b19-s192-sc-body">
+                  <div class="b19-s192-sc-title">Hashrate stabil — tidak ada adjustment</div>
+                  <div class="b19-s192-sc-desc">2.016 block diselesaikan tepat 14 hari. Difficulty tidak berubah.</div>
+                </div>
+              </div>
+              <div class="b19-s192-scenario s192-sc-up" data-sc="up5x">
+                <div class="b19-s192-sc-icon">🚀</div>
+                <div class="b19-s192-sc-body">
+                  <div class="b19-s192-sc-title">Hashrate naik 5× — terkena batas maksimum</div>
+                  <div class="b19-s192-sc-desc">Lonjakan hashrate ekstrem. Adjustment dibatasi maksimum 4× oleh protokol.</div>
+                </div>
+              </div>
+            </div>
+            <div class="b19-s192-results">
+              <div class="b19-s192-result s192-r-before">
+                <div class="b19-s192-result-label">Waktu aktual 2.016 block</div>
+                <div class="b19-s192-result-val" id="b19-s192-actual-time">7 hari</div>
+                <div class="b19-s192-result-sub">target: 14 hari</div>
+              </div>
+              <div class="b19-s192-result s192-r-adjust">
+                <div class="b19-s192-result-label">Adjustment difficulty</div>
+                <div class="b19-s192-result-val" id="b19-s192-adjust">+100% (2×)</div>
+                <div class="b19-s192-result-sub" id="b19-s192-adjust-sub">naik: block lebih sulit</div>
+              </div>
+              <div class="b19-s192-result s192-r-after">
+                <div class="b19-s192-result-label">Block time setelah adjustment</div>
+                <div class="b19-s192-result-val" id="b19-s192-after">~10 menit</div>
+                <div class="b19-s192-result-sub">kembali ke target</div>
+              </div>
+            </div>
+            <div class="b19-s192-calc-label">Langkah kalkulasi:</div>
+            <div id="b19-s192-calc-steps"></div>
+            <div class="b19-s192-chart-label">Simulasi 5 epoch — stabilisasi menuju ekuilibrium:</div>
+            <div id="b19-s192-chart-rows"></div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b19-s192-pane" id="b19-s192-p2">
+            <div class="b19-s192-hint">Formula difficulty adjustment Bitcoin sederhana tapi kuat. Ada satu pembatasan penting: perubahan tidak boleh lebih dari 4× dalam satu epoch.</div>
+            <div class="b19-s192-formula">
+              <div class="b19-s192-f-comment">// Difficulty Adjustment Formula</div>
+              <div class="b19-s192-f-comment">// Dijalankan setiap 2.016 block oleh setiap node secara independen</div>
+              <br>
+              <div><span class="b19-s192-f-var">target_time</span> <span class="b19-s192-f-op">=</span> <span class="b19-s192-f-num">2016</span> <span class="b19-s192-f-op">×</span> <span class="b19-s192-f-num">10</span> <span class="b19-s192-f-comment">// 20.160 menit = ~14 hari</span></div>
+              <div><span class="b19-s192-f-var">actual_time</span> <span class="b19-s192-f-op">=</span> timestamp[<span class="b19-s192-f-num">2016</span>] <span class="b19-s192-f-op">-</span> timestamp[<span class="b19-s192-f-num">0</span>] <span class="b19-s192-f-comment">// dalam menit</span></div>
+              <br>
+              <div><span class="b19-s192-f-var">ratio</span> <span class="b19-s192-f-op">=</span> <span class="b19-s192-f-var">actual_time</span> <span class="b19-s192-f-op">/</span> <span class="b19-s192-f-var">target_time</span></div>
+              <br>
+              <div class="b19-s192-f-cap">// Batas: ratio tidak boleh lebih dari 4× atau kurang dari 1/4×</div>
+              <div><span class="b19-s192-f-var">ratio</span> <span class="b19-s192-f-op">=</span> max(<span class="b19-s192-f-num">0.25</span>, min(<span class="b19-s192-f-num">4.0</span>, <span class="b19-s192-f-var">ratio</span>))</div>
+              <br>
+              <div><span class="b19-s192-f-result">new_target</span> <span class="b19-s192-f-op">=</span> <span class="b19-s192-f-var">old_target</span> <span class="b19-s192-f-op">×</span> <span class="b19-s192-f-var">ratio</span></div>
+              <div class="b19-s192-f-comment">// Target lebih besar = difficulty lebih mudah</div>
+              <div class="b19-s192-f-comment">// Target lebih kecil = difficulty lebih sulit</div>
+            </div>
+            <div class="b19-s192-info-cards">
+              <div class="b19-s192-info-card s192-ic-green">
+                <div class="b19-s192-ic-label">Mengapa batas 4× penting?</div>
+                <div class="b19-s192-ic-text">Tanpa batas, lonjakan hashrate yang sangat besar bisa membuat difficulty naik terlalu drastis dalam satu epoch. Batas 4× memastikan stabilisasi bertahap — maksimum beberapa epoch untuk kembali ke ekuilibrium meski ada perubahan hashrate yang sangat ekstrem.</div>
+              </div>
+              <div class="b19-s192-info-card s192-ic-purple">
+                <div class="b19-s192-ic-label">Desentralisasi kalkulasi</div>
+                <div class="b19-s192-ic-text">Tidak ada server pusat yang menghitung difficulty. Setiap node menghitung sendiri dari data blockchain yang sama dan karena deterministik, semua node mendapat angka yang identik. Block dengan difficulty yang salah ditolak oleh semua node.</div>
+              </div>
+              <div class="b19-s192-info-card s192-ic-amber">
+                <div class="b19-s192-ic-label">Detail implementasi: off-by-one</div>
+                <div class="b19-s192-ic-text">Timestamp yang dibandingkan adalah antara block pertama dan terakhir di setiap epoch, bukan genesis block. Genesis block (#0) punya timestamp yang di-hardcode sehingga epoch pertama tidak menimbulkan masalah. Ini contoh bagaimana implementasi nyata sering punya detail yang tidak ada di deskripsi tingkat tinggi.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-19-1" data-sb="sb-19-1">
+            ← 19.1 — Anatomi Revenue Miner
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-19-3" data-sb="sb-19-3">
+            19.3 — Halving & Security Budget →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 19.2 -->
+
+      <!-- ==============================
+           SECTION 19.3 · Halving & Security Budget
+      ============================== -->
+      <div class="p-section" id="section-19-3">
+        <div class="p-eyebrow">Bab 19 · 19.3</div>
+        <div class="p-heading">Setiap 210.000 block, block reward berkurang setengah — dan ini membawa pertanyaan terbuka paling penting dalam ekonomi Bitcoin jangka panjang</div>
+        <div class="p-title">Halving & Security Budget — Apa yang Terjadi Saat Block Reward Mendekati Nol?</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Halving adalah salah satu mekanisme paling fundamental dalam Bitcoin: setiap 210.000 block, block reward berkurang tepat setengah. Ini bukan keputusan yang diambil siapapun, melainkan terjadi secara otomatis sesuai aturan yang sudah tertanam dalam protokol sejak genesis block.</p>
+
+          <p><strong>Jadwal halving yang sudah pasti</strong></p>
+          <p>Halving pertama di block #210.000 (November 2012): block reward turun dari 50 BTC ke 25 BTC. Halving kedua di block #420.000 (Juli 2016): turun ke 12,5 BTC. Halving ketiga di block #630.000 (Mei 2020): turun ke 6,25 BTC. Halving keempat di block #840.000 (April 2024): turun ke 3,125 BTC. Total bitcoin yang bisa ada adalah 21 juta, hasil dari penjumlahan deret geometri: 210.000 block × 50 BTC × (1 + 0,5 + 0,25 + ...) = 21 juta BTC.</p>
+
+          <p><strong>Security budget: konsep kunci</strong></p>
+          <p>Security budget adalah total revenue miner dalam satu periode waktu tertentu. Ini adalah ukuran ekonomis dari seberapa mahal serangan terhadap jaringan: semakin tinggi security budget, semakin banyak hashrate yang bisa dibeli miner, dan semakin mahal bagi penyerang untuk mengumpulkan hashrate yang cukup untuk serangan 51%. Security budget terdiri dari block reward dalam BTC dikalikan harga BTC saat itu, ditambah total fee yang dikumpulkan. Saat ini block reward mendominasi sekitar 95-99% dari total security budget.</p>
+
+          <p><strong>Pertanyaan terbuka: apakah fee saja cukup?</strong></p>
+          <p>Saat block reward mendekati nol di abad berikutnya, miner bergantung sepenuhnya pada fee. Apakah fee akan cukup untuk mempertahankan hashrate yang tinggi adalah salah satu pertanyaan paling penting dan genuinely belum terjawab dalam ekonomi Bitcoin. Ada yang berpendapat bahwa seiring adopsi meningkat, volume transaksi dan total fee per block akan meningkat secara alami. Ada pula yang berpendapat bahwa fee per transaksi mungkin tidak cukup tinggi untuk menggantikan block reward, terutama kalau solusi layer-2 mengambil banyak transaksi dari layer-1. Tidak ada yang bisa menjawab ini dengan pasti hari ini karena bergantung pada banyak variabel yang tidak bisa diprediksi.</p>
+
+          <p><strong>Yang bisa diketahui sekarang</strong></p>
+          <p>Proporsi fee dari total security budget perlahan naik setiap halving, bukan karena fee melonjak drastis, tapi karena block reward yang terus berkurang. Apakah tren ini akan berlanjut dengan kecepatan yang cukup adalah pertanyaan yang hanya bisa dijawab oleh waktu dan data masa depan.</p>
+
+          <div class="p-callout">
+            <p>Block reward akan mendekati nol sekitar tahun 2140, lebih dari 100 tahun dari sekarang. Banyak aspek ekosistem Bitcoin di 2140 tidak bisa diprediksi dari 2025. Yang pasti: mekanisme halving adalah aturan konsensus yang tidak bisa diubah tanpa persetujuan seluruh jaringan, dan pertanyaan tentang security budget jangka panjang akan terus relevan seiring setiap halving berikutnya.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Halving Timeline & Security Budget Calculator</div>
+          <div class="b19-s193-desc">
+            Tab pertama: timeline halving dan kalkulator security budget — atur harga BTC dan rata-rata fee untuk melihat komposisi revenue miner saat ini. Tab kedua: pertanyaan terbuka tentang long-term security budget dan dua sudut pandang yang ada.
+          </div>
+
+          <div class="b19-s193-tabs">
+            <button class="b19-s193-tab s193-act" id="b19-s193-t1">Timeline & Security Budget</button>
+            <button class="b19-s193-tab" id="b19-s193-t2">Pertanyaan Terbuka</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b19-s193-pane show" id="b19-s193-p1">
+            <div class="b19-s193-hint">Block reward berkurang setengah setiap 210.000 block. Security budget = total revenue miner yang menentukan seberapa mahal serangan. Atur slider untuk lihat komposisi saat ini.</div>
+            <div id="b19-s193-tl"></div>
+            <div class="b19-s193-calc-wrap">
+              <div class="b19-s193-calc-row">
+                <div class="b19-s193-calc-label">Harga BTC (USD):</div>
+                <div class="b19-s193-slider-row">
+                  <span class="b19-s193-mm">$10rb</span>
+                  <input type="range" class="b19-s193-slider" id="b19-s193-price-sl" min="10000" max="200000" value="65000" step="1000">
+                  <span class="b19-s193-mm">$200rb</span>
+                  <div class="b19-s193-slider-val" id="b19-s193-price-val">$65.000</div>
+                </div>
+              </div>
+              <div class="b19-s193-calc-row">
+                <div class="b19-s193-calc-label">Rata-rata fee per block (BTC):</div>
+                <div class="b19-s193-slider-row">
+                  <span class="b19-s193-mm">0,05</span>
+                  <input type="range" class="b19-s193-slider" id="b19-s193-fee-sl" min="5" max="200" value="15" step="1">
+                  <span class="b19-s193-mm">2,00</span>
+                  <div class="b19-s193-slider-val" id="b19-s193-fee-val">0,15 BTC</div>
+                </div>
+              </div>
+            </div>
+            <div class="b19-s193-results">
+              <div class="b19-s193-result s193-r-reward">
+                <div class="b19-s193-result-label">Revenue block reward / block</div>
+                <div class="b19-s193-result-val" id="b19-s193-reward-usd">$203.125</div>
+                <div class="b19-s193-result-sub" id="b19-s193-reward-sub">3,125 BTC × harga</div>
+              </div>
+              <div class="b19-s193-result s193-r-fee">
+                <div class="b19-s193-result-label">Revenue fee / block</div>
+                <div class="b19-s193-result-val" id="b19-s193-fee-usd">$9.750</div>
+                <div class="b19-s193-result-sub">rata-rata fee × harga</div>
+              </div>
+              <div class="b19-s193-result s193-r-total">
+                <div class="b19-s193-result-label">Total security budget / tahun</div>
+                <div class="b19-s193-result-val" id="b19-s193-total-usd">~$11,1 M</div>
+                <div class="b19-s193-result-sub">~52.560 block/tahun</div>
+              </div>
+            </div>
+            <div class="b19-s193-prop-label">Proporsi block reward vs fee:</div>
+            <div class="b19-s193-prop-track">
+              <div class="b19-s193-prop-reward" id="b19-s193-prop-r"><span class="b19-s193-prop-txt" id="b19-s193-prop-r-txt">Block Reward</span></div>
+              <div class="b19-s193-prop-fee"    id="b19-s193-prop-f"><span class="b19-s193-prop-txt" id="b19-s193-prop-f-txt"></span></div>
+            </div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b19-s193-pane" id="b19-s193-p2">
+            <div class="b19-s193-hint">Saat block reward mendekati nol, miner bergantung sepenuhnya pada fee. Ini adalah pertanyaan genuinely terbuka yang belum bisa dijawab hari ini.</div>
+            <div class="b19-s193-open-card">
+              <div class="b19-s193-open-label">Pertanyaan terbuka: apakah fee saja cukup untuk security budget jangka panjang?</div>
+              <div class="b19-s193-open-text">Tidak ada yang bisa menjawab ini dengan pasti karena bergantung pada adopsi, harga, volume transaksi, dan struktur ekosistem Bitcoin di masa depan.</div>
+              <div class="b19-s193-views">
+                <div class="b19-s193-view s193-v-a">
+                  <div class="b19-s193-view-label">Sudut pandang A</div>
+                  <div class="b19-s193-view-text">Seiring adopsi meningkat, volume transaksi dan total fee per block akan meningkat secara alami. Security budget bisa tetap terjaga meski block reward turun, kalau demand terhadap block space tetap tinggi.</div>
+                </div>
+                <div class="b19-s193-view s193-v-b">
+                  <div class="b19-s193-view-label">Sudut pandang B</div>
+                  <div class="b19-s193-view-text">Fee per transaksi mungkin tidak cukup tinggi untuk menggantikan block reward, terutama kalau solusi layer-2 mengambil banyak transaksi dari layer-1. Security budget bisa tertekan tanpa solusi yang jelas.</div>
+                </div>
+              </div>
+            </div>
+            <div class="b19-s193-info-cards">
+              <div class="b19-s193-info-card s193-ic-purple">
+                <div class="b19-s193-ic-label">Yang bisa diketahui sekarang:</div>
+                <div class="b19-s193-ic-text">Proporsi fee dari total security budget perlahan naik setiap halving, bukan karena fee melonjak drastis, tapi karena block reward yang terus berkurang. Apakah tren ini berlanjut dengan kecepatan yang cukup hanya bisa dijawab oleh data masa depan.</div>
+              </div>
+              <div class="b19-s193-info-card s193-ic-gray">
+                <div class="b19-s193-ic-label">Konteks penting:</div>
+                <div class="b19-s193-ic-text">Block reward akan mendekati nol sekitar tahun 2140, lebih dari 100 tahun dari sekarang. Yang pasti: mekanisme halving adalah aturan konsensus yang tidak bisa diubah tanpa persetujuan seluruh jaringan.</div>
+              </div>
+            </div>
+            <div class="b19-s193-horizon-label">Block reward per halving (skala logaritmik):</div>
+            <div id="b19-s193-horizon-rows"></div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-19-2" data-sb="sb-19-2">
+            ← 19.2 — Difficulty Adjustment
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-19-4" data-sb="sb-19-4">
+            19.4 — Mining Pool Economics →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 19.3 -->
+
+      <!-- ==============================
+           SECTION 19.4 · Mining Pool Economics
+      ============================== -->
+      <div class="p-section" id="section-19-4">
+        <div class="p-eyebrow">Bab 19 · 19.4</div>
+        <div class="p-heading">Solo mining hampir mustahil untuk miner kecil hari ini — pool hadir untuk memecahkan masalah variance, bukan mengurangi total pendapatan</div>
+        <div class="p-title">Mining Pool Economics — Mengapa Miner Bergabung ke Pool?</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Solo mining Bitcoin hari ini secara statistik hampir mustahil untuk miner kecil. Dengan hashrate jaringan yang mencapai ratusan exahash per detik, seorang miner dengan satu ASIC modern yang menghasilkan 100 terahash per detik memiliki probabilitas menemukan block sekali setiap ratusan tahun. Mining pool memecahkan masalah ini dengan menggabungkan hashrate banyak miner dan membagi reward secara proporsional.</p>
+
+          <p><strong>Bagaimana mining pool bekerja</strong></p>
+          <p>Pool operator menjalankan full node dan menyiapkan block template. Miner yang bergabung menerima pekerjaan dari pool: mereka diminta mencari hash yang memenuhi target yang jauh lebih mudah dari target jaringan sebenarnya. Hash yang memenuhi target yang lebih mudah ini disebut share sebagai bukti bahwa miner benar-benar bekerja. Ketika salah satu miner menemukan hash yang memenuhi target jaringan yang sebenarnya, pool mendapat block reward dan mendistribusikannya ke semua anggota berdasarkan jumlah share yang masing-masing berkontribusikan.</p>
+
+          <p><strong>Skema pembayaran: PPS, PPLNS, dan FPPS</strong></p>
+          <p>PPS (Pay Per Share) membayar miner untuk setiap share yang valid, terlepas dari apakah pool benar-benar menemukan block atau tidak. Pool menanggung semua risiko variance. Lebih stabil untuk miner tapi pool biasanya mengambil fee lebih tinggi. PPLNS (Pay Per Last N Shares) membayar miner berdasarkan share yang dikontribusikan dalam window tertentu sebelum block ditemukan. Miner ikut menanggung variance, fee pool lebih rendah, dan lebih menguntungkan untuk miner yang konsisten. FPPS (Full Pay Per Share) seperti PPS tapi termasuk estimasi fee transaksi, bukan hanya block reward.</p>
+
+          <p><strong>Pool fee dan implikasinya</strong></p>
+          <p>Pool mengambil persentase kecil dari total reward sebagai biaya operasional, biasanya 1-3%. Total pendapatan jangka panjang antara solo mining dan pool mining secara teori sama jika hashrate sama, tapi pool memberikan pendapatan yang jauh lebih konsisten dan bisa diprediksi karena variance yang jauh lebih rendah.</p>
+
+          <p><strong>Implikasi terhadap desentralisasi</strong></p>
+          <p>Mining pool meningkatkan efisiensi dan stabilitas pendapatan miner kecil, tapi pool operator yang mengelola block template punya pengaruh atas transaksi mana yang dimasukkan ke block. Miner yang bergabung ke pool mendelegasikan keputusan ini ke operator pool. Konsentrasi hashrate di pool-pool besar adalah sesuatu yang diperhatikan komunitas dari perspektif desentralisasi jaringan.</p>
+
+          <div class="p-callout">
+            <p>Pool tidak meningkatkan total pendapatan miner secara agregat, total reward dari jaringan tetap sama. Yang dilakukan pool adalah mendistribusikan ulang reward dari pola yang tidak teratur (solo) menjadi aliran yang konsisten dan terprediksi. Ini adalah trade-off antara variance dan sentralisasi sedikit di level block template.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Mining Pool Visualizer — Variance & Skema Pembayaran</div>
+          <div class="b19-s194-desc">
+            Tab pertama: geser slider hashrate untuk lihat bagaimana variance solo mining vs pool mining berbeda secara visual. Tab kedua: perbandingan skema pembayaran PPS, PPLNS, dan FPPS dengan contoh angka konkret.
+          </div>
+
+          <div class="b19-s194-tabs">
+            <button class="b19-s194-tab s194-act" id="b19-s194-t1">Solo vs Pool — Variance</button>
+            <button class="b19-s194-tab" id="b19-s194-t2">Skema Pembayaran Pool</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b19-s194-pane show" id="b19-s194-p1">
+            <div class="b19-s194-hint">Solo mining menghasilkan reward besar tapi sangat tidak teratur. Pool menghasilkan pendapatan kecil tapi konsisten setiap hari. Total jangka panjang sama, variance yang berbeda.</div>
+            <div class="b19-s194-analogy">
+              <div class="b19-s194-analogy-label">Analogi</div>
+              <div class="b19-s194-analogy-text"><strong>Solo mining:</strong> seperti membeli satu tiket lotre per hari. Hadiahnya sangat besar, tapi kemungkinan menang sangat kecil dan tidak bisa diprediksi kapan.<br><br><strong>Pool mining:</strong> seperti patungan beli ribuan tiket lotre bersama ribuan orang. Menang lebih sering, tapi hadiahnya dibagi. Total penghasilan sama secara statistik, tapi jauh lebih konsisten.</div>
+            </div>
+            <div class="b19-s194-slider-wrap">
+              <div class="b19-s194-slider-label">Hashrate miner kamu:</div>
+              <div class="b19-s194-slider-row">
+                <span class="b19-s194-mm">100 TH/s</span>
+                <input type="range" class="b19-s194-slider" id="b19-s194-hr-sl" min="1" max="100" value="10" step="1">
+                <span class="b19-s194-mm">10 PH/s</span>
+                <div class="b19-s194-slider-val" id="b19-s194-hr-val">1 PH/s (1.000 TH/s)</div>
+              </div>
+            </div>
+            <div class="b19-s194-stats">
+              <div class="b19-s194-stat s194-s-solo">
+                <div class="b19-s194-stat-label">Solo Mining</div>
+                <div class="b19-s194-stat-val" id="b19-s194-solo-time">~8,5 tahun</div>
+                <div class="b19-s194-stat-sub">rata-rata waktu menemukan 1 block<br>bisa lebih cepat atau jauh lebih lama</div>
+              </div>
+              <div class="b19-s194-stat s194-s-pool">
+                <div class="b19-s194-stat-label">Pool Mining (pool fee 1%)</div>
+                <div class="b19-s194-stat-val" id="b19-s194-pool-income">~0,00031 BTC/hari</div>
+                <div class="b19-s194-stat-sub">pendapatan konsisten setiap hari<br>proporsional dengan hashrate</div>
+              </div>
+            </div>
+            <div class="b19-s194-tl-label">Simulasi pendapatan 12 minggu — solo vs pool (hashrate sama):</div>
+            <div class="b19-s194-tl-heads">
+              <div class="b19-s194-tl-week-lbl"></div>
+              <div class="b19-s194-tl-head h-solo">Solo Mining</div>
+              <div class="b19-s194-tl-head h-pool">Pool Mining</div>
+            </div>
+            <div id="b19-s194-tl-rows"></div>
+            <div class="b19-s194-note" id="b19-s194-note"></div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b19-s194-pane" id="b19-s194-p2">
+            <div class="b19-s194-hint">Pool menggunakan berbagai skema pembayaran yang berbeda dalam cara mendistribusikan reward. Perbedaan utama: siapa yang menanggung risiko variance.</div>
+            <div class="b19-s194-schemes">
+              <div class="b19-s194-scheme s194-sc-pps">
+                <div class="b19-s194-scheme-label">PPS — PAY PER SHARE</div>
+                <div class="b19-s194-scheme-title">Dibayar per share valid, terlepas dari apakah pool menemukan block</div>
+                <div class="b19-s194-scheme-desc">Pool menanggung semua risiko variance. Miner mendapat pembayaran tetap untuk setiap share.</div>
+                <div class="b19-s194-scheme-item">Pendapatan paling stabil dan terprediksi untuk miner</div>
+                <div class="b19-s194-scheme-item">Pool fee biasanya lebih tinggi (2-3%) karena pool menanggung risiko</div>
+                <div class="b19-s194-scheme-item">Cocok untuk miner yang butuh arus kas yang konsisten</div>
+                <div class="b19-s194-scheme-analogy">Seperti karyawan dengan gaji tetap — tidak peduli perusahaan untung atau rugi bulan ini, gajimu tetap.</div>
+              </div>
+              <div class="b19-s194-scheme s194-sc-pplns">
+                <div class="b19-s194-scheme-label">PPLNS — PAY PER LAST N SHARES</div>
+                <div class="b19-s194-scheme-title">Dibayar berdasarkan share dalam window tertentu sebelum block ditemukan</div>
+                <div class="b19-s194-scheme-desc">Miner ikut menanggung variance bersama pool. Reward hanya ada kalau pool menemukan block.</div>
+                <div class="b19-s194-scheme-item">Fee pool lebih rendah (0-1%) karena miner ikut menanggung risiko</div>
+                <div class="b19-s194-scheme-item">Lebih menguntungkan untuk miner yang konsisten dan loyal</div>
+                <div class="b19-s194-scheme-item">Miner baru tidak langsung mendapat bagian penuh</div>
+                <div class="b19-s194-scheme-analogy">Seperti bagi hasil usaha — kalau bulan ini untung, semua dapat. Kalau tidak ada block, tidak ada pembagian.</div>
+              </div>
+              <div class="b19-s194-scheme s194-sc-fpps">
+                <div class="b19-s194-scheme-label">FPPS — FULL PAY PER SHARE</div>
+                <div class="b19-s194-scheme-title">Seperti PPS tapi termasuk estimasi fee transaksi, bukan hanya block reward</div>
+                <div class="b19-s194-scheme-desc">Miner mendapat bagian dari block reward DAN estimasi fee transaksi. Pool menanggung risiko variance total termasuk fluktuasi fee.</div>
+                <div class="b19-s194-scheme-item">Lebih menguntungkan dari PPS di era fee tinggi</div>
+                <div class="b19-s194-scheme-item">Pool menanggung risiko fluktuasi fee</div>
+                <div class="b19-s194-scheme-item">Digunakan oleh beberapa pool besar saat ini</div>
+                <div class="b19-s194-scheme-analogy">Seperti PPS tapi gajimu juga termasuk estimasi tip pelanggan — lebih menguntungkan di saat ramai.</div>
+              </div>
+            </div>
+            <div class="b19-s194-example-wrap">
+              <div class="b19-s194-example-label">Contoh: miner dengan 1% hashrate pool, pool menemukan 6 block hari ini (3,125 BTC + ~0,15 BTC fee):</div>
+              <div class="b19-s194-example-rows">
+                <div class="b19-s194-example-row" style="background:#EEEDFE;">
+                  <div class="b19-s194-ex-name" style="color:#534AB7;font-weight:500;">PPS</div>
+                  <div class="b19-s194-ex-val" style="color:#534AB7;">~0,03125 BTC</div>
+                  <div class="b19-s194-ex-note">1% × 3,125 BTC × 6 block. Konsisten tiap hari kalau share konsisten.</div>
+                </div>
+                <div class="b19-s194-example-row" style="background:#EAF3DE;">
+                  <div class="b19-s194-ex-name" style="color:#0F6E56;font-weight:500;">PPLNS</div>
+                  <div class="b19-s194-ex-val" style="color:#0F6E56;">~0,03125 BTC</div>
+                  <div class="b19-s194-ex-note">Sama kalau konsisten. Tapi kalau pool hanya dapat 3 block, hanya dapat setengah.</div>
+                </div>
+                <div class="b19-s194-example-row" style="background:#FAEEDA;">
+                  <div class="b19-s194-ex-name" style="color:#854F0B;font-weight:500;">FPPS</div>
+                  <div class="b19-s194-ex-val" style="color:#854F0B;">~0,03215 BTC</div>
+                  <div class="b19-s194-ex-note">1% × (3,125 + 0,15) × 6 block. Lebih tinggi karena termasuk fee transaksi.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-19-3" data-sb="sb-19-3">
+            ← 19.3 — Halving & Security Budget
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-19-5" data-sb="sb-19-5">
+            19.5 — Selfish Mining →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 19.4 -->
+
+      <!-- ==============================
+           SECTION 19.5 · Selfish Mining & Miner Behavior
+      ============================== -->
+      <div class="p-section" id="section-19-5">
+        <div class="p-eyebrow">Bab 19 · 19.5</div>
+        <div class="p-heading">Apakah miner yang rasional selalu mengikuti protokol? Selfish mining menunjukkan bahwa dalam kondisi tertentu, jawabannya tidak</div>
+        <div class="p-title">Selfish Mining & Miner Behavior — Kapan Miner Rasional Menyimpang dari Protokol?</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Asumsi dasar Bitcoin adalah bahwa miner yang rasional akan selalu mengikuti protokol karena itulah yang paling menguntungkan. Tapi apakah ini selalu benar? Selfish mining adalah strategi yang menunjukkan bahwa dalam kondisi tertentu, miner bisa mendapat keuntungan lebih besar dengan menyimpang dari protokol honest mining.</p>
+
+          <p><strong>Honest mining vs selfish mining</strong></p>
+          <p>Honest mining adalah strategi default: saat miner menemukan block baru, ia langsung menyebarkannya ke seluruh jaringan. Semua miner mulai bekerja di atas block terbaru secara bersamaan dan probabilitas mendapat reward proporsional dengan hashrate masing-masing. Selfish mining, pertama kali dianalisis secara formal oleh Eyal dan Sirer pada 2013, adalah strategi di mana miner dengan hashrate signifikan menyembunyikan block yang baru ditemukan alih-alih langsung menyebarkannya. Miner terus bekerja secara diam-diam di atas block tersembunyi ini sambil jaringan lain masih bekerja di block lama.</p>
+
+          <p><strong>Mengapa selfish mining bisa menguntungkan</strong></p>
+          <p>Kalau miner selfish bisa menemukan block kedua sebelum jaringan menemukan satu block, ia punya keunggulan dua block. Ketika chain yang lebih panjang akhirnya dipublikasikan, semua pekerjaan jaringan lain menjadi orphan dan miner selfish mendapat lebih dari porsinya secara proporsional. Analisis Eyal dan Sirer menunjukkan bahwa selfish mining bisa menguntungkan jika miner memiliki lebih dari sekitar 33% hashrate jaringan, tergantung konektivitas jaringan.</p>
+
+          <p><strong>Mitigasi: propagasi cepat menggeser threshold</strong></p>
+          <p>Semakin cepat block menyebar ke seluruh jaringan, semakin kecil window bagi miner selfish untuk memanfaatkan keunggulan. Compact blocks dan teknologi propagasi cepat seperti FIBRE secara langsung meningkatkan threshold hashrate yang diperlukan agar selfish mining menguntungkan. Selain itu, pola block yang tidak wajar bisa dideteksi oleh node dan peneliti yang memonitor jaringan, dan pool besar yang ketahuan melakukan selfish mining bisa kehilangan kepercayaan miner yang bergabung.</p>
+
+          <p><strong>Fee sniping: bentuk lain dari miner behavior</strong></p>
+          <p>Fee sniping adalah skenario lain: miner dengan hashrate besar bisa mencoba me-reorganisasi block terakhir untuk mengambil fee transaksi yang sangat tinggi di block tersebut. Ini lebih relevan di masa depan ketika fee menjadi komponen dominan revenue miner. Bitcoin Core sudah mengimplementasikan default locktime untuk mengurangi insentif fee sniping dengan membuat transaksi tidak valid di block sebelum tinggi tertentu.</p>
+
+          <div class="p-callout">
+            <p>Selfish mining bukan hanya teori akademis, melainkan pengingat bahwa desain insentif Bitcoin harus terus dianalisis seiring berubahnya kondisi jaringan. Semakin besar proporsi fee dari total revenue, semakin penting untuk memahami bagaimana insentif miner bisa bergeser. Yang menjaga Bitcoin tetap sehat bukan hanya kriptografi, tapi desain ekonomi yang membuat perilaku jujur menjadi strategi yang paling rasional.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Selfish Mining Visualizer</div>
+          <div class="b19-s195-desc">
+            Tab pertama: ikuti langkah demi langkah bagaimana strategi selfish mining bekerja secara visual. Tab kedua: slider hashrate untuk lihat kapan selfish mining menguntungkan vs merugikan. Tab ketiga: solusi dan mitigasi yang membatasi efektivitas selfish mining.
+          </div>
+
+          <div class="b19-s195-tabs">
+            <button class="b19-s195-tab s195-act" id="b19-s195-t1">Strategi Selfish vs Honest</button>
+            <button class="b19-s195-tab" id="b19-s195-t2">Threshold & Revenue</button>
+            <button class="b19-s195-tab" id="b19-s195-t3">Mitigasi & Solusi</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b19-s195-pane show" id="b19-s195-p1">
+            <div class="b19-s195-hint">Selfish mining: menyembunyikan block yang ditemukan untuk mendapat keunggulan chain. Klik setiap langkah untuk lihat bagaimana strategi ini bekerja.</div>
+            <div class="b19-s195-step-btns">
+              <button class="b19-s195-step-btn s195-act" data-step="0">Awal</button>
+              <button class="b19-s195-step-btn" data-step="1">Langkah 1</button>
+              <button class="b19-s195-step-btn" data-step="2">Langkah 2</button>
+              <button class="b19-s195-step-btn" data-step="3">Langkah 3</button>
+              <button class="b19-s195-step-btn" data-step="4">Hasil</button>
+            </div>
+            <div class="b19-s195-chain-label">Visualisasi chain:</div>
+            <div id="b19-s195-chains"></div>
+            <div class="b19-s195-detail s195-d-idle" id="b19-s195-detail"></div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b19-s195-pane" id="b19-s195-p2">
+            <div class="b19-s195-hint">Selfish mining hanya menguntungkan di atas threshold ~33% hashrate. Di bawah itu, biaya risiko lebih besar dari potensi keuntungan.</div>
+            <div class="b19-s195-slider-wrap">
+              <div class="b19-s195-slider-label">Hashrate miner (% dari jaringan):</div>
+              <div class="b19-s195-slider-row">
+                <span class="b19-s195-mm">5%</span>
+                <input type="range" class="b19-s195-slider" id="b19-s195-hr-sl" min="5" max="49" value="35" step="1">
+                <span class="b19-s195-mm">49%</span>
+                <div class="b19-s195-slider-val" id="b19-s195-hr-val">35%</div>
+              </div>
+            </div>
+            <div class="b19-s195-rev-cards">
+              <div class="b19-s195-rev-card s195-rc-honest">
+                <div class="b19-s195-rev-label">Expected revenue — Honest Mining</div>
+                <div class="b19-s195-rev-val" id="b19-s195-honest-rev">35% dari total</div>
+                <div class="b19-s195-rev-sub">selalu proporsional dengan hashrate</div>
+              </div>
+              <div class="b19-s195-rev-card s195-rc-selfish">
+                <div class="b19-s195-rev-label">Expected revenue — Selfish Mining</div>
+                <div class="b19-s195-rev-val" id="b19-s195-selfish-rev">~39,5%</div>
+                <div class="b19-s195-rev-sub" id="b19-s195-selfish-sub">lebih tinggi dari porsi hashrate</div>
+              </div>
+            </div>
+            <div class="b19-s195-verdict" id="b19-s195-verdict">
+              <div class="b19-s195-verdict-label" id="b19-s195-verdict-label"></div>
+              <div id="b19-s195-verdict-text"></div>
+            </div>
+          </div>
+
+          <!-- PANE 3 -->
+          <div class="b19-s195-pane" id="b19-s195-p3">
+            <div class="b19-s195-hint">Ada beberapa mekanisme yang secara natural membatasi atau mencegah selfish mining — baik teknis maupun ekonomis.</div>
+            <div class="b19-s195-cms">
+              <div class="b19-s195-cm s195-cm-propagation">
+                <div class="b19-s195-cm-label">SOLUSI TEKNIS #1 — PROPAGASI YANG LEBIH CEPAT</div>
+                <div class="b19-s195-cm-title">Compact blocks & FIBRE mempersempit window selfish mining</div>
+                <div class="b19-s195-cm-text">Semakin cepat block menyebar ke seluruh jaringan, semakin kecil window bagi miner selfish untuk memanfaatkan keunggulan. Compact blocks dan teknologi propagasi cepat secara langsung meningkatkan threshold hashrate yang diperlukan.</div>
+                <div class="b19-s195-cm-analogy">Seperti gosip yang menyebar sangat cepat — tidak ada lagi keuntungan menyimpan informasi karena semua orang sudah tahu dalam hitungan detik.</div>
+              </div>
+              <div class="b19-s195-cm s195-cm-awareness">
+                <div class="b19-s195-cm-label">SOLUSI TEKNIS #2 — DETEKSI POLA ANOMALI</div>
+                <div class="b19-s195-cm-title">Node dan peneliti bisa mendeteksi pola block yang tidak wajar</div>
+                <div class="b19-s195-cm-text">Selfish mining meninggalkan jejak statistik: orphan rate lebih tinggi, block tiba dalam burst setelah periode sepi, dan pola timestamp yang mencurigakan. Komunitas yang memonitor jaringan bisa mengidentifikasi pool yang dicurigai.</div>
+                <div class="b19-s195-cm-analogy">Seperti polisi lalu lintas yang mendeteksi pembalap curang dari rekaman kamera — jejaknya tetap ada meski tidak tertangkap langsung.</div>
+              </div>
+              <div class="b19-s195-cm s195-cm-reputation">
+                <div class="b19-s195-cm-label">SOLUSI EKONOMIS — REPUTASI DAN INSENTIF SOSIAL</div>
+                <div class="b19-s195-cm-title">Pool yang ketahuan kehilangan miner dan seluruh pendapatan</div>
+                <div class="b19-s195-cm-text">Pool besar bergantung pada kepercayaan ribuan miner yang bergabung. Kalau ketahuan melakukan selfish mining, miner bisa pindah ke pool lain. Kehilangan hashrate jauh lebih mahal dari keuntungan jangka pendek selfish mining.</div>
+                <div class="b19-s195-cm-analogy">Seperti bisnis yang curang — mungkin untung sekali-kali, tapi kehilangan pelanggan jauh lebih mahal dari keuntungan kecurangan itu sendiri.</div>
+              </div>
+              <div class="b19-s195-cm s195-cm-variance">
+                <div class="b19-s195-cm-label">FAKTOR PEMBATAS — VARIANCE YANG TINGGI</div>
+                <div class="b19-s195-cm-title">Selfish mining meningkatkan variance pendapatan miner itu sendiri</div>
+                <div class="b19-s195-cm-text">Ada periode di mana block tersembunyi di-orphan oleh jaringan sebelum sempat dipublikasikan. Miner selfish kehilangan reward di periode itu. Variance yang tinggi membuat pendapatan lebih tidak terprediksi bahkan bagi pelakunya.</div>
+                <div class="b19-s195-cm-analogy">Seperti spekulan vs investor jangka panjang — yang pertama mungkin untung besar sekali-kali, tapi juga bisa rugi besar.</div>
+              </div>
+            </div>
+            <div class="b19-s195-prop-wrap">
+              <div class="b19-s195-prop-label">Simulasi: bagaimana kecepatan propagasi menggeser threshold selfish mining</div>
+              <div class="b19-s195-prop-slider-row">
+                <span class="b19-s195-mm" style="min-width:50px;">Lambat</span>
+                <input type="range" class="b19-s195-slider" id="b19-s195-prop-sl" min="0" max="100" value="70" step="5">
+                <span class="b19-s195-mm">Cepat</span>
+                <div class="b19-s195-slider-val" id="b19-s195-prop-val">70%</div>
+              </div>
+              <div class="b19-s195-prop-result" id="b19-s195-prop-result"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-19-4" data-sb="sb-19-4">
+            ← 19.4 — Mining Pool Economics
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-19-6" data-sb="sb-19-6">
+            19.6 — Ekosistem Mining →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 19.5 -->
+
+      <!-- ==============================
+           SECTION 19.6 · Ekosistem Mining
+      ============================== -->
+      <div class="p-section" id="section-19-6">
+        <div class="p-eyebrow">Bab 19 · 19.6</div>
+        <div class="p-heading">Mining Bitcoin adalah industri global yang mengikuti energi murah, bergantung pada hardware sangat khusus, dan beroperasi lewat protokol yang menentukan siapa yang mengontrol isi block</div>
+        <div class="p-title">Ekosistem Mining — Hardware, Energi, dan Protokol</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Mining Bitcoin di dunia nyata adalah industri yang sangat berbeda dari gambaran sederhana "komputer yang menebak angka." Ia melibatkan hardware khusus yang dirancang untuk satu tujuan, keputusan energi yang sangat ekonomis, distribusi geografis yang mengikuti harga listrik, dan protokol komunikasi yang menentukan siapa yang punya kontrol atas konten block.</p>
+
+          <p><strong>ASIC: hardware yang lahir dari satu tujuan</strong></p>
+          <p>ASIC (Application-Specific Integrated Circuit) adalah chip yang dirancang khusus untuk menjalankan satu operasi: SHA256 double hash secepat mungkin dengan energi sesedikit mungkin. Metrik kunci efisiensi ASIC adalah joule per terahash (J/TH): berapa energi yang dibutuhkan untuk menghasilkan satu terahash. Generasi pertama ASIC Bitcoin sekitar 2013 butuh lebih dari 1.000 J/TH. Hardware modern terbaik saat ini sudah di kisaran 15-20 J/TH, penurunan efisiensi lebih dari 50 kali lipat dalam satu dekade. Miner dengan hardware lama secara ekonomis terpaksa keluar saat harga Bitcoin turun atau difficulty naik, karena biaya listrik melebihi pendapatan.</p>
+
+          <p><strong>Energi dan distribusi geografis</strong></p>
+          <p>Mining Bitcoin adalah kompetisi efisiensi energi. Miner yang bertahan adalah yang bisa mendapat listrik paling murah: pembangkit hydro yang kelebihan kapasitas, energi panas bumi, flare gas dari ladang minyak, atau energi surya di daerah terpencil. Distribusi hashrate global berubah signifikan seiring regulasi. Setelah China melarang mining pada 2021, hashrate yang tadinya dominan di China bermigrasi ke Amerika Serikat, Kazakhstan, Rusia, dan tempat lain dalam hitungan bulan. Ini menunjukkan bahwa mining sangat mobile secara geografis dan jaringan Bitcoin tahan terhadap regulasi lokal karena hashrate bisa berpindah ke yurisdiksi lain.</p>
+
+          <p><strong>Stratum protocol: siapa yang mengontrol block template</strong></p>
+          <p>Stratum adalah protokol komunikasi antara pool server dan mining hardware. Di Stratum v1 yang masih dominan dipakai saat ini, pool operator yang menyusun block template dan menentukan transaksi apa yang dimasukkan. Miner hanya menerima pekerjaan berupa header yang harus di-hash tanpa kontrol atas isi block. Stratum v2 memperkenalkan job negotiation: miner individual bisa memilih transaksi sendiri dan hanya meminta pool untuk memvalidasi pekerjaan mereka. Ini secara signifikan meningkatkan desentralisasi karena kontrol block template tidak lagi terpusat di pool operator.</p>
+
+          <div class="p-callout">
+            <p>Ketiga aspek ini saling terkait: efisiensi hardware menentukan di mana miner bisa beroperasi secara ekonomis, distribusi geografis menentukan ketahanan jaringan terhadap regulasi, dan protokol komunikasi menentukan seberapa terdesentralisasi keputusan tentang isi block. Memahami ketiganya bersama-sama memberikan gambaran yang jauh lebih lengkap tentang bagaimana mining Bitcoin benar-benar bekerja di dunia nyata.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Mining Ecosystem Visualizer</div>
+          <div class="b19-s196-desc">
+            Tiga tab: evolusi efisiensi hardware ASIC dari 2013-2024, distribusi hashrate geografis sebelum dan sesudah China ban 2021, dan perbandingan Stratum v1 vs v2 dalam mengontrol block template.
+          </div>
+
+          <div class="b19-s196-tabs">
+            <button class="b19-s196-tab s196-act" id="b19-s196-t1">ASIC & Efisiensi Energi</button>
+            <button class="b19-s196-tab" id="b19-s196-t2">Distribusi Geografis</button>
+            <button class="b19-s196-tab" id="b19-s196-t3">Stratum v1 vs v2</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b19-s196-pane show" id="b19-s196-p1">
+            <div class="b19-s196-hint">ASIC dirancang khusus untuk SHA256. Efisiensi diukur dalam J/TH — semakin rendah semakin efisien. Hardware lama tidak bisa bersaing secara ekonomis dengan generasi baru.</div>
+            <div class="b19-s196-analogy">
+              <div class="b19-s196-analogy-label">Analogi</div>
+              <div class="b19-s196-analogy-text">Bayangkan lomba minum air: di 2013, miner pakai ember besar — banyak energi terbuang. Setiap generasi hardware seperti menemukan wadah yang lebih efisien. Hardware 2024 seperti pipet presisi — hampir tidak ada yang terbuang. Yang masih pakai ember tidak bisa lagi berkompetisi secara ekonomis.</div>
+            </div>
+            <div class="b19-s196-asic-label">Evolusi efisiensi ASIC Bitcoin — J/TH (lebih rendah = lebih efisien):</div>
+            <div id="b19-s196-asic-rows"></div>
+            <div class="b19-s196-asic-cards">
+              <div class="b19-s196-asic-card s196-ac-old">
+                <div class="b19-s196-ac-label">ASIC Generasi Pertama (2013)</div>
+                <div class="b19-s196-ac-val">~1.000+ J/TH</div>
+                <div class="b19-s196-ac-sub">Boros energi, sudah tidak kompetitif secara ekonomis</div>
+              </div>
+              <div class="b19-s196-asic-card s196-ac-now">
+                <div class="b19-s196-ac-label">ASIC Terbaik Saat Ini (2024)</div>
+                <div class="b19-s196-ac-val">~15-20 J/TH</div>
+                <div class="b19-s196-ac-sub">Mendekati batas efisiensi fisik silikon modern</div>
+              </div>
+              <div class="b19-s196-asic-card s196-ac-info">
+                <div class="b19-s196-ac-label">Mengapa J/TH penting?</div>
+                <div class="b19-s196-ac-val">Biaya listrik</div>
+                <div class="b19-s196-ac-sub">Semakin rendah J/TH, semakin murah biaya per hash, semakin kompetitif</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b19-s196-pane" id="b19-s196-p2">
+            <div class="b19-s196-hint">Mining mengikuti energi murah. Hashrate global sangat mobile — saat satu negara melarang, miner berpindah ke negara lain dalam hitungan bulan.</div>
+            <div class="b19-s196-analogy">
+              <div class="b19-s196-analogy-label">Analogi</div>
+              <div class="b19-s196-analogy-text">Mining Bitcoin seperti pabrik yang bisa bongkar pasang dalam hitungan minggu. Saat satu negara melarang, pabrik tidak tutup — ia pindah ke negara lain yang menawarkan listrik murah atau regulasi lebih ramah. Hardware miner adalah aset fisik yang bisa dikapalkan ke seluruh dunia.</div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+              <div class="b19-s196-geo-label">Pilih periode:</div>
+              <div class="b19-s196-geo-toggle">
+                <button class="b19-s196-geo-btn" data-period="before">Sebelum China Ban (2020)</button>
+                <button class="b19-s196-geo-btn s196-geo-act" data-period="after">Sesudah China Ban (2022+)</button>
+              </div>
+            </div>
+            <div id="b19-s196-geo-rows"></div>
+            <div class="b19-s196-geo-note" id="b19-s196-geo-note"></div>
+            <div class="b19-s196-geo-card">
+              <div class="b19-s196-geo-card-label">Implikasi untuk ketahanan jaringan:</div>
+              <div class="b19-s196-geo-card-text">Setelah China ban 2021, hashrate global turun ~50% dalam beberapa minggu, lalu pulih penuh dalam beberapa bulan. Ini membuktikan bahwa tidak ada satu pun pemerintah yang bisa mematikan Bitcoin secara permanen hanya dengan regulasi lokal.</div>
+            </div>
+          </div>
+
+          <!-- PANE 3 -->
+          <div class="b19-s196-pane" id="b19-s196-p3">
+            <div class="b19-s196-hint">Stratum adalah protokol komunikasi antara pool dan hardware. Versinya menentukan siapa yang punya kontrol atas konten block.</div>
+            <div class="b19-s196-analogy">
+              <div class="b19-s196-analogy-label">Analogi</div>
+              <div class="b19-s196-analogy-text"><strong>Stratum v1:</strong> seperti kontraktor yang menerima pesanan dari bos, di mana bos yang menentukan apa yang dibangun, kontraktor hanya mengerjakan. Pool yang menentukan transaksi apa yang masuk ke block.<br><br><strong>Stratum v2:</strong> seperti kontraktor yang punya hak memilih material sendiri, ia boleh mengusulkan desain dan bos hanya memvalidasi kualitas. Miner bisa memilih transaksi sendiri.</div>
+            </div>
+            <div class="b19-s196-stratum-cards">
+              <div class="b19-s196-stratum-card s196-sc-v1">
+                <div class="b19-s196-stratum-label">STRATUM V1 — DOMINAN SAAT INI</div>
+                <div class="b19-s196-stratum-title">Pool yang mengontrol block template</div>
+                <div class="b19-s196-stratum-item">Pool menyusun block template lengkap dengan transaksi yang dipilih</div>
+                <div class="b19-s196-stratum-item">Miner hanya menerima pekerjaan berupa header yang harus di-hash</div>
+                <div class="b19-s196-stratum-item">Miner tidak tahu atau tidak bisa memilih transaksi yang dimasukkan</div>
+                <div class="b19-s196-stratum-item">Komunikasi tidak terenkripsi — rentan terhadap man-in-the-middle</div>
+                <div class="b19-s196-stratum-analogy">Kontraktor yang hanya tahu "gali lubang di sini" tanpa tahu untuk apa.</div>
+              </div>
+              <div class="b19-s196-stratum-card s196-sc-v2">
+                <div class="b19-s196-stratum-label">STRATUM V2 — GENERASI BARU</div>
+                <div class="b19-s196-stratum-title">Miner bisa memilih transaksi sendiri</div>
+                <div class="b19-s196-stratum-item">Job negotiation: miner bisa menyusun block template sendiri</div>
+                <div class="b19-s196-stratum-item">Pool hanya memvalidasi bahwa pekerjaan hash benar</div>
+                <div class="b19-s196-stratum-item">Komunikasi terenkripsi — lebih aman dari intersepsi</div>
+                <div class="b19-s196-stratum-item">Meningkatkan desentralisasi block template secara signifikan</div>
+                <div class="b19-s196-stratum-analogy">Kontraktor yang bisa memilih material dan desain sendiri — bos hanya cek kualitas akhir.</div>
+              </div>
+            </div>
+            <div class="b19-s196-flow-wrap">
+              <div class="b19-s196-flow-label">Perbandingan alur komunikasi:</div>
+              <div class="b19-s196-flow-grid">
+                <div class="b19-s196-flow-col s196-fc-v1">
+                  <div class="b19-s196-flow-title">Stratum v1:</div>
+                  <div class="b19-s196-flow-step s196-highlight">Pool susun block template</div>
+                  <div class="b19-s196-flow-step">Pool kirim job ke miner</div>
+                  <div class="b19-s196-flow-step">Miner hash header</div>
+                  <div class="b19-s196-flow-step">Miner kirim share ke pool</div>
+                  <div class="b19-s196-flow-step s196-highlight">Pool submit block</div>
+                </div>
+                <div class="b19-s196-flow-col s196-fc-v2">
+                  <div class="b19-s196-flow-title">Stratum v2 (job negotiation):</div>
+                  <div class="b19-s196-flow-step s196-highlight">Miner susun block template</div>
+                  <div class="b19-s196-flow-step">Miner kirim template ke pool</div>
+                  <div class="b19-s196-flow-step">Pool validasi template</div>
+                  <div class="b19-s196-flow-step">Miner hash header</div>
+                  <div class="b19-s196-flow-step">Miner kirim share ke pool</div>
+                  <div class="b19-s196-flow-step s196-highlight">Miner/pool submit block</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-19-5" data-sb="sb-19-5">
+            ← 19.5 — Selfish Mining
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 19.6 -->
+
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 22 · BAB 19 -->
+
+

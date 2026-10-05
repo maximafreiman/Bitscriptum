@@ -1,0 +1,679 @@
+<!-- ============================================================
+     PAGE 20 · BAB 17 · SPV & Light Clients
+     |-- 17.1 · Masalah yang Dipecahkan SPV [DONE]
+     |-- 17.2 · [LOCKED]
+     |-- 17.3 · [LOCKED]
+     |-- 17.4 · [LOCKED]
+     |-- 17.5 · [LOCKED]
+     |-- 17.6 · [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab17">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b17">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b17">← Daftar Bab</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab17">
+      <div class="sidebar-heading">Bab 17</div>
+      <div class="sidebar-title">SPV & Light Clients</div>
+
+      <div class="sidebar-item active" id="sb-17-1">
+        <div class="sb-num">17.1</div>
+        <div class="sb-label">Masalah yang Dipecahkan SPV</div>
+      </div>
+      <div class="sidebar-item" id="sb-17-2">
+        <div class="sb-num">17.2</div>
+        <div class="sb-label">Merkle Proof — Bukti Keanggotaan yang Efisien</div>
+      </div>
+      <div class="sidebar-item" id="sb-17-3">
+        <div class="sb-num">17.3</div>
+        <div class="sb-label">Bloom Filters — Cara Lama yang Bermasalah</div>
+      </div>
+      <div class="sidebar-item" id="sb-17-4">
+        <div class="sb-num">17.4</div>
+        <div class="sb-label">BIP 157/158 — Compact Block Filters</div>
+      </div>
+      <div class="sidebar-item" id="sb-17-5">
+        <div class="sb-num">17.5</div>
+        <div class="sb-label">Trade-off SPV vs Full Node — Seberapa Besar Risiko?</div>
+      </div>
+      <div class="sidebar-item" id="sb-17-6">
+        <div class="sb-num">17.6</div>
+        <div class="sb-label">Light Client di Dunia Nyata — Electrum, Neutrino, dan Wallet Modern</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab17-content">
+
+      <!-- ==============================
+           SECTION 17.1 · Masalah yang Dipecahkan SPV
+      ============================== -->
+      <div class="p-section active" id="section-17-1">
+        <div class="p-eyebrow">Bab 17 · 17.1</div>
+        <div class="p-heading">Satoshi sudah memikirkan ini sejak 2008 — bagaimana HP bisa memverifikasi Bitcoin</div>
+        <div class="p-title">Masalah yang Dipecahkan SPV</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Bayangkan kamu ingin memverifikasi bahwa sebuah cek benar-benar dikeluarkan oleh bank yang sah. Ada dua cara: pertama, kamu bergabung menjadi karyawan bank dan mengakses seluruh sistem database untuk memverifikasi sendiri. Kedua, kamu minta bank menunjukkan bukti transaksi yang disertai stempel resmi yang bisa kamu verifikasi keasliannya tanpa harus masuk ke sistem.</p>
+
+          <p>Full node adalah cara pertama, yaitu verifikasi penuh tapi butuh komitmen besar. SPV adalah cara kedua, yaitu verifikasi yang lebih ringan tapi tetap bisa diandalkan untuk kebanyakan use case.</p>
+
+          <p><strong>Konteks sejarah: Satoshi sudah memikirkan ini</strong></p>
+          <p>Di bagian 8 whitepaper Bitcoin (2008), Satoshi menulis tentang Simplified Payment Verification. Ia menyadari bahwa tidak semua orang akan atau bisa menjalankan full node. Untuk pengguna sehari-hari yang hanya ingin menerima dan mengirim pembayaran, ada cara yang lebih ringan: cukup verifikasi bahwa transaksi kamu ada di dalam block yang valid, tanpa perlu memvalidasi seluruh blockchain.</p>
+
+          <p>Kuncinya ada di header block. Header block Bitcoin hanya 80 byte per block, tapi mengandung merkle root yaitu sebuah hash yang merepresentasikan seluruh transaksi dalam block tersebut. Dengan menggunakan hanya header block (sekitar 70 MB untuk seluruh blockchain) plus merkle proof untuk transaksi tertentu, kamu bisa membuktikan bahwa transaksi tersebut ada di dalam block yang valid.</p>
+
+          <p><strong>Apa yang bisa diverifikasi SPV?</strong></p>
+          <p>SPV client bisa memverifikasi bahwa transaksi ada di dalam block tertentu via merkle proof, block tersebut punya proof-of-work yang valid via header, dan block tersebut adalah bagian dari chain terpanjang via header chain. Yang tidak bisa diverifikasi oleh SPV tanpa kepercayaan tambahan: apakah aturan konsensus lainnya terpenuhi, apakah transaksi tersebut double-spend sebelum masuk block, dan apakah total supply Bitcoin valid.</p>
+
+          <p><strong>Asumsi kepercayaan yang dibutuhkan SPV</strong></p>
+          <p>SPV bukan trustless seperti full node. Ia bergantung pada asumsi bahwa mayoritas hashrate jujur. Kalau mayoritas miner bersekongkol, mereka bisa membuat block palsu yang menipu SPV client. Tapi asumsi ini sama dengan asumsi keamanan Bitcoin secara keseluruhan, yaitu selama majority honest, SPV aman untuk pembayaran sehari-hari.</p>
+
+          <p><strong>Untuk siapa SPV cocok?</strong></p>
+          <p>Untuk pembayaran sehari-hari dengan jumlah moderat, SPV memberikan keseimbangan yang baik antara keamanan dan kemudahan. Untuk pembayaran dengan nilai sangat besar atau untuk keperluan yang membutuhkan verifikasi penuh, full node tetap menjadi pilihan terbaik.</p>
+
+          <div class="p-callout">
+            <p>SPV bukan kompromi yang buruk, melainkan ia adalah trade-off yang disengaja dan sudah dipikirkan Satoshi sejak awal. Dalam sistem yang mayoritas jujur, SPV memberikan verifikasi yang cukup kuat untuk kebanyakan use case. Kuncinya adalah memahami batasannya dan memilih tingkat verifikasi yang sesuai dengan kebutuhan dan nilai yang dipertaruhkan.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualisasi — Full Node vs SPV Client</div>
+          <div class="b17-s171-desc">
+            Dua tab: perbandingan lengkap Full Node vs SPV dari sisi storage, verifikasi, dan kepercayaan yang dibutuhkan — plus diagram bagaimana keduanya berinteraksi dengan jaringan Bitcoin.
+          </div>
+
+          <div class="b17-s171-toggle">
+            <button class="b17-s171-toggle-btn s171-act" id="b17-s171-t1">Perbandingan Full Node vs SPV</button>
+            <button class="b17-s171-toggle-btn" id="b17-s171-t2">Diagram Interaksi Jaringan</button>
+          </div>
+
+          <!-- COMPARE VIEW -->
+          <div id="b17-s171-compare">
+            <div class="b17-s171-grid">
+              <div class="b17-s171-col">
+                <div class="b17-s171-col-head s171-full">
+                  <div class="b17-s171-col-title">Full Node</div>
+                  <div class="b17-s171-col-sub">Verifikasi penuh, tidak perlu mempercayai siapapun</div>
+                </div>
+                <div class="b17-s171-row s171-full"><div class="b17-s171-row-label">Yang didownload</div><div class="b17-s171-row-val">Semua block (~650 GB) + semua header</div><div class="b17-s171-badge s171-full">~650 GB</div></div>
+                <div class="b17-s171-row s171-full"><div class="b17-s171-row-label">Yang diverifikasi</div><div class="b17-s171-row-val">Setiap transaksi, setiap signature, setiap aturan konsensus</div><div class="b17-s171-badge s171-full">Verifikasi penuh</div></div>
+                <div class="b17-s171-row s171-full"><div class="b17-s171-row-label">Storage dibutuhkan</div><div class="b17-s171-row-val">~650 GB (full) atau ~550 MB minimum (pruned)</div><div class="b17-s171-badge s171-full">650 GB / 550 MB</div></div>
+                <div class="b17-s171-row s171-full"><div class="b17-s171-row-label">RAM dibutuhkan</div><div class="b17-s171-row-val">Minimal 2 GB, disarankan 4-8 GB</div><div class="b17-s171-badge s171-full">2-8 GB RAM</div></div>
+                <div class="b17-s171-row s171-full"><div class="b17-s171-row-label">Kepercayaan</div><div class="b17-s171-row-val">Tidak perlu mempercayai siapapun</div><div class="b17-s171-badge s171-full">Zero trust</div></div>
+                <div class="b17-s171-row s171-full"><div class="b17-s171-row-label">Waktu setup</div><div class="b17-s171-row-val">4-72 jam (IBD) tergantung hardware</div><div class="b17-s171-badge s171-full">4-72 jam</div></div>
+              </div>
+              <div class="b17-s171-col">
+                <div class="b17-s171-col-head s171-spv">
+                  <div class="b17-s171-col-title">SPV Client</div>
+                  <div class="b17-s171-col-sub">Verifikasi ringan, cocok untuk mobile</div>
+                </div>
+                <div class="b17-s171-row s171-spv"><div class="b17-s171-row-label">Yang didownload</div><div class="b17-s171-row-val">Hanya header (~70 MB) + merkle proof transaksi relevan</div><div class="b17-s171-badge s171-spv">~70 MB</div></div>
+                <div class="b17-s171-row s171-spv"><div class="b17-s171-row-label">Yang diverifikasi</div><div class="b17-s171-row-val">Proof-of-work header + merkle proof bahwa tx ada di block</div><div class="b17-s171-badge s171-spv">Verifikasi parsial</div></div>
+                <div class="b17-s171-row s171-spv"><div class="b17-s171-row-label">Storage dibutuhkan</div><div class="b17-s171-row-val">~70 MB header, bertambah ~4 MB/tahun</div><div class="b17-s171-badge s171-spv">~70 MB</div></div>
+                <div class="b17-s171-row s171-spv"><div class="b17-s171-row-label">RAM dibutuhkan</div><div class="b17-s171-row-val">Sangat ringan — cocok untuk HP</div><div class="b17-s171-badge s171-spv">&lt; 100 MB RAM</div></div>
+                <div class="b17-s171-row s171-spv"><div class="b17-s171-row-label">Kepercayaan</div><div class="b17-s171-row-val">Percaya mayoritas hashrate jujur</div><div class="b17-s171-badge s171-spv">Majority honest</div></div>
+                <div class="b17-s171-row s171-spv"><div class="b17-s171-row-label">Waktu setup</div><div class="b17-s171-row-val">Beberapa menit — hanya download header chain</div><div class="b17-s171-badge s171-spv">~5 menit</div></div>
+              </div>
+            </div>
+
+            <div class="b17-s171-cando-label">SPV client bisa dan tidak bisa:</div>
+            <div class="b17-s171-cando-wrap">
+              <div class="b17-s171-cando s171-can">
+                <div class="b17-s171-cando-title">SPV BISA memverifikasi:</div>
+                <div class="b17-s171-cando-item">Transaksi ada di dalam block tertentu</div>
+                <div class="b17-s171-cando-item">Block punya proof-of-work yang valid</div>
+                <div class="b17-s171-cando-item">Block adalah bagian dari chain terpanjang</div>
+                <div class="b17-s171-cando-item">Berapa konfirmasi yang sudah diterima</div>
+              </div>
+              <div class="b17-s171-cando s171-cant">
+                <div class="b17-s171-cando-title">SPV TIDAK BISA verifikasi:</div>
+                <div class="b17-s171-cando-item">Apakah semua aturan konsensus terpenuhi</div>
+                <div class="b17-s171-cando-item">Apakah total supply Bitcoin masih valid</div>
+                <div class="b17-s171-cando-item">Apakah transaksi double-spend sebelum masuk block</div>
+                <div class="b17-s171-cando-item">Apakah miner tidak overclaim reward</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- NETWORK VIEW -->
+          <div id="b17-s171-net" style="display:none;">
+            <div class="b17-s171-net-label">Bagaimana Full Node berinteraksi dengan jaringan:</div>
+            <div class="b17-s171-net-diagram">
+              <div class="b17-s171-net-node"><div class="b17-s171-net-icon s171-ni-full">🖥️</div><div class="b17-s171-net-name">Full Node<br>kamu</div></div>
+              <div class="b17-s171-net-arrow"><div class="b17-s171-net-arrow-label">← semua block + header</div><div class="b17-s171-net-arrow-line"></div><div class="b17-s171-net-arrow-label s171-down">→ relay tx & block</div></div>
+              <div class="b17-s171-net-node"><div class="b17-s171-net-icon s171-ni-peer">🌐</div><div class="b17-s171-net-name">Peer<br>Bitcoin</div></div>
+              <div class="b17-s171-net-arrow"><div class="b17-s171-net-arrow-label">← semua block + header</div><div class="b17-s171-net-arrow-line"></div><div class="b17-s171-net-arrow-label s171-down">→ relay tx & block</div></div>
+              <div class="b17-s171-net-node"><div class="b17-s171-net-icon s171-ni-peer">🌐</div><div class="b17-s171-net-name">Peer<br>Bitcoin</div></div>
+            </div>
+            <div class="b17-s171-net-label" style="margin-top:8px;">Bagaimana SPV client berinteraksi dengan jaringan:</div>
+            <div class="b17-s171-net-diagram">
+              <div class="b17-s171-net-node"><div class="b17-s171-net-icon s171-ni-spv">📱</div><div class="b17-s171-net-name">SPV Client<br>(HP kamu)</div></div>
+              <div class="b17-s171-net-arrow"><div class="b17-s171-net-arrow-label">← header saja (~70 MB)</div><div class="b17-s171-net-arrow-line"></div><div class="b17-s171-net-arrow-label s171-down">→ request tx relevan</div></div>
+              <div class="b17-s171-net-node"><div class="b17-s171-net-icon s171-ni-peer">🖥️</div><div class="b17-s171-net-name">Full Node<br>(pihak ketiga)</div></div>
+              <div class="b17-s171-net-arrow"><div class="b17-s171-net-arrow-label">← block data lengkap</div><div class="b17-s171-net-arrow-line"></div><div class="b17-s171-net-arrow-label s171-down">→ relay</div></div>
+              <div class="b17-s171-net-node"><div class="b17-s171-net-icon s171-ni-peer">🌐</div><div class="b17-s171-net-name">Peer<br>Bitcoin</div></div>
+            </div>
+            <div class="b17-s171-note">SPV client bergantung pada full node pihak ketiga untuk mendapatkan data — ini yang menciptakan asumsi kepercayaan tambahan dibanding full node yang terhubung langsung ke jaringan.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-17-2" data-sb="sb-17-2">
+            17.2 — Merkle Proof →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 17.1 -->
+
+      <!-- ==============================
+           SECTION 17.2 · Merkle Proof
+      ============================== -->
+      <div class="p-section" id="section-17-2">
+        <div class="p-eyebrow">Bab 17 · 17.2</div>
+        <div class="p-heading">Membuktikan satu transaksi dari jutaan — hanya dengan beberapa lusin byte</div>
+        <div class="p-title">Merkle Proof — Bukti Keanggotaan yang Efisien</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Bayangkan kamu tinggal di kota dengan 10.000 penduduk dan perlu membuktikan bahwa namamu ada di buku kependudukan resmi. Ada dua cara: pertama, tunjukkan seluruh buku (650 halaman) kepada orang yang ingin memverifikasi. Kedua, tunjukkan satu jalur kecil dari namamu hingga ke cap resmi di halaman pertama, hanya 13 langkah untuk 10.000 penduduk, bukan 10.000 halaman.</p>
+
+          <p>Itulah merkle proof. Bukan bukti dengan menunjukkan seluruh data, melainkan bukti dengan menunjukkan jalur yang bisa diverifikasi secara kriptografi.</p>
+
+          <p><strong>Sudut pandang yang berbeda dari Bab 3</strong></p>
+          <p>Di Bab 4 kita melihat merkle tree sebagai struktur kriptografi, yaitu bagaimana hash-hash transaksi dikombinasikan menjadi satu merkle root. Di sini kita melihatnya dari sudut pandang SPV client: bagaimana HP kamu membuktikan bahwa transaksi kamu ada di block yang tidak pernah kamu download sepenuhnya.</p>
+
+          <p><strong>Struktur merkle proof</strong></p>
+          <p>Misalkan sebuah block punya 8 transaksi. Untuk membuktikan bahwa Tx3 ada di block ini, kamu tidak perlu semua 8 transaksi. Kamu hanya butuh: hash dari Tx4 (pasangan Tx3 di level pertama), hash dari H(Tx1+Tx2) (pasangan di level kedua), dan hash dari H(Tx5+Tx6+Tx7+Tx8) (pasangan di level ketiga). Tiga hash ini, dikombinasikan dengan Tx3, cukup untuk merekonstruksi merkle root. Kalau hasilnya cocok dengan merkle root di header block yang sudah diverifikasi proof-of-work-nya, transaksi tersebut terbukti ada di block itu.</p>
+
+          <p><strong>Efisiensi yang luar biasa</strong></p>
+          <p>Untuk block dengan n transaksi, merkle proof hanya membutuhkan log₂(n) hash. Block Bitcoin modern bisa berisi lebih dari 3.000 transaksi. Merkle proof-nya hanya butuh sekitar 12 hash yaitu masing-masing 32 byte, totalnya sekitar 384 byte. Bandingkan dengan mengdownload seluruh block yang bisa mencapai 1-2 MB. Kalau transaksi dalam block berlipat ganda dari 3.000 menjadi 6.000, proof hanya butuh satu hash tambahan.</p>
+
+          <p><strong>Cara SPV client menggunakan merkle proof</strong></p>
+          <p>Ketika SPV wallet kamu menerima pembayaran, ini yang terjadi di belakang layar: node yang terhubung mengirimkan transaksi beserta merkle proof-nya. SPV client mengambil hash transaksi, mengikuti jalur merkle proof, dan merekonstruksi merkle root. Kemudian membandingkan dengan merkle root yang ada di header block yang sudah diverifikasi proof-of-work-nya. Kalau cocok, transaksi terbukti ada di block tersebut.</p>
+
+          <p><strong>Keterbatasan merkle proof</strong></p>
+          <p>Merkle proof membuktikan bahwa transaksi ADA di block, tapi tidak membuktikan bahwa transaksi tersebut VALID. Input transaksi bisa saja sudah dibelanjakan sebelumnya dan block yang mengandung transaksi tersebut tetap valid dari sudut pandang proof-of-work. Untuk mendeteksi double spend, dibutuhkan akses ke UTXO set yang hanya dimiliki oleh full node.</p>
+
+          <div class="p-callout">
+            <p>Merkle proof adalah salah satu konstruksi kriptografi paling elegan di Bitcoin. Dengan hanya beberapa lusin byte, siapapun bisa membuktikan bahwa sebuah transaksi ada di dalam block yang mengandung jutaan byte data. Ini adalah konsekuensi matematika dari sifat hash function yang deterministic dan collision-resistant.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Merkle Proof Visualizer</div>
+          <div class="b17-s172-desc">
+            Pilih transaksi yang ingin dibuktikan. Tree akan menampilkan jalur proof yang dibutuhkan SPV client — hanya sebagian kecil data dari seluruh block.
+          </div>
+
+          <div class="b17-s172-tx-label">Pilih transaksi target (klik salah satu):</div>
+          <div class="b17-s172-tx-grid" id="b17-s172-tx-grid"></div>
+
+          <div class="b17-s172-tree-wrap">
+            <svg class="b17-s172-svg" id="b17-s172-svg" width="600" height="200" viewBox="0 0 600 200" style="display:block;width:100%;max-width:600px;margin:0 auto;"></svg>
+          </div>
+
+          <div class="b17-s172-steps-label">Jalur merkle proof:</div>
+          <div class="b17-s172-steps" id="b17-s172-steps"></div>
+
+          <div class="b17-s172-stats">
+            <div class="b17-s172-stat s172-purple">
+              <div class="b17-s172-stat-label">Ukuran proof</div>
+              <div class="b17-s172-stat-val" id="b17-s172-proof-size">128 byte</div>
+              <div class="b17-s172-stat-sub" id="b17-s172-proof-hashes">3 sibling + 1 target</div>
+            </div>
+            <div class="b17-s172-stat s172-green">
+              <div class="b17-s172-stat-label">Ukuran block</div>
+              <div class="b17-s172-stat-val">~1.5 MB</div>
+              <div class="b17-s172-stat-sub">8 transaksi (simulasi)</div>
+            </div>
+            <div class="b17-s172-stat s172-amber">
+              <div class="b17-s172-stat-label">Efisiensi</div>
+              <div class="b17-s172-stat-val" id="b17-s172-efficiency">99.99%</div>
+              <div class="b17-s172-stat-sub">Data dihemat vs download penuh</div>
+            </div>
+          </div>
+
+          <div class="b17-s172-note" id="b17-s172-note">Pilih transaksi di atas untuk melihat merkle proof-nya.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-17-1" data-sb="sb-17-1">
+            ← 17.1 — Masalah yang Dipecahkan SPV
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-17-3" data-sb="sb-17-3">
+            17.3 — Bloom Filters →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 17.2 -->
+
+      <!-- ==============================
+           SECTION 17.3 · Bloom Filters
+      ============================== -->
+      <div class="p-section" id="section-17-3">
+        <div class="p-eyebrow">Bab 17 · 17.3</div>
+        <div class="p-heading">Solusi yang elegan secara matematis tapi ternyata bocor dari sisi privasi</div>
+        <div class="p-title">Bloom Filters — Cara Lama yang Bermasalah</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>SPV client perlu memberitahu full node: "kirimkan saya transaksi yang relevan dengan address saya." Tapi kalau SPV langsung berkata "saya punya address bc1q...xyz, kirimkan transaksi ke address itu," privasi langsung bocor karena full node tahu persis address mana yang kamu miliki.</p>
+
+          <p>Bloom filter adalah solusi pertama Bitcoin untuk masalah ini. Diperkenalkan di BIP 37 pada 2012, ia memungkinkan SPV client memberitahu node tentang transaksi yang relevan tanpa mengungkap address secara langsung.</p>
+
+          <p><strong>Apa itu bloom filter?</strong></p>
+          <p>Bloom filter adalah struktur data probabilistik yang menjawab satu pertanyaan: "apakah elemen X ada dalam set ini?" Jawaban "tidak" selalu tepat, kalau bloom filter bilang tidak ada, memang tidak ada. Tapi jawaban "ya" bisa salah (false positive), bloom filter bisa bilang "ya" untuk elemen yang sebenarnya tidak ada di set. Ini disengaja: false positive menciptakan ambiguitas yang melindungi privasi.</p>
+
+          <p><strong>Cara kerja bloom filter</strong></p>
+          <p>Bloom filter adalah array bit, dimulai dengan semua bit nol. Untuk menambahkan elemen, kamu hash elemen tersebut dengan beberapa hash function berbeda, lalu set bit-bit yang dihasilkan menjadi 1. Untuk query "apakah X ada?", hash X dengan hash function yang sama. Kalau semua bit yang dihasilkan sudah 1, X mungkin ada. Kalau ada satu bit yang masih 0, X pasti tidak ada. SPV client membuat bloom filter berisi address-address miliknya dan mengirimkannya ke node. Node menyaring transaksi dan hanya mengirimkan yang cocok.</p>
+
+          <p><strong>Masalah privasi yang membuat BIP 37 deprecated</strong></p>
+          <p>Terlepas dari desain yang cerdas, bloom filter punya masalah serius. Ukuran dan komposisi filter bisa mengungkap informasi tentang berapa banyak address yang dimiliki klien. Node yang jahat bisa menguji jutaan address Bitcoin ke filter dan melakukan analisis statistik untuk mengidentifikasi address yang sebenarnya dimiliki. Implementasi awal BIP 37 bahkan punya kelemahan yang memungkinkan full node menentukan address klien dengan akurasi yang mengejutkan.</p>
+
+          <p>Selain masalah privasi, BIP 37 juga membebani full node secara tidak proporsional, karena node harus memfilter setiap transaksi untuk setiap klien SPV yang terhubung, yang bisa menjadi serangan DoS.</p>
+
+          <p><strong>Status saat ini</strong></p>
+          <p>BIP 37 sekarang dianggap deprecated. Banyak node menonaktifkan dukungan BIP 37 secara default. Solusi yang lebih baik, yaitu compact block filters (BIP 157/158), sudah tersedia dan akan dibahas di 17.4.</p>
+
+          <div class="p-callout">
+            <p>Bloom filter adalah contoh menarik dari solusi yang elegan secara matematis tapi tidak cukup baik dalam praktik keamanan. Privasi adalah properti yang sangat sulit dipertahankan, bahkan sistem yang dirancang untuk melindungi privasi bisa bocor informasi melalui cara-cara yang tidak terduga.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bloom Filter — Cara Kerja & Masalah Privasi</div>
+          <div class="b17-s173-desc">
+            Tab pertama: coba sendiri cara kerja bloom filter — tambah address, lihat bit yang di-set, dan temukan false positive. Tab kedua: bagaimana node jahat bisa mengeksploitasi filter untuk mengetahui address yang kamu miliki.
+          </div>
+
+          <div class="b17-s173-tabs">
+            <button class="b17-s173-tab s173-act" id="b17-s173-t1">Bloom Filter — Cara Kerjanya</button>
+            <button class="b17-s173-tab" id="b17-s173-t2">Masalah Privasi BIP 37</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b17-s173-pane show" id="b17-s173-p1">
+            <div class="b17-s173-hint">Bloom filter memungkinkan SPV client memberitahu node transaksi yang relevan tanpa mengungkap address langsung. Tambah address ke filter, lalu query untuk lihat hasilnya — termasuk false positive.</div>
+
+            <div class="b17-s173-array-label">Bit array (32 bit) — bit yang di-set menjadi 1 saat address ditambahkan:</div>
+            <div class="b17-s173-array" id="b17-s173-array"></div>
+
+            <div class="b17-s173-section-label">Tambah address ke filter:</div>
+            <div class="b17-s173-add-wrap">
+              <select class="b17-s173-select" id="b17-s173-add-select">
+                <option value="bc1q...alice">bc1q...alice (address Alice)</option>
+                <option value="bc1q...bob">bc1q...bob (address Bob)</option>
+                <option value="bc1q...carol">bc1q...carol (address Carol)</option>
+                <option value="3J98t...dave">3J98t...dave (address Dave)</option>
+                <option value="1BvB...eve">1BvB...eve (address Eve)</option>
+              </select>
+              <button class="b17-s173-add-btn" id="b17-s173-add-btn">+ Tambah ke Filter</button>
+            </div>
+
+            <div class="b17-s173-section-label">Address yang sudah ada di filter:</div>
+            <div class="b17-s173-addrs" id="b17-s173-addrs">
+              <div class="b17-s173-empty">Belum ada address. Tambahkan di atas.</div>
+            </div>
+
+            <div class="b17-s173-section-label">Query filter — apakah address ini ada?</div>
+            <div class="b17-s173-add-wrap">
+              <select class="b17-s173-select" id="b17-s173-query-select">
+                <option value="bc1q...alice">bc1q...alice (address Alice)</option>
+                <option value="bc1q...bob">bc1q...bob (address Bob)</option>
+                <option value="bc1q...carol">bc1q...carol (address Carol)</option>
+                <option value="3J98t...dave">3J98t...dave (address Dave)</option>
+                <option value="1BvB...eve">1BvB...eve (address Eve)</option>
+                <option value="bc1q...unknown">bc1q...unknown (address asing)</option>
+                <option value="1abc...stranger">1abc...stranger (address asing 2)</option>
+              </select>
+              <button class="b17-s173-query-btn" id="b17-s173-query-btn">Query →</button>
+            </div>
+
+            <div class="b17-s173-result s173-idle" id="b17-s173-result">Tambahkan address ke filter lalu query untuk melihat hasilnya.</div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b17-s173-pane" id="b17-s173-p2">
+            <div class="b17-s173-hint">Walau bloom filter dirancang untuk melindungi privasi, analisis statistik bisa mengungkap address yang sebenarnya dimiliki SPV client. Inilah mengapa BIP 37 sekarang deprecated.</div>
+
+            <div class="b17-s173-priv-steps">
+              <div class="b17-s173-priv-step s173-spy">
+                <div class="b17-s173-priv-label">Langkah 1: SPV client mengirim filter ke node</div>
+                <div class="b17-s173-priv-text">Alice mengirim bloom filter yang berisi 3 address miliknya ke full node. Filter berukuran 64 byte dengan false positive rate 1%.</div>
+                <div class="b17-s173-priv-sub">filter: 0x4A2F8C...3D1E (64 byte) | fp_rate: 0.01 | num_hash: 4</div>
+              </div>
+              <div class="b17-s173-priv-step s173-info">
+                <div class="b17-s173-priv-label">Langkah 2: Node menganalisis ukuran filter</div>
+                <div class="b17-s173-priv-text">Dari ukuran filter dan false positive rate yang diminta, node bisa memperkirakan berapa banyak address yang ada di filter. Filter 64 byte dengan fp 1% biasanya berisi 3-5 address.</div>
+                <div class="b17-s173-priv-sub">estimasi: ~3-5 address dalam filter</div>
+              </div>
+              <div class="b17-s173-priv-step s173-warn">
+                <div class="b17-s173-priv-label">Langkah 3: Node menguji address satu per satu</div>
+                <div class="b17-s173-priv-text">Node jahat menguji jutaan address Bitcoin ke filter Alice. Setiap address yang cocok (termasuk false positive) mempersempit kemungkinan. Dengan cukup banyak query, address yang benar-benar dimiliki Alice bisa diidentifikasi.</div>
+                <div class="b17-s173-priv-sub">tested: 1.847.293 address | matched: 47 (fp + true positives)</div>
+              </div>
+              <div class="b17-s173-priv-step s173-spy">
+                <div class="b17-s173-priv-label">Langkah 4: Analisis on-chain memperparah situasi</div>
+                <div class="b17-s173-priv-text">Address yang teridentifikasi dicocokkan dengan data blockchain publik. Clustering analysis bisa mengidentifikasi address lain milik Alice yang bahkan tidak ada di filter.</div>
+                <div class="b17-s173-priv-sub">identified: bc1q...alice1, bc1q...alice2 → linked to 4 more addresses</div>
+              </div>
+            </div>
+
+            <div class="b17-s173-bar-label">Perbandingan privasi antar metode:</div>
+            <div class="b17-s173-bars">
+              <div class="b17-s173-bar-row"><div class="b17-s173-bar-name">Full node</div><div class="b17-s173-bar-track"><div class="b17-s173-bar-fill" style="width:100%;background:#0F6E56;"><span class="b17-s173-bar-txt">100% — verifikasi mandiri</span></div></div></div>
+              <div class="b17-s173-bar-row"><div class="b17-s173-bar-name">BIP 37 (awal)</div><div class="b17-s173-bar-track"><div class="b17-s173-bar-fill" style="width:60%;background:#854F0B;"><span class="b17-s173-bar-txt">~60%</span></div></div></div>
+              <div class="b17-s173-bar-row"><div class="b17-s173-bar-name">BIP 37 (dianalisis)</div><div class="b17-s173-bar-track"><div class="b17-s173-bar-fill" style="width:15%;background:#A32D2D;"><span class="b17-s173-bar-txt">~15%</span></div></div></div>
+              <div class="b17-s173-bar-row"><div class="b17-s173-bar-name">BIP 157/158</div><div class="b17-s173-bar-track"><div class="b17-s173-bar-fill" style="width:85%;background:#534AB7;"><span class="b17-s173-bar-txt">~85% — jauh lebih baik</span></div></div></div>
+            </div>
+
+            <div class="b17-s173-note">BIP 37 dinonaktifkan secara default di banyak node sejak 2021. Kalau wallet kamu masih menggunakan BIP 37, pertimbangkan beralih ke wallet yang mendukung BIP 157/158 atau terhubung ke node kamu sendiri. Detail BIP 157/158 dibahas di 17.4.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-17-2" data-sb="sb-17-2">
+            ← 17.2 — Merkle Proof
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-17-4" data-sb="sb-17-4">
+            17.4 — BIP 157/158 →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 17.3 -->
+
+      <!-- ==============================
+           SECTION 17.4 · BIP 157/158
+      ============================== -->
+      <div class="p-section" id="section-17-4">
+        <div class="p-eyebrow">Bab 17 · 17.4</div>
+        <div class="p-heading">Kalau kamu tidak perlu memberitahu siapapun apa yang kamu cari, jangan lakukan itu</div>
+        <div class="p-title">BIP 157/158 — Compact Block Filters: Solusi Privasi yang Lebih Baik</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>BIP 37 membiarkan node memfilter untuk klien, sehingga node tahu apa yang dicari klien. BIP 157/158 membalik logika ini: klien yang mendownload filter dan memfilter sendiri. Pergeseran sederhana ini menciptakan perbedaan privasi yang sangat besar.</p>
+
+          <p><strong>Logika yang terbalik</strong></p>
+          <p>Dengan BIP 37: SPV client berkata ke node "saya punya address ini, tolong filter untuk saya." Node tahu address yang dicari. Dengan BIP 157/158: node membuat filter kompak untuk setiap block yang merangkum semua data dalam block tersebut. SPV client mendownload filter ini dan mengecek sendiri apakah ada data yang relevan. Kalau ada, baru klien mendownload block lengkapnya. Node tidak pernah tahu apa yang dicari klien.</p>
+
+          <p><strong>Apa itu compact block filter?</strong></p>
+          <p>BIP 158 mendefinisikan format filter kompak menggunakan struktur data bernama Golomb-Coded Set (GCS). GCS adalah probabilistic data structure yang lebih efisien dari bloom filter dengan false positive rate yang lebih terprediksi. Untuk setiap block, node membuat filter yang mengandung semua scriptPubKey dari output transaksi dalam block tersebut. Filter ini berukuran sekitar 10-20 KB untuk block dengan ribuan transaksi.</p>
+
+          <p><strong>BIP 157: Protokol Distribusi Filter</strong></p>
+          <p>BIP 157 mendefinisikan bagaimana filter ini didistribusikan di jaringan P2P. Ada dua jenis pesan baru: getcfheaders untuk minta header dari filter, dan getcfilters untuk minta filter untuk range block tertentu. Klien bisa mendownload filter headers secara ringan terlebih dahulu, lalu mendownload filter lengkap hanya untuk block yang dibutuhkan.</p>
+
+          <p><strong>Trade-off yang perlu dipahami</strong></p>
+          <p>SPV client dengan BIP 157/158 harus mendownload filter untuk setiap block, total bisa beberapa ratus MB hingga beberapa GB untuk seluruh chain. Ini lebih besar dari BIP 37 yang hanya mendownload transaksi relevan. Sebagai gantinya, privasi yang didapat jauh lebih baik. Ini adalah trade-off yang disengaja: tukar bandwidth untuk privasi.</p>
+
+          <p><strong>Status implementasi</strong></p>
+          <p>BIP 157/158 sudah diimplementasikan di software Bitcoin client utama. Neutrino adalah implementasi light client Go yang menggunakan BIP 157/158 dan dipakai oleh Lightning Network mobile wallet seperti Phoenix dan Breez.</p>
+
+          <div class="p-callout">
+            <p>BIP 157/158 menunjukkan bagaimana desain protokol yang lebih baik bisa membalik asumsi kepercayaan. Dengan memindahkan pekerjaan filtering dari node ke klien, privasi meningkat drastis tanpa mengorbankan keamanan. Kalau kamu tidak perlu memberitahu siapapun apa yang kamu cari, jangan lakukan itu.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi — BIP 37 vs BIP 157/158 & Compact Filter</div>
+          <div class="b17-s174-desc">
+            Tab pertama: perbandingan alur data, privasi, dan bandwidth antara BIP 37 dan BIP 157/158. Tab kedua: simulasi compact block filter — klik address untuk cek apakah ada di filter block.
+          </div>
+
+          <div class="b17-s174-tabs">
+            <button class="b17-s174-tab s174-act" id="b17-s174-t1">BIP 37 vs BIP 157/158</button>
+            <button class="b17-s174-tab" id="b17-s174-t2">Compact Filter — Cara Kerjanya</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b17-s174-pane show" id="b17-s174-p1">
+            <div class="b17-s174-hint">BIP 37 membiarkan node memfilter untuk klien. BIP 157/158 membalik logikanya: klien yang memfilter sendiri. Perbedaan ini sangat besar untuk privasi.</div>
+
+            <div class="b17-s174-flows">
+              <div class="b17-s174-flow">
+                <div class="b17-s174-flow-head s174-bip37">
+                  <div class="b17-s174-flow-title">BIP 37 — Deprecated</div>
+                  <div class="b17-s174-flow-sub">Node memfilter untuk klien</div>
+                </div>
+                <div class="b17-s174-flow-step s174-client"><div class="b17-s174-flow-who">Klien →</div><div class="b17-s174-flow-text">"Saya punya address bc1q...alice. Tolong filter transaksi untuk saya." (bloom filter dikirim ke node)</div></div>
+                <div class="b17-s174-flow-arrow">↕</div>
+                <div class="b17-s174-flow-step s174-warn"><div class="b17-s174-flow-who">Node ⚠</div><div class="b17-s174-flow-text">Node mengetahui address yang dicari klien. Memfilter setiap transaksi khusus untuk klien ini. Beban CPU per klien.</div></div>
+                <div class="b17-s174-flow-arrow">↕</div>
+                <div class="b17-s174-flow-step s174-client"><div class="b17-s174-flow-who">Klien ←</div><div class="b17-s174-flow-text">Menerima transaksi yang "cocok" — tapi node sudah tahu terlalu banyak.</div></div>
+              </div>
+              <div class="b17-s174-flow">
+                <div class="b17-s174-flow-head s174-bip158">
+                  <div class="b17-s174-flow-title">BIP 157/158 — Modern</div>
+                  <div class="b17-s174-flow-sub">Klien memfilter sendiri</div>
+                </div>
+                <div class="b17-s174-flow-step s174-node"><div class="b17-s174-flow-who">Node →</div><div class="b17-s174-flow-text">Membuat compact filter untuk setiap block (dibuat sekali, berlaku untuk semua klien). Filter ~10-20 KB per block.</div></div>
+                <div class="b17-s174-flow-arrow">↕</div>
+                <div class="b17-s174-flow-step s174-client"><div class="b17-s174-flow-who">Klien ←</div><div class="b17-s174-flow-text">Mendownload filter dan mengecek sendiri apakah ada data relevan. Node tidak tahu apa yang dicari klien.</div></div>
+                <div class="b17-s174-flow-arrow">↕</div>
+                <div class="b17-s174-flow-step s174-good"><div class="b17-s174-flow-who">Klien →</div><div class="b17-s174-flow-text">Hanya request block lengkap kalau filter menunjukkan ada transaksi relevan. Node hanya tahu block mana yang diminta.</div></div>
+              </div>
+            </div>
+
+            <div class="b17-s174-privacy-wrap">
+              <div class="b17-s174-privacy s174-bad">
+                <div class="b17-s174-privacy-label">BIP 37 — Node tahu:</div>
+                <div class="b17-s174-privacy-item"><span class="b17-s174-privacy-icon">❌</span>Address yang dimiliki klien</div>
+                <div class="b17-s174-privacy-item"><span class="b17-s174-privacy-icon">❌</span>Berapa banyak address yang dimiliki</div>
+                <div class="b17-s174-privacy-item"><span class="b17-s174-privacy-icon">❌</span>Transaksi mana yang relevan</div>
+                <div class="b17-s174-privacy-item"><span class="b17-s174-privacy-icon">❌</span>Pola aktivitas finansial klien</div>
+              </div>
+              <div class="b17-s174-privacy s174-good">
+                <div class="b17-s174-privacy-label">BIP 157/158 — Node tahu:</div>
+                <div class="b17-s174-privacy-item"><span class="b17-s174-privacy-icon">✅</span>Block mana yang di-request klien</div>
+                <div class="b17-s174-privacy-item"><span class="b17-s174-privacy-icon">✅</span>IP address klien (bisa atasi dengan Tor)</div>
+                <div class="b17-s174-privacy-item"><span class="b17-s174-privacy-icon">🔒</span>Address yang dimiliki? Tidak tahu</div>
+                <div class="b17-s174-privacy-item"><span class="b17-s174-privacy-icon">🔒</span>Transaksi yang relevan? Tidak tahu</div>
+              </div>
+            </div>
+
+            <div class="b17-s174-bw-label">Trade-off bandwidth — untuk wallet dengan 5 address aktif:</div>
+            <div class="b17-s174-bw-rows">
+              <div class="b17-s174-bw-row"><div class="b17-s174-bw-name">BIP 37 (hanya tx relevan)</div><div class="b17-s174-bw-track"><div class="b17-s174-bw-bar" style="width:8%;background:#0F6E56;"><span class="b17-s174-bw-txt">~5 MB/bulan</span></div></div><div class="b17-s174-bw-val">~5 MB</div></div>
+              <div class="b17-s174-bw-row"><div class="b17-s174-bw-name">BIP 157/158 (semua filter)</div><div class="b17-s174-bw-track"><div class="b17-s174-bw-bar" style="width:100%;background:#534AB7;"><span class="b17-s174-bw-txt">~500 MB - 2 GB total</span></div></div><div class="b17-s174-bw-val">~500 MB+</div></div>
+            </div>
+
+            <div class="b17-s174-note">BIP 157/158 butuh lebih banyak bandwidth, tapi privasi yang didapat jauh lebih baik. Ini adalah trade-off yang disengaja: tukar bandwidth untuk privasi.</div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b17-s174-pane" id="b17-s174-p2">
+            <div class="b17-s174-hint">Compact block filter menggunakan Golomb-Coded Set (GCS). Untuk setiap block, node membuat filter yang berisi semua scriptPubKey output dalam block. Klien cek sendiri apakah address mereka ada di filter.</div>
+
+            <div class="b17-s174-gcs-label">Simulasi block #870.142 — output transaksi dalam block:</div>
+            <div class="b17-s174-gcs-block">
+              <div class="b17-s174-gcs-block-label">ScriptPubKey (address penerima) dalam block:</div>
+              <div class="b17-s174-gcs-outputs">
+                <div class="b17-s174-gcs-output">bc1q...alice</div>
+                <div class="b17-s174-gcs-output">bc1q...bob</div>
+                <div class="b17-s174-gcs-output">3J98t...carol</div>
+                <div class="b17-s174-gcs-output">bc1p...dave</div>
+                <div class="b17-s174-gcs-output">1BvB...miner</div>
+                <div class="b17-s174-gcs-output">bc1q...exchange</div>
+                <div class="b17-s174-gcs-output">3Kzh...pool</div>
+              </div>
+              <div class="b17-s174-gcs-arrow">↓ dikompres menjadi GCS filter</div>
+              <div class="b17-s174-gcs-filter">
+                <div class="b17-s174-gcs-filter-label">Compact Block Filter (GCS):</div>
+                <div class="b17-s174-gcs-filter-val">01a4f8...c3d2e1...9b7f4a...2e8c1d...f6a3b9...7d4e2f</div>
+                <div class="b17-s174-gcs-filter-size">Ukuran: ~14 KB (vs ~1.5 MB block penuh) — hemat 99%</div>
+              </div>
+            </div>
+
+            <div class="b17-s174-gcs-check-label">SPV client mengecek: apakah address ini ada di filter block #870.142?</div>
+            <div class="b17-s174-gcs-btns" id="b17-s174-gcs-btns"></div>
+            <div class="b17-s174-gcs-result s174-gcs-no" id="b17-s174-gcs-result">Klik address di atas untuk mengecek apakah ada di filter block ini.</div>
+
+            <div class="b17-s174-gcs-note">Node membuat filter SATU KALI untuk setiap block dan menyebarkannya ke semua klien. Klien mengecek sendiri — node tidak pernah tahu address mana yang dicari. Kalau filter menunjukkan "mungkin ada", klien baru request block lengkapnya.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-17-3" data-sb="sb-17-3">
+            ← 17.3 — Bloom Filters
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-17-5" data-sb="sb-17-5">
+            17.5 — Trade-off SPV →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 17.4 -->
+
+      <!-- ==============================
+           SECTION 17.5 · Trade-off SPV vs Full Node
+      ============================== -->
+      <div class="p-section" id="section-17-5">
+        <div class="p-eyebrow">Bab 17 · 17.5</div>
+        <div class="p-heading">SPV bisa ditipu dalam skenario tertentu — tapi seberapa realistis dan seberapa mahal?</div>
+        <div class="p-title">Trade-off SPV vs Full Node — Seberapa Besar Risiko SPV Bisa Ditipu?</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>SPV tidak memverifikasi semua aturan konsensus. Tapi seberapa besar risiko nyatanya? Ini pertanyaan yang sering salah dijawab di dua arah: ada yang bilang SPV sama amannya dengan full node, ada yang bilang SPV tidak bisa dipercaya sama sekali. Keduanya salah.</p>
+
+          <p><strong>Apa yang bisa dilakukan attacker terhadap SPV client?</strong></p>
+          <p>Skenario serangan paling realistis adalah eclipse attack, yaitu attacker mengisolasi SPV client dari jaringan jujur dan hanya menghubungkannya ke node-node milik attacker. Dari posisi ini, attacker bisa menyembunyikan transaksi yang masuk atau memperlihatkan chain yang berbeda. Untuk double spend, attacker butuh eclipse attack DAN hashrate yang signifikan untuk menghasilkan chain alternatif, sangat mahal dan jarang terjadi.</p>
+
+          <p><strong>Apa yang TIDAK bisa dilakukan attacker?</strong></p>
+          <p>Tanpa mengontrol mayoritas hashrate jaringan, attacker tidak bisa membuat transaksi yang membelanjakan bitcoin yang tidak dimilikinya karena butuh private key, membuat bitcoin dari tidak ada karena melanggar konsensus yang bisa dideteksi full node manapun, atau meyakinkan SPV client menerima block tanpa proof-of-work yang valid karena SPV tetap memverifikasi PoW header.</p>
+
+          <p><strong>Konfirmasi sebagai mitigation</strong></p>
+          <p>Semakin banyak konfirmasi yang kamu tunggu, semakin mahal bagi attacker untuk melakukan serangan. Untuk transaksi sehari-hari dengan nilai kecil, 1-3 konfirmasi sudah sangat cukup. Untuk nilai besar, 6+ konfirmasi memberikan keamanan yang jauh lebih kuat bahkan untuk SPV.</p>
+
+          <p><strong>Kesimpulan praktis</strong></p>
+          <p>Untuk 99% penggunaan Bitcoin sehari-hari oleh individu yaitu beli kopi, terima gaji, kirim ke teman, SPV memberikan keamanan yang lebih dari cukup. Full node tetap ideal untuk menerima pembayaran bernilai besar, menjalankan bisnis yang menerima Bitcoin, dan siapapun yang ingin verifikasi mandiri penuh tanpa asumsi kepercayaan apapun.</p>
+
+          <div class="p-callout">
+            <p>Keamanan Bitcoin bukan biner antara "aman" dan "tidak aman", melainkan ia adalah spektrum trade-off antara kemudahan, resource, dan level verifikasi. SPV adalah titik yang valid di spektrum itu, bukan kompromi yang memalukan. Yang penting adalah memahami di mana titik itu berada dan memilih dengan sadar.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Attack Scenario Visualizer</div>
+          <div class="b17-s175-desc">
+            Pilih skenario serangan untuk melihat apa yang bisa dan tidak bisa dilakukan attacker terhadap SPV client, seberapa sulit serangannya, dan cara mitigasinya. Plus slider konfirmasi untuk lihat dampaknya terhadap keamanan.
+          </div>
+
+          <div class="b17-s175-scenarios" id="b17-s175-scenarios">
+            <div class="b17-s175-scenario s175-act s175-red" data-id="eclipse">
+              <div class="b17-s175-scenario-icon">🌑</div>
+              <div class="b17-s175-scenario-body">
+                <div class="b17-s175-scenario-title">Eclipse Attack — Isolasi SPV dari Jaringan Jujur</div>
+                <div class="b17-s175-scenario-desc">Attacker mengisolasi SPV client agar hanya terhubung ke node milik attacker</div>
+              </div>
+            </div>
+            <div class="b17-s175-scenario s175-amber" data-id="doublespend">
+              <div class="b17-s175-scenario-icon">💸</div>
+              <div class="b17-s175-scenario-body">
+                <div class="b17-s175-scenario-title">Double Spend Attack — Bayar Dua Kali dengan Satu Bitcoin</div>
+                <div class="b17-s175-scenario-desc">Attacker mencoba mengirim bitcoin ke merchant, lalu membalikkan transaksi</div>
+              </div>
+            </div>
+            <div class="b17-s175-scenario s175-green" data-id="invalid">
+              <div class="b17-s175-scenario-icon">🚫</div>
+              <div class="b17-s175-scenario-body">
+                <div class="b17-s175-scenario-title">Invalid Block — Mencoba Menipu SPV dengan Block Palsu</div>
+                <div class="b17-s175-scenario-desc">Attacker mencoba membuat SPV menerima block yang melanggar aturan konsensus</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b17-s175-detail" id="b17-s175-detail"></div>
+
+          <div class="b17-s175-conf-wrap">
+            <div class="b17-s175-conf-label">Konfirmasi sebagai mitigation — berapa konfirmasi yang kamu tunggu?</div>
+            <div class="b17-s175-conf-row">
+              <span class="b17-s175-conf-mm">0</span>
+              <input type="range" class="b17-s175-conf-slider" id="b17-s175-conf-sl" min="0" max="12" value="1" step="1">
+              <span class="b17-s175-conf-mm">12</span>
+              <div class="b17-s175-conf-val" id="b17-s175-conf-val">1 konfirmasi</div>
+            </div>
+            <div class="b17-s175-conf-result s175-conf-ok" id="b17-s175-conf-result">1 konfirmasi: cukup untuk transaksi kecil sehari-hari (beli kopi, top-up). Biaya serangan masih relatif rendah, tapi untuk nilai kecil tidak worth it bagi attacker.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-17-4" data-sb="sb-17-4">
+            ← 17.4 — BIP 157/158
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-17-6" data-sb="sb-17-6">
+            17.6 — Light Client di Dunia Nyata →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 17.5 -->
+
+      <!-- ==============================
+           SECTION 17.6 · Light Client di Dunia Nyata
+      ============================== -->
+      <div class="p-section" id="section-17-6">
+        <div class="p-eyebrow">Bab 17 · 17.6</div>
+        <div class="p-heading">SPV di whitepaper dan SPV di app store adalah dua hal yang berbeda</div>
+        <div class="p-title">Light Client di Dunia Nyata — Electrum, Neutrino, dan Wallet Modern</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Semua yang kita pelajari di Bab 17 tentang SPV, merkle proof, bloom filter, dan compact block filters bukan konsep teoretis, melainkan semuanya diimplementasikan di wallet Bitcoin yang dipakai jutaan orang setiap hari. Tapi implementasi di dunia nyata sering kali lebih kompleks dan beragam dari model SPV murni yang Satoshi gambarkan di whitepaper.</p>
+
+          <p><strong>Electrum: SPV Hybrid dengan Server</strong></p>
+          <p>Electrum adalah salah satu wallet Bitcoin paling populer sejak 2011. Electrum tidak mengimplementasikan SPV murni, melainkan ia terhubung ke jaringan server Electrum yang sudah memproses blockchain dan menyimpan UTXO set. Klien Electrum bisa query server untuk balance, transaksi historis, dan UTXO dengan sangat cepat. Kalau kamu menjalankan Electrum server sendiri di atas full node, kamu mendapat kecepatan query Electrum dengan privasi setara full node.</p>
+
+          <p><strong>Neutrino: BIP 157/158 yang Sebenarnya</strong></p>
+          <p>Neutrino adalah implementasi light client Bitcoin dalam Go yang dikembangkan Lightning Labs. Ia mengimplementasikan BIP 157/158 (compact block filters) secara penuh. Neutrino dipakai sebagai backend untuk beberapa Lightning Network wallet mobile seperti Phoenix Wallet dan Breez. Untuk membayar Lightning invoice, wallet tersebut menggunakan Neutrino untuk memverifikasi state channel di Bitcoin blockchain tanpa mendownload seluruh blockchain.</p>
+
+          <p><strong>Wallet Mobile "SPV" Biasa: Mayoritas Pakai Server</strong></p>
+          <p>Banyak wallet mobile yang mengklaim "SPV" sebenarnya terhubung ke server backend yang dikontrol developer wallet tersebut. Mereka tidak mendownload header chain atau melakukan verifikasi PoW sama sekali, melainkan hanya query API server developer untuk mendapat balance dan transaksi. Ini bukan SPV, ini adalah custodial-lite: kamu pegang private key tapi verifikasi dilakukan oleh orang lain.</p>
+
+          <p><strong>Memilih yang tepat</strong></p>
+          <p>Tidak ada satu jawaban benar untuk semua orang. Untuk 99% pengguna sehari-hari dengan jumlah kecil, wallet mobile biasa sudah cukup aman. Untuk pengguna yang peduli privasi dan verifikasi, Electrum dengan server sendiri atau Neutrino adalah pilihan yang jauh lebih baik. Untuk nilai besar atau keperluan bisnis, full node tetap pilihan terbaik.</p>
+
+          <div class="p-callout">
+            <p>Yang terpenting adalah memahami model kepercayaan dari wallet yang kamu gunakan. "Self-custody" tidak selalu berarti "trustless", karena banyak wallet self-custody yang diam-diam membutuhkan kepercayaan kepada server operator atau developer. Pilih dengan sadar sesuai dengan nilai yang kamu simpan dan tingkat kepercayaan yang kamu butuhkan.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Wallet Explorer — Perbandingan Light Client di Dunia Nyata</div>
+          <div class="b17-s176-desc">
+            Klik wallet atau implementasi untuk melihat model verifikasi, privasi, trust model, cocok untuk siapa, dan trade-off utamanya.
+          </div>
+
+          <div class="b17-s176-wallets" id="b17-s176-wallets"></div>
+          <div class="b17-s176-detail" id="b17-s176-detail"></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-17-5" data-sb="sb-17-5">
+            ← 17.5 — Trade-off SPV
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 17.6 -->
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 20 · BAB 17 -->
+
+

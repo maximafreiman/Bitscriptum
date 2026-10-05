@@ -1,0 +1,123 @@
+/* ============================================================
+   PAGE 7 · BAB 4 · Kriptografi Bitcoin
+============================================================ */
+#page-bab4 { flex-direction:column; }
+
+/* ============================================================
+   PAGE 7 · BAB 4 · 4.1 SIMULATION (Hash Playground)
+============================================================ */
+.b04-s41-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1.25rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.hp-input-label { font-size:11px; color:#52524C; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:6px; font-family:'Sora',sans-serif; }
+.hp-textarea { width:100%; font-size:13px; font-family:'Sora',sans-serif; padding:10px 12px; border:0.5px solid rgba(124,58,237,0.2); border-radius:var(--border-radius-md); background:#FAFAF8; color:#1A1A18; resize:none; line-height:1.6; outline:none; transition:border-color 0.2s; margin-bottom:1.25rem; }
+.hp-textarea:focus { border-color:#534AB7; }
+.hp-hash-box { border:0.5px solid rgba(124,58,237,0.15); border-radius:var(--border-radius-lg); overflow:hidden; margin-bottom:1.25rem; }
+.hp-hash-head { padding:8px 14px; background:#1A1A18; display:flex; align-items:center; justify-content:space-between; }
+.hp-hash-label { font-size:10px; color:#C4B5FD; letter-spacing:0.1em; text-transform:uppercase; font-family:'Sora',sans-serif; }
+.hp-hash-algo { font-size:10px; color:#534AB7; background:#EEEDFE; padding:2px 8px; border-radius:99px; font-family:'Sora',sans-serif; }
+.hp-hash-val { padding:12px 14px; font-size:11px; font-family:'Courier Prime',monospace; color:#534AB7; word-break:break-all; line-height:1.8; background:#FAFAF8; min-height:48px; transition:background 0.3s; }
+.hp-hash-val.changed { background:#EEEDFE; }
+.hp-hash-empty { color:#52524C; }
+.hp-meta { display:flex; gap:16px; margin-bottom:1.25rem; flex-wrap:wrap; }
+.hp-meta-item { font-size:11px; color:#3A3A35; font-family:'Sora',sans-serif; }
+.hp-meta-val { font-weight:500; color:#1A1A18; font-family:'Courier Prime',monospace; }
+.hp-presets { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:1.25rem; align-items:center; }
+.hp-preset { padding:6px 12px; font-size:11px; border-radius:99px; border:0.5px solid rgba(124,58,237,0.2); background:transparent; color:#3A3A35; cursor:pointer; transition:all 0.2s; font-family:'Sora',sans-serif; }
+.hp-preset:hover { border-color:#534AB7; color:#534AB7; }
+.hp-avalanche { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-lg); overflow:hidden; }
+.hp-av-head { padding:8px 14px; background:#F4F4F0; font-size:11px; font-weight:500; color:#1A1A18; font-family:'Sora',sans-serif; }
+.hp-av-body { padding:12px 14px; display:flex; flex-direction:column; gap:10px; background:#FAFAF8; }
+.hp-av-row { display:flex; flex-direction:column; gap:4px; }
+.hp-av-input { font-size:12px; font-family:'Courier Prime',monospace; color:#1A1A18; padding:6px 10px; background:#F4F4F0; border-radius:var(--border-radius-md); border:0.5px solid rgba(124,58,237,0.08); }
+.hp-av-input span { color:#A32D2D; font-weight:500; }
+.hp-av-hash { font-size:10px; font-family:'Courier Prime',monospace; word-break:break-all; line-height:1.6; padding:6px 10px; border-radius:var(--border-radius-md); }
+.hp-av-hash.a { color:#534AB7; background:#EEEDFE; }
+.hp-av-hash.b { color:#A32D2D; background:#FCEBEB; }
+.hp-av-diff { font-size:11px; color:#52524C; margin-top:2px; font-family:'Sora',sans-serif; line-height:1.6; }
+.hp-av-diff strong { color:#534AB7; }
+
+/* ============================================================
+   PAGE 7 · BAB 4 · 4.1 SIMULATION (Hash Comparison)
+============================================================ */
+.b04-s41-cmp-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b04-s41-cmp-table { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-lg); overflow:hidden; margin-bottom:1rem; }
+.b04-s41-cmp-row { display:grid; grid-template-columns:100px 50px 160px 1fr; gap:0; border-bottom:0.5px solid rgba(124,58,237,0.08); }
+.b04-s41-cmp-row:last-child { border-bottom:none; }
+.b04-s41-cmp-row.header { background:#1A1A18; }
+.b04-s41-cmp-row.header > div { font-size:9px; color:#C4B5FD; text-transform:uppercase; letter-spacing:0.1em; padding:7px 12px; font-family:'Sora',sans-serif; }
+.b04-s41-cmp-row.deprecated { background:#FAFAF8; opacity:0.6; }
+.b04-s41-cmp-name { font-size:11px; font-weight:500; color:#1A1A18; padding:10px 12px; font-family:'Courier Prime',monospace; background:#F4F4F0; display:flex; align-items:center; }
+.b04-s41-cmp-name.active { color:#534AB7; background:#EEEDFE; }
+.b04-s41-cmp-bits { font-size:11px; color:#3A3A35; padding:10px 12px; font-family:'Courier Prime',monospace; display:flex; align-items:center; border-left:0.5px solid rgba(124,58,237,0.08); }
+.b04-s41-cmp-use { font-size:10px; color:#3A3A35; padding:10px 12px; font-family:'Sora',sans-serif; display:flex; align-items:center; border-left:0.5px solid rgba(124,58,237,0.08); line-height:1.4; }
+.b04-s41-cmp-out { font-size:9px; font-family:'Courier Prime',monospace; color:#534AB7; padding:10px 12px; word-break:break-all; line-height:1.6; border-left:0.5px solid rgba(124,58,237,0.08); }
+.b04-s41-cmp-out.b04-s41-cmp-note-cell { font-family:'Sora',sans-serif; font-size:10px; color:#52524C; font-style:italic; }
+.b04-s41-cmp-row.deprecated .b04-s41-cmp-out { color:#52524C; }
+.b04-s41-cmp-note { font-size:11px; color:#52524C; line-height:1.6; padding:8px 10px; background:#F4F4F0; border-radius:var(--border-radius-md); font-family:'Sora',sans-serif; }
+/* ============================================================
+   PAGE 7 · BAB 4 · 4.2 SIMULATION (Elliptic Curve)
+============================================================ */
+.b04-s42-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1.25rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.ecc-ctrl { display:flex; align-items:center; gap:12px; margin-bottom:1.25rem; }
+.ecc-label { font-size:13px; color:#3A3A35; white-space:nowrap; font-family:'Sora',sans-serif; }
+.ecc-ctrl input[type=range] { flex:1; accent-color:#534AB7; }
+.ecc-k-val { font-size:14px; font-weight:500; min-width:60px; font-family:'Courier Prime',monospace; color:#1A1A18; }
+.ecc-canvas-wrap { width:100%; margin-bottom:1.25rem; }
+.ecc-canvas-wrap canvas { width:100%; border-radius:var(--border-radius-lg); display:block; }
+.ecc-cards { display:flex; flex-direction:column; gap:8px; margin-bottom:1.25rem; }
+.ecc-card { background:#F4F4F0; border-radius:var(--border-radius-md); padding:12px 14px; }
+.ecc-card-label { font-size:10px; color:#52524C; margin-bottom:4px; text-transform:uppercase; letter-spacing:0.1em; font-family:'Sora',sans-serif; }
+.ecc-card-val { font-size:11px; font-weight:500; font-family:'Courier Prime',monospace; word-break:break-all; line-height:1.6; }
+.ecc-card-val.priv  { color:#A32D2D; }
+.ecc-card-val.coord { color:#534AB7; }
+.ecc-card-val.pub   { color:#534AB7; }
+.ecc-card-sub { font-size:11px; color:#3A3A35; margin-top:4px; line-height:1.5; font-family:'Sora',sans-serif; }
+.ecc-prefix { background:#EEEDFE; color:#534AB7; border-radius:3px; padding:0 3px; font-weight:500; }
+.ecc-note { font-size:12px; color:#3A3A35; line-height:1.7; padding:10px 12px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.2); font-family:'Sora',sans-serif; }
+.ecc-caveat { font-size:11px; color:#52524C; line-height:1.6; margin-top:8px; padding:8px 12px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.15); font-family:'Sora',sans-serif; }
+
+/* ============================================================
+   PAGE 7 · BAB 4 · 4.3 SIMULATION (ECDSA)
+============================================================ */
+.b04-s43-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1.25rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.ec-steps { display:flex; gap:0; margin-bottom:1.25rem; border:0.5px solid rgba(124,58,237,0.15); border-radius:var(--border-radius-lg); overflow:hidden; }
+.ec-step-tab { flex:1; padding:10px 8px; text-align:center; cursor:pointer; background:#F4F4F0; transition:all 0.2s; border-right:0.5px solid rgba(124,58,237,0.1); }
+.ec-step-tab:last-child { border-right:none; }
+.ec-step-tab.active { background:#534AB7; color:#fff; }
+.ec-step-tab:not(.active):hover { background:#EEEDFE; }
+.ec-step-num { font-size:9px; text-transform:uppercase; letter-spacing:0.1em; opacity:0.7; margin-bottom:2px; font-family:'Sora',sans-serif; }
+.ec-step-title { font-size:11px; font-weight:500; font-family:'Sora',sans-serif; }
+.ec-panel { display:none; }
+.ec-panel.show { display:block; }
+.ec-field { margin-bottom:1rem; }
+.ec-field-label { font-size:10px; color:#52524C; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:3px; font-family:'Sora',sans-serif; }
+.ec-field-desc { font-size:11px; color:#3A3A35; margin-bottom:5px; line-height:1.5; font-family:'Sora',sans-serif; }
+.ec-field-val { font-size:11px; font-family:'Courier Prime',monospace; padding:8px 10px; border-radius:var(--border-radius-md); word-break:break-all; line-height:1.6; }
+.ec-field-val.priv { background:#FCEBEB; color:#A32D2D; }
+.ec-field-val.pub  { background:#EEEDFE; color:#534AB7; }
+.ec-field-val.msg  { background:#F4F4F0; color:#1A1A18; }
+.ec-field-val.sig  { background:#EEEDFE; color:#534AB7; }
+.ec-field-val.nc   { background:#F4F4F0; color:#3A3A35; }
+.ec-field-input { width:100%; font-size:12px; font-family:'Sora',sans-serif; padding:8px 10px; border:0.5px solid rgba(124,58,237,0.2); border-radius:var(--border-radius-md); background:#FAFAF8; color:#1A1A18; outline:none; resize:none; line-height:1.6; }
+.ec-field-input:focus { border-color:#534AB7; }
+.ec-result { padding:10px 14px; border-radius:var(--border-radius-md); font-size:12px; line-height:1.6; margin-bottom:1rem; border:0.5px solid; display:none; font-family:'Sora',sans-serif; }
+.ec-result.show { display:block; }
+.ec-result.ok  { background:#EAF3DE; border-color:#3B6D11; color:#27500A; }
+.ec-result.bad { background:#FCEBEB; border-color:#F09595; color:#791F1F; }
+.ec-tamper-row { display:flex; gap:8px; margin-bottom:1rem; flex-wrap:wrap; }
+.ec-tamper-btn { padding:7px 14px; font-size:11px; font-family:'Sora',sans-serif; border-radius:var(--border-radius-md); border:0.5px solid rgba(124,58,237,0.2); background:transparent; color:#6D28D9; cursor:pointer; transition:all 0.2s; }
+.ec-tamper-btn:hover { background:rgba(124,58,237,0.06); }
+.ec-tamper-btn.danger { border-color:#F09595; color:#A32D2D; }
+.ec-tamper-btn.danger:hover { background:#FCEBEB; }
+.ec-btns { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:1rem; }
+.ec-note { font-size:11px; color:#3A3A35; line-height:1.6; padding:8px 10px; background:#F4F4F0; border-radius:var(--border-radius-md); margin-bottom:1rem; font-family:'Sora',sans-serif; }
+.ec-warning { font-size:11px; line-height:1.6; padding:10px 12px; border-radius:var(--border-radius-md); border-left:2px solid #F09595; margin-top:0.5rem; background:#FCEBEB; color:#791F1F; font-family:'Sora',sans-serif; }
+.ec-warning-sol { display:block; margin-top:6px; padding-top:6px; border-top:0.5px solid rgba(163,45,45,0.2); color:#A32D2D; }
+
+/* ============================================================
+   PAGE 7 · BAB 4 · 4.4 SIMULATION (Schnorr)
+============================================================ */
+/* .sc-grid dipakai di markup tapi tidak pernah didefinisikan di file asli,
+   sehingga dua kolom perbandingan menumpuk ke bawah. Untuk simulasi yang
+   tujuannya membandingkan, keduanya harus bisa dilihat bersebelahan. */
+.sc-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; align-items:start; margin-bottom:1.25rem; }
+@media (max-width:640px){ .sc-grid { grid-template-columns:1fr; } }

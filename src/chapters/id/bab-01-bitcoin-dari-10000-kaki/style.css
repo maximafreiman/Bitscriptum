@@ -1,0 +1,227 @@
+/* ============================================================
+   PAGE 4 · BAB 1 · Bitcoin dari 10.000 Kaki
+============================================================ */
+#page-bab1 { flex-direction:column; }
+
+/* ============================================================
+   PAGE 4 · BAB 1 · 1.2 SIMULATION (Transaksi Bank vs Bitcoin)
+============================================================ */
+.tx-tabs { display:flex; gap:8px; margin-bottom:1.25rem; }
+.tx-tab { flex:1; padding:10px 8px; font-size:12px; font-family:'Sora',sans-serif; border:0.5px solid rgba(124,58,237,0.2); background:transparent; color:#52524C; cursor:pointer; border-radius:var(--border-radius-md); transition:all 0.2s; font-weight:400; text-align:center; }
+.tx-tab.active-bank { background:#1A1A18; color:#FAFAF8; border-color:#1A1A18; }
+.tx-tab.active-btc  { background:#534AB7; color:#FAFAF8; border-color:#534AB7; }
+.tx-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1.25rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid #D4D4C8; }
+.tx-desc.bank { border-left-color:#1A1A18; }
+.tx-desc.btc  { border-left-color:#534AB7; }
+.tx-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:1.25rem; }
+.tx-stat { background:#F4F4F0; border-radius:var(--border-radius-md); padding:10px 12px; }
+.tx-stat-label { font-size:10px; color:#52524C; margin-bottom:4px; }
+.tx-stat-value { font-size:13px; font-weight:500; color:#1A1A18; }
+.tx-stat-value.good { color:#3B6D11; }
+.tx-stat-value.bad  { color:#A32D2D; }
+.tx-scenario { display:none; gap:6px; margin-bottom:1.25rem; }
+.tx-scenario.show { display:flex; }
+.tx-scenario-btn { flex:1; padding:8px; font-size:11px; font-family:'Sora',sans-serif; border:0.5px solid rgba(124,58,237,0.2); background:transparent; color:#52524C; cursor:pointer; border-radius:var(--border-radius-md); transition:all 0.2s; }
+.tx-scenario-btn.active-normal   { background:#3B6D11; color:#fff; border-color:#3B6D11; }
+.tx-scenario-btn.active-blocked  { background:#A32D2D; color:#fff; border-color:#A32D2D; }
+.tx-scenario-btn.active-btcblock { background:#534AB7; color:#fff; border-color:#534AB7; }
+.tx-flow { display:flex; flex-direction:column; gap:6px; margin-bottom:1.25rem; }
+.tx-step { display:grid; grid-template-columns:28px 1fr auto; gap:12px; align-items:center; border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-md); padding:10px 14px; transition:all 0.4s; opacity:0.35; }
+.tx-step.active  { opacity:1; border-color:#534AB7; background:rgba(83,74,183,0.04); }
+.tx-step.done    { opacity:1; border-color:#3B6D11; background:#EAF3DE; }
+.tx-step.blocked { opacity:1; border-color:#A32D2D; background:#FCEBEB; }
+.tx-step.frozen  { opacity:0.4; }
+.tx-step.waiting { opacity:1; border-color:#C8A020; background:#FFF8E1; }
+.tx-step-icon   { font-size:18px; text-align:center; }
+.tx-step-info   { flex:1; display:flex; flex-direction:column; }
+.tx-step-name   { font-size:12px; font-weight:500; color:#1A1A18; margin-bottom:2px; }
+.tx-step-detail { font-size:11px; color:#52524C; line-height:1.4; }
+.tx-step-status { font-size:10px; padding:3px 8px; border-radius:99px; font-weight:500; white-space:nowrap; opacity:0; transition:opacity 0.3s; }
+.tx-step-status.show    { opacity:1; }
+.tx-step-status.ok      { background:#EAF3DE; color:#3B6D11; }
+.tx-step-status.pending { background:#FFF8E1; color:#8B6914; }
+.tx-step-status.blocked { background:#FCEBEB; color:#A32D2D; }
+.tx-step-status.info    { background:#EEEDFE; color:#534AB7; }
+.node-grid-wrap { margin-bottom:1.25rem; display:none; }
+.node-grid-wrap.show { display:block; }
+.node-grid-label { font-size:11px; color:#52524C; margin-bottom:8px; }
+.node-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:6px; margin-bottom:10px; }
+.node { aspect-ratio:1; border-radius:var(--border-radius-md); border:1.5px solid rgba(124,58,237,0.12); display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:14px; transition:all 0.4s; background:#F4F4F0; }
+.node.validating { border-color:#534AB7; background:#EEEDFE; }
+.node.valid      { border-color:#3B6D11; background:#EAF3DE; }
+.node.evil       { border-color:#A32D2D; background:#FCEBEB; }
+.node.rejected   { border-color:#A32D2D; background:#FCEBEB; opacity:0.5; }
+.node-label { font-size:8px; margin-top:2px; font-weight:500; }
+.node.valid .node-label      { color:#3B6D11; }
+.node.evil .node-label       { color:#A32D2D; }
+.node.rejected .node-label   { color:#A32D2D; }
+.node.validating .node-label { color:#534AB7; }
+.node-consensus { font-size:12px; padding:8px 12px; border-radius:var(--border-radius-md); border:0.5px solid; display:none; line-height:1.6; }
+.node-consensus.show    { display:block; }
+.node-consensus.valid   { background:#EAF3DE; border-color:#97C459; color:#27500A; }
+.tx-confirm { margin-bottom:1.25rem; display:none; }
+.tx-confirm.show { display:block; }
+.tx-confirm-label { font-size:11px; color:#52524C; margin-bottom:6px; }
+.tx-confirm-track { display:flex; gap:4px; }
+.tx-confirm-block { flex:1; height:8px; border-radius:4px; background:rgba(124,58,237,0.12); transition:background 0.4s; }
+.tx-confirm-block.confirmed { background:#534AB7; }
+.tx-confirm-count { font-size:11px; color:#534AB7; font-weight:500; margin-top:5px; text-align:right; }
+.tx-result { border-radius:var(--border-radius-md); padding:10px 14px; font-size:12px; line-height:1.6; display:none; border:0.5px solid; margin-bottom:1.25rem; }
+.tx-result.show    { display:block; }
+.tx-result.success { background:#EAF3DE; border-color:#97C459; color:#27500A; }
+.tx-result.fail    { background:#FCEBEB; border-color:#F09595; color:#791F1F; }
+.tx-controls { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:1.5rem; }
+.tx-btn { padding:9px 20px; font-size:12px; font-family:'Sora',sans-serif; cursor:pointer; border-radius:var(--border-radius-md); font-weight:500; transition:all 0.2s; border:none; }
+.tx-btn-start { background:#1A1A18; color:#FAFAF8; }
+.tx-btn-start:hover { background:#534AB7; }
+.tx-btn-start:disabled { opacity:0.35; cursor:not-allowed; background:#1A1A18; }
+.tx-btn-reset { background:transparent; border:0.5px solid rgba(124,58,237,0.2); color:#6D28D9; cursor:pointer; }
+.tx-btn-reset:hover { background:rgba(124,58,237,0.06); }
+.tx-compare { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-lg); overflow:hidden; }
+.tx-compare-header { display:grid; grid-template-columns:1fr 1fr 1fr; background:#F4F4F0; border-bottom:0.5px solid rgba(124,58,237,0.12); }
+.tx-compare-header div { padding:8px 14px; font-size:11px; font-weight:500; color:#52524C; }
+.tx-compare-row { display:grid; grid-template-columns:1fr 1fr 1fr; border-bottom:0.5px solid rgba(124,58,237,0.08); }
+.tx-compare-row:last-child { border-bottom:none; }
+.tx-compare-row div { padding:10px 14px; font-size:11px; color:#1A1A18; line-height:1.5; }
+.tx-compare-row div:first-child { color:#52524C; font-size:10px; }
+.tx-compare-row div.good { color:#3B6D11; font-weight:500; }
+.tx-compare-row div.bad  { color:#A32D2D; }
+/* ============================================================
+   PAGE 4 · BAB 1 · 1.4 SIMULATION (Blockchain)
+============================================================ */
+.bc-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1.25rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); font-family:'Sora',sans-serif; }
+.bc-chain { display:flex; flex-direction:column; gap:0; }
+.bc-link { display:flex; align-items:center; justify-content:center; padding:4px 0; gap:6px; }
+.bc-link-arrow { font-size:14px; color:#D4D4C8; transition:color 0.3s; }
+.bc-link.invalid .bc-link-arrow { color:#A32D2D; }
+.bc-link-label { font-size:9px; letter-spacing:0.1em; color:#C4B5FD; font-family:'Sora',sans-serif; }
+.bc-link.invalid .bc-link-label { color:#A32D2D; }
+.bc-block { border:0.5px solid rgba(124,58,237,0.2); border-radius:var(--border-radius-lg); overflow:hidden; transition:border-color 0.4s; }
+.bc-block.valid   { border-color:#3B6D11; }
+.bc-block.invalid { border-color:#A32D2D; }
+.bc-block-header { display:flex; align-items:center; justify-content:space-between; padding:8px 14px; background:#1A1A18; transition:background 0.4s; }
+.bc-block.invalid .bc-block-header { background:#A32D2D; }
+.bc-block-num { font-size:11px; color:#C4B5FD; font-family:'Sora',sans-serif; font-weight:300; }
+.bc-block-status { font-size:9px; padding:2px 8px; border-radius:99px; font-family:'Sora',sans-serif; font-weight:500; }
+.bc-block.valid .bc-block-status   { background:#EAF3DE; color:#3B6D11; }
+.bc-block.invalid .bc-block-status { background:#FCEBEB; color:#A32D2D; }
+.bc-block-body { padding:12px 14px; background:#FAFAF8; display:flex; flex-direction:column; gap:8px; }
+.bc-field { display:grid; grid-template-columns:110px 1fr; gap:8px; align-items:flex-start; }
+.bc-field-label { font-size:9px; color:#52524C; letter-spacing:0.1em; text-transform:uppercase; padding-top:6px; font-family:'Sora',sans-serif; }
+.bc-field-value { font-size:10px; color:#1A1A18; line-height:1.5; word-break:break-all; padding:5px 8px; background:#F4F4F0; border-radius:var(--border-radius-md); border:0.5px solid rgba(124,58,237,0.1); font-family:'Courier Prime',monospace; transition:background 0.3s, border-color 0.3s; }
+.bc-field-value.invalid { background:#FCEBEB; border-color:#F09595; color:#A32D2D; }
+.bc-data-input { width:100%; font-size:10px; font-family:'Courier Prime',monospace; padding:5px 8px; border:0.5px solid rgba(124,58,237,0.2); border-radius:var(--border-radius-md); background:#FAFAF8; color:#1A1A18; resize:none; line-height:1.5; transition:border-color 0.2s; }
+.bc-data-input:focus { outline:none; border-color:#534AB7; }
+.bc-data-input:disabled { opacity:0.6; background:#F4F4F0; }
+.bc-result { margin-top:1.25rem; border-radius:var(--border-radius-md); padding:10px 14px; font-size:12px; line-height:1.6; display:none; border:0.5px solid; font-family:'Sora',sans-serif; }
+.bc-result.show    { display:block; }
+.bc-result.invalid { background:#FCEBEB; border-color:#F09595; color:#791F1F; }
+.bc-controls { display:flex; gap:8px; margin-top:1.25rem; }
+.bc-btn { padding:8px 18px; font-size:12px; font-family:'Sora',sans-serif; cursor:pointer; border-radius:var(--border-radius-md); font-weight:500; transition:all 0.2s; border:none; }
+.bc-btn-reset { background:#1A1A18; color:#FAFAF8; }
+.bc-btn-reset:hover { background:#534AB7; }
+.bc-hint { font-size:11px; color:#52524C; margin-top:1rem; padding:8px 12px; background:#F4F4F0; border-radius:var(--border-radius-md); font-family:'Sora',sans-serif; line-height:1.6; }
+
+/* ============================================================
+   PAGE 4 · BAB 1 · 1.4 SIMULATION (Blockchain Attack)
+============================================================ */
+.atk-desc { font-size:12px; color:#791F1F; line-height:1.7; margin-bottom:1.25rem; padding:10px 14px; background:#FCEBEB; border-radius:var(--border-radius-md); border-left:2px solid #A32D2D; }
+.atk-chain { display:flex; gap:6px; margin-bottom:1.25rem; overflow-x:auto; padding-bottom:4px; }
+.atk-block { flex-shrink:0; width:120px; border:0.5px solid rgba(124,58,237,0.2); border-radius:var(--border-radius-md); overflow:hidden; cursor:pointer; transition:all 0.3s; }
+.atk-block:hover { border-color:#534AB7; }
+.atk-block.selected    { border-color:#A32D2D; box-shadow:0 0 0 2px rgba(163,45,45,0.2); }
+.atk-block.valid       { border-color:#3B6D11; }
+.atk-block.invalid     { border-color:#A32D2D; }
+.atk-block.compromised { border-color:#A32D2D; background:#FCEBEB; }
+.atk-block-head { padding:6px 8px; background:#1A1A18; font-size:10px; color:#C4B5FD; font-weight:300; display:flex; justify-content:space-between; align-items:center; transition:background 0.3s; }
+.atk-block.selected .atk-block-head   { background:#A32D2D; }
+.atk-block.compromised .atk-block-head { background:#A32D2D; }
+.atk-block.valid .atk-block-head      { background:#3B6D11; }
+.atk-block-body { padding:6px 8px; font-size:9px; color:#52524C; line-height:1.6; font-family:'Courier Prime',monospace; }
+.atk-block-tx { font-size:9px; color:#1A1A18; margin-top:2px; word-break:break-all; }
+.atk-panel { border:0.5px solid #A32D2D; border-radius:var(--border-radius-lg); overflow:hidden; margin-bottom:1.25rem; display:none; }
+.atk-panel.show { display:block; }
+.atk-panel-head { padding:8px 14px; background:#A32D2D; font-size:11px; color:#fff; font-weight:500; }
+.atk-panel-body { padding:12px 14px; background:#FAFAF8; display:flex; flex-direction:column; gap:10px; }
+.atk-panel-label { font-size:10px; color:#52524C; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:4px; }
+.atk-panel-orig { font-size:11px; font-family:'Courier Prime',monospace; color:#3A3A35; padding:6px 8px; background:#F4F4F0; border-radius:var(--border-radius-md); line-height:1.5; text-decoration:line-through; }
+.atk-panel-input { width:100%; font-size:11px; font-family:'Courier Prime',monospace; padding:6px 8px; border:0.5px solid #F09595; border-radius:var(--border-radius-md); background:#FAFAF8; color:#1A1A18; resize:none; line-height:1.5; }
+.atk-panel-input:focus { outline:none; border-color:#A32D2D; }
+.atk-panel-btn { padding:8px 16px; font-size:11px; font-family:'Sora',sans-serif; cursor:pointer; border-radius:var(--border-radius-md); font-weight:500; border:none; background:#A32D2D; color:#fff; transition:background 0.2s; align-self:flex-start; }
+.atk-panel-btn:hover { background:#791F1F; }
+.atk-race { display:none; margin-bottom:1.25rem; }
+.atk-race.show { display:block; }
+.atk-race-label { font-size:11px; color:#52524C; margin-bottom:8px; }
+.atk-race-row { display:flex; flex-direction:column; gap:6px; }
+.atk-bar-wrap { display:flex; align-items:center; gap:8px; }
+.atk-bar-name { font-size:10px; min-width:100px; color:#52524C; }
+.atk-bar-track { flex:1; height:10px; background:rgba(124,58,237,0.1); border-radius:5px; overflow:hidden; }
+.atk-bar-fill { height:100%; border-radius:5px; width:0%; transition:width 0.1s linear; }
+.atk-bar-fill.attacker { background:#A32D2D; }
+.atk-bar-fill.network  { background:#534AB7; }
+.atk-bar-pct { font-size:10px; min-width:36px; text-align:right; font-family:'Courier Prime',monospace; color:#52524C; }
+.atk-race-status { font-size:11px; padding:6px 10px; border-radius:var(--border-radius-md); margin-top:6px; font-weight:500; display:none; }
+.atk-race-status.show { display:block; }
+.atk-race-status.fail { background:#FCEBEB; color:#791F1F; }
+.atk-result { border-radius:var(--border-radius-md); padding:10px 14px; font-size:12px; line-height:1.6; display:none; border:0.5px solid; margin-bottom:1.25rem; }
+.atk-result.show { display:block; }
+.atk-result.fail { background:#FCEBEB; border-color:#F09595; color:#791F1F; }
+.atk-controls { display:flex; gap:8px; }
+.atk-btn { padding:8px 18px; font-size:12px; font-family:'Sora',sans-serif; cursor:pointer; border-radius:var(--border-radius-md); font-weight:500; transition:all 0.2s; border:none; }
+.atk-btn-reset { background:#1A1A18; color:#FAFAF8; }
+.atk-btn-reset:hover { background:#534AB7; }
+.atk-hint { font-size:11px; color:#52524C; margin-top:1rem; line-height:1.6; padding:8px 12px; background:#F4F4F0; border-radius:var(--border-radius-md); font-family:'Sora',sans-serif; }
+
+/* ============================================================
+   PAGE 4 · BAB 1 · 1.5 SIMULATION (Halving Table)
+============================================================ */
+.hv-progress-wrap { margin-bottom:1.5rem; }
+.hv-progress-label { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px; }
+.hv-progress-title { font-size:12px; color:#3A3A35; }
+.hv-progress-num   { font-size:13px; font-weight:500; color:#534AB7; font-family:'Courier Prime',monospace; }
+.hv-progress-track { height:8px; background:rgba(124,58,237,0.1); border-radius:4px; overflow:hidden; }
+.hv-progress-fill  { height:100%; border-radius:4px; background:linear-gradient(90deg,#534AB7,#7C3AED); }
+.hv-progress-sub   { font-size:10px; color:#52524C; margin-top:4px; text-align:right; }
+.hv-table-wrap { border:0.5px solid rgba(124,58,237,0.15); border-radius:var(--border-radius-lg); overflow:hidden; margin-bottom:1rem; }
+.hv-table { width:100%; border-collapse:collapse; }
+.hv-thead { background:#1A1A18; }
+.hv-thead th { padding:8px 12px; font-size:10px; font-weight:500; color:#C4B5FD; text-align:left; letter-spacing:0.05em; white-space:nowrap; }
+.hv-tbody tr { border-bottom:0.5px solid rgba(124,58,237,0.08); cursor:pointer; transition:background 0.15s; }
+.hv-tbody tr:last-child { border-bottom:none; }
+.hv-tbody tr:hover   { background:rgba(124,58,237,0.04); }
+.hv-tbody tr.active  { background:#EEEDFE; }
+.hv-tbody td { padding:9px 12px; font-size:11px; color:#1A1A18; font-family:'Courier Prime',monospace; white-space:nowrap; }
+.hv-td-era  { font-family:'Sora',sans-serif; font-weight:500; font-size:11px; }
+.hv-supply-bar-wrap  { display:flex; align-items:center; gap:6px; }
+.hv-supply-bar-track { width:60px; height:5px; background:rgba(124,58,237,0.1); border-radius:3px; overflow:hidden; }
+.hv-supply-bar-fill  { height:100%; background:#534AB7; border-radius:3px; }
+.hv-detail { border:0.5px solid rgba(124,58,237,0.2); border-radius:var(--border-radius-lg); overflow:hidden; display:none; margin-bottom:1rem; }
+.hv-detail.show { display:block; }
+.hv-detail-head { padding:8px 14px; background:#534AB7; font-size:11px; color:#fff; font-weight:500; font-family:'Sora',sans-serif; }
+.hv-detail-body { padding:12px 14px; background:#FAFAF8; display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.hv-detail-label { font-size:9px; color:#52524C; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:3px; font-family:'Sora',sans-serif; }
+.hv-detail-value { font-size:13px; font-weight:500; color:#1A1A18; font-family:'Courier Prime',monospace; }
+.hv-detail-note  { font-size:11px; color:#3A3A35; margin-top:8px; line-height:1.6; grid-column:1/-1; font-family:'Sora',sans-serif; }
+.hv-hint { font-size:11px; color:#52524C; padding:8px 12px; background:#F4F4F0; border-radius:var(--border-radius-md); line-height:1.6; }
+
+/* ============================================================
+   PAGE 4 · BAB 1 · 1.6 SIMULATION (Bitcoin vs Uang Biasa)
+============================================================ */
+.cmp-pills { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:1.5rem; }
+.cmp-pill { padding:7px 14px; font-size:11px; cursor:pointer; border:0.5px solid rgba(124,58,237,0.2); border-radius:99px; background:transparent; color:#52524C; transition:all 0.2s; font-family:'Sora',sans-serif; }
+.cmp-pill:hover  { border-color:#534AB7; color:#534AB7; }
+.cmp-pill.active { background:#534AB7; color:#fff; border-color:#534AB7; }
+.cmp-card { border:0.5px solid rgba(124,58,237,0.15); border-radius:var(--border-radius-lg); overflow:hidden; display:none; }
+.cmp-card.show { display:block; }
+.cmp-card-head { padding:10px 16px; background:#1A1A18; font-size:12px; color:#C4B5FD; font-weight:300; display:flex; align-items:center; gap:8px; }
+.cmp-card-icon { font-size:16px; }
+.cmp-cols { display:grid; grid-template-columns:1fr 1fr; }
+.cmp-col { padding:16px; }
+.cmp-col:first-child { border-right:0.5px solid rgba(124,58,237,0.1); }
+.cmp-col-head { font-size:10px; letter-spacing:0.15em; text-transform:uppercase; font-weight:500; margin-bottom:10px; padding-bottom:8px; border-bottom:0.5px solid rgba(124,58,237,0.1); }
+.cmp-col-head.fiat { color:#52524C; }
+.cmp-col-head.btc  { color:#534AB7; }
+.cmp-col-body { font-size:12px; color:#1A1A18; line-height:1.7; }
+.cmp-verdict { padding:10px 16px; background:#EEEDFE; border-top:0.5px solid rgba(124,58,237,0.1); font-size:11px; color:#3C3489; line-height:1.6; }
+.cmp-verdict strong { color:#534AB7; }
+

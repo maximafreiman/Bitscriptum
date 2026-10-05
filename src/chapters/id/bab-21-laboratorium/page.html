@@ -1,0 +1,1703 @@
+<!-- ============================================================
+     PAGE 24 · BAB 21 · Simulasi Atas Semuanya
+     |-- 21.1 · Kriptografi, Wallet & Kepemilikan Bitcoin [DONE]
+     |-- 21.2+ · [segera hadir]
+============================================================ -->
+<div class="page" id="page-bab21">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b21">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b21">← Daftar Bab</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab21">
+      <div class="sidebar-heading">Laboratorium</div>
+      <div class="sidebar-title">Bongkar isinya, bukan cuma pakai</div>
+
+      <div class="lab-group first">Alur<span style="opacity:.35;margin-left:6px">·</span><span class="lab-letter">A</span></div>
+      <div class="lab-group-d">Proses ujung ke ujung yang bisa dijalankan</div>
+      <div class="sidebar-item active" id="sb-21-1">
+        <div class="sb-num">A1</div>
+        <div class="sb-label">Kriptografi, Wallet & Kepemilikan Bitcoin</div>
+      </div>
+      <div class="sidebar-item" id="sb-21-2">
+        <div class="sb-num">A2</div>
+        <div class="sb-label">Transaction Builder, Script Inspector & Stack Executor</div>
+      </div>
+      <div class="sidebar-item" id="sb-21-3">
+        <div class="sb-num">A3</div>
+        <div class="sb-label">Opcodes Explorer</div>
+      </div>
+      <div class="sidebar-item" id="sb-21-4">
+        <div class="sb-num">A4</div>
+        <div class="sb-label">Block Explorer</div>
+      </div>
+      <div class="sidebar-item" id="sb-21-5">
+        <div class="sb-num">A5</div>
+        <div class="sb-label">Mining Nonce Hunt</div>
+      </div>
+      <div class="sidebar-item" id="sb-21-6">
+        <div class="sb-num">A6</div>
+        <div class="sb-label">Mempool Simulator</div>
+      </div>
+      <div class="sidebar-item" id="sb-21-7">
+        <div class="sb-num">A7</div>
+        <div class="sb-label">HD Wallet & Derivation Tree</div>
+      </div>
+      <div class="sidebar-item" id="sb-21-8">
+        <div class="sb-num">A8</div>
+        <div class="sb-label">Schnorr vs ECDSA</div>
+      </div>
+      <div class="sidebar-item" id="sb-21-9">
+        <div class="sb-num">A9</div>
+        <div class="sb-label">Lightning TX Flow</div>
+      </div>
+
+      <div class="lab-group">Primitif Kriptografi<span style="opacity:.35;margin-left:6px">·</span><span class="lab-letter">C</span></div>
+      <div class="lab-group-d">Fungsi kriptografi yang dibuka dari dalam</div>
+      <div class="sidebar-item" id="sb-lab-c1">
+        <div class="sb-num">C1</div>
+        <div class="sb-label">SHA-256 ronde demi ronde</div>
+      </div>
+      <div class="sidebar-item" id="sb-lab-c2">
+        <div class="sb-num">C2</div>
+        <div class="sb-label">secp256k1: aritmetika titik</div>
+      </div>
+      <div class="sidebar-item" id="sb-lab-c3">
+        <div class="sb-num">C3</div>
+        <div class="sb-label">ECDSA &amp; Schnorr: r dan s</div>
+      </div>
+      <div class="sidebar-item" id="sb-lab-c4">
+        <div class="sb-num">C4</div>
+        <div class="sb-label">BIP32: turunan kunci</div>
+      </div>
+      <div class="sidebar-item" id="sb-lab-c5">
+        <div class="sb-num">C5</div>
+        <div class="sb-label">BIP39: entropi ke kata</div>
+      </div>
+      <div class="sidebar-item" id="sb-lab-c6">
+        <div class="sb-num">C6</div>
+        <div class="sb-label">Tweak Taproot</div>
+      </div>
+      <div class="sidebar-item" id="sb-lab-c7">
+        <div class="sb-num">C7</div>
+        <div class="sb-label">Simpul ganjil & CVE-2012-2459</div>
+      </div>
+      <div class="lab-group">Format &amp; Protokol<span style="opacity:.35;margin-left:6px">·</span><span class="lab-letter">F</span></div>
+      <div class="lab-group-d">Anatomi byte, encoding, dan pesan jaringan</div>
+      
+      <div class="sidebar-item" id="sb-lab-f1">
+        <div class="sb-num">F1</div>
+        <div class="sb-label">Serialisasi transaksi</div>
+      </div>
+      <div class="sidebar-item" id="sb-lab-f2">
+        <div class="sb-num">F2</div>
+        <div class="sb-label">bech32 &amp; base58check</div>
+      </div>
+      <div class="sidebar-item" id="sb-lab-f3">
+        <div class="sb-num">F3</div>
+        <div class="sb-label">Encoding nBits</div>
+      </div>
+      
+      
+      <div class="lab-group">Kalkulator<span style="opacity:.35;margin-left:6px">·</span><span class="lab-letter">D</span></div>
+      <div class="lab-group-d">Hitungan yang menyangkut kamu langsung</div>
+      <div class="sidebar-item" id="sb-lab-d1">
+        <div class="sb-num">D1</div>
+        <div class="sb-label">Halving &amp; DCA</div>
+      </div>
+      <div class="sidebar-item" id="sb-lab-d2">
+        <div class="sb-num">D2</div>
+        <div class="sb-label">Sebaran jenis address</div>
+      </div>
+
+    </div>
+
+    <div class="prologue-content" id="bab21-content">
+
+      <!-- ==============================
+           SECTION 21.1 · Kriptografi, Wallet & Kepemilikan Bitcoin
+      ============================== -->
+      <div class="p-section active" id="section-21-1">
+        <div class="p-eyebrow">Laboratorium · Alur 1</div>
+        <div class="p-heading">Dari entropi acak sampai address Bitcoin — setiap langkah kriptografi yang terjadi saat wallet dibuat dan transaksi ditandatangani</div>
+        <div class="p-title">Kriptografi, Wallet & Kepemilikan Bitcoin</div>
+        <div class="p-divider"></div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Crypto Flow Simulator — CSPRNG ke Address & Signature</div>
+          <div class="b21-s211-desc">
+            Pilih format address untuk melihat bagaimana jalur encoding berbeda di langkah 7-9. Klik "Generate ulang" untuk menghasilkan nilai baru. Setiap nilai adalah simulasi visual — bukan implementasi kriptografi nyata.
+          </div>
+
+          <div class="b21-s211-wrap" id="b21-s211-wrap">
+            <div class="b21-s211-top">
+              <div class="b21-s211-addr-btns">
+                <button class="b21-s211-addr-btn s211-act" data-type="p2wpkh">P2WPKH (bc1q)</button>
+                <button class="b21-s211-addr-btn" data-type="p2pkh">P2PKH (1...)</button>
+                <button class="b21-s211-addr-btn" data-type="p2tr">P2TR (bc1p)</button>
+              </div>
+              <button class="b21-s211-gen-btn" id="b21-s211-gen">Generate ulang</button>
+            </div>
+            <div class="b21-s211-flow" id="b21-s211-flow"></div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-21-2" data-sb="sb-21-2">
+            21.2 — Transaction Builder & Script →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 21.1 -->
+
+      <!-- ==============================
+           SECTION 21.2 · Transaction Builder, Script Inspector & Stack Executor
+      ============================== -->
+      <div class="p-section" id="section-21-2">
+        <div class="p-eyebrow">Laboratorium · Alur 2</div>
+        <div class="p-heading">Setiap transaksi Bitcoin adalah komunikasi antara dua pihak lewat Script — pengirim mengkonsumsi UTXO, penerima mendapat UTXO baru yang terkunci dengan kondisi yang bisa diverifikasi siapapun</div>
+        <div class="p-title">Transaction Builder, Script Inspector & Stack Executor</div>
+        <div class="p-divider"></div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Transaction Builder · Script Inspector · Stack Executor</div>
+          <div class="b21-s212-desc">
+            Tab 1: simulasi Alice mengirim ke Bob — lihat UTXO dikonsumsi, UTXO baru tercipta, miner dapat fee. Pilih script type untuk lihat locking script yang berbeda. Tab 2: inspect setiap opcode dari 7 format script — klik untuk penjelasan mengapa opcode itu ada. Tab 3: eksekusi script step-by-step dan lihat stack berubah per opcode.
+          </div>
+
+          <div class="b21-s212-tabs">
+            <button class="b21-s212-tab s212-act" id="b21-s212-t1">Alice → Bob</button>
+            <button class="b21-s212-tab" id="b21-s212-t2">Script Inspector</button>
+            <button class="b21-s212-tab" id="b21-s212-t3">Stack Executor</button>
+            <button class="b21-s212-tab" id="b21-s212-t4">Full TX Flow</button>
+          </div>
+
+          <!-- PANE 1: ALICE & BOB -->
+          <div class="b21-s212-pane show" id="b21-s212-p1">
+            <div class="b21-s212-hint">Setiap transaksi Bitcoin melibatkan dua pihak: pengirim yang mengkonsumsi UTXO-nya, dan penerima yang mendapat UTXO baru yang terkunci di address mereka. Miner mendapat fee sebagai selisih. Pilih tipe script untuk lihat locking script yang berbeda.</div>
+            <div class="b21-s212-type-btns" id="b21-s212-type-btns"></div>
+            <div class="b21-s212-ab-layout">
+              <div class="b21-s212-party">
+                <div class="b21-s212-party-hdr s212-alice">
+                  <div class="b21-s212-avatar s212-alice">A</div>
+                  <div><div class="b21-s212-name">Alice (pengirim)</div><div class="b21-s212-addr" id="b21-s212-alice-addr">bc1q...a7f2</div></div>
+                </div>
+                <div class="b21-s212-utxo s212-alice-in" id="b21-s212-alice-utxo">
+                  <div class="b21-s212-utxo-lbl s212-purple">UTXO milik Alice (INPUT)</div>
+                  <div class="b21-s212-utxo-val">0,05 BTC</div>
+                  <div class="b21-s212-utxo-script" id="b21-s212-alice-lock"></div>
+                  <div class="b21-s212-utxo-note">← terkunci di address Alice</div>
+                </div>
+                <div class="b21-s212-utxo s212-change-out" id="b21-s212-change-utxo">
+                  <div class="b21-s212-utxo-lbl s212-purple">Kembalian Alice (OUTPUT)</div>
+                  <div class="b21-s212-utxo-val">0,009 BTC</div>
+                  <div class="b21-s212-utxo-script" id="b21-s212-change-lock"></div>
+                  <div class="b21-s212-utxo-note">← terkunci di address Alice baru</div>
+                </div>
+              </div>
+              <div class="b21-s212-middle">
+                <div class="b21-s212-tx-box" id="b21-s212-tx-box">TX<br>pending</div>
+                <div class="b21-s212-arrow">⇄</div>
+                <button class="b21-s212-send-btn" id="b21-s212-send">Kirim Transaksi</button>
+                <button class="b21-s212-reset-btn" id="b21-s212-ab-reset">Reset</button>
+              </div>
+              <div class="b21-s212-party">
+                <div class="b21-s212-party-hdr s212-bob">
+                  <div class="b21-s212-avatar s212-bob">B</div>
+                  <div><div class="b21-s212-name">Bob (penerima)</div><div class="b21-s212-addr" id="b21-s212-bob-addr">bc1q...3c9d</div></div>
+                </div>
+                <div class="b21-s212-utxo s212-bob-out" id="b21-s212-bob-utxo">
+                  <div class="b21-s212-utxo-lbl s212-green">UTXO baru milik Bob (OUTPUT)</div>
+                  <div class="b21-s212-utxo-val">0,04 BTC</div>
+                  <div class="b21-s212-utxo-script" id="b21-s212-bob-lock"></div>
+                  <div class="b21-s212-utxo-note">← terkunci di address Bob</div>
+                </div>
+              </div>
+            </div>
+            <div class="b21-s212-miner" id="b21-s212-miner">
+              <div class="b21-s212-miner-avatar">M</div>
+              <div class="b21-s212-miner-body">
+                <div class="b21-s212-miner-name">Miner (fee collector)</div>
+                <div class="b21-s212-miner-val">0,001 BTC fee</div>
+                <div class="b21-s212-miner-note">selisih input − output · diklaim via coinbase tx · tidak perlu unlocking script</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PANE 2: SCRIPT INSPECTOR -->
+          <div class="b21-s212-pane" id="b21-s212-p2">
+            <div class="b21-s212-hint">Klik setiap opcode untuk penjelasan mengapa opcode itu ada di sini dan bagaimana ia berkomunikasi syarat transfer kepemilikan antara pengirim dan penerima.</div>
+            <div class="b21-s212-si-btns" id="b21-s212-si-btns"></div>
+            <div id="b21-s212-si-display"></div>
+          </div>
+
+          <!-- PANE 4: FULL TX FLOW -->
+
+          <!-- PANE 3: STACK EXECUTOR -->
+          <div class="b21-s212-pane" id="b21-s212-p3">
+            <div class="b21-s212-hint">Eksekusi script step-by-step. Lihat bagaimana stack berubah per opcode dan bagaimana akhirnya TRUE muncul di atas stack saat script berhasil.</div>
+                        <div class="b21-s212-si-btns" id="b21-s212-se-btns"></div>
+                        <div class="b21-s212-exec-ctrl">
+                          <button class="b21-s212-exec-btn s212-primary" id="b21-s212-step">▶ Step</button>
+                          <button class="b21-s212-exec-btn" id="b21-s212-se-reset">Reset</button>
+                          <span class="b21-s212-step-lbl" id="b21-s212-step-lbl">Tekan Step untuk mulai</span>
+                        </div>
+                        <div class="b21-s212-exec-layout">
+                          <div>
+                            <div class="b21-s212-col-lbl">Script (unlock + lock):</div>
+                            <div id="b21-s212-exec-script"></div>
+                          </div>
+                          <div>
+                            <div class="b21-s212-col-lbl">Stack:</div>
+                            <div class="b21-s212-stack" id="b21-s212-stack"></div>
+                          </div>
+                        </div>
+                        <div class="b21-s212-exec-result s212-idle" id="b21-s212-result">Eksekusi belum dimulai.</div>
+          </div>
+        </div>
+
+          <!-- PANE 4: FULL TX FLOW -->
+          <div class="b21-s212-pane" id="b21-s212-p4">
+            <div class="b21-s212-hint">Ikuti alur lengkap sebuah transaksi dari address Bob sebagai tujuan sampai UTXO baru terkunci di address-nya. Pilih format untuk lihat perbedaan decode address, locking script, cara signing, dan verifikasi per tipe.</div>
+                        <div style="display:flex;flex-direction:column;gap:4px;">
+                          <div class="b21-s212-si-lbl">Legacy (sebelum SegWit):</div>
+                          <div class="b21-s212-script-btns" id="b21-s212-tf-btns-legacy"></div>
+                          <div class="b21-s212-si-lbl">SegWit &amp; Taproot:</div>
+                          <div class="b21-s212-script-btns" id="b21-s212-tf-btns-segwit"></div>
+                        </div>
+                        <div id="b21-s212-tf-flow"></div>
+          </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-21-1" data-sb="sb-21-1">
+            ← 21.1 — Kriptografi & Wallet
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-21-3" data-sb="sb-21-3">
+            21.3 — Opcodes Explorer →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 21.2 -->
+
+      <!-- ==============================
+           SECTION 21.3 · Opcodes Explorer
+      ============================== -->
+      <div class="p-section" id="section-21-3">
+        <div class="p-eyebrow">Laboratorium · Alur 3</div>
+        <div class="p-heading">Setiap opcode adalah instruksi dalam "bahasa" yang digunakan Bitcoin untuk mengkomunikasikan syarat transfer kepemilikan antara pengirim dan penerima</div>
+        <div class="p-title">Opcodes Explorer — Status, Stack Effect, dan Real Case per Address Type</div>
+        <div class="p-divider"></div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Opcodes Explorer</div>
+          <div class="b21-s213-desc">
+            Pilih opcode dari panel kiri untuk lihat: status aktif atau dinonaktifkan, stack effect (input ke output), penjelasan fungsi, perbedaan penggunaan per tipe address (P2PKH vs P2WPKH vs P2TR dll), dan contoh script nyata dengan opcode tersebut di-highlight.
+          </div>
+          <div class="b21-s213-layout">
+            <div class="b21-s213-left" id="b21-s213-left"></div>
+            <div class="b21-s213-right" id="b21-s213-right">
+              <div class="b21-s213-empty">← Pilih opcode untuk mulai</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-21-2" data-sb="sb-21-2">
+            ← 21.2 — Transaction Builder & Script
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-21-4" data-sb="sb-21-4">
+            21.4 — Block Explorer →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 21.3 -->
+
+      <!-- ==============================
+           SECTION 21.4 · Block Explorer
+      ============================== -->
+      <div class="p-section" id="section-21-4">
+        <div class="p-eyebrow">Laboratorium · Alur 4</div>
+        <div class="p-heading">Setiap block adalah wadah 80 bytes header yang meringkas ribuan transaksi lewat Merkle tree — mengubah satu transaksi apapun akan membatalkan seluruh proof of work</div>
+        <div class="p-title">Block Explorer — Header, Merkle Tree & Anatomy Transaksi</div>
+        <div class="p-divider"></div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Block Explorer — Block #840,000 (Halving ke-4)</div>
+          <div class="b21-s214-desc">
+            Explore anatomy sebuah block nyata: tab Overview menampilkan statistik block, Header menampilkan 6 field 80 bytes yang bisa diklik, Merkle Tree menampilkan bagaimana semua txid terhubung ke satu root di header, dan Transaksi menampilkan berbagai format tx dengan efisiensi berbeda.
+          </div>
+
+          <div class="b21-s214-tabs">
+            <button class="b21-s214-tab s214-act" id="b21-s214-t1">Block Overview</button>
+            <button class="b21-s214-tab" id="b21-s214-t2">Block Header</button>
+            <button class="b21-s214-tab" id="b21-s214-t3">Merkle Tree</button>
+            <button class="b21-s214-tab" id="b21-s214-t4">Transaksi</button>
+          </div>
+
+          <!-- PANE 1: OVERVIEW -->
+          <div class="b21-s214-pane show" id="b21-s214-p1">
+            <div class="b21-s214-block-card">
+              <div class="b21-s214-block-top">
+                <div class="b21-s214-block-num">Block #840,000</div>
+                <div class="b21-s214-block-meta">
+                  <div class="b21-s214-block-time">19 Apr 2024 · 00:09:27 UTC</div>
+                  <div class="b21-s214-block-sub">Halving ke-4 — reward turun dari 6.25 ke 3.125 BTC</div>
+                </div>
+              </div>
+              <div class="b21-s214-stats">
+                <div class="b21-s214-stat s214-st-tx"><div class="b21-s214-stat-lbl">Transaksi</div><div class="b21-s214-stat-val">3,050</div></div>
+                <div class="b21-s214-stat s214-st-fee"><div class="b21-s214-stat-lbl">Total Fee</div><div class="b21-s214-stat-val">37.626 BTC</div></div>
+                <div class="b21-s214-stat s214-st-rew"><div class="b21-s214-stat-lbl">Block Reward</div><div class="b21-s214-stat-val">3.125 BTC</div></div>
+                <div class="b21-s214-stat s214-st-sz"><div class="b21-s214-stat-lbl">Ukuran</div><div class="b21-s214-stat-val">1.54 MB</div></div>
+              </div>
+            </div>
+            <div class="b21-s214-overview-note">
+              <strong>Block #840,000</strong> adalah block halving ke-4 Bitcoin. Block reward berkurang dari 6.25 BTC menjadi 3.125 BTC secara otomatis sesuai jadwal yang sudah tertanam di protokol sejak genesis block. Block ini unik karena total fee transaksi (37.626 BTC) jauh melampaui block reward (3.125 BTC), salah satu bukti awal bahwa fee market bisa berfungsi sebagai insentif miner jangka panjang.<br><br>
+              Setiap block berisi: satu <strong>header 80 bytes</strong> yang meringkas seluruh konten block, satu <strong>coinbase transaction</strong> yang menciptakan Bitcoin baru untuk miner, dan ribuan <strong>transaksi reguler</strong> yang memindahkan Bitcoin antar pihak. Explore tiap bagian di tab di atas.
+            </div>
+          </div>
+
+          <!-- PANE 2: HEADER -->
+          <div class="b21-s214-pane" id="b21-s214-p2">
+            <div class="b21-s214-pane-hint">Block header adalah 80 bytes yang meringkas seluruh block. Ini yang di-hash oleh miner untuk membuktikan proof of work. Klik setiap field untuk penjelasan.</div>
+            <div id="b21-s214-fields"></div>
+            <div class="b21-s214-header-note">Total header: 80 bytes (4 + 32 + 32 + 4 + 4 + 4). Double SHA256 dari 80 bytes ini adalah block hash — inilah yang harus memenuhi target difficulty.</div>
+          </div>
+
+          <!-- PANE 3: MERKLE TREE -->
+          <div class="b21-s214-pane" id="b21-s214-p3">
+            <div class="b21-s214-pane-hint">Merkle tree adalah struktur hash yang menghubungkan semua txid ke satu Merkle root yang tersimpan di block header. Klik setiap node untuk penjelasan.</div>
+            <div class="b21-s214-merkle-tree" id="b21-s214-merkle-tree"></div>
+            <div class="b21-s214-merkle-detail" id="b21-s214-merkle-detail">
+              <div class="b21-s214-merkle-hint-inner">Klik node untuk penjelasan</div>
+            </div>
+            <div class="b21-s214-merkle-note">Merkle proof: untuk membuktikan satu transaksi ada di block, cukup sediakan hash sepanjang jalur dari leaf ke root — tidak perlu seluruh block. Inilah yang dipakai SPV wallet.</div>
+          </div>
+
+          <!-- PANE 4: TX LIST -->
+          <div class="b21-s214-pane" id="b21-s214-p4">
+            <div class="b21-s214-pane-hint">Setiap block dimulai dengan coinbase transaction yang menciptakan Bitcoin baru. Klik transaksi untuk detail input, output, fee, dan penjelasan format script-nya.</div>
+            <div id="b21-s214-tx-list"></div>
+            <div class="b21-s214-tx-detail" id="b21-s214-tx-detail" style="display:none;"></div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-21-3" data-sb="sb-21-3">
+            ← 21.3 — Opcodes Explorer
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-21-5" data-sb="sb-21-5">
+            21.5 — Mining Nonce Hunt →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 21.4 -->
+
+      <!-- ==============================
+           SECTION 21.5 · Mining Nonce Hunt
+      ============================== -->
+      <div class="p-section" id="section-21-5">
+        <div class="p-eyebrow">Laboratorium · Alur 5</div>
+        <div class="p-heading">Miner berulang kali mengubah nonce sampai hash block memenuhi target difficulty — tidak ada jalan pintas selain mencoba satu per satu</div>
+        <div class="p-title">Mining Nonce Hunt — Simulasi Proof of Work</div>
+        <div class="p-divider"></div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Mining Simulator — Block Header Nonce Hunt</div>
+          <div class="b21-s215-desc">
+            Pilih difficulty, tekan Mine, dan lihat bagaimana nonce diubah terus sampai double SHA256 dari block header menghasilkan hash yang memenuhi target. Karakter hijau = cocok dengan target, merah = belum. Bitcoin nyata memerlukan 19+ leading zeros.
+          </div>
+
+          <div class="b21-s215-diff-wrap">
+            <div class="b21-s215-diff-lbl">Pilih difficulty (jumlah leading zeros yang diperlukan):</div>
+            <div class="b21-s215-diff-btns">
+              <button class="b21-s215-diff-btn s215-act" data-zeros="2">2 zeros (mudah)</button>
+              <button class="b21-s215-diff-btn" data-zeros="3">3 zeros (sedang)</button>
+              <button class="b21-s215-diff-btn" data-zeros="4">4 zeros (sulit)</button>
+              <button class="b21-s215-diff-btn" data-zeros="6">6 zeros (sangat sulit)</button>
+            </div>
+          </div>
+
+          <div class="b21-s215-stats">
+            <div class="b21-s215-stat s215-st-nonce">
+              <div class="b21-s215-stat-lbl">Nonce saat ini</div>
+              <div class="b21-s215-stat-val" id="b21-s215-nonce-display">0</div>
+              <div class="b21-s215-stat-sub">hex: <span id="b21-s215-nonce-hex">0x00000000</span></div>
+            </div>
+            <div class="b21-s215-stat s215-st-hash">
+              <div class="b21-s215-stat-lbl">Hash dicoba</div>
+              <div class="b21-s215-stat-val" id="b21-s215-hash-count">0</div>
+              <div class="b21-s215-stat-sub">per detik: <span id="b21-s215-hps">—</span></div>
+            </div>
+            <div class="b21-s215-stat s215-st-diff">
+              <div class="b21-s215-stat-lbl">Target zeros</div>
+              <div class="b21-s215-stat-val" id="b21-s215-zeros-display">2</div>
+              <div class="b21-s215-stat-sub">peluang: 1/<span id="b21-s215-prob">256</span></div>
+            </div>
+          </div>
+
+          <div class="b21-s215-header">
+            <div class="b21-s215-header-lbl">Block Header (80 bytes) yang sedang di-hash:</div>
+            <div class="b21-s215-header-fields">
+              <div class="b21-s215-hf"><div class="b21-s215-hf-name">version</div><div class="b21-s215-hf-val">0x20000000</div></div>
+              <div class="b21-s215-hf"><div class="b21-s215-hf-name">prev_hash</div><div class="b21-s215-hf-val">00000000...a3b8</div></div>
+              <div class="b21-s215-hf"><div class="b21-s215-hf-name">merkle_root</div><div class="b21-s215-hf-val">c4b8e2f1...d8c1</div></div>
+              <div class="b21-s215-hf"><div class="b21-s215-hf-name">timestamp</div><div class="b21-s215-hf-val">0x65FF8A47</div></div>
+              <div class="b21-s215-hf"><div class="b21-s215-hf-name">bits</div><div class="b21-s215-hf-val">0x17034219</div></div>
+              <div class="b21-s215-hf"><div class="b21-s215-hf-name">nonce</div><div class="b21-s215-hf-val b21-s215-nonce-yellow" id="b21-s215-nonce-field">0x00000000</div></div>
+            </div>
+            <div class="b21-s215-header-raw" id="b21-s215-header-raw">20000000 00000000...a3b8 c4b8e2f1...d8c1 65FF8A47 17034219 <span class="b21-s215-nonce-yellow">00000000</span></div>
+          </div>
+
+          <div class="b21-s215-hash-section">
+            <div class="b21-s215-hash-lbl">Block hash saat ini (double SHA256 dari header):</div>
+            <div class="b21-s215-hash-box">
+              <div class="b21-s215-hash-val" id="b21-s215-hash-display">—</div>
+              <div class="b21-s215-hash-meta">
+                <div class="b21-s215-target-lbl">Target:</div>
+                <div class="b21-s215-target-val" id="b21-s215-target-display">00ffffffffffffff...</div>
+              </div>
+              <div class="b21-s215-target-note" id="b21-s215-target-note">Hash harus dimulai dengan minimal 2 karakter "0"</div>
+            </div>
+          </div>
+
+          <div class="b21-s215-ctrl">
+            <button class="b21-s215-btn s215-primary" id="b21-s215-mine-btn">⛏ Mine</button>
+            <button class="b21-s215-btn s215-secondary" id="b21-s215-reset-btn">Reset</button>
+            <div class="b21-s215-timer-wrap">
+              <div class="b21-s215-timer-lbl">Waktu mining</div>
+              <div class="b21-s215-timer-val" id="b21-s215-timer">0.00s</div>
+            </div>
+          </div>
+
+          <div class="b21-s215-result s215-idle" id="b21-s215-result">Tekan Mine untuk mulai mencari nonce yang valid.</div>
+
+          <div class="b21-s215-explainer">
+            <div class="b21-s215-exp-row"><div class="b21-s215-exp-num">1</div><div class="b21-s215-exp-text"><strong>Miner mengubah nonce</strong> di header block (4 bytes, 0 sampai ~4 miliar). Setiap perubahan nonce menghasilkan hash yang sama sekali berbeda.</div></div>
+            <div class="b21-s215-exp-row"><div class="b21-s215-exp-num">2</div><div class="b21-s215-exp-text"><strong>Double SHA256 dari 80 bytes header</strong> dihitung. Hasilnya 32 bytes (64 karakter hex). Tidak bisa diprediksi, satu-satunya cara adalah mencoba.</div></div>
+            <div class="b21-s215-exp-row"><div class="b21-s215-exp-num">3</div><div class="b21-s215-exp-text"><strong>Hash dibandingkan dengan target.</strong> Kalau hash lebih kecil dari target (cukup banyak leading zeros), block valid dan miner mendapat reward.</div></div>
+            <div class="b21-s215-exp-row"><div class="b21-s215-exp-num">4</div><div class="b21-s215-exp-text"><strong>Difficulty Bitcoin nyata</strong> memerlukan 19+ leading zeros, dengan peluang 1 dari 2^76. Seluruh jaringan mencoba triliunan hash per detik untuk mencapai ini rata-rata setiap 10 menit.</div></div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-21-4" data-sb="sb-21-4">
+            ← 21.4 — Block Explorer
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-21-6" data-sb="sb-21-6">
+            21.6 — Mempool Simulator →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 21.5 -->
+
+      <!-- ==============================
+           SECTION 21.6 · Mempool Simulator
+      ============================== -->
+      <div class="p-section" id="section-21-6">
+        <div class="p-eyebrow">Laboratorium · Alur 6</div>
+        <div class="p-heading">Mempool adalah antrian transaksi yang menunggu masuk block — miner memilih yang paling menguntungkan, fee rate minimum naik saat antrian penuh</div>
+        <div class="p-title">Mempool Simulator — Fee Market & Seleksi Transaksi</div>
+        <div class="p-divider"></div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Mempool Live Simulator</div>
+          <div class="b21-s216-desc">
+            Tambah transaksi dengan berbagai fee rate, lihat bagaimana mempool terisi, mine block untuk lihat transaksi mana yang dipilih miner, dan amati bagaimana fee minimum relay berubah saat mempool penuh atau kosong.
+          </div>
+
+          <div class="b21-s216-stats">
+            <div class="b21-s216-stat s216-ms-count">
+              <div class="b21-s216-stat-lbl">Tx di Mempool</div>
+              <div class="b21-s216-stat-val" id="b21-s216-tx-count">0</div>
+              <div class="b21-s216-stat-sub">pending</div>
+            </div>
+            <div class="b21-s216-stat s216-ms-size">
+              <div class="b21-s216-stat-lbl">Ukuran Mempool</div>
+              <div class="b21-s216-stat-val" id="b21-s216-size">0</div>
+              <div class="b21-s216-stat-sub">vByte</div>
+            </div>
+            <div class="b21-s216-stat s216-ms-min">
+              <div class="b21-s216-stat-lbl">Fee Min Relay</div>
+              <div class="b21-s216-stat-val" id="b21-s216-min-fee">1</div>
+              <div class="b21-s216-stat-sub">sat/vByte</div>
+            </div>
+            <div class="b21-s216-stat s216-ms-next">
+              <div class="b21-s216-stat-lbl">Fee Next Block</div>
+              <div class="b21-s216-stat-val" id="b21-s216-next-fee">—</div>
+              <div class="b21-s216-stat-sub">sat/vByte (est.)</div>
+            </div>
+          </div>
+
+          <div class="b21-s216-ctrl">
+            <button class="b21-s216-btn s216-primary" id="b21-s216-add-btn">+ Tambah TX</button>
+            <button class="b21-s216-btn s216-primary" id="b21-s216-add5-btn">+ Tambah 5 TX</button>
+            <div class="b21-s216-fee-input">
+              <span class="b21-s216-fee-lbl">fee rate:</span>
+              <select class="b21-s216-fee-sel" id="b21-s216-fee-sel">
+                <option value="120">120 sat/vB (prioritas tinggi)</option>
+                <option value="50">50 sat/vB (sedang)</option>
+                <option value="10">10 sat/vB (rendah)</option>
+                <option value="2">2 sat/vB (sangat rendah)</option>
+                <option value="0">acak</option>
+              </select>
+            </div>
+            <button class="b21-s216-btn s216-secondary" id="b21-s216-mine-btn">⛏ Mine Block</button>
+            <button class="b21-s216-btn s216-danger" id="b21-s216-clear-btn">Bersihkan</button>
+          </div>
+
+          <div class="b21-s216-layout">
+            <div>
+              <div class="b21-s216-pool-lbl">Mempool — diurutkan berdasarkan fee rate:</div>
+              <div class="b21-s216-pool-header">
+                <div class="b21-s216-pool-hcell">txid</div>
+                <div class="b21-s216-pool-hcell">fee rate</div>
+                <div class="b21-s216-pool-hcell">ukuran</div>
+                <div class="b21-s216-pool-hcell">tipe</div>
+              </div>
+              <div class="b21-s216-pool-rows" id="b21-s216-pool-rows"></div>
+
+              <div style="margin-top:8px;">
+                <div class="b21-s216-chart-lbl">Distribusi fee rate:</div>
+                <div id="b21-s216-chart"></div>
+              </div>
+
+              <div id="b21-s216-detail-wrap" style="display:none;margin-top:8px;">
+                <div class="b21-s216-detail" id="b21-s216-detail"></div>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div>
+                <div class="b21-s216-side-lbl">Block terakhir di-mine:</div>
+                <div class="b21-s216-block-box" id="b21-s216-block-box">
+                  <div class="b21-s216-block-empty">Belum ada block di-mine</div>
+                </div>
+              </div>
+              <div>
+                <div class="b21-s216-side-lbl">Log aktivitas:</div>
+                <div class="b21-s216-log" id="b21-s216-log"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-21-5" data-sb="sb-21-5">
+            ← 21.5 — Mining Nonce Hunt
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-21-7" data-sb="sb-21-7">
+            21.7 — HD Wallet & Derivation Tree →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 21.6 -->
+
+      <!-- ==============================
+           SECTION 21.7 · HD Wallet & Derivation Tree
+      ============================== -->
+      <div class="p-section" id="section-21-7">
+        <div class="p-eyebrow">Laboratorium · Alur 7</div>
+        <div class="p-heading">Satu seed phrase menghasilkan seluruh pohon key secara deterministik — infinite address dari satu sumber entropi tunggal</div>
+        <div class="p-title">HD Wallet & Derivation Tree — BIP32, BIP39, BIP44/49/84/86</div>
+        <div class="p-divider"></div>
+
+        <div class="p-simulation">
+          <div class="sim-label">HD Wallet Derivation Simulator (semua nilai simulasi)</div>
+          <div class="b21-s217-desc">
+            Pilih standar BIP, klik segmen path untuk penjelasan, dan lihat bagaimana setiap level pohon diderivasi dari seed. Semua nilai adalah simulasi — bukan kriptografi nyata.
+          </div>
+
+          <div class="b21-s217-sim-warning">⚠ SIMULASI — semua nilai di bawah adalah data palsu untuk keperluan edukasi. Jangan gunakan sebagai wallet nyata.</div>
+
+          <div class="b21-s217-seed-box">
+            <div class="b21-s217-seed-phrase" id="b21-s217-seed-phrase">SIMULASI: alpha bravo charlie delta echo foxtrot golf hotel india juliet kilo lima</div>
+            <div class="b21-s217-seed-sub">12 kata × ~11 bit = 128-bit entropy (simulasi — bukan kata BIP39 valid)</div>
+            <div class="b21-s217-seed-hex" id="b21-s217-seed-hex">seed (512-bit, PBKDF2-HMAC-SHA512): [SIMULASI] a1b2c3d4...f0e1d2c3</div>
+          </div>
+          <button class="b21-s217-gen-btn" id="b21-s217-gen-btn">Regenerate (simulasi)</button>
+
+          <div class="b21-s217-sec-lbl" style="margin-top:4px;">Pilih standar derivasi:</div>
+          <div class="b21-s217-std-btns" id="b21-s217-std-btns"></div>
+
+          <div class="b21-s217-path-wrap">
+            <div class="b21-s217-sec-lbl">Derivation path — klik segmen untuk penjelasan:</div>
+            <div class="b21-s217-path-display" id="b21-s217-path-display"></div>
+            <div id="b21-s217-path-detail" style="display:none;"></div>
+          </div>
+
+          <div class="b21-s217-sec-lbl">Pohon derivasi (semua nilai simulasi):</div>
+          <div id="b21-s217-tree"></div>
+
+          <div class="b21-s217-sec-lbl" style="margin-top:4px;">Address yang digenerate — index 0 sampai 4 (simulasi):</div>
+          <div class="b21-s217-addr-header">
+            <div class="b21-s217-addr-hcell">Path</div>
+            <div class="b21-s217-addr-hcell">Address (simulasi)</div>
+            <div class="b21-s217-addr-hcell">Format</div>
+          </div>
+          <div id="b21-s217-addr-rows"></div>
+        
+          <div class="lab-back">Peraga ini memakai nilai ilustratif untuk memperlihatkan bentuk pohonnya. Perhitungan HMAC-SHA512 yang sungguhan, dan peragaan kenapa turunan hardened wajib ada, dibedah di C4 pada kelompok Primitif Kriptografi.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-21-6" data-sb="sb-21-6">
+            ← 21.6 — Mempool Simulator
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-21-8" data-sb="sb-21-8">
+            21.8 — Schnorr vs ECDSA →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 21.7 -->
+
+      <!-- ==============================
+           SECTION 21.8 · Schnorr vs ECDSA
+      ============================== -->
+      <div class="p-section" id="section-21-8">
+        <div class="p-eyebrow">Laboratorium · Alur 8</div>
+        <div class="p-heading">Schnorr dan ECDSA sama-sama berjalan di secp256k1 — tapi linearitas Schnorr memungkinkan agregasi signature yang mengubah cara multisig bekerja di Bitcoin</div>
+        <div class="p-title">Schnorr vs ECDSA — Signing, Verifikasi & Key Aggregation</div>
+        <div class="p-divider"></div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Schnorr vs ECDSA — Flow Visualizer</div>
+          <div class="b21-s218-desc">
+            Tiga tab: (1) proses signing step-by-step kedua skema berjalan bersamaan, (2) proses verifikasi dengan perbedaan jumlah operasi yang diperlukan, (3) simulasi 3 transaksi yang menunjukkan mengapa agregasi Schnorr mengubah segalanya.
+          </div>
+
+          <div class="b21-s218-tabs">
+            <button class="b21-s218-tab s218-act" id="b21-s218-t1">Signing Flow</button>
+            <button class="b21-s218-tab" id="b21-s218-t2">Verifikasi Flow</button>
+            <button class="b21-s218-tab" id="b21-s218-t3">3-TX Aggregation</button>
+          </div>
+
+          <!-- PANE 1 & 2: SIGNING / VERIFY FLOW -->
+          <div class="b21-s218-pane show" id="b21-s218-p1">
+            <div class="b21-s218-flow-hint" id="b21-s218-flow-hint">Proses signing ECDSA dan Schnorr berjalan bersamaan. Badge merah = kelemahan ECDSA, badge hijau = keunggulan Schnorr. Nilai hex simulasi mengalir tiap step.</div>
+            <div class="b21-s218-ctrl">
+              <button class="b21-s218-btn s218-primary" id="b21-s218-step-btn">▶ Step</button>
+              <button class="b21-s218-btn s218-primary" id="b21-s218-auto-btn">⚡ Auto</button>
+              <button class="b21-s218-btn s218-secondary" id="b21-s218-reset-btn">Reset</button>
+              <span class="b21-s218-step-info" id="b21-s218-step-info">Tekan Step atau Auto untuk mulai</span>
+            </div>
+            <div class="b21-s218-dual">
+              <div class="b21-s218-col">
+                <div class="b21-s218-col-hdr s218-ec">ECDSA <span class="b21-s218-col-hdr-sub">— sejak 2009</span></div>
+                <div class="b21-s218-steps" id="b21-s218-ec-steps"></div>
+              </div>
+              <div class="b21-s218-col">
+                <div class="b21-s218-col-hdr s218-sc">Schnorr <span class="b21-s218-col-hdr-sub">— sejak Taproot 2021</span></div>
+                <div class="b21-s218-steps" id="b21-s218-sc-steps"></div>
+              </div>
+            </div>
+            <div id="b21-s218-outputs" style="display:none;">
+              <div class="b21-s218-out-lbl">Output signature final:</div>
+              <div class="b21-s218-out-grid">
+                <div class="b21-s218-out-box s218-ec-out" id="b21-s218-ec-out"></div>
+                <div class="b21-s218-out-box s218-sc-out" id="b21-s218-sc-out"></div>
+              </div>
+              <div class="b21-s218-result-row" id="b21-s218-result-row"></div>
+            </div>
+          </div>
+
+          <div class="b21-s218-pane" id="b21-s218-p2">
+            <!-- Same structure, reused via JS mode switching -->
+          </div>
+
+          <!-- PANE 3: 3-TX AGGREGATION -->
+          <div class="b21-s218-pane" id="b21-s218-p3">
+            <div class="b21-s218-flow-hint">3 transaksi, 3 pengirim berbeda. ECDSA butuh 3 signature terpisah. Schnorr + MuSig2 mengagregasi ketiganya menjadi 1 signature tunggal yang terlihat identik dengan single-sig.</div>
+            <div class="b21-s218-ctrl">
+              <button class="b21-s218-btn s218-primary" id="b21-s218-ag-step">▶ Step</button>
+              <button class="b21-s218-btn s218-primary" id="b21-s218-ag-auto">⚡ Auto</button>
+              <button class="b21-s218-btn s218-secondary" id="b21-s218-ag-reset">Reset</button>
+              <span class="b21-s218-step-info" id="b21-s218-ag-info">Tekan Step atau Auto untuk mulai</span>
+            </div>
+            <div class="b21-s218-txs">
+              <div class="b21-s218-tx" id="b21-s218-tx-0"><div class="b21-s218-tx-num">TX 1</div><div class="b21-s218-tx-info"><div class="b21-s218-tx-title">Alice → Bob · 0.05 BTC</div><div class="b21-s218-tx-hash" id="b21-s218-hash-0">txhash: —</div></div></div>
+              <div class="b21-s218-tx" id="b21-s218-tx-1"><div class="b21-s218-tx-num">TX 2</div><div class="b21-s218-tx-info"><div class="b21-s218-tx-title">Carol → Dave · 0.12 BTC</div><div class="b21-s218-tx-hash" id="b21-s218-hash-1">txhash: —</div></div></div>
+              <div class="b21-s218-tx" id="b21-s218-tx-2"><div class="b21-s218-tx-num">TX 3</div><div class="b21-s218-tx-info"><div class="b21-s218-tx-title">Eve → Frank · 0.08 BTC</div><div class="b21-s218-tx-hash" id="b21-s218-hash-2">txhash: —</div></div></div>
+            </div>
+            <div class="b21-s218-ag-dual">
+              <div class="b21-s218-ag-col">
+                <div class="b21-s218-ag-hdr s218-ec">ECDSA — 3 signature terpisah</div>
+                <div class="b21-s218-ag-boxes">
+                  <div class="b21-s218-ag-box s218-ec-box s218-pending" id="b21-s218-ec-box-0"><div class="b21-s218-ag-box-top"><div class="b21-s218-ag-box-lbl">Signature TX 1 (Alice)</div><div class="b21-s218-ag-box-sz">71-72 bytes</div></div><div class="b21-s218-ag-box-val" id="b21-s218-ec-val-0">menunggu...</div></div>
+                  <div class="b21-s218-ag-box s218-ec-box s218-pending" id="b21-s218-ec-box-1"><div class="b21-s218-ag-box-top"><div class="b21-s218-ag-box-lbl">Signature TX 2 (Carol)</div><div class="b21-s218-ag-box-sz">71-72 bytes</div></div><div class="b21-s218-ag-box-val" id="b21-s218-ec-val-1">menunggu...</div></div>
+                  <div class="b21-s218-ag-box s218-ec-box s218-pending" id="b21-s218-ec-box-2"><div class="b21-s218-ag-box-top"><div class="b21-s218-ag-box-lbl">Signature TX 3 (Eve)</div><div class="b21-s218-ag-box-sz">71-72 bytes</div></div><div class="b21-s218-ag-box-val" id="b21-s218-ec-val-2">menunggu...</div></div>
+                </div>
+              </div>
+              <div class="b21-s218-ag-col">
+                <div class="b21-s218-ag-hdr s218-sc">Schnorr + MuSig2 — diagregasi jadi 1</div>
+                <div class="b21-s218-ag-boxes">
+                  <div class="b21-s218-ag-box s218-sc-box s218-pending" id="b21-s218-sc-box-0"><div class="b21-s218-ag-box-top"><div class="b21-s218-ag-box-lbl">Partial sig TX 1 (Alice)</div><div class="b21-s218-ag-box-sz">64 bytes</div></div><div class="b21-s218-ag-box-val" id="b21-s218-sc-val-0">menunggu...</div></div>
+                  <div class="b21-s218-ag-box s218-sc-box s218-pending" id="b21-s218-sc-box-1"><div class="b21-s218-ag-box-top"><div class="b21-s218-ag-box-lbl">Partial sig TX 2 (Carol)</div><div class="b21-s218-ag-box-sz">64 bytes</div></div><div class="b21-s218-ag-box-val" id="b21-s218-sc-val-1">menunggu...</div></div>
+                  <div class="b21-s218-ag-box s218-sc-box s218-pending" id="b21-s218-sc-box-2"><div class="b21-s218-ag-box-top"><div class="b21-s218-ag-box-lbl">Partial sig TX 3 (Eve)</div><div class="b21-s218-ag-box-sz">64 bytes</div></div><div class="b21-s218-ag-box-val" id="b21-s218-sc-val-2">menunggu...</div></div>
+                </div>
+                <div id="b21-s218-agg-wrap" style="display:none;">
+                  <div class="b21-s218-agg-arrow">↓ agregasi MuSig2</div>
+                  <div class="b21-s218-agg-final" id="b21-s218-agg-final">
+                    <div class="b21-s218-agg-lbl">Aggregated Signature</div>
+                    <div class="b21-s218-agg-val" id="b21-s218-agg-val">—</div>
+                    <div class="b21-s218-agg-note">s_agg = s1 + s2 + s3 mod n · 1 signature 64 bytes · identik dengan single-sig</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="b21-s218-ag-totals" style="display:none;">
+              <div class="b21-s218-totals-grid">
+                <div class="b21-s218-total s218-ec-total"><div class="b21-s218-total-lbl">Total ECDSA — 3 TX</div><div class="b21-s218-total-val">213–216 bytes</div><div class="b21-s218-total-note">3 × 71-72 bytes + 3 × 33 bytes pubKey + 3 verifikasi terpisah. Observer tahu ada 3 pengirim.</div></div>
+                <div class="b21-s218-total s218-sc-total"><div class="b21-s218-total-lbl">Total Schnorr MuSig2 — 3 TX</div><div class="b21-s218-total-val">64 bytes <span style="color:#0F6E56;font-size:11px;">~70% lebih kecil</span></div><div class="b21-s218-total-note">1 × 64 bytes + 1 × 32 bytes pubKey + 1 verifikasi. Observer tidak bisa tahu berapa pihak terlibat.</div></div>
+              </div>
+            </div>
+            <div class="b21-s218-privacy" id="b21-s218-privacy">
+              <div class="b21-s218-privacy-lbl">Apa yang dilihat observer di blockchain:</div>
+              <div class="b21-s218-obs-ec" id="b21-s218-obs-ec">ECDSA: —</div>
+              <div class="b21-s218-obs-sc" id="b21-s218-obs-sc">Schnorr: —</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-21-7" data-sb="sb-21-7">
+            ← 21.7 — HD Wallet & Derivation Tree
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-21-9" data-sb="sb-21-9">
+            21.9 — Lightning TX Flow →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 21.8 -->
+
+      <!-- ==============================
+           SECTION 21.9 · Lightning Network TX Flow
+      ============================== -->
+      <div class="p-section" id="section-21-9">
+        <div class="p-eyebrow">Laboratorium · Alur 9</div>
+        <div class="p-heading">Lightning membayar tanpa on-chain transaction — channel dua arah yang diperbarui off-chain, dijamin oleh smart contract HTLC di Bitcoin</div>
+        <div class="p-title">Lightning Network — Channel, HTLC & Payment Flow</div>
+        <div class="p-divider"></div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Lightning TX Flow Simulator</div>
+          <div class="b21-s219-desc">
+            Pilih skenario, tekan Step atau Auto, dan ikuti alur pembayaran Lightning dari invoice sampai settlement. Setiap hop menunjukkan HTLC yang terkunci dan dibuka, perubahan saldo channel, serta apa yang terjadi bila likuiditas tidak cukup.
+          </div>
+
+          <div class="b21-s219-mode-btns" id="b21-s219-mode-btns"></div>
+
+          <div class="b21-s219-ctrl">
+            <button class="b21-s219-btn s219-primary" id="b21-s219-step-btn">&#9654; Step</button>
+            <button class="b21-s219-btn s219-primary" id="b21-s219-auto-btn">&#9889; Auto</button>
+            <button class="b21-s219-btn s219-secondary" id="b21-s219-reset-btn">Reset</button>
+            <span class="b21-s219-step-info" id="b21-s219-step-info">Tekan Step atau Auto untuk mulai</span>
+          </div>
+
+          <div class="b21-s219-network" id="b21-s219-network">
+            <svg id="b21-s219-svg" viewBox="0 0 640 180" xmlns="http://www.w3.org/2000/svg"></svg>
+          </div>
+
+          <div>
+            <div class="b21-s219-sec-lbl">Saldo channel (biru = lokal, hijau = remote):</div>
+            <div id="b21-s219-channels"></div>
+          </div>
+
+          <div class="b21-s219-htlc-wrap">
+            <div class="b21-s219-sec-lbl">HTLC aktif per hop:</div>
+            <div class="b21-s219-htlc-header">
+              <div class="b21-s219-htlc-hcell">Hop</div>
+              <div class="b21-s219-htlc-hcell">Jumlah</div>
+              <div class="b21-s219-htlc-hcell">Payment hash</div>
+              <div class="b21-s219-htlc-hcell">Status</div>
+            </div>
+            <div id="b21-s219-htlc-stack"></div>
+          </div>
+
+          <div id="b21-s219-steps-wrap"></div>
+
+          <div class="b21-s219-result" id="b21-s219-result"></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-21-8" data-sb="sb-21-8">
+            ← 21.8 — Schnorr vs ECDSA
+          </button>
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+        </div>
+      </div>
+
+      <div class="p-section" id="section-lab-c1">
+        <div class="p-body">
+          <div class="p-eyebrow">Laboratorium · Primitif C1</div>
+          <div class="p-title">SHA-256, dibedah dari dalam</div>
+          <div class="p-divider"></div>
+          <p>Kebanyakan alat SHA-256 cuma menerima teks lalu memuntahkan hash. Itu tidak mengajarkan apa pun. Di sini kita buka panci masaknya: bagaimana pesanmu dibungkus, dipecah jadi 64 kata, lalu diaduk 64 kali sampai tidak ada jejak asalnya yang tersisa.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Langkah 1 · Pesanmu dibungkus dulu</div>
+          <div class="sh-wrap">
+            <p class="sh-note">SHA-256 hanya bisa mengolah potongan tepat 512 bit. Pesan yang panjangnya bukan kelipatan itu harus dibungkus lebih dulu, dan cara membungkusnya bukan sekadar diisi nol.</p>
+            <input class="sh-in" id="lab-c1-msg" type="text" value="satoshi" aria-label="Pesan">
+            <div class="sh-sub" id="lab-c1-padinfo"></div>
+            <div class="sh-bytes" id="lab-c1-bytes"></div>
+            <div class="sh-legend">
+              <span><b style="background:#EEEDFE"></b>pesan</span>
+              <span><b style="background:#FAEEDA"></b>bit 1 (80)</span>
+              <span><b style="background:#F4F4F0"></b>padding</span>
+              <span><b style="background:#EAF3DE"></b>panjang</span>
+            </div>
+            <p class="sh-note">Tiga bagian, dan urutannya wajib. Pertama pesan aslinya. Lalu satu bit 1 sebagai penanda batas, yang dalam byte tampil sebagai <b>80</b>. Lalu nol sebanyak yang dibutuhkan. Lalu <b>delapan byte terakhir</b> berisi panjang pesan asli dalam bit. Delapan byte terakhir itulah yang membuat dua pesan berbeda panjang tidak akan pernah menghasilkan blok yang sama, bahkan kalau isinya mirip.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Langkah 2 · 16 kata dikembangbiakkan jadi 64</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Satu blok 512 bit dibaca sebagai 16 kata berukuran 32 bit. Tapi ronde pengadukannya ada 64, jadi 16 kata itu harus diperbanyak jadi 64 dulu.</p>
+            <div class="sh-words" id="lab-c1-words"></div>
+            <div class="sh-sub" id="lab-c1-wordval"></div>
+            <p class="sh-note">Kata ke-16 dan seterusnya tidak diambil dari pesan. Ia dihitung dari <b>empat kata sebelumnya</b>, dengan dua di antaranya diputar dan digeser dulu. Efeknya berlapis: kata ke-63 sudah mengandung jejak dari hampir semua kata sebelumnya. Ini alasan pertama kenapa mengubah satu bit di pesan bisa merembet ke mana-mana.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Langkah 3 · 64 ronde, tapi cuma dua yang berubah</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Ini bagian yang biasanya bikin orang menyerah. Delapan register bernama a sampai h, diaduk 64 kali. Terlihat rumit sampai kamu memperhatikan satu hal.</p>
+            <div class="sh-ctl">
+              <span class="sh-round" id="lab-c1-rnum"></span>
+              <input class="sh-slider" id="lab-c1-slider" type="range" min="0" max="64" value="0">
+              <button class="sh-btn pri" id="lab-c1-play">Jalankan</button>
+              <button class="sh-btn" id="lab-c1-next">Ronde berikutnya</button>
+              <button class="sh-btn" id="lab-c1-reset">Ulangi</button>
+            </div>
+            <div class="sh-regs" id="lab-c1-regs"></div>
+            <p class="sh-note">Perhatikan kolomnya saat kamu melangkah. <b>Enam dari delapan register cuma bergeser turun</b>: b jadi c, c jadi d, dan seterusnya. Mereka tidak dihitung apa-apa, cuma mengantre. Yang benar-benar dihitung hanya <b>a</b> dan <b>e</b>. Jadi SHA-256 bukan 64 operasi rumit, melainkan satu operasi sederhana yang diulang 64 kali di atas antrean yang terus bergerak.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Langkah 4 · Kenapa satu bit meruntuhkan semuanya</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Sekarang bagian yang paling sering diklaim tapi jarang ditunjukkan. Dua pesan yang cuma beda satu bit, dijalankan berdampingan, lalu kita hitung berapa bit yang berbeda di tiap ronde.</p>
+            <div class="sh-sub" id="lab-c1-avnum"></div>
+            <div class="sh-meter" id="lab-c1-av"></div>
+            <p class="sh-note">Di ronde nol angkanya nol, dan itu bukan salah hitung: pengadukan belum dimulai, jadi kedelapan register kedua pesan masih persis sama. Yang berbeda baru <b>satu bit di pesannya</b>. Sekarang majukan rondenya. Dalam tiga ronde saja perbedaannya sudah melewati seperempat, dan sekitar ronde dua belas ia mencapai <b>separuh</b> lalu bertahan di sana sampai akhir. Separuh justru angka yang kita mau, karena artinya keluarannya tidak bisa dibedakan dari acak. Satu bit tadi tidak menular pelan-pelan, ia meledak.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Dari mana angka-angka ajaibnya?</div>
+          <div class="sh-wrap">
+            <div class="sh-sub">Hasil akhir</div>
+            <div class="sh-hash" id="lab-c1-hash"></div>
+            <div class="sh-ok" id="lab-c1-ok"></div>
+            <p class="sh-note">SHA-256 memakai delapan nilai awal dan 64 konstanta. Angka-angka itu bukan dipilih seseorang. Kedelapan nilai awal adalah bagian pecahan dari <b>akar kuadrat delapan bilangan prima pertama</b>, dan 64 konstantanya dari <b>akar pangkat tiga 64 prima pertama</b>. Ini disebut nothing up my sleeve: siapa pun bisa menghitung ulang sendiri dan memastikan tidak ada pintu belakang yang disembunyikan di dalam angkanya.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section" id="section-lab-c2">
+        <div class="p-body">
+          <div class="p-eyebrow">Laboratorium · Primitif C2</div>
+          <div class="p-title">secp256k1, dibedah dari nol</div>
+          <div class="p-divider"></div>
+          <p>Rumusnya cuma satu baris: P = k × G. Tapi di dalamnya ada aritmetika jam, kurva yang jumlah titiknya terbatas, dan penjumlahan yang bukan penjumlahan biasa. Kita bongkar berurutan, dan setiap angka di sini bisa kamu periksa sendiri pakai kalkulator.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Langkah 1 · Sebelum apa pun: apa itu mod</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Semua aritmetika di kurva Bitcoin dibungkus modulo sebuah bilangan prima. Kalau istilah itu asing, seluruh sisanya akan terasa seperti sihir. Jadi kita mulai dari sini.</p>
+            <div class="sh-ctl">
+              <span class="sh-round">Angka</span>
+              <input class="sh-slider" id="lab-c2-num" type="range" min="0" max="60" value="36">
+            </div>
+            <div class="ec-clock" id="lab-c2-clock"></div>
+            <dl class="ec-kv" id="lab-c2-modout"></dl>
+            <p class="sh-note">Mod itu sisa bagi, tidak lebih. Bayangkan jam yang cuma punya 17 angka, 0 sampai 16. Hitung sampai 17, kamu kembali ke 0. Hitung sampai 36, kamu berputar dua kali penuh lalu berhenti di <b>2</b>. Itulah arti 36 mod 17 = 2. Seluruh kurva Bitcoin berdiri di atas gagasan sesederhana ini, bedanya jamnya punya sekitar 10⁷⁷ angka.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Langkah 2 · Periksa sendiri: titik ini di kurva atau bukan</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Kurvanya punya satu persamaan: y² = x³ + 7. Sebuah titik ada di kurva kalau kedua sisi persamaan itu bernilai sama setelah dibungkus mod 17. Jangan percaya saya, hitung sendiri.</p>
+            <div class="ec-two">
+              <label><span class="sh-sub">Koordinat x</span>
+                <input class="sh-slider" id="lab-c2-tx" type="range" min="0" max="16" value="6"></label>
+              <label><span class="sh-sub">Koordinat y</span>
+                <input class="sh-slider" id="lab-c2-ty" type="range" min="0" max="16" value="6"></label>
+            </div>
+            <div class="ec-eq" id="lab-c2-check"></div>
+            <div class="ec-verdict" id="lab-c2-cverdict"></div>
+            <div class="ec-grid" id="lab-c2-grid"></div>
+            <p class="sh-note">Geser ke titik yang <b>bukan</b> anggota dan lihat kedua sisinya berbeda. Inilah satu-satunya syarat keanggotaan. Tidak ada daftar rahasia dan tidak ada otoritas yang menentukan: sebuah titik ada di kurva kalau dan hanya kalau persamaannya terpenuhi. Dari 289 kemungkinan pasangan koordinat, hanya <b>17</b> yang lolos.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Langkah 3 · Tangga: inilah arti k × G</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Sekarang inti rumusnya. P = k × G <b>bukan perkalian biasa</b>. Artinya menambahkan titik G ke dirinya sendiri sebanyak k kali. Naik setapak demi setapak, dan rumus penjumlahannya ikut ditampilkan dengan angka yang sedang berjalan.</p>
+            <div class="sh-ctl">
+              <span class="sh-round" id="lab-c2-rung"></span>
+              <button class="sh-btn pri" id="lab-c2-step">Langkah +1</button>
+              <button class="sh-btn" id="lab-c2-auto">Jalan sendiri</button>
+              <button class="sh-btn" id="lab-c2-back">Kembali ke G</button>
+            </div>
+            <div class="ec-eq" id="lab-c2-eq"></div>
+            <div class="sh-sub" id="lab-c2-wrap"></div>
+            <p class="sh-note">Perhatikan bahwa penjumlahan titik punya rumus sendiri, dan rumusnya berbeda tergantung apakah kedua titiknya sama atau tidak. Yang dihitung lebih dulu selalu <b>kemiringan garis</b> λ. Setelah λ didapat, koordinat hasilnya mengikuti dua baris terakhir. Ini rumus yang sama persis dipakai secp256k1, cuma angkanya di sini kecil. Perhatikan juga hasilnya <b>selalu jatuh kembali di kurva</b>, tidak pernah keluar.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Langkah 4 · Tangga itu terlalu lambat</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Naik setapak demi setapak baik-baik saja untuk k = 17. Untuk k sebesar milik Bitcoin, tangga itu butuh lebih banyak langkah daripada jumlah atom di alam semesta. Jadi dipakai jalan pintas.</p>
+            <div class="sh-ctl">
+              <span class="sh-round" id="lab-c2-kval"></span>
+              <input class="sh-slider" id="lab-c2-k" type="range" min="1" max="17" value="5">
+            </div>
+            <div class="sh-sub">k dalam biner</div>
+            <div class="ec-bits" id="lab-c2-bits"></div>
+            <div class="ec-trace" id="lab-c2-trace"></div>
+            <dl class="ec-kv" id="lab-c2-fastout"></dl>
+            <p class="sh-note">Triknya membaca k dalam biner. Tiap bit berarti satu <b>penggandaan</b>, dan bit yang bernilai 1 berarti satu <b>penjumlahan</b> tambahan. Hasilnya sama persis dengan menaiki tangga, tapi jumlah langkahnya bukan k melainkan sekitar dua kali jumlah bitnya. Untuk k sebesar 256 bit, itu sekitar 384 langkah, selesai dalam sepersekian detik.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Langkah 5 · Jadi kenapa ini disebut kunci?</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Semua bahannya sudah ada. Sekarang rangkaiannya bisa dibaca sebagai satu kalimat.</p>
+            <dl class="ec-kv" id="lab-c2-key"></dl>
+            <div class="ec-fmt" id="lab-c2-fmt"></div>
+            <p class="sh-note" id="lab-c2-parity"></p>
+            <div class="sh-sub">Mencari k dari P dengan mencoba satu per satu</div>
+            <div class="ec-cmp" id="lab-c2-brute"></div>
+            <p class="sh-note">Rantainya begini. <b>k adalah private key-mu</b>, satu angka yang cuma kamu tahu. <b>P adalah public key</b>, hasil menaiki tangga sebanyak k langkah, dan boleh dilihat siapa saja. Menghitung maju dari k ke P mudah, dan kamu baru saja melakukannya. Menghitung mundur dari P ke k menuntut mencoba satu per satu. Di kurva mainan ini cukup 17 percobaan, dan itu sebabnya kurva ini tidak mengamankan apa pun. Di secp256k1 angkanya <b>78 digit</b>. Dari ketimpangan itulah lahir kemampuan membuktikan kamu tahu k tanpa pernah menyebutkannya, dan itu yang dibedah di C3.</p>
+            <div class="sh-sub">Angka secp256k1 yang sebenarnya</div>
+            <dl class="ec-kv">
+              <dt>p</dt><dd>2^256 - 2^32 - 977</dd>
+              <dt>a, b</dt><dd>0, 7</dd>
+              <dt>Gx</dt><dd>79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798</dd>
+              <dt>n</dt><dd>fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141</dd>
+            </dl>
+            <p class="sh-note">Semua yang barusan kamu lakukan berlaku persis sama di sini. Yang berubah hanya ukuran angkanya, dan itu satu-satunya alasan kenapa yang tadi gampang kamu balik menjadi mustahil dibalik.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section" id="section-lab-c3">
+        <div class="p-body">
+          <div class="p-eyebrow">Laboratorium · Primitif C3</div>
+          <div class="p-title">Tanda tangan, dibedah dari dalam</div>
+          <div class="p-divider"></div>
+          <p>Di 4.3 kamu sudah menandatangani dan memverifikasi. Tapi apa sebenarnya isi tanda tangan itu? Dua angka, r dan s. Di sini kita hitung keduanya dengan tangan di kurva mainan yang sama seperti C2, lalu kita pakai untuk membongkar private key dari pemiliknya. Kurvanya sedikit lebih besar dari C2 (modulo 43, bukan 17) karena ECDSA menuntut jumlah titiknya bilangan prima.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Langkah 1 · Dua angka, dan dari mana asalnya</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Tanda tangan ECDSA bukan benda misterius. Ia sepasang bilangan. Yang pertama, r, berasal dari sebuah titik acak di kurva. Yang kedua, s, mengikat titik acak itu dengan pesanmu dan private key-mu.</p>
+            <div class="sg-form">
+              <div class="sg-f"><label>Private key d</label>
+                <input id="lab-c3-d" type="number" min="1" max="30" value="7"></div>
+              <div class="sg-f"><label>Nonce k</label>
+                <input id="lab-c3-k" type="number" min="1" max="30" value="5"></div>
+              <div class="sg-f" style="grid-column:1/-1"><label>Pesan pertama</label>
+                <input id="lab-c3-msg" type="text" value="bayar alice"></div>
+            </div>
+            <div class="sg-steps" id="lab-c3-sign"></div>
+            <p class="sh-note">Perhatikan bahwa <b>k tidak pernah ikut dikirim</b>. Ia dipakai lalu dibuang. Public key juga tidak masuk ke dalam tanda tangan. Yang berpindah cuma dua angka, dan dari dua angka itu siapa pun bisa memeriksa tanpa pernah tahu private key-nya.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Langkah 2 · Verifikasi, dan kenapa bisa cocok</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Verifikasi tidak membalik perhitungan tadi. Ia menempuh jalur berbeda yang, kalau semua angkanya benar, berakhir di titik yang sama.</p>
+            <div class="sg-steps" id="lab-c3-verify"></div>
+            <div class="sg-verdict" id="lab-c3-verdict"></div>
+            <p class="sh-note">Yang dibandingkan adalah <b>koordinat x dari titik hasil</b> dengan r yang dikirim. Kalau sama, tanda tangannya sah. Tidak ada tahap yang membutuhkan private key, dan tidak ada tahap yang membocorkannya. Inilah ketimpangan yang jadi dasar seluruh kepemilikan Bitcoin: membuat menuntut rahasia, memeriksa tidak.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Langkah 3 · Pakai ulang k, dan semuanya jatuh</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Sekarang bagian yang di 4.3 cuma bisa diperingatkan. Kita tandatangani dua pesan berbeda dengan k yang sama, lalu hitung private key-nya dari kedua tanda tangan itu. Bukan menebak, menghitung.</p>
+            <div class="sg-form">
+              <div class="sg-f"><label>Private key d</label>
+                <input id="lab-c3-ad" type="number" min="1" max="30" value="11"></div>
+              <div class="sg-f"><label>Nonce k</label>
+                <input id="lab-c3-ak" type="number" min="1" max="30" value="4"></div>
+              <div class="sg-f"><label>Pesan pertama</label>
+                <input id="lab-c3-m1" type="text" value="bayar alice"></div>
+              <div class="sg-f"><label>Pesan kedua</label>
+                <input id="lab-c3-m2" type="text" value="bayar mallory"></div>
+              <div class="sg-f" style="grid-column:1/-1">
+                <label><input id="lab-c3-reuse" type="checkbox" checked style="width:auto;margin-right:7px">Pakai ulang k di kedua pesan</label></div>
+            </div>
+            <div class="sg-steps" id="lab-c3-attack"></div>
+            <div class="sg-verdict" id="lab-c3-averdict"></div>
+            <p class="sh-note">Perhatikan alurnya. Karena k sama, <b>r-nya juga sama</b>, dan itulah penanda yang bisa dilihat siapa pun di blockchain. Dari situ k terpulihkan lewat selisihnya, dan begitu k diketahui, private key tinggal satu langkah aljabar. Tidak ada penebakan sama sekali. Inilah alasan wallet modern tidak lagi mengacak k, melainkan menurunkannya secara deterministik dari private key dan pesan, seperti disebut di 4.3.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Langkah 4 · Schnorr, dan kenapa lebih rapi</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Schnorr memakai bahan yang sama tapi menyusunnya berbeda. Perbedaannya kelihatan sepele di rumus, tapi akibatnya besar.</p>
+            <div class="sg-cmp">
+              <div class="sg-col"><h5>ECDSA</h5>
+                <code>R = k×G</code>
+                <code>r = x(R)</code>
+                <code>s = (z + r·d) <em>/ k</em></code>
+              </div>
+              <div class="sg-col"><h5>Schnorr</h5>
+                <code>R = k×G</code>
+                <code>e = hash(R, Q, z)</code>
+                <code>s = k <b>+</b> e·d</code>
+              </div>
+            </div>
+            <p class="sh-note">Di ECDSA, s memuat <b>pembagian</b> oleh k. Pembagian itulah yang membuat rumusnya tidak linear, dan ketidaklinearan itu yang menghalangi penggabungan tanda tangan. Schnorr menggantinya dengan penjumlahan biasa. Karena semuanya linear, dua tanda tangan Schnorr bisa dijumlahkan menjadi satu yang tetap sah. Itulah dasar key aggregation yang kamu lihat di 4.4, dan alasannya ada di satu operasi ini.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section" id="section-lab-c4">
+        <div class="p-body">
+          <div class="p-eyebrow">Laboratorium · Primitif C4</div>
+          <div class="p-title">BIP32: satu benih, jutaan kunci</div>
+          <div class="p-divider"></div>
+          <p>Dompet modern tidak menyimpan ribuan private key. Ia menyimpan satu benih, lalu menurunkan sisanya sesuai kebutuhan. Di sini seluruh rantainya dihitung sungguhan, dan diperiksa terhadap vektor uji resmi BIP32. Di ujungnya ada peragaan kenapa tanda kutip kecil pada jalur turunan itu bukan hiasan.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 1 · Dari benih ke kunci induk</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Benih dari BIP39 dimasukkan ke HMAC-SHA512, dan hasilnya yang 64 byte dibelah tepat di tengah.</p>
+            <div class="hd-flow" id="c4-master"></div>
+            <p class="sh-note">Perhatikan pembelahannya. Separuh kiri jadi <b>private key induk</b>, separuh kanan jadi <b>chain code</b>. Chain code bukan kunci dan tidak bisa membelanjakan apa pun, tapi ia wajib ada untuk menurunkan anak. Itu sebabnya membocorkan chain code bersama satu public key sudah cukup berbahaya, seperti yang akan kita lihat di bagian empat.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 2 · Menurunkan satu anak</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Anak diturunkan dengan memasukkan chain code, kunci induk, dan nomor urut ke HMAC-SHA512 lagi. Geser nomornya dan perhatikan yang berubah.</p>
+            <div class="sh-ctl">
+              <span class="sh-round" id="c4-idxv"></span>
+              <input class="sh-slider" id="c4-idx" type="range" min="0" max="9" value="0">
+            </div>
+            <div class="hd-flow" id="c4-child"></div>
+            <p class="sh-note">Kuncinya di baris terakhir: <b>kunci anak sama dengan IL ditambah kunci induk</b>, dijumlahkan modulo n. Penjumlahan itu yang membuat seluruh sistem bekerja, dan sekaligus yang jadi celahnya. Perhatikan juga bahwa tiap anak punya chain code sendiri, jadi turunan bisa berlanjut ke cucu, cicit, dan seterusnya tanpa batas.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 3 · Hardened: satu perbedaan kecil di masukan</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Ada dua cara menurunkan anak, dan bedanya cuma pada apa yang dimasukkan ke HMAC. Perhatikan baris masukan pada kedua kolom.</p>
+            <div class="hd-two">
+              <div class="hd-col"><h6>Biasa (non-hardened)</h6>
+                <dl><dt>Yang dimasukkan ke HMAC</dt><dd>public key induk ‖ nomor</dd>
+                <dt>Bisa diturunkan dari xpub?</dt><dd class="yes">Bisa</dd></dl></div>
+              <div class="hd-col h"><h6>Hardened (nomor ≥ 2³¹)</h6>
+                <dl><dt>Yang dimasukkan ke HMAC</dt><dd>0x00 ‖ private key induk ‖ nomor</dd>
+                <dt>Bisa diturunkan dari xpub?</dt><dd class="no">Tidak bisa</dd></dl></div>
+            </div>
+            <p class="sh-note">Yang biasa memasukkan <b>public key induk</b>, sedangkan yang hardened memasukkan <b>private key induk</b>. Akibatnya besar. Karena yang hardened butuh private key, ia <b>tidak bisa diturunkan dari xpub</b>. Itu terdengar seperti kekurangan, tapi justru itulah gunanya, dan bagian berikutnya menunjukkan alasannya.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 4 · Kenapa hardened harus ada</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Sekarang peragaannya. Bayangkan seseorang punya xpub kamu, misalnya karena kamu berikan ke akuntan agar bisa memantau saldo. Lalu satu private key anak non-hardened bocor. Tekan tombolnya.</p>
+            <div class="sh-ctl"><button class="sh-btn pri" id="c4-leak"></button></div>
+            <div class="hd-atk" id="c4-atk"></div>
+            <div class="hd-verd" id="c4-verd"></div>
+            <p class="sh-note">Perhatikan apa yang barusan terjadi. Karena kunci anak sama dengan IL ditambah kunci induk, dan <b>IL bisa dihitung siapa saja yang punya xpub</b>, maka kunci induk tinggal dikurangkan: <b>induk = anak dikurangi IL</b>. Satu kunci anak yang bocor merobohkan seluruh dompet, termasuk semua cabang lain yang tidak pernah bocor. Untuk turunan hardened serangan ini mustahil, karena IL-nya butuh private key induk yang justru sedang dicari. Inilah alasan jalur seperti m/84h/0h/0h memakai tanda kutip di tiga tingkat pertama.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Membaca jalur turunan</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Sekarang jalur seperti <b>m/84h/0h/0h/0/0</b> bisa dibaca. <b>m</b> adalah kunci induk dari benih. <b>84h</b> menandai standar address yang dipakai, dalam hal ini bc1q seperti di 6.4. <b>0h</b> berikutnya menandai Bitcoin, bukan koin lain. <b>0h</b> ketiga adalah nomor akun. Tiga tingkat pertama semuanya hardened, dan sekarang kamu tahu kenapa. Dua angka terakhir tanpa tanda kutip: <b>0</b> berarti cabang penerimaan, dan angka terakhir nomor urut address. Keduanya sengaja tidak hardened supaya sebuah xpub bisa dipakai memantau saldo tanpa bisa membelanjakan, seperti dibahas di 2.3.</p>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="p-section" id="section-lab-c5">
+        <div class="p-body">
+          <div class="p-eyebrow">Laboratorium · Primitif C5</div>
+          <div class="p-title">BIP39: dari bit acak jadi dua belas kata</div>
+          <div class="p-divider"></div>
+          <p>Seed phrase terlihat seperti daftar kata bahasa Inggris yang dipilih sembarangan. Sebenarnya tidak ada satu pun kata yang dipilih. Semuanya hasil pembacaan ulang deretan bit, sebelas bit per kata, dan salah satu kelompok bit itu bukan keacakan melainkan checksum. Semua yang di halaman ini dihitung sungguhan.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 1 · Semuanya berangkat dari bit acak</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Yang dihasilkan wallet pertama kali bukan kata, melainkan sederet bit acak. Untuk seed phrase 12 kata, panjangnya 128 bit.</p>
+            <div class="sh-ctl">
+              <button class="sh-btn pri" id="c5-gen">Bangkitkan ulang</button>
+              <select class="dc-in" id="c5-size" style="width:auto">
+                <option value="16">12 kata (128 bit)</option>
+                <option value="32">24 kata (256 bit)</option>
+              </select>
+            </div>
+            <dl class="dc-kv" id="c5-ent"></dl>
+            <div class="b9-bits" id="c5-bits"></div>
+            <p class="sh-note">Perhatikan bahwa 128 bit ini <b>bukan hasil perhitungan apa pun</b>. Ia murni keacakan, persis yang kita bahas di 2.4. Semua yang terjadi setelah ini cuma mengubah cara membacanya, bukan menambah rahasia baru.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 2 · Checksum: empat bit dari SHA-256</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Sebelum dipotong jadi kata, deretan bit itu ditambahi checksum. Sumbernya fungsi hash yang sudah kamu bedah di C1.</p>
+            <dl class="dc-kv" id="c5-chk"></dl>
+            <p class="sh-note">Aturannya sederhana: <b>panjang checksum sama dengan panjang entropi dibagi 32</b>. Untuk 128 bit entropi berarti 4 bit checksum, untuk 256 bit berarti 8 bit. Bit itu diambil dari <b>paling depan</b> hasil SHA-256, sisanya dibuang. Setelah ditempel, totalnya jadi 132 bit, dan angka itu penting: 132 habis dibagi 11.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 3 · Potong sebelas bit, jadilah kata</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Sekarang 132 bit itu dipotong jadi dua belas kelompok, masing-masing sebelas bit. Tiap kelompok dibaca sebagai angka, dan angka itu nomor urut di daftar kata resmi.</p>
+            <div class="dc-scroll">
+              <table class="b9-tab">
+                <thead><tr><th>Nomor</th><th>Sebelas bit</th>
+                  <th>#</th><th>Kata</th></tr></thead>
+                <tbody id="c5-tab"></tbody>
+              </table>
+            </div>
+            <p class="sh-note">Kenapa sebelas bit? Karena <b>dua pangkat sebelas sama dengan 2048</b>, dan daftar kata BIP39 berisi tepat 2048 kata. Bukan kebetulan, itu dirancang begitu. Perhatikan juga kelompok terakhir: sebagian bitnya berasal dari entropi, sebagian dari checksum. Jadi kata terakhir <b>tidak sepenuhnya acak</b>, dan itulah yang membuat salah ketik bisa tertangkap.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 4 · Ganti satu kata dan lihat apa yang terjadi</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Karena kata terakhir memuat checksum, mengubah kata mana pun biasanya membuat seluruh rangkaian jadi tidak sah. Coba sendiri.</p>
+            <div class="b9-words" id="c5-words"></div>
+            <div class="sh-ctl">
+              <span class="sh-sub">Kata ke-</span>
+              <select class="dc-in" id="c5-pos" style="width:auto"></select>
+              <button class="sh-btn pri" id="c5-swap">Diganti jadi</button>
+              <button class="sh-btn" id="c5-restore">Bangkitkan ulang</button>
+            </div>
+            <div class="ec-verdict" id="c5-verd"></div>
+            <p class="sh-note">Peluang sebuah perubahan acak kebetulan tetap sah cuma sekitar <b>satu berbanding enam belas</b> untuk seed 12 kata, karena checksum-nya empat bit. Kecil, tapi bukan nol, jadi checksum BIP39 adalah jaring pengaman terhadap salah ketik, <b>bukan</b> jaminan mutlak. Untuk seed 24 kata checksumnya delapan bit, jadi peluangnya turun ke satu berbanding 256. Dan ada satu detail kecil yang berguna: <b>empat huruf pertama tiap kata di daftar itu unik</b>, jadi kamu sebenarnya cukup mengetik empat huruf pertama.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Yang perlu diluruskan</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Seed phrase sering disebut sebagai "terjemahan" dari private key. Itu terbalik. Yang lahir duluan adalah <b>entropi</b>, lalu darinya diturunkan seed phrase maupun private key, seperti sudah diluruskan di 2.4. Dan kata-katanya bukan penyandian rahasia: siapa pun yang tahu dua belas kata itu bisa menghitung ulang seluruh dompetmu, karena daftar katanya publik dan aturannya publik. Kata-kata itu bukan kunci terkunci, ia cuma cara menuliskan bit supaya manusia bisa menyalinnya tanpa salah.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section" id="section-lab-c6">
+        <div class="p-body">
+          <div class="p-eyebrow">Laboratorium · Primitif C6</div>
+          <div class="p-title">Tweak Taproot: mengikat aturan ke sebuah titik</div>
+          <div class="p-divider"></div>
+          <p>Bab 6.6 menjelaskan Taproot punya dua jalur pembelanjaan, tapi tidak pernah menunjukkan bagaimana keduanya bisa hidup di satu titik yang sama. Jawabannya satu operasi penjumlahan, dan satu kesamaan aljabar yang bikin semuanya jalan. Kurvanya sama dengan C2, jadi tiap angka bisa kamu periksa.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 1 · Kunci internal, sebelum diapa-apakan</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Semuanya berangkat dari sepasang kunci biasa, persis seperti di C2. Belum ada Taproot di sini.</p>
+            <div class="sh-ctl">
+              <span class="sh-round" id="c6-dval"></span>
+              <input class="sh-slider" id="c6-d" type="range" min="1" max="17" value="7">
+            </div>
+            <div class="tw-flow" id="c6-int"></div>
+            <p class="sh-note">Titik P ini disebut <b>internal key</b>. Kalau berhenti di sini, ia cuma public key biasa. Yang membuatnya Taproot adalah langkah berikutnya.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 2 · Tweak: menempelkan pohon script</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Sekarang aturan pembelanjaan cadangan, dalam bentuk merkle root dari pohon script, ditempelkan ke kunci itu. Bukan disimpan di sebelahnya, tapi dilebur ke dalamnya.</p>
+            <div class="sh-ctl">
+              <select class="dc-in" id="c6-root" style="width:auto">
+                <option value="aabb">merkle root: aabb</option>
+                <option value="1234cd">merkle root: 1234cd</option>
+                <option value="">(tanpa pohon script)</option>
+              </select>
+            </div>
+            <div class="tw-flow" id="c6-tw"></div>
+            <p class="sh-note">Perhatikan urutannya. Angka <b>t</b> dihitung dari hash atas P dan merkle root, jadi ia terikat pada keduanya sekaligus: ganti script-nya, t berubah; ganti kuncinya, t juga berubah. Lalu <b>Q = P + t×G</b>, dan Q inilah yang muncul di blockchain sebagai address bc1p. Perhatikan juga bahwa merkle root <b>tidak terlihat</b> di Q. Yang tercatat cuma satu titik, dan dari titik itu tidak ada yang bisa menebak ada aturan apa di belakangnya, atau bahkan apakah ada aturan sama sekali.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 3 · Kesamaan yang membuat semuanya jalan</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Ada satu sifat yang gampang terlewat tapi menanggung seluruh rancangan Taproot. Kita hitung dua jalur berbeda dan bandingkan hasilnya.</p>
+            <div class="tw-two" id="c6-two"></div>
+            <div class="sh-sub" id="c6-dt"></div>
+            <div class="tw-eq" id="c6-eq"></div>
+            <p class="sh-note">Kedua jalur selalu berakhir di titik yang sama, dan itu bukan kebetulan. Karena P sama dengan d×G, maka <b>P + t×G sama dengan (d+t)×G</b>. Artinya pemilik kunci tidak perlu perlakuan istimewa apa pun: ia cukup menandatangani memakai <b>d + t</b> sebagai private key barunya, dan tanda tangannya akan sah terhadap Q. Tidak ada script yang dijalankan, tidak ada pohon yang dibuka, tidak ada bukti yang dilampirkan. Inilah key path spend.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 4 · Dua jalur, satu titik</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Sekarang perbandingan yang di 6.6 dijelaskan lewat kata, tapi di sini ditunjukkan lewat isi transaksinya.</p>
+            <div class="tw-path">
+              <div class="tw-card k"><h6>Key path</h6>
+                <p>Tanda tangan saja</p><div class="sz">~64 byte</div>
+                <p style="margin-top:6px">Terlihat seperti pembayaran biasa</p></div>
+              <div class="tw-card s"><h6>Script path</h6>
+                <p>Script + bukti merkle + tanda tangan</p><div class="sz">ratusan byte</div>
+                <p style="margin-top:6px">Aturan yang dipakai jadi terlihat publik</p></div>
+            </div>
+            <p class="sh-note">Perbedaan ukurannya bukan sekadar hemat ongkos. Karena key path spend cuma berisi satu tanda tangan, ia <b>terlihat persis sama</b> dengan pembayaran biasa dari address Taproot mana pun. Pengamat tidak bisa tahu apakah di belakang kunci itu ada pohon script berisi multisig, timelock, atau tidak ada apa-apa sama sekali. Aturan yang rumit tetap ada dan tetap bisa dipakai, tapi selama semua pihak sepakat, ia tidak pernah menyentuh blockchain. Inilah alasan Taproot disebut menguntungkan privasi, bukan cuma ukuran.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Catatan kejujuran soal kurva mainan ini</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Semua di halaman ini memakai modulo 17 dengan ordo 18 supaya angkanya bisa kamu ikuti. Ada dua hal yang berbeda di secp256k1 sungguhan. Pertama, <b>t dihitung dengan tagged hash</b>, yaitu SHA-256 yang diawali penanda "TapTweak" dua kali, supaya hash untuk keperluan berbeda tidak pernah bisa tertukar. Kedua, ordonya bilangan prima raksasa, sehingga kasus d+t bernilai nol yang kadang muncul di sini praktis mustahil terjadi. Selebihnya, rumus dan alurnya identik.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section" id="section-lab-c7">
+        <div class="p-body">
+          <div class="p-eyebrow">Laboratorium · Primitif C7</div>
+          <div class="p-title">Merkle: aturan ganjil dan cacat yang lahir darinya</div>
+          <div class="p-divider"></div>
+          <p>Buku ini sudah punya dua peraga Merkle, di 4.5 dan 17.2. Yang belum pernah disebut di mana pun: apa yang terjadi kalau jumlah simpul di sebuah tingkat ternyata ganjil. Jawabannya satu aturan sederhana, dan aturan itu pernah melahirkan celah nyata yang hampir menghentikan jaringan.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 1 · Ketika jumlahnya ganjil</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Pohon Merkle memasangkan simpul dua-dua. Tapi jumlah transaksi dalam satu block tidak selalu genap. Geser jumlahnya dan perhatikan tingkat yang ganjil.</p>
+            <div class="sh-ctl">
+              <span class="sh-round" id="c7-nv"></span>
+              <input class="sh-slider" id="c7-n" type="range" min="2" max="11" value="3">
+            </div>
+            <div class="mk-tree" id="c7-tree"></div>
+            <p class="sh-note">Aturannya: kalau sebuah tingkat berisi jumlah ganjil, <b>simpul terakhir digandakan</b> lalu dipasangkan dengan dirinya sendiri. Bukan diisi nol, bukan dibiarkan naik sendiri. Digandakan. Itu keputusan rancangan yang terlihat wajar dan tidak berbahaya, dan selama tiga tahun memang begitu.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 2 · Cacat yang lahir dari aturan itu</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Perhatikan baik-baik. Kalau simpul terakhir digandakan, maka sebuah daftar berisi tiga item akan diperlakukan persis sama dengan daftar berisi empat item yang dua terakhirnya kembar.</p>
+            <div class="mk-two" id="c7-cve"></div>
+            <div class="mk-verd" id="c7-verd"></div>
+            <p class="sh-note">Dua daftar transaksi yang <b>berbeda</b> menghasilkan merkle root yang <b>identik</b>. Ini bukan tabrakan hash, karena SHA-256 tidak dipatahkan sama sekali. Yang cacat adalah aturan penyusunan pohonnya. Tercatat sebagai <b>CVE-2012-2459</b>, dan akibatnya berbahaya: penyerang bisa mengambil block yang sah, menggandakan transaksi terakhirnya, lalu menyiarkan versi palsu itu. Node yang menerimanya akan menolaknya karena transaksi kembar jelas tidak sah, tapi karena merkle root-nya cocok dengan yang asli, node itu <b>menandai block aslinya sebagai tidak sah secara permanen</b> dan menolak menerima versi yang benar. Jaringan bisa terbelah tanpa satu pun hash dipecahkan.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 3 · Bagaimana ditambalnya</div>
+          <div class="sh-wrap">
+            <div class="mk-fix">
+              <div class="a"><h6>Sebelum ditambal</h6><p>Block dengan transaksi kembar diterima, lalu ditolak karena isinya tidak sah</p></div>
+              <div class="b"><h6>Setelah ditambal</h6><p>Block dengan transaksi kembar ditolak lebih dulu, sebelum root dihitung</p></div>
+            </div>
+            <p class="sh-note">Tambalannya tidak mengubah cara pohon disusun, karena itu akan jadi hard fork yang membatalkan seluruh block lama. Yang dilakukan lebih sederhana: node sekarang <b>menolak block yang punya transaksi kembar persis</b>, sebelum merkle root-nya sempat dihitung. Cacatnya masih ada di dalam rancangan pohonnya, tapi jalan menuju cacat itu ditutup. Ini pola yang sama seperti CVE-2018-17144 di 14.1: kalau aturan konsensus tidak bisa diubah, yang diubah adalah apa yang diterima sebelum aturan itu dijalankan. Dan seperti insiden itu juga, pelajarannya bukan soal kriptografinya, melainkan soal <b>asumsi yang tidak pernah dituliskan</b>. Tidak ada yang pernah menuliskan bahwa dua daftar berbeda harus menghasilkan root berbeda. Itu dianggap sudah pasti.</p>
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <div class="p-section" id="section-lab-d1">
+        <div class="p-body">
+          <div class="p-eyebrow">Laboratorium · Kalkulator D1</div>
+          <div class="p-title">Halving dan DCA, dihitung sendiri</div>
+          <div class="p-divider"></div>
+          <p>Tiga kelompok sebelumnya menjawab bagaimana Bitcoin bekerja. Yang ini menjawab pertanyaan lain: apa artinya buat orang yang memegangnya. Semua di halaman ini hitungan murni, tidak ada data harga yang diambil dari mana pun, dan tidak ada ramalan.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 1 · Berpikir dalam satoshi</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Satu bitcoin dipecah jadi 100 juta satoshi. Angka itu terasa besar sampai kamu bandingkan dengan jumlah manusia.</p>
+            <div class="dc-row">
+              <label><span>Jumlah (BTC)</span>
+                <input class="dc-in" id="d1-amt" type="number" step="0.001" min="0" value="0.01"></label>
+              <label><span>Penduduk bumi (miliar)</span>
+                <input class="dc-in" id="d1-pop" type="number" step="0.1" min="0.1" value="8"></label>
+            </div>
+            <dl class="dc-kv" id="d1-sats"></dl>
+            <p class="sh-note">Perhatikan angka terakhir. Kalau seluruh 21 juta bitcoin dibagi rata ke setiap orang di bumi, masing-masing dapat sekitar <b>262 ribu satoshi</b>, atau 0,0026 BTC. Itu batas atasnya, dan itu pun mengandaikan tidak ada satu pun yang hilang. Padahal jutaan sudah hilang selamanya, seperti dibahas di 11.2. Berpikir dalam satoshi mengubah pertanyaan dari "berapa bitcoin yang bisa saya punya" menjadi "berapa bagian dari yang pernah ada".</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 2 · Laju penerbitan, dan apa yang berubah tiap halving</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Setiap sekitar empat tahun, jumlah bitcoin baru per block dipotong setengah. Yang jarang dihitung orang adalah akibatnya pada laju harian.</p>
+            <div class="dc-scroll">
+              <table class="dc-tab">
+                <thead><tr>
+                  <th>Era halving</th><th class="num">Reward per block</th>
+                  <th class="num">Bitcoin baru per hari</th><th class="num">Perkiraan tahun</th>
+                  <th class="num">Total beredar</th><th class="num">Sisa belum ditambang</th>
+                </tr></thead>
+                <tbody id="d1-halv"></tbody>
+              </table>
+            </div>
+            <div class="sh-sub">144 block per hari, rata-rata</div>
+            <p class="sh-note">Angka harian itu yang jarang disebut. Setiap halving, jumlah bitcoin baru yang masuk ke dunia tiap hari dipotong separuh, dan itu terjadi dalam satu block, bukan bertahap. Perhatikan juga kolom terakhir: makin lama, makin kecil bagian yang tersisa untuk ditambang. Seluruh jadwal ini sudah ditetapkan sejak 2009 dan tidak bergantung pada apa pun, termasuk harga.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 3 · Mekanika DCA, bukan janjinya</div>
+          <div class="sh-wrap">
+            <p class="sh-note">DCA artinya membeli jumlah rupiah yang sama secara rutin, apa pun harganya. Yang menarik bukan hasilnya, melainkan cara kerjanya, dan itu bisa dihitung tanpa tahu harga masa depan.</p>
+            <div class="dc-row">
+              <label><span>Beli tiap periode</span>
+                <input class="dc-in" id="d1-buy" type="number" step="10" min="1" value="100"></label>
+              <label><span>Pola harga</span>
+                <div class="dc-seg" id="d1-seg">
+                  <button data-p="rise">Naik terus</button>
+                  <button data-p="fall">Turun terus</button>
+                  <button data-p="vol" class="on">Bergejolak</button>
+                  <button data-p="flat">Datar</button>
+                </div></label>
+            </div>
+            <div class="dc-bars" id="d1-bars"></div>
+            <div class="dc-scroll">
+              <table class="dc-tab">
+                <thead><tr><th>Periode</th><th class="num">Harga</th>
+                  <th class="num">Satoshi didapat</th></tr></thead>
+                <tbody id="d1-dca"></tbody>
+              </table>
+            </div>
+            <div class="dc-cmp" id="d1-dcaout"></div>
+            <p class="sh-note">Inilah seluruh mekanismenya: karena jumlah rupiah tetap, harga yang lebih rendah otomatis membeli lebih banyak satoshi. Jadi rata-rata harga belimu selalu <b>lebih rendah atau sama</b> dengan rata-rata harga periodenya, tidak pernah lebih tinggi. Itu sifat matematis, bukan ramalan. Yang tidak dijanjikan siapa pun: apakah harganya naik. DCA mengurangi risiko salah waktu, ia tidak menghapus risiko harga.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 4 · Kenapa rata-ratanya selalu lebih rendah</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Bagian 3 menunjukkan angkanya. Bagian ini menunjukkan kenapa itu bukan kebetulan, dan kenapa ia berlaku pada pola harga apa pun.</p>
+            <dl class="dc-kv" id="d1-mean"></dl>
+            <div class="sh-sub" id="d1-meannote"></div>
+            <p class="sh-note">Rata-rata harga belimu adalah total uang dibagi total satoshi, dan itu yang disebut <b>rata-rata harmonik</b>. Rata-rata pasar adalah rata-rata biasa dari harga tiap periode. Dalam matematika, rata-rata harmonik <b>tidak pernah lebih besar</b> dari rata-rata biasa, dan keduanya hanya sama persis kalau seluruh harganya identik. Itulah sebabnya kolom selisih di atas tidak pernah negatif, pola harga apa pun yang kamu pilih. Coba pola datar dan lihat selisihnya jadi nol.</p>
+            <div class="dc-disc">Halaman ini kalkulator, bukan saran keuangan. Ia tidak meramal harga, tidak menganjurkan membeli, dan tidak mengetahui keadaan pasar. Semua angka di sini berasal dari yang kamu masukkan sendiri.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section" id="section-lab-d2">
+        <div class="p-body">
+          <div class="p-eyebrow">Laboratorium · Kalkulator D2</div>
+          <div class="p-title">Sebaran jenis address, dan dua cerita yang berlawanan</div>
+          <div class="p-divider"></div>
+          <p>Bab 6 mengajarkan lima jenis address dan cara kerjanya. Yang belum pernah dijawab: mana yang benar-benar dipakai dunia. Jawabannya ternyata bergantung pada bagaimana kamu menghitung, dan dua cara menghitung memberi kesimpulan yang bertolak belakang.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 1 · Kalau dihitung per UTXO</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Cara paling umum menghitung sebaran adalah menghitung ada berapa UTXO dari tiap jenis. Hasilnya begini.</p>
+            <div class="sh-sub">Bagian dari jumlah UTXO</div>
+            <div class="ad-bars" id="d2-bars"></div>
+            <div class="ad-snap">Snapshot dari laporan UTXO set mempool.space pada block 892.385, ditambah pengamatan aktivitas transaksi 2026. Angka ini bergerak. Ia dipasang sebagai potret bertanggal, bukan data langsung.</div>
+            <p class="sh-note">Kejutan pertama: <b>Taproot yang paling banyak</b>, padahal ia paling baru dan aktif sejak 2021 saja. P2PKH yang sudah ada sejak genesis block berada di urutan kedua. Dan P2PK, format paling awal yang dipakai Satoshi sendiri, praktis lenyap dengan 0,03 persen. Tapi tahan dulu sebelum menyimpulkan apa pun, karena cara menghitung ini menyembunyikan sesuatu.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 2 · Kalau dihitung per nilai, urutannya terbalik</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Sekarang hitung dengan cara lain: berapa banyak bitcoin yang sebenarnya tersimpan di tiap jenis. Dua angka di bawah ini cukup untuk meruntuhkan kesimpulan tadi.</p>
+            <div class="dc-scroll">
+              <table class="ad-tab">
+                <thead><tr><th>Jenis</th><th class="num">Bagian jumlah</th>
+                  <th class="num">Bagian nilai</th><th class="num">Nilai per UTXO, relatif</th></tr></thead>
+                <tbody>
+                  <tr class="hi"><td>P2TR</td><td class="num">34,2%</td>
+                    <td class="num">0,75%</td><td class="num">1&times;</td></tr>
+                  <tr class="warn"><td>P2PK</td><td class="num">0,03%</td>
+                    <td class="num">8,7%</td><td class="num">≈ 13.200&times;</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="sh-note">Perhatikan dua baris itu baik-baik. <b>Taproot memegang sepertiga UTXO tapi kurang dari satu persen nilainya.</b> Dan <b>P2PK memegang tiga per sepuluh ribu UTXO tapi hampir sepersepuluh seluruh nilai.</b> Bagi saja: satu UTXO P2PK rata-rata memuat sekitar <b>13 ribu kali</b> lebih banyak bitcoin daripada satu UTXO Taproot. Kedua keanehan itu punya sebabnya masing-masing, dan keduanya menarik.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 3 · Kenapa Taproot banyak tapi nyaris kosong</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Jawabannya bukan soal adopsi wallet, melainkan soal apa yang disimpan di sana.</p>
+            <div class="ad-stat">
+              <div class="ad-card"><div class="ad-card-t">UTXO terkait inscription</div>
+                <div class="ad-card-v">51,2 juta</div></div>
+              <div class="ad-card"><div class="ad-card-t">Dari seluruh UTXO set</div>
+                <div class="ad-card-v">29,6%</div></div>
+              <div class="ad-card warn"><div class="ad-card-t">Total nilainya</div>
+                <div class="ad-card-v">415 BTC</div></div>
+            </div>
+            <div class="sh-sub">Rata-rata per UTXO: 811 satoshi</div>
+            <p class="sh-note">Hampir <b>30 persen dari seluruh UTXO Bitcoin</b> berkaitan dengan inscription, dan mayoritasnya memakai Taproot. Tapi seluruh 51 juta UTXO itu isinya cuma sekitar <b>415 BTC</b>, dengan rata-rata 811 satoshi per UTXO. Itu debu. Jadi angka 34 persen tadi bukan tanda Taproot menang sebagai format pembayaran, melainkan tanda ia dipakai untuk hal lain. Perdebatan soal apakah itu pemakaian yang sah kita bahas dua sisinya di 9.6. Yang tidak diperdebatkan: UTXO set jadi jauh lebih besar karenanya, dan setiap node harus menyimpannya, seperti dibahas di 10.1.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 4 · Kenapa P2PK sedikit tapi berat</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Yang ini ceritanya justru terbalik: sedikit sekali jumlahnya, tapi memuat nilai yang sangat besar.</p>
+            <p class="sh-note">P2PK adalah format paling awal, dipakai untuk reward mining di tahun-tahun pertama, termasuk milik Satoshi sendiri. Hampir semuanya <b>tidak pernah dibelanjakan sejak dibuat</b>, dan sebagian besar diduga hilang selamanya seperti dibahas di 11.2. Tapi ada satu hal lagi yang membuatnya penting, dan itu terhubung ke 4.6: P2PK menaruh <b>public key mentah langsung di output</b>, tanpa disembunyikan di balik hash. Artinya seluruh nilai itu sudah terpapar sejak hari pertama, dan tidak ada yang bisa memindahkannya kalau kuncinya memang sudah hilang.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 5 · Kenapa yang lama tidak kunjung hilang</div>
+          <div class="sh-wrap">
+            <div class="dc-scroll">
+              <table class="ad-tab">
+                <thead><tr><th>Jenis</th><th class="num">Bagian jumlah</th>
+                  <th class="num">Ada sejak</th></tr></thead>
+                <tbody><tr><td>P2TR</td><td class="num">34.2%</td><td class="num">Ada sejak 2021</td></tr><tr><td>P2PKH</td><td class="num">28.8%</td><td class="num">Ada sejak 2009</td></tr><tr><td>P2WPKH</td><td class="num">26.5%</td><td class="num">Ada sejak 2017</td></tr><tr><td>P2SH + P2WSH + dll</td><td class="num">10.5%</td><td class="num">Ada sejak 2012</td></tr><tr><td>P2PK</td><td class="num">0.03%</td><td class="num">Ada sejak 2009</td></tr></tbody>
+              </table>
+            </div>
+            <p class="sh-note">Satu pertanyaan yang wajar: kalau format baru lebih murah dan lebih privat, kenapa P2PKH dari 2009 masih memegang hampir sepertiga UTXO? Tiga sebab. Pertama, <b>UTXO lama tidak berpindah sendiri</b>: ia baru berubah jenis kalau pemiliknya membelanjakannya, dan banyak yang memang tidak pernah bergerak. Kedua, sebagian layanan lama belum memperbarui diri. Ketiga, mengirim ke format baru menuntut <b>pihak lawan</b> juga mendukungnya, dan itu perubahan yang butuh dua sisi. Jadi grafik di atas bukan foto pilihan orang hari ini, melainkan endapan dari lima belas tahun keputusan yang saling menumpuk.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section" id="section-lab-f1">
+        <div class="p-body">
+          <div class="p-eyebrow">Laboratorium · Format F1</div>
+          <div class="p-title">Serialisasi transaksi, byte per byte</div>
+          <div class="p-divider"></div>
+          <p>Transaksi Bitcoin yang beredar di jaringan bukan objek, bukan JSON, dan bukan tabel. Ia deretan byte dengan urutan yang sudah dipatok. Di sini kita bedah satu transaksi utuh, lalu memakainya untuk menjawab pertanyaan yang selama ini cuma disinggung: kenapa SegWit menghentikan malleability.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 1 · Membaca deretan byte</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Klik tiap potongan berwarna untuk melihat isinya. Urutan field-nya tetap, dan tidak ada penanda nama di mana pun: parser tahu apa yang sedang dibaca semata karena tahu urutannya.</p>
+            <div class="tx-hex" id="f1-hex"></div>
+            <div class="tx-desc" id="f1-desc"></div>
+            <p class="sh-note">Perhatikan dua hal yang paling sering membingungkan. Pertama, <b>txid input ditulis terbalik</b>. Byte pertama di layar adalah byte terakhir dari txid yang biasa kamu lihat di block explorer. Kedua, <b>marker 00 dan flag 01</b> di posisi ketiga. Di transaksi lama, posisi itu berisi jumlah input, dan jumlah input tidak mungkin nol. Justru kemustahilan itulah yang dipakai SegWit sebagai penanda: parser lama membacanya sebagai transaksi tanpa input dan berhenti, parser baru mengenalinya sebagai bendera.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 2 · Varint, si penyebab tersandung</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Angka di dalam transaksi tidak berukuran tetap. Angka kecil dipadatkan jadi satu byte, angka besar diberi awalan penanda. Ini yang membuat orang salah hitung waktu membaca hex mentah.</p>
+            <div class="dc-row">
+              <label><span>Angka</span>
+                <input class="dc-in" id="f1-vi" type="number" min="0" value="252"></label>
+            </div>
+            <dl class="dc-kv" id="f1-viout"></dl>
+            <div class="dc-scroll">
+              <table class="tx-tab">
+                <thead><tr><th>Angka</th><th>Hasil encoding</th><th>Ukuran</th></tr></thead>
+                <tbody id="f1-vitab"></tbody>
+              </table>
+            </div>
+            <p class="sh-note">Aturannya cuma empat baris, tapi wajib dihafal parser: di bawah 253 cukup satu byte apa adanya. Mulai 253, byte pertama jadi <b>penanda panjang</b>, bukan nilai. Jadi <code>fd</code> berarti "dua byte berikutnya adalah angkanya", bukan angka 253. Salah membaca satu varint saja dan seluruh sisa transaksi ikut salah baca, karena posisinya bergeser.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 3 · txid dan wtxid, dan di mana keduanya berpisah</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Satu transaksi SegWit punya dua identitas. Keduanya hasil hash ganda SHA-256, tapi atas potongan byte yang berbeda.</p>
+            <div class="tx-id" id="f1-ids"></div>
+            <p class="sh-note">Inilah pemisahannya. <b>txid</b> dihitung dari serialisasi <b>tanpa</b> marker, flag, dan witness. <b>wtxid</b> dihitung dari serialisasi lengkap. Artinya seluruh tanda tangan berada di luar jangkauan txid. Tekan tombol di bawah dan lihat sendiri akibatnya.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 4 · Malleability, diperagakan bukan diceritakan</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Bab 6.4 dan 13.4 menyebut malleability sebagai masalah yang diselesaikan SegWit, tapi tidak pernah menunjukkannya. Sekarang kita ubah satu bit tanda tangan di kedua format dan bandingkan.</p>
+            <div class="sh-ctl"><button class="sh-btn pri" id="f1-flip"></button></div>
+            <div class="tx-cmp" id="f1-mall"></div>
+            <p class="sh-note">Hasilnya berbicara sendiri. Di format lama, tanda tangan berada di dalam scriptSig, dan scriptSig ikut dihitung ke dalam txid. Jadi siapa pun yang meneruskan transaksimu bisa mengubah encoding tanda tangan tanpa membatalkan keabsahannya, dan <b>txid-nya berubah</b>. Transaksi yang menunggu txid itu jadi menggantung. Di SegWit, tanda tangan pindah ke witness yang di luar txid, jadi <b>txid tidak bergerak sedikit pun</b>. Ini bukan tambalan, melainkan akibat langsung dari memindahkan satu potong data keluar dari jangkauan hash. Lightning di Bab 7 bersandar penuh pada txid yang tidak bisa digoyang seperti ini.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section" id="section-lab-f2">
+        <div class="p-body">
+          <div class="p-eyebrow">Laboratorium · Format F2</div>
+          <div class="p-title">Checksum address, dihitung di depan mata</div>
+          <div class="p-divider"></div>
+          <p>Address Bitcoin bukan sekadar hash yang dipoles. Ia dibungkus dengan checksum supaya salah ketik tertangkap sebelum dana dikirim. Dua format memakai dua cara yang sama sekali berbeda, dan perbedaannya bukan soal mana yang lebih ketat, melainkan soal apa yang bisa dibuktikan.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 1 · base58check: memakai SHA-256 dua kali</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Format lama membangun checksum dari fungsi hash yang sudah kamu bedah di C1. Empat langkah, dan semuanya bisa kamu ikuti.</p>
+            <div class="ck-flow" id="f2-b58"></div>
+            <p class="sh-note">Perhatikan bahwa checksum-nya <b>cuma empat byte pertama</b> dari hash ganda. Sisanya dibuang. Empat byte berarti 32 bit, jadi peluang sebuah salah ketik kebetulan menghasilkan checksum yang sama kira-kira satu berbanding empat miliar. Kecil, tapi ini <b>peluang</b>, bukan jaminan. Perhatikan juga alfabetnya: base58 sengaja membuang angka 0, huruf O, huruf I, dan huruf l, karena keempatnya gampang tertukar saat dibaca manusia.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 2 · bech32: bukan hash sama sekali</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Format baru tidak memakai SHA-256. Ia memakai kode koreksi galat, keluarga matematika yang sama dengan yang dipakai CD dan QR code.</p>
+            <div class="ck-flow" id="f2-bc"></div>
+            <p class="sh-note">Enam karakter terakhir itu checksum-nya, dan ia lahir dari perhitungan polinomial, bukan dari hash. Itu sebabnya ia bisa <b>membuktikan</b> sesuatu yang tidak bisa dibuktikan hash: selama galatnya tidak lebih dari empat karakter, ia dijamin tertangkap. Bukan hampir pasti, tapi pasti. Perhatikan juga huruf <b>bc</b> di depan: itu penanda jaringan, dan ia ikut dihitung ke dalam checksum, sehingga address mainnet tidak akan pernah lolos sebagai address testnet.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 3 · Rusakkan satu karakter</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Ubah satu karakter di salah satu address dan lihat apakah tertangkap. Coba beberapa kali di posisi berbeda.</p>
+            <div class="ck-pair">
+              <div class="ck-col"><h5>base58check</h5>
+                <div class="ck-addr" id="f2-t58"></div>
+                <div class="ck-verd" id="f2-t58-v" style="margin-top:9px"></div></div>
+              <div class="ck-col"><h5>bech32</h5>
+                <div class="ck-addr" id="f2-tbc"></div>
+                <div class="ck-verd" id="f2-tbc-v" style="margin-top:9px"></div></div>
+            </div>
+            <p class="sh-note">Kamu akan menemukan bahwa <b>keduanya menangkap galat satu karakter</b>, dan itu memang benar. Saya menguji empat ribu perubahan acak pada masing-masing, dan tidak satu pun lolos. Jadi kalau ada yang bilang bech32 lebih tahan salah ketik, itu tidak tepat untuk kasus satu karakter. Bedanya ada di tempat lain: base58check <b>hampir pasti</b> menangkapnya karena peluang tabrakan sangat kecil, sedangkan bech32 <b>dijamin secara matematis</b> menangkapnya selama galatnya empat karakter atau kurang. Yang satu bersandar pada probabilitas, yang satu pada bukti.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 4 · Ketika standarnya sendiri ternyata cacat</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Ada bagian dari cerita ini yang jarang diceritakan, dan ia cocok dengan semangat Bab 14.</p>
+            <div class="dc-scroll">
+              <table class="ck-tab">
+                <thead><tr><th>Format</th><th>Konstanta akhir</th><th>Dipakai untuk</th></tr></thead>
+                <tbody>
+                  <tr><td>bech32</td><td>1</td><td>SegWit v0 (bc1q)</td></tr>
+                  <tr><td>bech32m</td><td>0x2bc830a3</td><td>SegWit v1 ke atas (bc1p, Taproot)</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="sh-note">Bech32 dirilis pada 2017 dan dipakai luas. Pada 2020 ditemukan bahwa konstanta di akhir perhitungannya punya cacat: dalam keadaan tertentu, <b>menambah atau menghapus karakter di ujung tidak selalu terdeteksi</b>. Untuk address SegWit versi nol akibatnya tidak berbahaya karena panjangnya sudah dipatok. Tapi untuk versi berikutnya, termasuk Taproot, itu masalah. Jawabannya adalah <b>bech32m</b>, yang identik dalam segala hal kecuali satu konstanta di baris terakhir. Itulah sebabnya address bc1q dan bc1p terlihat mirip tapi divalidasi dengan konstanta berbeda, dan kenapa dompet yang belum memperbarui diri bisa menolak address Taproot yang sebenarnya sah.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section" id="section-lab-f3">
+        <div class="p-body">
+          <div class="p-eyebrow">Laboratorium · Format F3</div>
+          <div class="p-title">nBits: empat byte yang memuat angka 256 bit</div>
+          <div class="p-divider"></div>
+          <p>Bab 5.4 membahas difficulty adjustment panjang lebar, tapi tidak pernah menunjukkan di mana target itu sebenarnya disimpan. Jawabannya empat byte di dalam block header, dan cara empat byte memuat angka 256 bit itu lebih sederhana sekaligus lebih menjebak daripada dugaan kebanyakan orang.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 1 · Bongkar empat byte itu</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Byte pertama disebut exponent, tiga sisanya mantissa. Geser nilainya dan perhatikan target yang dihasilkan.</p>
+            <div class="nb-word" id="f3-word"></div>
+            <div class="nb-lbl"><span>exponent</span><span>&nbsp;mantissa&nbsp;</span></div>
+            <div class="ec-two">
+              <label><span class="sh-sub" id="f3-expv"></span>
+                <input class="sh-slider" id="f3-exp" type="range" min="3" max="32" value="29"></label>
+              <label><span class="sh-sub" id="f3-manv"></span>
+                <input class="sh-slider" id="f3-man" type="range" min="1" max="8388607" value="65535"></label>
+            </div>
+            <dl class="dc-kv" id="f3-out"></dl>
+            <div class="sh-sub">Target (32 byte)</div>
+            <div class="nb-target" id="f3-target"></div>
+            <p class="sh-note">Inilah jebakan yang paling sering terjadi: <b>exponent bukan pangkat dua</b>. Ia adalah <b>panjang target dalam byte</b>. Jadi exponent 29 berarti targetnya sepanjang 29 byte, dan mantissa diletakkan di tiga byte paling depan dari 29 byte itu. Sisanya nol semua. Itu sebabnya target selalu punya bentuk yang sama: sedikit angka bermakna di depan, lalu deretan nol yang panjang.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 2 · Sejarahnya dalam lima angka</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Nilai nBits sungguhan dari beberapa masa. Perhatikan bagaimana exponent-nya menyusut seiring waktu.</p>
+            <div class="dc-scroll">
+              <table class="nb-tab">
+                <thead><tr><th>Masa</th><th>nBits</th>
+                  <th class="num">Exp</th><th class="num">Difficulty</th></tr></thead>
+                <tbody id="f3-hist"></tbody>
+              </table>
+            </div>
+            <p class="sh-note">Exponent yang menyusut dari 29 ke 23 berarti targetnya makin pendek, dan target yang makin pendek berarti makin sedikit hash yang memenuhinya. Itulah difficulty yang naik, dilihat dari sisi penyimpanannya. Dan perhatikan lompatan angkanya: dari difficulty 1 di genesis ke puluhan triliun, hanya dengan mengubah empat byte.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 3 · Kenapa harus dipadatkan sama sekali</div>
+          <div class="sh-wrap">
+            <div class="nb-cmp" id="f3-why"></div>
+            <p class="sh-note">Pertanyaan yang wajar: kenapa tidak simpan saja 32 byte targetnya langsung? Karena block header dipatok tepat <b>80 byte</b>, dan setiap byte di sana ikut di-hash jutaan kali per detik oleh seluruh miner di dunia. Menyimpan target penuh berarti header jadi 108 byte, naik 35 persen, untuk informasi yang hampir seluruhnya nol. Padatan ini juga punya harga: karena mantissa cuma tiga byte, <b>tidak semua angka 256 bit bisa dinyatakan</b>. Target yang sebenarnya selalu dibulatkan ke bentuk terdekat yang bisa diwakili. Ketelitian itu dikorbankan, dan tidak apa-apa, karena yang dibutuhkan cuma ambang batas, bukan angka persis.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bagian 4 · Coba sendiri: dari target ke nBits</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Sekarang arah sebaliknya. Masukkan berapa banyak angka nol di depan yang kamu inginkan, dan lihat nBits yang mewakilinya.</p>
+            <div class="sh-ctl">
+              <span class="sh-round" id="f3-zerov"></span>
+              <input class="sh-slider" id="f3-zero" type="range" min="1" max="20" value="8">
+            </div>
+            <dl class="dc-kv" id="f3-rev"></dl>
+            <div class="nb-target" id="f3-revt"></div>
+            <p class="sh-note">Perhatikan bahwa menambah satu angka nol di depan membuat target mengecil <b>enam belas kali lipat</b>, karena satu digit heksadesimal bernilai empat bit. Jadi setiap nol tambahan yang kamu lihat di depan sebuah block hash mewakili enam belas kali lipat kerja tambahan. Ini penjelasan angka yang selama ini cuma dijelaskan lewat kata di 5.2 dan 5.4.</p>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+      <!-- END SECTION 21.9 -->
+
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 24 · BAB 21 -->
+
+

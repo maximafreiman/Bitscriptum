@@ -1,0 +1,702 @@
+<!-- ============================================================
+     PAGE 19 · BAB 16 · Menjalankan Node: IBD, Chainstate, dan Verifikasi dari Dalam
+     |-- 16.1 · Initial Block Download [DONE]
+     |-- 16.2 · [LOCKED]
+     |-- 16.3 · [LOCKED]
+     |-- 16.4 · [LOCKED]
+     |-- 16.5 · [LOCKED]
+     |-- 16.6 · [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab16">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b16">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b16">← Daftar Bab</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab16">
+      <div class="sidebar-heading">Bab 16</div>
+      <div class="sidebar-title">Menjalankan Node</div>
+
+      <div class="sidebar-item active" id="sb-16-1">
+        <div class="sb-num">16.1</div>
+        <div class="sb-label">Initial Block Download — Bagaimana Node Baru Mengenal Bitcoin</div>
+      </div>
+      <div class="sidebar-item" id="sb-16-2">
+        <div class="sb-num">16.2</div>
+        <div class="sb-label">Verifikasi Block — Apa yang Dicek Node Setiap Kali Block Baru Datang</div>
+      </div>
+      <div class="sidebar-item" id="sb-16-3">
+        <div class="sb-num">16.3</div>
+        <div class="sb-label">Chainstate Database — Jantung State Bitcoin</div>
+      </div>
+      <div class="sidebar-item" id="sb-16-4">
+        <div class="sb-num">16.4</div>
+        <div class="sb-label">Pruning — Buang Block Lama, Tetap Fully Validating</div>
+      </div>
+      <div class="sidebar-item" id="sb-16-5">
+        <div class="sb-num">16.5</div>
+        <div class="sb-label">assumevalid dan assumeUTXO — Sync Lebih Cepat Tanpa Mengorbankan Trustlessness</div>
+      </div>
+      <div class="sidebar-item" id="sb-16-6">
+        <div class="sb-num">16.6</div>
+        <div class="sb-label">Mengapa Menjalankan Node Sendiri — dan 10 Command Harian</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab16-content">
+
+      <!-- ==============================
+           SECTION 16.1 · Initial Block Download
+      ============================== -->
+      <div class="p-section active" id="section-16-1">
+        <div class="p-eyebrow">Bab 16 · 16.1</div>
+        <div class="p-heading">Sebelum bisa dipercaya, node harus membaca semua sejarah Bitcoin dari awal</div>
+        <div class="p-title">Initial Block Download — Bagaimana Node Baru Mengenal Bitcoin</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Bayangkan kamu baru pindah ke kota baru dan harus membaca semua koran dari 15 tahun terakhir sebelum bisa mengikuti berita hari ini. Itulah yang dilakukan node Bitcoin baru: ia harus memvalidasi setiap block sejak genesis block sebelum bisa dianggap synced dan dipercaya.</p>
+
+          <p>Proses ini disebut Initial Block Download (IBD). Untuk node baru saat ini, ini berarti memvalidasi ratusan ribu block yang berisi ratusan juta transaksi. Tergantung hardware, proses ini bisa memakan waktu beberapa jam hingga beberapa hari.</p>
+
+          <p><strong>Headers-first: strategi yang cerdas</strong></p>
+          <p>Software Bitcoin client (seperti Bitcoin Core atau Bitcoin Knots) tidak langsung mendownload semua block dari awal. Ia pertama-tama mendownload semua header block, yaitu 80 byte per block, dari peer. Untuk seluruh blockchain, ini hanya sekitar 70MB. Dari header, node bisa memverifikasi chain of proof-of-work tanpa perlu data transaksi sama sekali.</p>
+
+          <p>Setelah tahu mana chain terpanjang yang valid, barulah node mendownload block-block secara paralel dari banyak peer sekaligus. Ini jauh lebih efisien dari pendekatan lama yang hanya mendownload satu block dari satu peer secara sequential.</p>
+
+          <p><strong>Apa yang diverifikasi selama IBD?</strong></p>
+          <p>Untuk setiap block, node memverifikasi: proof-of-work valid, timestamp dalam range yang diizinkan, ukuran block tidak melebihi batas, semua transaksi valid secara kriptografi, tidak ada double spend, dan total coinbase output tidak melebihi reward yang diizinkan. Ini bukan proses yang ringan dan itulah mengapa IBD membutuhkan waktu dan CPU yang signifikan.</p>
+
+          <p><strong>assumevalid: shortcut yang aman</strong></p>
+          <p>Banyak implementasi Bitcoin client menyertakan hash dari block tertentu yang sudah diverifikasi oleh komunitas luas sebagai "titik aman yang diasumsikan valid." Untuk block sebelum titik ini, node tetap mendownload dan mengeksekusi semua transaksi untuk membangun UTXO set, tapi tidak lagi memverifikasi signature kriptografi yang merupakan bagian paling CPU-intensive. Ini mempersingkat IBD secara signifikan tanpa mengorbankan keamanan UTXO set.</p>
+
+          <p>Penting: assumevalid bukan kepercayaan buta. Node masih memverifikasi seluruh struktur block dan UTXO set. Yang di-skip hanya verifikasi signature untuk block lama yang sudah terbukti valid oleh jutaan node lain.</p>
+
+          <div class="p-callout">
+            <p>Selama IBD berlangsung, node tidak boleh digunakan untuk memverifikasi pembayaran. Ia belum punya gambaran penuh tentang blockchain dan bisa ditipu untuk menerima transaksi yang sudah double-spend di block yang belum ia validasi. Cek field "initialblockdownload" via RPC untuk memastikan node sudah siap.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">RPC Terminal — Monitoring IBD</div>
+          <div class="b16-s161-desc">
+            Command-command di bawah adalah RPC Bitcoin client yang nyata untuk memonitor proses IBD. Pilih command dan klik "Jalankan" untuk melihat output JSON dengan penjelasan tiap field.
+          </div>
+
+          <div class="b16-s161-cmds-label">Pilih command untuk dijalankan:</div>
+          <div class="b16-s161-cmds" id="b16-s161-cmds">
+            <div class="b16-s161-cmd-btn s161-act" data-cmd="getblockchaininfo">
+              <div class="b16-s161-cmd-code">bitcoin-cli getblockchaininfo</div>
+              <div class="b16-s161-cmd-desc">Status sync node secara lengkap</div>
+            </div>
+            <div class="b16-s161-cmd-btn" data-cmd="getinfo">
+              <div class="b16-s161-cmd-code">bitcoin-cli -getinfo</div>
+              <div class="b16-s161-cmd-desc">Ringkasan status node (cepat)</div>
+            </div>
+            <div class="b16-s161-cmd-btn" data-cmd="getpeerinfo_sync">
+              <div class="b16-s161-cmd-code">bitcoin-cli getpeerinfo | grep synced_blocks</div>
+              <div class="b16-s161-cmd-desc">Monitor peer yang dipakai untuk IBD</div>
+            </div>
+            <div class="b16-s161-cmd-btn" data-cmd="getnetworkinfo">
+              <div class="b16-s161-cmd-code">bitcoin-cli getnetworkinfo</div>
+              <div class="b16-s161-cmd-desc">Info koneksi jaringan node</div>
+            </div>
+          </div>
+
+          <button class="b16-s161-run-btn" id="b16-s161-run">▶ Jalankan</button>
+
+          <div class="b16-s161-terminal">
+            <div class="b16-s161-terminal-bar">
+              <div class="b16-s161-dot" style="background:#FF5F57;"></div>
+              <div class="b16-s161-dot" style="background:#FEBC2E;"></div>
+              <div class="b16-s161-dot" style="background:#28C840;"></div>
+              <div class="b16-s161-terminal-title">bitcoin-cli — Terminal</div>
+            </div>
+            <div class="b16-s161-terminal-body" id="b16-s161-body">
+              <div class="b16-s161-prompt"><span class="b16-s161-prompt-user">satoshi@node</span>:~$ <span class="b16-s161-prompt-cursor">_</span></div>
+            </div>
+          </div>
+
+          <div class="b16-s161-explain" id="b16-s161-explain" style="display:none;">
+            <div class="b16-s161-explain-label">Penjelasan output:</div>
+            <div id="b16-s161-fields"></div>
+          </div>
+
+          <div class="b16-s161-note" id="b16-s161-note" style="display:none;"></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-16-2" data-sb="sb-16-2">
+            16.2 — Verifikasi Block →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 16.1 -->
+
+      <!-- ==============================
+           SECTION 16.2 · Verifikasi Block
+      ============================== -->
+      <div class="p-section" id="section-16-2">
+        <div class="p-eyebrow">Bab 16 · 16.2</div>
+        <div class="p-heading">Node tidak mempercayai siapapun — ia memverifikasi segalanya sendiri</div>
+        <div class="p-title">Verifikasi Block — Apa yang Dicek Node Setiap Kali Block Baru Datang</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Setiap kali block baru tiba dari jaringan, node tidak langsung menerimanya begitu saja. Ia menjalankan serangkaian pemeriksaan yang panjang dan ketat sebelum memutuskan apakah block itu valid atau tidak. Proses inilah yang membuat Bitcoin trustless: kamu tidak perlu mempercayai siapapun karena node kamu sendiri yang memverifikasi segalanya.</p>
+
+          <p><strong>Dua lapisan verifikasi</strong></p>
+          <p>Verifikasi block terjadi dalam dua lapisan. Pertama adalah verifikasi header: node memeriksa proof-of-work, timestamp, dan struktur dasar block tanpa perlu melihat transaksi di dalamnya. Ini cepat dan ringan. Kedua adalah verifikasi penuh: node memeriksa setiap transaksi satu per satu, memastikan tidak ada double spend, semua signature valid, dan semua aturan konsensus terpenuhi.</p>
+
+          <p><strong>Apa saja yang diperiksa?</strong></p>
+          <p>Proof-of-work: hash dari header block harus di bawah target difficulty saat ini. Ini tidak bisa dipalsukan tanpa mengeluarkan energi nyata. Timestamp: tidak lebih dari 2 jam di masa depan dari waktu node, dan harus lebih besar dari Median Time Past (MTP). Ukuran block: total weight tidak melebihi 4 juta weight units. Coinbase transaction: reward yang diklaim miner tidak melebihi block subsidy ditambah total fee transaksi. Setiap transaksi: semua input merujuk ke UTXO yang ada dan belum dibelanjakan, semua signature valid secara kriptografi, tidak ada transaksi yang membelanjakan lebih dari yang diterima.</p>
+
+          <p><strong>Script validation: lapisan paling kompleks</strong></p>
+          <p>Untuk setiap input transaksi, node harus menjalankan script Bitcoin dan memverifikasi bahwa kondisi locking script terpenuhi oleh unlocking script yang diberikan. Ini melibatkan eksekusi stack-based virtual machine untuk setiap input di setiap transaksi di setiap block. Inilah bagian yang paling CPU-intensive dari seluruh proses verifikasi.</p>
+
+          <p><strong>Verifikasi paralel</strong></p>
+          <p>Software Bitcoin client modern memverifikasi signature secara paralel menggunakan semua core CPU yang tersedia. Ini adalah salah satu alasan mengapa hardware yang lebih baik mempercepat IBD secara signifikan. Semakin banyak core, semakin cepat proses validasi signature yang jumlahnya bisa puluhan ribu per block.</p>
+
+          <div class="p-callout">
+            <p>Setiap node yang menjalankan verifikasi ini adalah satu suara independen yang menegakkan aturan konsensus Bitcoin. Tidak ada satu entitas pun yang bisa memaksa node-node ini untuk menerima block yang melanggar aturan, sekalipun block itu punya proof-of-work yang valid.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Block Inspector — Checklist Verifikasi & RPC</div>
+          <div class="b16-s162-desc">
+            Tab pertama: ikuti 8 pemeriksaan yang dilakukan node saat menerima block baru. Tab kedua: command RPC untuk menginspeksi block langsung dari node — klik command untuk langsung eksekusi.
+          </div>
+
+          <div class="b16-s162-tabs">
+            <button class="b16-s162-tab s162-act" id="b16-s162-t1">Checklist Verifikasi Block</button>
+            <button class="b16-s162-tab" id="b16-s162-t2">RPC — Inspect Block</button>
+          </div>
+
+          <!-- PANE 1: CHECKLIST -->
+          <div class="b16-s162-pane show" id="b16-s162-p1">
+            <div class="b16-s162-hint">Setiap kali block baru tiba, node menjalankan 8 pemeriksaan secara berurutan. Klik "Verifikasi Berikutnya" untuk melihat tiap pemeriksaan persis seperti urutan yang dilakukan node.</div>
+            <div class="b16-s162-checklist" id="b16-s162-checklist"></div>
+            <div class="b16-s162-ctrl">
+              <button class="b16-s162-btn-primary" id="b16-s162-next">Verifikasi Berikutnya →</button>
+              <button class="b16-s162-btn-sec" id="b16-s162-rst">Reset</button>
+              <div class="b16-s162-step-ind" id="b16-s162-ind">0 / 8 pemeriksaan</div>
+            </div>
+            <div class="b16-s162-verdict s162-idle" id="b16-s162-verdict">Klik "Verifikasi Berikutnya" — node baru saja menerima block #870.142 dari peer.</div>
+          </div>
+
+          <!-- PANE 2: RPC -->
+          <div class="b16-s162-pane" id="b16-s162-p2">
+            <div class="b16-s162-hint">Klik command untuk langsung menjalankan dan melihat output beserta penjelasan tiap field.</div>
+            <div class="b16-s162-cmds-label">Klik command untuk eksekusi:</div>
+            <div class="b16-s162-cmds" id="b16-s162-cmds"></div>
+            <div class="b16-s162-terminal">
+              <div class="b16-s162-term-bar">
+                <div class="b16-s162-dot" style="background:#FF5F57;"></div>
+                <div class="b16-s162-dot" style="background:#FEBC2E;"></div>
+                <div class="b16-s162-dot" style="background:#28C840;"></div>
+                <div class="b16-s162-term-lbl">bitcoin-cli — Block Inspector</div>
+              </div>
+              <div class="b16-s162-term-body" id="b16-s162-term-body"></div>
+            </div>
+            <div class="b16-s162-fe" id="b16-s162-fe" style="display:none;">
+              <div class="b16-s162-fe-label">Penjelasan field penting:</div>
+              <div id="b16-s162-fe-inner"></div>
+            </div>
+            <div class="b16-s162-note" id="b16-s162-note" style="display:none;"></div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-16-1" data-sb="sb-16-1">
+            ← 16.1 — Initial Block Download
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-16-3" data-sb="sb-16-3">
+            16.3 — Chainstate Database →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 16.2 -->
+
+      <!-- ==============================
+           SECTION 16.3 · Chainstate Database
+      ============================== -->
+      <div class="p-section" id="section-16-3">
+        <div class="p-eyebrow">Bab 16 · 16.3</div>
+        <div class="p-heading">Kalau kamu hanya boleh menyimpan satu folder dari seluruh Bitcoin — simpan chainstate</div>
+        <div class="p-title">Chainstate Database — Jantung State Bitcoin</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Kalau kamu menghapus semua block dari hard drive node kamu tapi menyimpan satu folder kecil bernama chainstate, maka node kamu masih bisa memverifikasi apakah transaksi baru valid atau tidak. Folder itulah yang menyimpan seluruh "keadaan terkini" Bitcoin, yaitu semua UTXO yang ada saat ini, siapa yang memilikinya, dan berapa nilainya.</p>
+
+          <p><strong>Apa itu chainstate?</strong></p>
+          <p>Chainstate adalah database yang menyimpan UTXO set: kumpulan semua output transaksi yang belum pernah dibelanjakan. Setiap kali block baru divalidasi, node memperbarui chainstate, yaitu output baru ditambahkan, output yang dibelanjakan dihapus. Ini adalah snapshot dari kepemilikan Bitcoin saat ini.</p>
+
+          <p><strong>LevelDB: Lemari Arsip yang Sangat Terorganisir</strong></p>
+          <p>Di disk, chainstate disimpan menggunakan LevelDB, yaitu database key-value yang dibuat oleh Google dan sangat efisien untuk akses cepat. Bayangkan kamu punya 184 juta lembar dokumen, di mana setiap lembar adalah satu UTXO. Kalau dokumen-dokumen itu ditumpuk sembarangan, mencari satu dokumen bisa butuh waktu lama. LevelDB mengorganisir dokumen-dokumen itu secara terurut berdasarkan kuncinya, sehingga pencarian bisa dilakukan dalam hitungan milidetik meski ada ratusan juta entri. Itulah mengapa node bisa memverifikasi transaksi baru dengan sangat cepat tanpa menelusuri seluruh blockchain.</p>
+
+          <p>Kuncinya adalah outpoint (txid + index output), nilainya adalah informasi tentang UTXO tersebut: nilai dalam satoshi, script locking, apakah coinbase, dan di block mana ia dikonfirmasi.</p>
+
+          <p><strong>Mengapa ukuran UTXO set penting?</strong></p>
+          <p>Saat ini UTXO set berisi sekitar 184 juta entri dan berukuran sekitar 11 GB di disk setelah kompresi LevelDB. Semakin besar UTXO set, semakin besar RAM yang dibutuhkan node untuk operasi yang efisien. Ini adalah salah satu alasan mengapa komunitas Bitcoin sangat memperhatikan "UTXO bloat" yaitu praktik membuat banyak output kecil yang tidak efisien.</p>
+
+          <p><strong>dbcache: Ukuran Meja Kerja di RAM</strong></p>
+          <p>Salah satu parameter konfigurasi paling penting di bitcoin.conf adalah dbcache, yaitu ukuran cache untuk chainstate database dalam MB. Bayangkan LevelDB sebagai lemari arsip fisik di gudang (hard disk). Setiap kali node butuh mengecek UTXO, ia harus berjalan ke gudang, buka laci, ambil dokumen, baca, lalu kembalikan. dbcache adalah meja kerja di depan gudang, semakin besar mejanya, semakin banyak dokumen yang bisa langsung diakses tanpa bolak-balik ke disk. Default-nya hanya 450 MB, tapi dengan RAM yang cukup, menaikkannya ke 4-8 GB bisa mempercepat IBD secara dramatis.</p>
+
+          <p><strong>Undo data: cara node bisa mundur</strong></p>
+          <p>Selain chainstate, node juga menyimpan undo data untuk setiap block yaitu data yang diperlukan untuk membalik efek block tersebut kalau terjadi reorg. Undo data berisi semua UTXO yang dibelanjakan dalam block itu, sehingga kalau block tersebut harus di-disconnect, node bisa mengembalikan UTXO-UTXO tersebut ke chainstate.</p>
+
+          <div class="p-callout">
+            <p>Total semua UTXO di chainstate harus sama persis dengan total supply Bitcoin yang beredar. Ini bisa diverifikasi siapapun kapanpun dengan menjalankan gettxoutsetinfo. Tidak ada bank sentral, tidak ada audit eksternal yang dibutuhkan, matematika yang membuktikannya.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Chainstate Explorer — UTXO Set & LevelDB</div>
+          <div class="b16-s163-desc">
+            Tab pertama: statistik UTXO set, visualisasi LevelDB, dan simulator dbcache. Tab kedua: command RPC untuk mengakses chainstate — klik command untuk langsung eksekusi.
+          </div>
+
+          <div class="b16-s163-tabs">
+            <button class="b16-s163-tab s163-act" id="b16-s163-t1">UTXO Set & LevelDB</button>
+            <button class="b16-s163-tab" id="b16-s163-t2">RPC — Chainstate</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b16-s163-pane show" id="b16-s163-p1">
+            <div class="b16-s163-stats">
+              <div class="b16-s163-stat s163-purple">
+                <div class="b16-s163-stat-label">Total UTXO</div>
+                <div class="b16-s163-stat-val">184,2 juta</div>
+                <div class="b16-s163-stat-sub">Entri di database chainstate saat ini</div>
+              </div>
+              <div class="b16-s163-stat s163-green">
+                <div class="b16-s163-stat-label">Total Supply Terverifikasi</div>
+                <div class="b16-s163-stat-val">19,72 juta BTC</div>
+                <div class="b16-s163-stat-sub">Jumlah semua UTXO = total BTC yang ada</div>
+              </div>
+              <div class="b16-s163-stat s163-amber">
+                <div class="b16-s163-stat-label">Ukuran di Disk</div>
+                <div class="b16-s163-stat-val">~11 GB</div>
+                <div class="b16-s163-stat-sub">Setelah kompresi LevelDB</div>
+              </div>
+              <div class="b16-s163-stat s163-gray">
+                <div class="b16-s163-stat-label">Transaksi Unik</div>
+                <div class="b16-s163-stat-val">~152 juta</div>
+                <div class="b16-s163-stat-sub">Transaksi dengan output belum dibelanjakan</div>
+              </div>
+            </div>
+
+            <div class="b16-s163-bar-wrap">
+              <div class="b16-s163-bar-label">Chainstate vs Full Blockchain:</div>
+              <div class="b16-s163-bar-track">
+                <div class="b16-s163-bar-fill" id="b16-s163-bar">
+                  <div class="b16-s163-bar-text" id="b16-s163-bar-text"></div>
+                </div>
+              </div>
+              <div class="b16-s163-bar-desc">Chainstate (~11 GB) jauh lebih kecil dari full blockchain (~650 GB). Node bisa memverifikasi transaksi baru hanya dengan chainstate, tanpa perlu semua block lama.</div>
+            </div>
+
+            <div class="b16-s163-ldb-label">Struktur key-value LevelDB untuk UTXO:</div>
+            <div class="b16-s163-ldb-row">
+              <div class="b16-s163-ldb-key">KEY (outpoint)</div>
+              <div class="b16-s163-ldb-val">txid + index output — contoh: a1b2c3...0001</div>
+            </div>
+            <div class="b16-s163-ldb-row">
+              <div class="b16-s163-ldb-key">VALUE (utxo)</div>
+              <div class="b16-s163-ldb-val">nilai (satoshi) + locking script + block height + apakah coinbase</div>
+            </div>
+            <div class="b16-s163-ldb-note">
+              <strong>Analogi lemari arsip:</strong> LevelDB seperti lemari arsip raksasa dengan 184 juta laci, masing-masing diberi label unik (outpoint). Karena laci-laci ini diurutkan berdasarkan labelnya, menemukan satu laci dari 184 juta hanya butuh beberapa milidetik, tanpa harus memeriksa satu per satu.
+            </div>
+
+            <div class="b16-s163-cache-wrap">
+              <div class="b16-s163-cache-label">dbcache — Ukuran "meja kerja" di RAM</div>
+              <div class="b16-s163-cache-sub">Semakin besar dbcache, semakin banyak UTXO yang bisa diakses langsung dari RAM tanpa bolak-balik ke disk. Geser untuk lihat dampaknya.</div>
+              <div class="b16-s163-cache-row">
+                <span class="b16-s163-cache-minmax">450 MB</span>
+                <input type="range" class="b16-s163-cache-slider" id="b16-s163-cache-sl" min="450" max="8000" value="450" step="50">
+                <span class="b16-s163-cache-minmax">8 GB</span>
+                <div class="b16-s163-cache-val" id="b16-s163-cache-val">450 MB</div>
+              </div>
+              <div class="b16-s163-cache-result s163-bad" id="b16-s163-cache-result">
+                <strong>Default (450 MB):</strong> Meja kerja sangat kecil. Node sering bolak-balik ke disk saat IBD, proses sync lebih lambat. Cocok hanya kalau RAM terbatas.
+              </div>
+            </div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b16-s163-pane" id="b16-s163-p2">
+            <div class="b16-s163-hint">Klik command untuk langsung eksekusi dan lihat output beserta penjelasan tiap field.</div>
+            <div class="b16-s163-cmds-label">Klik command untuk eksekusi:</div>
+            <div class="b16-s163-cmds" id="b16-s163-cmds"></div>
+            <div class="b16-s163-terminal">
+              <div class="b16-s163-term-bar">
+                <div class="b16-s163-dot" style="background:#FF5F57;"></div>
+                <div class="b16-s163-dot" style="background:#FEBC2E;"></div>
+                <div class="b16-s163-dot" style="background:#28C840;"></div>
+                <div class="b16-s163-term-lbl">bitcoin-cli — Chainstate</div>
+              </div>
+              <div class="b16-s163-term-body" id="b16-s163-term-body"></div>
+            </div>
+            <div class="b16-s163-fe" id="b16-s163-fe" style="display:none;">
+              <div class="b16-s163-fe-lbl">Penjelasan field penting:</div>
+              <div id="b16-s163-fe-inner"></div>
+            </div>
+            <div class="b16-s163-note" id="b16-s163-note" style="display:none;"></div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-16-2" data-sb="sb-16-2">
+            ← 16.2 — Verifikasi Block
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-16-4" data-sb="sb-16-4">
+            16.4 — Pruning →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 16.3 -->
+
+      <!-- ==============================
+           SECTION 16.4 · Pruning
+      ============================== -->
+      <div class="p-section" id="section-16-4">
+        <div class="p-eyebrow">Bab 16 · 16.4</div>
+        <div class="p-heading">Node yang hemat storage tapi tidak berkompromi dengan keamanan verifikasi</div>
+        <div class="p-title">Pruning — Buang Block Lama, Tetap Fully Validating</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Ada miskonsepsi umum tentang menjalankan Bitcoin node: bahwa kamu butuh ratusan gigabyte storage untuk melakukannya. Ini tidak sepenuhnya benar. Bitcoin punya fitur bernama pruning yang memungkinkan node membuang block lama dari disk setelah memvalidasinya, sambil tetap bisa memverifikasi transaksi baru sepenuhnya.</p>
+
+          <p><strong>Apa itu pruned node?</strong></p>
+          <p>Node yang berjalan dalam mode pruning tetap mendownload dan memvalidasi setiap block sejak genesis block selama IBD, tidak ada jalan pintas. Tapi setelah block divalidasi dan UTXO set diperbarui, block tersebut bisa dihapus dari disk. Yang tersisa hanyalah chainstate (UTXO set) dan beberapa block terbaru sebagai buffer. Hasilnya: node yang butuh minimal sekitar 550 MB storage alih-alih 700+ GB untuk full archival node.</p>
+
+          <p><strong>Yang hilang saat pruning</strong></p>
+          <p>Pruned node tidak bisa melayani block lama kepada peer lain yang sedang IBD. Ini berarti pruned node tidak berkontribusi penuh sebagai relay untuk jaringan. Selain itu, ada beberapa command RPC yang tidak bisa dijalankan di pruned node karena data yang dibutuhkan sudah tidak ada di disk. Ini yang paling sering membingungkan pengguna baru.</p>
+
+          <p><strong>Tapi yang terpenting tetap ada</strong></p>
+          <p>Pruned node adalah node yang fully validating, bukan light client dan bukan SPV node. Kemampuan memverifikasi transaksi baru, memvalidasi block baru, menolak transaksi dan block yang tidak valid, dan menjaga UTXO set yang akurat semuanya tetap ada. Keamanan verifikasi tidak berkurang sama sekali.</p>
+
+          <p><strong>Konfigurasi pruning</strong></p>
+          <p>Di bitcoin.conf, pruning dikonfigurasi dengan parameter prune dalam satuan MB, dengan minimum 550 MB. Nilai 0 berarti pruning dimatikan. Ada dua mode: otomatis di mana node mengelola sendiri berdasarkan target size, dan manual di mana pruning dilakukan via RPC ke block height tertentu.</p>
+
+          <div class="p-callout">
+            <p>Pruned node sangat cocok untuk pengguna yang ingin memverifikasi transaksi sendiri tanpa bergantung pada pihak ketiga, tapi punya keterbatasan storage. Kalau storage cukup, menjalankan full archival node lebih baik untuk kesehatan jaringan karena bisa membantu node baru yang sedang IBD.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Pruning Visualizer — Timeline & RPC</div>
+          <div class="b16-s164-desc">
+            Tab pertama: visualisasi blockchain timeline dengan slider prune target. Tab kedua: command RPC untuk pruning — termasuk command yang TIDAK bisa dipakai di pruned node beserta error message-nya.
+          </div>
+
+          <div class="b16-s164-tabs">
+            <button class="b16-s164-tab s164-act" id="b16-s164-t1">Pruning Visualizer</button>
+            <button class="b16-s164-tab" id="b16-s164-t2">RPC — Pruning</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b16-s164-pane show" id="b16-s164-p1">
+            <div class="b16-s164-hint">Pruned node tetap memvalidasi SETIAP block sejak genesis. Setelah divalidasi, block lama boleh dihapus. Geser slider untuk mengatur ukuran prune target.</div>
+
+            <div class="b16-s164-tl-label">Blockchain timeline — block yang masih ada vs yang sudah di-prune:</div>
+            <div class="b16-s164-tl-track" id="b16-s164-tl"></div>
+            <div class="b16-s164-tl-markers">
+              <span>Genesis #0</span>
+              <span id="b16-s164-prune-marker">Prune height</span>
+              <span>Tip #870.142</span>
+            </div>
+
+            <div class="b16-s164-legend">
+              <div class="b16-s164-leg"><div class="b16-s164-leg-dot" style="background:#F0EEF8;border:0.5px solid rgba(124,58,237,0.2);"></div>Block divalidasi lalu dihapus</div>
+              <div class="b16-s164-leg"><div class="b16-s164-leg-dot" style="background:#534AB7;"></div>Block masih ada di disk (buffer)</div>
+              <div class="b16-s164-leg"><div class="b16-s164-leg-dot" style="background:#7C3AED;"></div>Block terbaru (selalu ada)</div>
+            </div>
+
+            <div class="b16-s164-ctrl-wrap">
+              <div class="b16-s164-ctrl-label">prune = ? (ukuran target di bitcoin.conf, dalam MB)</div>
+              <div class="b16-s164-ctrl-sub">Minimum 550 MB. Nilai 0 = pruning mati (full archival ~650 GB).</div>
+              <div class="b16-s164-ctrl-row">
+                <span class="b16-s164-ctrl-mm">550 MB</span>
+                <input type="range" class="b16-s164-slider" id="b16-s164-sl" min="550" max="100000" value="550" step="50">
+                <span class="b16-s164-ctrl-mm">~100 GB</span>
+                <div class="b16-s164-ctrl-val" id="b16-s164-sl-val">550 MB</div>
+              </div>
+            </div>
+
+            <div class="b16-s164-stats">
+              <div class="b16-s164-stat s164-red">
+                <div class="b16-s164-stat-lbl">Block dihapus</div>
+                <div class="b16-s164-stat-val" id="b16-s164-pruned-blocks">~869.000</div>
+                <div class="b16-s164-stat-sub">Sudah divalidasi, tidak perlu lagi</div>
+              </div>
+              <div class="b16-s164-stat s164-green">
+                <div class="b16-s164-stat-lbl">Storage dihemat</div>
+                <div class="b16-s164-stat-val" id="b16-s164-saved">~649 GB</div>
+                <div class="b16-s164-stat-sub">Dari total ~650 GB blockchain</div>
+              </div>
+              <div class="b16-s164-stat s164-purple">
+                <div class="b16-s164-stat-lbl">Storage dibutuhkan</div>
+                <div class="b16-s164-stat-val" id="b16-s164-needed">~550 MB</div>
+                <div class="b16-s164-stat-sub">Chainstate + buffer block</div>
+              </div>
+            </div>
+
+            <div class="b16-s164-tradeoffs">
+              <div class="b16-s164-to s164-good">
+                <div class="b16-s164-to-label">Pruned node TETAP bisa:</div>
+                <div class="b16-s164-to-item">Memvalidasi semua transaksi baru</div>
+                <div class="b16-s164-to-item">Memvalidasi semua block baru</div>
+                <div class="b16-s164-to-item">Menjaga UTXO set yang akurat</div>
+                <div class="b16-s164-to-item">Menolak transaksi invalid</div>
+                <div class="b16-s164-to-item">Menerima koneksi inbound</div>
+              </div>
+              <div class="b16-s164-to s164-bad">
+                <div class="b16-s164-to-label">Pruned node TIDAK bisa:</div>
+                <div class="b16-s164-to-item">Melayani block lama ke peer IBD</div>
+                <div class="b16-s164-to-item">getblock untuk block yang di-prune</div>
+                <div class="b16-s164-to-item">getrawtransaction tanpa txindex</div>
+                <div class="b16-s164-to-item">Menjalankan txindex/blockfilterindex</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b16-s164-pane" id="b16-s164-p2">
+            <div class="b16-s164-hint">Klik command untuk langsung eksekusi. Command dengan label ERROR menunjukkan apa yang terjadi kalau kamu mencoba RPC yang tidak didukung di pruned node.</div>
+            <div class="b16-s164-cmds-label">Klik command untuk eksekusi:</div>
+            <div class="b16-s164-cmds" id="b16-s164-cmds"></div>
+            <div class="b16-s164-terminal">
+              <div class="b16-s164-term-bar">
+                <div class="b16-s164-dot" style="background:#FF5F57;"></div>
+                <div class="b16-s164-dot" style="background:#FEBC2E;"></div>
+                <div class="b16-s164-dot" style="background:#28C840;"></div>
+                <div class="b16-s164-term-lbl">bitcoin-cli — Pruning</div>
+              </div>
+              <div class="b16-s164-term-body" id="b16-s164-term-body"></div>
+            </div>
+            <div class="b16-s164-fe" id="b16-s164-fe" style="display:none;">
+              <div class="b16-s164-fe-lbl">Penjelasan:</div>
+              <div id="b16-s164-fe-inner"></div>
+            </div>
+            <div class="b16-s164-note" id="b16-s164-note" style="display:none;"></div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-16-3" data-sb="sb-16-3">
+            ← 16.3 — Chainstate Database
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-16-5" data-sb="sb-16-5">
+            16.5 — assumevalid & assumeUTXO →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 16.4 -->
+
+      <!-- ==============================
+           SECTION 16.5 · assumevalid dan assumeUTXO
+      ============================== -->
+      <div class="p-section" id="section-16-5">
+        <div class="p-eyebrow">Bab 16 · 16.5</div>
+        <div class="p-heading">Sync lebih cepat bukan berarti lebih tidak aman — kalau didesain dengan benar</div>
+        <div class="p-title">assumevalid dan assumeUTXO — Sync Lebih Cepat Tanpa Mengorbankan Trustlessness</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>assumevalid sudah kita singgung di 16.1 sebagai salah satu alasan IBD bisa dipersingkat. Section ini menjelaskan cara kerjanya secara utuh, bersama saudaranya assumeUTXO, dan menjawab keberatan yang paling sering muncul: apakah ini artinya kita balik mempercayai developer?</p>
+          <p>IBD bisa memakan waktu berjam-jam atau bahkan berhari-hari. Dua fitur Bitcoin, yaitu assumevalid dan assumeUTXO, dirancang untuk mempercepat proses ini secara signifikan. Tapi keduanya sering disalahpahami: bukan kepercayaan buta kepada developer, melainkan pilihan desain yang sangat hati-hati dengan mekanisme verifikasi yang tetap kuat.</p>
+
+          <p><strong>assumevalid: Skip Verifikasi Signature untuk Block Lama</strong></p>
+          <p>Selama IBD, bagian yang paling memakan CPU adalah verifikasi signature kriptografi untuk setiap input transaksi. Untuk blockchain sepanjang ratusan ribu block dengan ratusan juta transaksi, ini pekerjaan yang sangat berat dan bisa memakan waktu puluhan jam.</p>
+
+          <p>assumevalid adalah hash dari block tertentu yang di-hardcode ke dalam software Bitcoin client. Untuk semua block sebelum hash ini, node tetap mendownload semua data, memvalidasi struktur block, dan membangun UTXO set secara penuh, tapi tidak memverifikasi signature kriptografi. Logikanya: kalau jutaan node lain sudah memvalidasi signature ini dan blockchain tetap berjalan normal, signature pasti valid.</p>
+
+          <p>Penting: kamu bisa menimpa ini kapanpun. Dengan menjalankan flag -assumevalid=0, node akan memverifikasi setiap signature dari block 0 tanpa pengecualian. Ini butuh waktu jauh lebih lama tapi memberikan verifikasi paling menyeluruh.</p>
+
+          <p><strong>assumeUTXO: Mulai dari Snapshot UTXO Set</strong></p>
+          <p>assumeUTXO adalah fitur yang lebih baru dan lebih radikal. Alih-alih membangun UTXO set dari genesis block, node bisa memuat snapshot UTXO set yang sudah jadi dari file eksternal. Node langsung bisa digunakan untuk memverifikasi transaksi baru sambil memverifikasi blockchain historis di background.</p>
+
+          <p>Analoginya: bayangkan kamu baru bergabung di sebuah perusahaan. Daripada membaca semua email dari 15 tahun lalu sebelum bisa mulai kerja, kamu membaca ringkasan situasi terkini dulu (snapshot UTXO), langsung mulai kerja, sambil perlahan membaca arsip historis di waktu luang.</p>
+
+          <p><strong>Apakah ini aman?</strong></p>
+          <p>Untuk assumevalid: kalau developer jahat memasukkan hash block yang salah, node akan membangun UTXO set yang berselisih dengan jaringan dan langsung ketahuan. Ribuan developer dan pengguna yang mengaudit source code menjadi lapisan verifikasi sosial yang kuat.</p>
+
+          <p>Untuk assumeUTXO: hash snapshot di-hardcode dan bisa diaudit siapapun. Kalau snapshot berisi UTXO yang salah, verifikasi historis di background akhirnya akan menemukan inkonsistensi. Desainnya memastikan bahwa bahkan kalau snapshot salah, node akan self-correct.</p>
+
+          <div class="p-callout">
+            <p>assumevalid dan assumeUTXO bukan jalan pintas yang mengorbankan keamanan, melainkan keduanya adalah optimisasi yang dirancang dengan sangat hati-hati. Keamanan Bitcoin tidak bergantung pada satu node yang memverifikasi segalanya, melainkan pada ribuan node independen yang semuanya menjalankan aturan konsensus yang sama.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulasi — Perbandingan Metode Sync</div>
+          <div class="b16-s165-desc">
+            Tab pertama: pilih metode sync dan lihat perbandingan waktu, fase yang dijalankan, dan analisis kepercayaan. Tab kedua: command RPC untuk mengontrol dan memonitor sync.
+          </div>
+
+          <div class="b16-s165-tabs">
+            <button class="b16-s165-tab s165-act" id="b16-s165-t1">Perbandingan Metode Sync</button>
+            <button class="b16-s165-tab" id="b16-s165-t2">RPC — assumevalid & assumeUTXO</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b16-s165-pane show" id="b16-s165-p1">
+            <div class="b16-s165-hint">Pilih metode sync untuk melihat perbandingan waktu, fase yang dijalankan, dan trade-off kepercayaan.</div>
+
+            <div class="b16-s165-modes" id="b16-s165-modes">
+              <div class="b16-s165-mode-btn s165-act" data-mode="full" style="--mc:#A32D2D;--mb:#FCEBEB;">
+                <div class="b16-s165-mode-title">IBD Penuh — Verifikasi Semua dari Genesis</div>
+                <div class="b16-s165-mode-desc">Setiap signature diverifikasi, setiap block divalidasi. Paling lambat, paling menyeluruh. Flag: -assumevalid=0</div>
+              </div>
+              <div class="b16-s165-mode-btn" data-mode="assumevalid" style="--mc:#854F0B;--mb:#FAEEDA;">
+                <div class="b16-s165-mode-title">IBD + assumevalid — Skip Signature Lama</div>
+                <div class="b16-s165-mode-desc">Block tetap didownload dan UTXO set tetap dibangun penuh — tapi signature untuk block lama di-skip. Default di semua implementasi utama.</div>
+              </div>
+              <div class="b16-s165-mode-btn" data-mode="assumeutxo" style="--mc:#0F6E56;--mb:#EAF3DE;">
+                <div class="b16-s165-mode-title">assumeUTXO — Langsung Pakai dari Snapshot</div>
+                <div class="b16-s165-mode-desc">Muat snapshot UTXO set yang sudah jadi. Node langsung bisa beroperasi sambil verifikasi historis berjalan di background.</div>
+              </div>
+            </div>
+
+            <div class="b16-s165-tl-label">Perbandingan waktu sync (estimasi, hardware rata-rata + SSD):</div>
+            <div class="b16-s165-tl-row">
+              <div class="b16-s165-tl-name">IBD Penuh</div>
+              <div class="b16-s165-tl-bar-wrap"><div class="b16-s165-tl-bar" style="width:100%;background:#A32D2D;"><div class="b16-s165-tl-bar-txt">~24-72 jam</div></div></div>
+              <div class="b16-s165-tl-time">~24-72j</div>
+            </div>
+            <div class="b16-s165-tl-row">
+              <div class="b16-s165-tl-name">+ assumevalid</div>
+              <div class="b16-s165-tl-bar-wrap"><div class="b16-s165-tl-bar" style="width:40%;background:#854F0B;"><div class="b16-s165-tl-bar-txt">~4-8 jam</div></div></div>
+              <div class="b16-s165-tl-time">~4-8j</div>
+            </div>
+            <div class="b16-s165-tl-row">
+              <div class="b16-s165-tl-name">assumeUTXO</div>
+              <div class="b16-s165-tl-bar-wrap"><div class="b16-s165-tl-bar" style="width:8%;background:#0F6E56;"><div class="b16-s165-tl-bar-txt">~10m</div></div></div>
+              <div class="b16-s165-tl-time">~10 menit</div>
+            </div>
+
+            <div class="b16-s165-phases" id="b16-s165-phases"></div>
+            <div class="b16-s165-trust" id="b16-s165-trust"></div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b16-s165-pane" id="b16-s165-p2">
+            <div class="b16-s165-hint">Command RPC untuk mengontrol dan memonitor metode sync. Klik command untuk langsung eksekusi.</div>
+            <div class="b16-s165-cmds-label">Klik command untuk eksekusi:</div>
+            <div class="b16-s165-cmds" id="b16-s165-cmds"></div>
+            <div class="b16-s165-terminal">
+              <div class="b16-s165-term-bar">
+                <div class="b16-s165-dot" style="background:#FF5F57;"></div>
+                <div class="b16-s165-dot" style="background:#FEBC2E;"></div>
+                <div class="b16-s165-dot" style="background:#28C840;"></div>
+                <div class="b16-s165-term-lbl">bitcoin-cli — assumevalid & assumeUTXO</div>
+              </div>
+              <div class="b16-s165-term-body" id="b16-s165-term-body"></div>
+            </div>
+            <div class="b16-s165-fe" id="b16-s165-fe" style="display:none;">
+              <div class="b16-s165-fe-lbl">Penjelasan field penting:</div>
+              <div id="b16-s165-fe-inner"></div>
+            </div>
+            <div class="b16-s165-note" id="b16-s165-note" style="display:none;"></div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-16-4" data-sb="sb-16-4">
+            ← 16.4 — Pruning
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-16-6" data-sb="sb-16-6">
+            16.6 — Mengapa Node Penting →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 16.5 -->
+
+      <!-- ==============================
+           SECTION 16.6 · Mengapa Menjalankan Node Sendiri
+      ============================== -->
+      <div class="p-section" id="section-16-6">
+        <div class="p-eyebrow">Bab 16 · 16.6</div>
+        <div class="p-heading">Tanpa node sendiri, kamu harus mempercayai seseorang — dan itu bertentangan dengan seluruh ide Bitcoin</div>
+        <div class="p-title">Mengapa Menjalankan Node Sendiri — dan 10 Command Harian</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Setelah memahami IBD, chainstate, verifikasi block, pruning, dan assumevalid, saatnya menjawab pertanyaan paling fundamental: mengapa kamu harus repot-repot menjalankan node sendiri?</p>
+
+          <p><strong>"Jangan percaya, verifikasi": Bukan Slogan Kosong</strong></p>
+          <p>Kalau kamu tidak menjalankan node sendiri, kamu harus mempercayai seseorang. Mungkin exchange tempat kamu membeli bitcoin. Mungkin block explorer yang kamu pakai untuk melihat transaksi. Mungkin wallet yang terhubung ke node orang lain. Setiap kali kamu mempercayai pihak ketiga untuk memverifikasi transaksi Bitcoin, kamu menciptakan titik kegagalan yang bisa dimanipulasi, bisa di-hack, atau bisa berbohong.</p>
+
+          <p>Node sendiri menghilangkan semua ketergantungan itu. Kamu verifikasi sendiri bahwa transaksi yang kamu terima benar-benar ada di blockchain, bahwa tidak ada inflasi tersembunyi, bahwa aturan konsensus yang kamu setujui benar-benar ditegakkan.</p>
+
+          <p><strong>Apa yang node kamu verifikasi setiap hari?</strong></p>
+          <p>Setiap block baru: proof-of-work valid, tidak ada transaksi yang membelanjakan UTXO yang tidak ada, tidak ada miner yang mengklaim reward lebih dari yang seharusnya, semua aturan konsensus terpenuhi. Setiap transaksi yang kamu terima: benar-benar ada di blockchain, sudah dikonfirmasi sebanyak yang kamu lihat, tidak ada manipulasi data dari pihak ketiga.</p>
+
+          <p><strong>Node adalah suara kamu di jaringan</strong></p>
+          <p>Kalau suatu hari ada proposal untuk mengubah aturan konsensus Bitcoin, misalnya menaikkan batas supply atau mengubah algoritma mining, node kamu adalah yang menentukan apakah kamu mengikuti perubahan itu atau tidak. Node yang tidak di-upgrade akan otomatis menolak block yang melanggar aturan lama. Ini adalah mekanisme yang membuat perubahan konsensus di Bitcoin sangat sulit dilakukan tanpa persetujuan luas dari para pengguna.</p>
+
+          <p><strong>Kontribusi ke jaringan</strong></p>
+          <p>Setiap node yang berjalan memperkuat jaringan Bitcoin. Node archival membantu node baru yang sedang IBD. Node yang menerima koneksi inbound membantu peer baru menemukan jaringan. Semakin banyak node independen yang berjalan, semakin sulit bagi siapapun untuk menyensor transaksi atau memanipulasi data.</p>
+
+          <div class="p-callout">
+            <p>Menjalankan node sendiri adalah bentuk partisipasi paling fundamental dalam Bitcoin. Bukan karena memberi keuntungan finansial langsung, tapi karena itulah cara kamu benar-benar memiliki dan memverifikasi bitcoin yang kamu pegang, tanpa mempercayai siapapun.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">10 Command RPC Harian — Referensi Lengkap</div>
+          <div class="b16-s166-desc">
+            10 command paling berguna untuk memantau dan mengoperasikan node sehari-hari. Klik command untuk melihat output realistis, kapan menggunakannya, dan penjelasan field penting.
+          </div>
+
+          <div class="b16-s166-label">Klik command untuk eksekusi:</div>
+          <div class="b16-s166-grid" id="b16-s166-grid"></div>
+
+          <div class="b16-s166-terminal">
+            <div class="b16-s166-term-bar">
+              <div class="b16-s166-dot" style="background:#FF5F57;"></div>
+              <div class="b16-s166-dot" style="background:#FEBC2E;"></div>
+              <div class="b16-s166-dot" style="background:#28C840;"></div>
+              <div class="b16-s166-term-lbl">bitcoin-cli — Daily Commands</div>
+              <div class="b16-s166-term-cmd" id="b16-s166-term-cmd"></div>
+            </div>
+            <div class="b16-s166-term-body" id="b16-s166-term-body"></div>
+          </div>
+
+          <div class="b16-s166-explain" id="b16-s166-explain"></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-16-5" data-sb="sb-16-5">
+            ← 16.5 — assumevalid & assumeUTXO
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 16.6 -->
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 19 · BAB 16 -->
+
+
