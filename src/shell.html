@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bitscriptum</title>
+<style>
+  html,body{margin:0;padding:0;height:100%;background:#FAFAF8;}
+  #frame{position:fixed;inset:0;width:100%;height:100%;border:0;display:block;}
+</style>
+</head>
+<body>
+<iframe id="frame" title="Bitscriptum"></iframe>
+<script>
+(function(){
+  var DOCS={
+    id:"__BITSCRIPTUM_DOC_ID__",
+    en:"__BITSCRIPTUM_DOC_EN__"
+  };
+  var frame=document.getElementById('frame');
+  var pending=null;
+
+  function b64ToStr(b64){
+    var bin=atob(b64);var bytes=new Uint8Array(bin.length);
+    for(var i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
+    return new TextDecoder('utf-8').decode(bytes);
+  }
+
+  function load(lang,state){
+    if(lang!=='id'&&lang!=='en')lang='id';
+    pending=state||null;
+    /* dibaca sinkron oleh boot script di dalam iframe (same-origin),
+       supaya halaman tujuan tampil tanpa kedip welcome page */
+    window.__bsPending=pending;
+    try{localStorage.setItem('bitscriptum-lang',lang);}catch(e){}
+    frame.srcdoc=b64ToStr(DOCS[lang]);
+  }
+
+  /* Kirim posisi halaman terakhir ke dokumen baru supaya tidak balik ke welcome. */
+  function sendRestore(target){
+    if(!pending)return;
+    var win=target||frame.contentWindow;
+    if(!win)return;
+    var st=pending;pending=null;window.__bsPending=null;
+    try{win.postMessage({type:'bitscriptum-restore',state:st},'*');}catch(e){pending=st;}
+  }
+
+  frame.addEventListener('load',function(){setTimeout(function(){sendRestore(null);},0);});
+
+  window.addEventListener('message',function(e){
+    /* hanya percaya pesan dari iframe kita sendiri, bukan script/halaman lain */
+    if(e.source!==frame.contentWindow)return;
+    var d=e.data;if(!d)return;
+    if(d.type==='bitscriptum-setlang'){load(d.lang,d.state);}
+    else if(d.type==='bitscriptum-ready'){sendRestore(e.source);}
+  });
+
+  var start='id';
+  try{var s=localStorage.getItem('bitscriptum-lang');if(s==='en'||s==='id')start=s;}catch(e){}
+  load(start,null);
+})();
+</script>
+</body>
+</html>
