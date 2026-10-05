@@ -1,0 +1,13 @@
+# Paksa line ending LF supaya hasil build identik di Windows/macOS/Linux.
+# Force LF line endings so builds are identical on Windows/macOS/Linux.
+* text=auto eol=lf
+
+# index.html adalah file hasil build (berisi base64 besar):
+# sembunyikan dari diff dan statistik bahasa GitHub.
+# index.html is a generated build artifact (large base64 payload):
+# hide it from diffs and GitHub language stats.
+index.html linguist-generated=true -diff
+
+# Library pihak ketiga (minified), bukan kode kita.
+# Third-party minified library, not our code.
+src/chapters/_shared/chartjs-*.min.js linguist-vendored=true -diff
