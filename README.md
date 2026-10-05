@@ -62,7 +62,7 @@ Bitscriptum adalah buku Bitcoin interaktif dalam satu file HTML. Isinya:
 
 ### Cara membaca
 
-- **Online:** buka link GitHub Pages di atas.
+- **Online:** bitscriptum.xyz (rilis tanggal 31 Oktober 2026).
 - **Offline:** download repo ini, lalu klik dua kali `index.html`.
 
 ### Mengaktifkan GitHub Pages
@@ -193,7 +193,7 @@ Bitscriptum is an interactive Bitcoin book in a single HTML file. It includes:
 
 ### Reading
 
-- **Online:** use the GitHub Pages link at the top.
+- **Online:** bitscriptum.xyz (Released on October 31, 2026).
 - **Offline:** download this repo and double-click `index.html`.
 
 ### Enabling GitHub Pages
