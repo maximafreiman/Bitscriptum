@@ -1,0 +1,678 @@
+<!-- ============================================================
+     PAGE 20 · BAB 17 · SPV & Light Clients
+     |-- 17.1 · Masalah yang Dipecahkan SPV [DONE]
+     |-- 17.2 · [LOCKED]
+     |-- 17.3 · [LOCKED]
+     |-- 17.4 · [LOCKED]
+     |-- 17.5 · [LOCKED]
+     |-- 17.6 · [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab17">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b17">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b17">← Chapter List</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab17">
+      <div class="sidebar-heading">Chapter 17</div>
+      <div class="sidebar-title">SPV & Light Clients</div>
+
+      <div class="sidebar-item active" id="sb-17-1">
+        <div class="sb-num">17.1</div>
+        <div class="sb-label">The Problem SPV Solves</div>
+      </div>
+      <div class="sidebar-item" id="sb-17-2">
+        <div class="sb-num">17.2</div>
+        <div class="sb-label">Merkle Proof — Efficient Membership Proof</div>
+      </div>
+      <div class="sidebar-item" id="sb-17-3">
+        <div class="sb-num">17.3</div>
+        <div class="sb-label">Bloom Filters — The Old, Problematic Way</div>
+      </div>
+      <div class="sidebar-item" id="sb-17-4">
+        <div class="sb-num">17.4</div>
+        <div class="sb-label">BIP 157/158 — Compact Block Filters</div>
+      </div>
+      <div class="sidebar-item" id="sb-17-5">
+        <div class="sb-num">17.5</div>
+        <div class="sb-label">SPV vs Full Node Trade-off — How Big Is the Risk?</div>
+      </div>
+      <div class="sidebar-item" id="sb-17-6">
+        <div class="sb-num">17.6</div>
+        <div class="sb-label">Light Clients in the Real World — Electrum, Neutrino, and Modern Wallets</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab17-content">
+
+      <!-- ==============================
+           SECTION 17.1 · Masalah yang Dipecahkan SPV
+      ============================== -->
+      <div class="p-section active" id="section-17-1">
+        <div class="p-eyebrow">Chapter 17 · 17.1</div>
+        <div class="p-heading">Satoshi already thought about this in 2008 — how a phone can verify Bitcoin</div>
+        <div class="p-title">The Problem SPV Solves</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Imagine you want to verify that a check was really issued by a legitimate bank. There are two ways: first, you become a bank employee and access the entire database system to verify it yourself. Second, you ask the bank to show you proof of the transaction with an official stamp whose authenticity you can verify without entering the system.</p>
+
+          <p>A full node is the first way: full verification but it requires a big commitment. SPV is the second way: lighter verification but still reliable for most use cases.</p>
+
+          <p><strong>Historical context: Satoshi already thought about this</strong></p>
+          <p>In section 8 of the Bitcoin whitepaper (2008), Satoshi wrote about Simplified Payment Verification. He realized that not everyone would or could run a full node. For everyday users who just want to receive and send payments, there’s a lighter way: just verify that your transaction is in a valid block, without needing to validate the entire blockchain.</p>
+
+          <p>The key is in the block header. A Bitcoin block header is only 80 bytes per block, but contains the merkle root, a hash that represents all the transactions in that block. By using only the block headers (about 70 MB for the entire blockchain) plus a merkle proof for a particular transaction, you can prove that the transaction is in a valid block.</p>
+
+          <p><strong>What can SPV verify?</strong></p>
+          <p>An SPV client can verify that a transaction is in a particular block via a merkle proof, that the block has valid proof-of-work via the header, and that the block is part of the longest chain via the header chain. What SPV can’t verify without additional trust: whether the other consensus rules are met, whether the transaction was double-spent before entering the block, and whether the total Bitcoin supply is valid.</p>
+
+          <p><strong>The trust assumption SPV needs</strong></p>
+          <p>SPV isn’t trustless like a full node. It depends on the assumption that the majority of hashrate is honest. If the majority of miners collude, they can create a fake block that deceives the SPV client. But this assumption is the same as Bitcoin’s overall security assumption: as long as the majority is honest, SPV is safe for everyday payments.</p>
+
+          <p><strong>Who is SPV suitable for?</strong></p>
+          <p>For everyday payments of moderate amounts, SPV provides a good balance between security and convenience. For very large-value payments or for needs that require full verification, a full node remains the best choice.</p>
+
+          <div class="p-callout">
+            <p>SPV isn’t a bad compromise, but rather a deliberate trade-off that Satoshi thought about from the start. In a majority-honest system, SPV provides verification strong enough for most use cases. The key is understanding its limitations and choosing a level of verification that matches your needs and the value at stake.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualization — Full Node vs SPV Client</div>
+          <div class="b17-s171-desc">
+            Two tabs: a full comparison of Full Node vs SPV in terms of storage, verification, and required trust — plus a diagram of how both interact with the Bitcoin network.
+          </div>
+
+          <div class="b17-s171-toggle">
+            <button class="b17-s171-toggle-btn s171-act" id="b17-s171-t1">Full Node vs SPV Comparison</button>
+            <button class="b17-s171-toggle-btn" id="b17-s171-t2">Network Interaction Diagram</button>
+          </div>
+
+          <!-- COMPARE VIEW -->
+          <div id="b17-s171-compare">
+            <div class="b17-s171-grid">
+              <div class="b17-s171-col">
+                <div class="b17-s171-col-head s171-full">
+                  <div class="b17-s171-col-title">Full Node</div>
+                  <div class="b17-s171-col-sub">Full verification, no need to trust anyone</div>
+                </div>
+                <div class="b17-s171-row s171-full"><div class="b17-s171-row-label">What’s downloaded</div><div class="b17-s171-row-val">All blocks (~650 GB) + all headers</div><div class="b17-s171-badge s171-full">~650 GB</div></div>
+                <div class="b17-s171-row s171-full"><div class="b17-s171-row-label">What’s verified</div><div class="b17-s171-row-val">Every transaction, every signature, every consensus rule</div><div class="b17-s171-badge s171-full">Full verification</div></div>
+                <div class="b17-s171-row s171-full"><div class="b17-s171-row-label">Storage needed</div><div class="b17-s171-row-val">~650 GB (full) or ~550 MB minimum (pruned)</div><div class="b17-s171-badge s171-full">650 GB / 550 MB</div></div>
+                <div class="b17-s171-row s171-full"><div class="b17-s171-row-label">RAM needed</div><div class="b17-s171-row-val">At least 2 GB, 4-8 GB recommended</div><div class="b17-s171-badge s171-full">2-8 GB RAM</div></div>
+                <div class="b17-s171-row s171-full"><div class="b17-s171-row-label">Trust</div><div class="b17-s171-row-val">No need to trust anyone</div><div class="b17-s171-badge s171-full">Zero trust</div></div>
+                <div class="b17-s171-row s171-full"><div class="b17-s171-row-label">Setup time</div><div class="b17-s171-row-val">4-72 hours (IBD) depending on hardware</div><div class="b17-s171-badge s171-full">4-72 hours</div></div>
+              </div>
+              <div class="b17-s171-col">
+                <div class="b17-s171-col-head s171-spv">
+                  <div class="b17-s171-col-title">SPV Client</div>
+                  <div class="b17-s171-col-sub">Lightweight verification, suitable for mobile</div>
+                </div>
+                <div class="b17-s171-row s171-spv"><div class="b17-s171-row-label">What’s downloaded</div><div class="b17-s171-row-val">Only headers (~70 MB) + merkle proofs for relevant transactions</div><div class="b17-s171-badge s171-spv">~70 MB</div></div>
+                <div class="b17-s171-row s171-spv"><div class="b17-s171-row-label">What’s verified</div><div class="b17-s171-row-val">Header proof-of-work + merkle proof that the tx is in the block</div><div class="b17-s171-badge s171-spv">Partial verification</div></div>
+                <div class="b17-s171-row s171-spv"><div class="b17-s171-row-label">Storage needed</div><div class="b17-s171-row-val">~70 MB headers, growing ~4 MB/year</div><div class="b17-s171-badge s171-spv">~70 MB</div></div>
+                <div class="b17-s171-row s171-spv"><div class="b17-s171-row-label">RAM needed</div><div class="b17-s171-row-val">Very light — suitable for a phone</div><div class="b17-s171-badge s171-spv">&lt; 100 MB RAM</div></div>
+                <div class="b17-s171-row s171-spv"><div class="b17-s171-row-label">Trust</div><div class="b17-s171-row-val">Trust the majority of hashrate to be honest</div><div class="b17-s171-badge s171-spv">Majority honest</div></div>
+                <div class="b17-s171-row s171-spv"><div class="b17-s171-row-label">Setup time</div><div class="b17-s171-row-val">A few minutes — only download the header chain</div><div class="b17-s171-badge s171-spv">~5 minutes</div></div>
+              </div>
+            </div>
+
+            <div class="b17-s171-cando-label">What an SPV client can and can’t do:</div>
+            <div class="b17-s171-cando-wrap">
+              <div class="b17-s171-cando s171-can">
+                <div class="b17-s171-cando-title">SPV CAN verify:</div>
+                <div class="b17-s171-cando-item">A transaction is in a particular block</div>
+                <div class="b17-s171-cando-item">A block has valid proof-of-work</div>
+                <div class="b17-s171-cando-item">A block is part of the longest chain</div>
+                <div class="b17-s171-cando-item">How many confirmations have been received</div>
+              </div>
+              <div class="b17-s171-cando s171-cant">
+                <div class="b17-s171-cando-title">SPV CANNOT verify:</div>
+                <div class="b17-s171-cando-item">Whether all consensus rules are met</div>
+                <div class="b17-s171-cando-item">Whether the total Bitcoin supply is still valid</div>
+                <div class="b17-s171-cando-item">Whether a transaction was double-spent before entering a block</div>
+                <div class="b17-s171-cando-item">Whether a miner didn’t overclaim the reward</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- NETWORK VIEW -->
+          <div id="b17-s171-net" style="display:none;">
+            <div class="b17-s171-net-label">How a Full Node interacts with the network:</div>
+            <div class="b17-s171-net-diagram">
+              <div class="b17-s171-net-node"><div class="b17-s171-net-icon s171-ni-full">🖥️</div><div class="b17-s171-net-name">Your<br>Full Node</div></div>
+              <div class="b17-s171-net-arrow"><div class="b17-s171-net-arrow-label">← all blocks + headers</div><div class="b17-s171-net-arrow-line"></div><div class="b17-s171-net-arrow-label s171-down">→ relay tx & blocks</div></div>
+              <div class="b17-s171-net-node"><div class="b17-s171-net-icon s171-ni-peer">🌐</div><div class="b17-s171-net-name">Bitcoin<br>Peer</div></div>
+              <div class="b17-s171-net-arrow"><div class="b17-s171-net-arrow-label">← all blocks + headers</div><div class="b17-s171-net-arrow-line"></div><div class="b17-s171-net-arrow-label s171-down">→ relay tx & blocks</div></div>
+              <div class="b17-s171-net-node"><div class="b17-s171-net-icon s171-ni-peer">🌐</div><div class="b17-s171-net-name">Bitcoin<br>Peer</div></div>
+            </div>
+            <div class="b17-s171-net-label" style="margin-top:8px;">How an SPV client interacts with the network:</div>
+            <div class="b17-s171-net-diagram">
+              <div class="b17-s171-net-node"><div class="b17-s171-net-icon s171-ni-spv">📱</div><div class="b17-s171-net-name">SPV Client<br>(your phone)</div></div>
+              <div class="b17-s171-net-arrow"><div class="b17-s171-net-arrow-label">← headers only (~70 MB)</div><div class="b17-s171-net-arrow-line"></div><div class="b17-s171-net-arrow-label s171-down">→ request relevant tx</div></div>
+              <div class="b17-s171-net-node"><div class="b17-s171-net-icon s171-ni-peer">🖥️</div><div class="b17-s171-net-name">Full Node<br>(third party)</div></div>
+              <div class="b17-s171-net-arrow"><div class="b17-s171-net-arrow-label">← full block data</div><div class="b17-s171-net-arrow-line"></div><div class="b17-s171-net-arrow-label s171-down">→ relay</div></div>
+              <div class="b17-s171-net-node"><div class="b17-s171-net-icon s171-ni-peer">🌐</div><div class="b17-s171-net-name">Bitcoin<br>Peer</div></div>
+            </div>
+            <div class="b17-s171-note">An SPV client depends on a third-party full node to get data — this is what creates an additional trust assumption compared to a full node connected directly to the network.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-17-2" data-sb="sb-17-2">
+            17.2 — Merkle Proof →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 17.1 -->
+
+      <!-- ==============================
+           SECTION 17.2 · Merkle Proof
+      ============================== -->
+      <div class="p-section" id="section-17-2">
+        <div class="p-eyebrow">Chapter 17 · 17.2</div>
+        <div class="p-heading">Proving one transaction out of millions — with just a few dozen bytes</div>
+        <div class="p-title">Merkle Proof — Efficient Membership Proof</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Imagine you live in a city of 10,000 residents and need to prove that your name is in the official residency register. There are two ways: first, show the whole book (650 pages) to the person who wants to verify. Second, show one small path from your name up to the official stamp on the first page, only 13 steps for 10,000 residents, not 10,000 pages.</p>
+
+          <p>That’s a merkle proof. Not proof by showing all the data, but proof by showing a path that can be cryptographically verified.</p>
+
+          <p><strong>A different perspective from Chapter 3</strong></p>
+          <p>In Chapter 4 we saw the merkle tree as a cryptographic structure: how transaction hashes are combined into one merkle root. Here we see it from the SPV client’s perspective: how your phone proves that your transaction is in a block it never fully downloaded.</p>
+
+          <p><strong>The structure of a merkle proof</strong></p>
+          <p>Suppose a block has 8 transactions. To prove that Tx3 is in this block, you don’t need all 8 transactions. You only need: the hash of Tx4 (Tx3’s pair at the first level), the hash of H(Tx1+Tx2) (the pair at the second level), and the hash of H(Tx5+Tx6+Tx7+Tx8) (the pair at the third level). These three hashes, combined with Tx3, are enough to reconstruct the merkle root. If the result matches the merkle root in the block header whose proof-of-work has been verified, the transaction is proven to be in that block.</p>
+
+          <p><strong>Remarkable efficiency</strong></p>
+          <p>For a block with n transactions, a merkle proof only needs log₂(n) hashes. A modern Bitcoin block can contain more than 3,000 transactions. Its merkle proof only needs about 12 hashes, 32 bytes each, totaling about 384 bytes. Compare that with downloading the entire block, which can reach 1-2 MB. If the transactions in a block double from 3,000 to 6,000, the proof only needs one additional hash.</p>
+
+          <p><strong>How an SPV client uses a merkle proof</strong></p>
+          <p>When your SPV wallet receives a payment, here’s what happens behind the scenes: the connected node sends the transaction along with its merkle proof. The SPV client takes the transaction hash, follows the merkle proof path, and reconstructs the merkle root. Then it compares that with the merkle root in the block header whose proof-of-work has been verified. If they match, the transaction is proven to be in that block.</p>
+
+          <p><strong>Limitations of a merkle proof</strong></p>
+          <p>A merkle proof proves that a transaction IS in a block, but doesn’t prove that the transaction is VALID. A transaction’s inputs could already have been spent earlier and the block containing that transaction would still be valid from a proof-of-work perspective. To detect a double spend, you need access to the UTXO set, which only a full node has.</p>
+
+          <div class="p-callout">
+            <p>The merkle proof is one of the most elegant cryptographic constructions in Bitcoin. With only a few dozen bytes, anyone can prove that a transaction is inside a block containing millions of bytes of data. This is a mathematical consequence of the deterministic and collision-resistant nature of a hash function.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Merkle Proof Visualizer</div>
+          <div class="b17-s172-desc">
+            Choose a transaction to prove. The tree will show the proof path the SPV client needs — only a small fraction of the data from the entire block.
+          </div>
+
+          <div class="b17-s172-tx-label">Choose a target transaction (click one):</div>
+          <div class="b17-s172-tx-grid" id="b17-s172-tx-grid"></div>
+
+          <div class="b17-s172-tree-wrap">
+            <svg class="b17-s172-svg" id="b17-s172-svg" width="600" height="200" viewBox="0 0 600 200" style="display:block;width:100%;max-width:600px;margin:0 auto;"></svg>
+          </div>
+
+          <div class="b17-s172-steps-label">Merkle proof path:</div>
+          <div class="b17-s172-steps" id="b17-s172-steps"></div>
+
+          <div class="b17-s172-stats">
+            <div class="b17-s172-stat s172-purple">
+              <div class="b17-s172-stat-label">Proof size</div>
+              <div class="b17-s172-stat-val" id="b17-s172-proof-size">128 bytes</div>
+              <div class="b17-s172-stat-sub" id="b17-s172-proof-hashes">3 siblings + 1 target</div>
+            </div>
+            <div class="b17-s172-stat s172-green">
+              <div class="b17-s172-stat-label">Block size</div>
+              <div class="b17-s172-stat-val">~1.5 MB</div>
+              <div class="b17-s172-stat-sub">8 transactions (simulation)</div>
+            </div>
+            <div class="b17-s172-stat s172-amber">
+              <div class="b17-s172-stat-label">Efficiency</div>
+              <div class="b17-s172-stat-val" id="b17-s172-efficiency">99.99%</div>
+              <div class="b17-s172-stat-sub">Data saved vs full download</div>
+            </div>
+          </div>
+
+          <div class="b17-s172-note" id="b17-s172-note">Choose a transaction above to see its merkle proof.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-17-1" data-sb="sb-17-1">
+            ← 17.1 — The Problem SPV Solves
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-17-3" data-sb="sb-17-3">
+            17.3 — Bloom Filters →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 17.2 -->
+
+      <!-- ==============================
+           SECTION 17.3 · Bloom Filters
+      ============================== -->
+      <div class="p-section" id="section-17-3">
+        <div class="p-eyebrow">Chapter 17 · 17.3</div>
+        <div class="p-heading">A mathematically elegant solution that turned out to leak on the privacy side</div>
+        <div class="p-title">Bloom Filters — The Old, Problematic Way</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>An SPV client needs to tell a full node: "send me the transactions relevant to my address." But if the SPV directly says "I have address bc1q...xyz, send me transactions to that address," privacy leaks immediately because the full node knows exactly which address you own.</p>
+
+          <p>Bloom filters were Bitcoin’s first solution to this problem. Introduced in BIP 37 in 2012, they let an SPV client tell a node about relevant transactions without directly revealing the address.</p>
+
+          <p><strong>What is a bloom filter?</strong></p>
+          <p>A bloom filter is a probabilistic data structure that answers one question: "is element X in this set?" The answer "no" is always correct, if the bloom filter says it’s not there, it really isn’t. But the answer "yes" can be wrong (a false positive), the bloom filter can say "yes" for an element that isn’t actually in the set. This is intentional: false positives create ambiguity that protects privacy.</p>
+
+          <p><strong>How a bloom filter works</strong></p>
+          <p>A bloom filter is a bit array, starting with all bits zero. To add an element, you hash that element with several different hash functions, then set the resulting bits to 1. To query "is X there?", hash X with the same hash functions. If all the resulting bits are already 1, X might be there. If even one bit is still 0, X is definitely not there. The SPV client builds a bloom filter containing its addresses and sends it to a node. The node filters transactions and only sends the matching ones.</p>
+
+          <p><strong>The privacy problem that made BIP 37 deprecated</strong></p>
+          <p>Despite the clever design, bloom filters have a serious problem. The size and composition of the filter can reveal information about how many addresses the client owns. A malicious node can test millions of Bitcoin addresses against the filter and do statistical analysis to identify the addresses actually owned. Early BIP 37 implementations even had a weakness that let a full node determine the client’s addresses with surprising accuracy.</p>
+
+          <p>Besides the privacy problem, BIP 37 also burdened full nodes disproportionately, because a node has to filter every transaction for every connected SPV client, which can become a DoS attack.</p>
+
+          <p><strong>Current status</strong></p>
+          <p>BIP 37 is now considered deprecated. Many nodes disable BIP 37 support by default. A better solution, compact block filters (BIP 157/158), is already available and will be discussed in 17.4.</p>
+
+          <div class="p-callout">
+            <p>The bloom filter is an interesting example of a mathematically elegant solution that isn’t good enough in security practice. Privacy is a very hard property to maintain, even a system designed to protect privacy can leak information through unexpected channels.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bloom Filter — How It Works & The Privacy Problem</div>
+          <div class="b17-s173-desc">
+            First tab: try the bloom filter yourself — add addresses, see the bits being set, and find a false positive. Second tab: how a malicious node can exploit the filter to learn the addresses you own.
+          </div>
+
+          <div class="b17-s173-tabs">
+            <button class="b17-s173-tab s173-act" id="b17-s173-t1">Bloom Filter — How It Works</button>
+            <button class="b17-s173-tab" id="b17-s173-t2">BIP 37 Privacy Problem</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b17-s173-pane show" id="b17-s173-p1">
+            <div class="b17-s173-hint">A bloom filter lets an SPV client tell a node about relevant transactions without directly revealing the address. Add an address to the filter, then query to see the result — including a false positive.</div>
+
+            <div class="b17-s173-array-label">Bit array (32 bits) — bits are set to 1 when an address is added:</div>
+            <div class="b17-s173-array" id="b17-s173-array"></div>
+
+            <div class="b17-s173-section-label">Add an address to the filter:</div>
+            <div class="b17-s173-add-wrap">
+              <select class="b17-s173-select" id="b17-s173-add-select">
+                <option value="bc1q...alice">bc1q...alice (Alice’s address)</option>
+                <option value="bc1q...bob">bc1q...bob (Bob’s address)</option>
+                <option value="bc1q...carol">bc1q...carol (Carol’s address)</option>
+                <option value="3J98t...dave">3J98t...dave (Dave’s address)</option>
+                <option value="1BvB...eve">1BvB...eve (Eve’s address)</option>
+              </select>
+              <button class="b17-s173-add-btn" id="b17-s173-add-btn">+ Add to Filter</button>
+            </div>
+
+            <div class="b17-s173-section-label">Addresses already in the filter:</div>
+            <div class="b17-s173-addrs" id="b17-s173-addrs">
+              <div class="b17-s173-empty">No addresses yet. Add one above.</div>
+            </div>
+
+            <div class="b17-s173-section-label">Query the filter — is this address present?</div>
+            <div class="b17-s173-add-wrap">
+              <select class="b17-s173-select" id="b17-s173-query-select">
+                <option value="bc1q...alice">bc1q...alice (Alice’s address)</option>
+                <option value="bc1q...bob">bc1q...bob (Bob’s address)</option>
+                <option value="bc1q...carol">bc1q...carol (Carol’s address)</option>
+                <option value="3J98t...dave">3J98t...dave (Dave’s address)</option>
+                <option value="1BvB...eve">1BvB...eve (Eve’s address)</option>
+                <option value="bc1q...unknown">bc1q...unknown (foreign address)</option>
+                <option value="1abc...stranger">1abc...stranger (foreign address 2)</option>
+              </select>
+              <button class="b17-s173-query-btn" id="b17-s173-query-btn">Query →</button>
+            </div>
+
+            <div class="b17-s173-result s173-idle" id="b17-s173-result">Add an address to the filter then query to see the result.</div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b17-s173-pane" id="b17-s173-p2">
+            <div class="b17-s173-hint">Although a bloom filter is designed to protect privacy, statistical analysis can reveal the addresses an SPV client actually owns. This is why BIP 37 is now deprecated.</div>
+
+            <div class="b17-s173-priv-steps">
+              <div class="b17-s173-priv-step s173-spy">
+                <div class="b17-s173-priv-label">Step 1: The SPV client sends the filter to the node</div>
+                <div class="b17-s173-priv-text">Alice sends a bloom filter containing 3 of her addresses to a full node. The filter is 64 bytes with a 1% false positive rate.</div>
+                <div class="b17-s173-priv-sub">filter: 0x4A2F8C...3D1E (64 byte) | fp_rate: 0.01 | num_hash: 4</div>
+              </div>
+              <div class="b17-s173-priv-step s173-info">
+                <div class="b17-s173-priv-label">Step 2: The node analyzes the filter size</div>
+                <div class="b17-s173-priv-text">From the filter size and the requested false positive rate, the node can estimate how many addresses are in the filter. A 64-byte filter with 1% fp usually contains 3-5 addresses.</div>
+                <div class="b17-s173-priv-sub">estimate: ~3-5 addresses in the filter</div>
+              </div>
+              <div class="b17-s173-priv-step s173-warn">
+                <div class="b17-s173-priv-label">Step 3: The node tests addresses one by one</div>
+                <div class="b17-s173-priv-text">A malicious node tests millions of Bitcoin addresses against Alice’s filter. Every matching address (including false positives) narrows the possibilities. With enough queries, the addresses Alice actually owns can be identified.</div>
+                <div class="b17-s173-priv-sub">tested: 1,847,293 addresses | matched: 47 (fp + true positives)</div>
+              </div>
+              <div class="b17-s173-priv-step s173-spy">
+                <div class="b17-s173-priv-label">Step 4: On-chain analysis makes it worse</div>
+                <div class="b17-s173-priv-text">The identified addresses are matched against public blockchain data. Clustering analysis can identify other addresses owned by Alice that aren’t even in the filter.</div>
+                <div class="b17-s173-priv-sub">identified: bc1q...alice1, bc1q...alice2 → linked to 4 more addresses</div>
+              </div>
+            </div>
+
+            <div class="b17-s173-bar-label">Privacy comparison across methods:</div>
+            <div class="b17-s173-bars">
+              <div class="b17-s173-bar-row"><div class="b17-s173-bar-name">Full node</div><div class="b17-s173-bar-track"><div class="b17-s173-bar-fill" style="width:100%;background:#0F6E56;"><span class="b17-s173-bar-txt">100% — self-verification</span></div></div></div>
+              <div class="b17-s173-bar-row"><div class="b17-s173-bar-name">BIP 37 (early)</div><div class="b17-s173-bar-track"><div class="b17-s173-bar-fill" style="width:60%;background:#854F0B;"><span class="b17-s173-bar-txt">~60%</span></div></div></div>
+              <div class="b17-s173-bar-row"><div class="b17-s173-bar-name">BIP 37 (analyzed)</div><div class="b17-s173-bar-track"><div class="b17-s173-bar-fill" style="width:15%;background:#A32D2D;"><span class="b17-s173-bar-txt">~15%</span></div></div></div>
+              <div class="b17-s173-bar-row"><div class="b17-s173-bar-name">BIP 157/158</div><div class="b17-s173-bar-track"><div class="b17-s173-bar-fill" style="width:85%;background:#534AB7;"><span class="b17-s173-bar-txt">~85% — far better</span></div></div></div>
+            </div>
+
+            <div class="b17-s173-note">BIP 37 has been disabled by default in many nodes since 2021. If your wallet still uses BIP 37, consider switching to a wallet that supports BIP 157/158 or connecting to your own node. The details of BIP 157/158 are discussed in 17.4.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-17-2" data-sb="sb-17-2">
+            ← 17.2 — Merkle Proof
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-17-4" data-sb="sb-17-4">
+            17.4 — BIP 157/158 →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 17.3 -->
+
+      <!-- ==============================
+           SECTION 17.4 · BIP 157/158
+      ============================== -->
+      <div class="p-section" id="section-17-4">
+        <div class="p-eyebrow">Chapter 17 · 17.4</div>
+        <div class="p-heading">If you don’t need to tell anyone what you’re looking for, don’t do it</div>
+        <div class="p-title">BIP 157/158 — Compact Block Filters: A Better Privacy Solution</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>BIP 37 lets the node filter for the client, so the node knows what the client is looking for. BIP 157/158 flips this logic: the client downloads filters and filters them itself. This simple shift creates a huge privacy difference.</p>
+
+          <p><strong>The inverted logic</strong></p>
+          <p>With BIP 37: the SPV client says to the node "I have this address, please filter for me." The node knows the address being searched. With BIP 157/158: the node creates a compact filter for each block that summarizes all the data in that block. The SPV client downloads this filter and checks for itself whether there’s any relevant data. If there is, only then does the client download the full block. The node never knows what the client is looking for.</p>
+
+          <p><strong>What is a compact block filter?</strong></p>
+          <p>BIP 158 defines a compact filter format using a data structure called a Golomb-Coded Set (GCS). A GCS is a probabilistic data structure that’s more efficient than a bloom filter with a more predictable false positive rate. For each block, the node creates a filter containing all the scriptPubKeys of the transaction outputs in that block. This filter is about 10-20 KB for a block with thousands of transactions.</p>
+
+          <p><strong>BIP 157: The Filter Distribution Protocol</strong></p>
+          <p>BIP 157 defines how these filters are distributed across the P2P network. There are two new message types: getcfheaders to request filter headers, and getcfilters to request filters for a particular block range. A client can download filter headers lightly first, then download the full filters only for the blocks it needs.</p>
+
+          <p><strong>A trade-off to understand</strong></p>
+          <p>An SPV client with BIP 157/158 has to download the filter for every block, totaling a few hundred MB to a few GB for the entire chain. This is larger than BIP 37, which only downloads relevant transactions. In exchange, the privacy gained is far better. This is a deliberate trade-off: trade bandwidth for privacy.</p>
+
+          <p><strong>Implementation status</strong></p>
+          <p>BIP 157/158 is already implemented in major Bitcoin client software. Neutrino is a Go light client implementation that uses BIP 157/158 and is used by Lightning Network mobile wallets like Phoenix and Breez.</p>
+
+          <div class="p-callout">
+            <p>BIP 157/158 shows how better protocol design can flip trust assumptions. By moving the filtering work from the node to the client, privacy increases drastically without sacrificing security. If you don’t need to tell anyone what you’re looking for, don’t do it.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulation — BIP 37 vs BIP 157/158 & Compact Filter</div>
+          <div class="b17-s174-desc">
+            First tab: a comparison of data flow, privacy, and bandwidth between BIP 37 and BIP 157/158. Second tab: a compact block filter simulation — click an address to check whether it’s in a block’s filter.
+          </div>
+
+          <div class="b17-s174-tabs">
+            <button class="b17-s174-tab s174-act" id="b17-s174-t1">BIP 37 vs BIP 157/158</button>
+            <button class="b17-s174-tab" id="b17-s174-t2">Compact Filter — How It Works</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b17-s174-pane show" id="b17-s174-p1">
+            <div class="b17-s174-hint">BIP 37 lets the node filter for the client. BIP 157/158 flips the logic: the client filters itself. This difference is huge for privacy.</div>
+
+            <div class="b17-s174-flows">
+              <div class="b17-s174-flow">
+                <div class="b17-s174-flow-head s174-bip37">
+                  <div class="b17-s174-flow-title">BIP 37 — Deprecated</div>
+                  <div class="b17-s174-flow-sub">The node filters for the client</div>
+                </div>
+                <div class="b17-s174-flow-step s174-client"><div class="b17-s174-flow-who">Client →</div><div class="b17-s174-flow-text">"I have address bc1q...alice. Please filter transactions for me." (a bloom filter is sent to the node)</div></div>
+                <div class="b17-s174-flow-arrow">↕</div>
+                <div class="b17-s174-flow-step s174-warn"><div class="b17-s174-flow-who">Node ⚠</div><div class="b17-s174-flow-text">The node knows the address the client is searching for. It filters every transaction specifically for this client. CPU load per client.</div></div>
+                <div class="b17-s174-flow-arrow">↕</div>
+                <div class="b17-s174-flow-step s174-client"><div class="b17-s174-flow-who">Client ←</div><div class="b17-s174-flow-text">Receives the "matching" transactions — but the node already knows too much.</div></div>
+              </div>
+              <div class="b17-s174-flow">
+                <div class="b17-s174-flow-head s174-bip158">
+                  <div class="b17-s174-flow-title">BIP 157/158 — Modern</div>
+                  <div class="b17-s174-flow-sub">The client filters itself</div>
+                </div>
+                <div class="b17-s174-flow-step s174-node"><div class="b17-s174-flow-who">Node →</div><div class="b17-s174-flow-text">Creates a compact filter for each block (created once, applies to all clients). The filter is ~10-20 KB per block.</div></div>
+                <div class="b17-s174-flow-arrow">↕</div>
+                <div class="b17-s174-flow-step s174-client"><div class="b17-s174-flow-who">Client ←</div><div class="b17-s174-flow-text">Downloads the filter and checks for itself whether there’s relevant data. The node doesn’t know what the client is looking for.</div></div>
+                <div class="b17-s174-flow-arrow">↕</div>
+                <div class="b17-s174-flow-step s174-good"><div class="b17-s174-flow-who">Client →</div><div class="b17-s174-flow-text">Only requests the full block if the filter shows there’s a relevant transaction. The node only knows which block was requested.</div></div>
+              </div>
+            </div>
+
+            <div class="b17-s174-privacy-wrap">
+              <div class="b17-s174-privacy s174-bad">
+                <div class="b17-s174-privacy-label">BIP 37 — The node knows:</div>
+                <div class="b17-s174-privacy-item"><span class="b17-s174-privacy-icon">❌</span>The addresses the client owns</div>
+                <div class="b17-s174-privacy-item"><span class="b17-s174-privacy-icon">❌</span>How many addresses are owned</div>
+                <div class="b17-s174-privacy-item"><span class="b17-s174-privacy-icon">❌</span>Which transactions are relevant</div>
+                <div class="b17-s174-privacy-item"><span class="b17-s174-privacy-icon">❌</span>The client’s financial activity pattern</div>
+              </div>
+              <div class="b17-s174-privacy s174-good">
+                <div class="b17-s174-privacy-label">BIP 157/158 — The node knows:</div>
+                <div class="b17-s174-privacy-item"><span class="b17-s174-privacy-icon">✅</span>Which block the client requested</div>
+                <div class="b17-s174-privacy-item"><span class="b17-s174-privacy-icon">✅</span>The client’s IP address (can be solved with Tor)</div>
+                <div class="b17-s174-privacy-item"><span class="b17-s174-privacy-icon">🔒</span>The addresses owned? Doesn’t know</div>
+                <div class="b17-s174-privacy-item"><span class="b17-s174-privacy-icon">🔒</span>The relevant transactions? Doesn’t know</div>
+              </div>
+            </div>
+
+            <div class="b17-s174-bw-label">Bandwidth trade-off — for a wallet with 5 active addresses:</div>
+            <div class="b17-s174-bw-rows">
+              <div class="b17-s174-bw-row"><div class="b17-s174-bw-name">BIP 37 (relevant tx only)</div><div class="b17-s174-bw-track"><div class="b17-s174-bw-bar" style="width:8%;background:#0F6E56;"><span class="b17-s174-bw-txt">~5 MB/month</span></div></div><div class="b17-s174-bw-val">~5 MB</div></div>
+              <div class="b17-s174-bw-row"><div class="b17-s174-bw-name">BIP 157/158 (all filters)</div><div class="b17-s174-bw-track"><div class="b17-s174-bw-bar" style="width:100%;background:#534AB7;"><span class="b17-s174-bw-txt">~500 MB - 2 GB total</span></div></div><div class="b17-s174-bw-val">~500 MB+</div></div>
+            </div>
+
+            <div class="b17-s174-note">BIP 157/158 needs more bandwidth, but the privacy gained is far better. This is a deliberate trade-off: trade bandwidth for privacy.</div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b17-s174-pane" id="b17-s174-p2">
+            <div class="b17-s174-hint">A compact block filter uses a Golomb-Coded Set (GCS). For each block, the node creates a filter containing all the output scriptPubKeys in the block. The client checks for itself whether their address is in the filter.</div>
+
+            <div class="b17-s174-gcs-label">Simulating block #870,142 — transaction outputs in the block:</div>
+            <div class="b17-s174-gcs-block">
+              <div class="b17-s174-gcs-block-label">ScriptPubKeys (recipient addresses) in the block:</div>
+              <div class="b17-s174-gcs-outputs">
+                <div class="b17-s174-gcs-output">bc1q...alice</div>
+                <div class="b17-s174-gcs-output">bc1q...bob</div>
+                <div class="b17-s174-gcs-output">3J98t...carol</div>
+                <div class="b17-s174-gcs-output">bc1p...dave</div>
+                <div class="b17-s174-gcs-output">1BvB...miner</div>
+                <div class="b17-s174-gcs-output">bc1q...exchange</div>
+                <div class="b17-s174-gcs-output">3Kzh...pool</div>
+              </div>
+              <div class="b17-s174-gcs-arrow">↓ compressed into a GCS filter</div>
+              <div class="b17-s174-gcs-filter">
+                <div class="b17-s174-gcs-filter-label">Compact Block Filter (GCS):</div>
+                <div class="b17-s174-gcs-filter-val">01a4f8...c3d2e1...9b7f4a...2e8c1d...f6a3b9...7d4e2f</div>
+                <div class="b17-s174-gcs-filter-size">Size: ~14 KB (vs ~1.5 MB full block) — saves 99%</div>
+              </div>
+            </div>
+
+            <div class="b17-s174-gcs-check-label">The SPV client checks: is this address in the filter for block #870,142?</div>
+            <div class="b17-s174-gcs-btns" id="b17-s174-gcs-btns"></div>
+            <div class="b17-s174-gcs-result s174-gcs-no" id="b17-s174-gcs-result">Click an address above to check whether it’s in this block’s filter.</div>
+
+            <div class="b17-s174-gcs-note">The node creates a filter ONCE for each block and distributes it to all clients. The client checks for itself — the node never knows which address is being searched. If the filter shows "might be present," only then does the client request the full block.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-17-3" data-sb="sb-17-3">
+            ← 17.3 — Bloom Filters
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-17-5" data-sb="sb-17-5">
+            17.5 — SPV Trade-off →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 17.4 -->
+
+      <!-- ==============================
+           SECTION 17.5 · Trade-off SPV vs Full Node
+      ============================== -->
+      <div class="p-section" id="section-17-5">
+        <div class="p-eyebrow">Chapter 17 · 17.5</div>
+        <div class="p-heading">SPV can be deceived in certain scenarios — but how realistic and how expensive?</div>
+        <div class="p-title">SPV vs Full Node Trade-off — How Big Is the Risk That SPV Can Be Deceived?</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>SPV doesn’t verify all consensus rules. But how big is the real risk? This is a question often answered wrong in two directions: some say SPV is as safe as a full node, others say SPV can’t be trusted at all. Both are wrong.</p>
+
+          <p><strong>What can an attacker do to an SPV client?</strong></p>
+          <p>The most realistic attack scenario is an eclipse attack: the attacker isolates the SPV client from the honest network and only connects it to nodes owned by the attacker. From this position, the attacker can hide incoming transactions or show a different chain. For a double spend, the attacker needs an eclipse attack AND significant hashrate to produce an alternative chain, which is very expensive and rare.</p>
+          <p><strong>What an attacker CANNOT do</strong></p>
+          <p>Without controlling the majority of the network’s hashrate, an attacker can’t create a transaction that spends bitcoin they don’t own because it needs a private key, create bitcoin out of nothing because it violates consensus that any full node can detect, or convince an SPV client to accept a block without valid proof-of-work because SPV still verifies the PoW header.</p>
+
+          <p><strong>Confirmations as mitigation</strong></p>
+          <p>The more confirmations you wait for, the more expensive it is for an attacker to carry out an attack. For everyday small-value transactions, 1-3 confirmations is already plenty. For large values, 6+ confirmations provide far stronger security even for SPV.</p>
+
+          <p><strong>Practical conclusion</strong></p>
+          <p>For 99% of everyday Bitcoin use by individuals, buying coffee, receiving a salary, sending to a friend, SPV provides more than enough security. A full node remains ideal for receiving large-value payments, running a business that accepts Bitcoin, and anyone who wants full self-verification without any trust assumptions.</p>
+
+          <div class="p-callout">
+            <p>Bitcoin’s security isn’t binary between "safe" and "unsafe," but rather a spectrum of trade-offs between convenience, resources, and the level of verification. SPV is a valid point on that spectrum, not an embarrassing compromise. What matters is understanding where that point is and choosing deliberately.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Attack Scenario Visualizer</div>
+          <div class="b17-s175-desc">
+            Choose an attack scenario to see what an attacker can and can’t do to an SPV client, how hard the attack is, and how to mitigate it. Plus a confirmation slider to see its impact on security.
+          </div>
+
+          <div class="b17-s175-scenarios" id="b17-s175-scenarios">
+            <div class="b17-s175-scenario s175-act s175-red" data-id="eclipse">
+              <div class="b17-s175-scenario-icon">🌑</div>
+              <div class="b17-s175-scenario-body">
+                <div class="b17-s175-scenario-title">Eclipse Attack — Isolate SPV from the Honest Network</div>
+                <div class="b17-s175-scenario-desc">The attacker isolates the SPV client so it only connects to nodes owned by the attacker</div>
+              </div>
+            </div>
+            <div class="b17-s175-scenario s175-amber" data-id="doublespend">
+              <div class="b17-s175-scenario-icon">💸</div>
+              <div class="b17-s175-scenario-body">
+                <div class="b17-s175-scenario-title">Double Spend Attack — Pay Twice with One Bitcoin</div>
+                <div class="b17-s175-scenario-desc">The attacker tries to send bitcoin to a merchant, then reverse the transaction</div>
+              </div>
+            </div>
+            <div class="b17-s175-scenario s175-green" data-id="invalid">
+              <div class="b17-s175-scenario-icon">🚫</div>
+              <div class="b17-s175-scenario-body">
+                <div class="b17-s175-scenario-title">Invalid Block — Trying to Deceive SPV with a Fake Block</div>
+                <div class="b17-s175-scenario-desc">The attacker tries to make SPV accept a block that violates consensus rules</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b17-s175-detail" id="b17-s175-detail"></div>
+
+          <div class="b17-s175-conf-wrap">
+            <div class="b17-s175-conf-label">Confirmations as mitigation — how many confirmations do you wait for?</div>
+            <div class="b17-s175-conf-row">
+              <span class="b17-s175-conf-mm">0</span>
+              <input type="range" class="b17-s175-conf-slider" id="b17-s175-conf-sl" min="0" max="12" value="1" step="1">
+              <span class="b17-s175-conf-mm">12</span>
+              <div class="b17-s175-conf-val" id="b17-s175-conf-val">1 confirmation</div>
+            </div>
+            <div class="b17-s175-conf-result s175-conf-ok" id="b17-s175-conf-result">1 confirmation: enough for small everyday transactions (buying coffee, top-ups). The attack cost is still relatively low, but for small amounts it’s not worth it for an attacker.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-17-4" data-sb="sb-17-4">
+            ← 17.4 — BIP 157/158
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-17-6" data-sb="sb-17-6">
+            17.6 — Light Clients in the Real World →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 17.5 -->
+
+      <!-- ==============================
+           SECTION 17.6 · Light Client di Dunia Nyata
+      ============================== -->
+      <div class="p-section" id="section-17-6">
+        <div class="p-eyebrow">Chapter 17 · 17.6</div>
+        <div class="p-heading">SPV in the whitepaper and SPV in the app store are two different things</div>
+        <div class="p-title">Light Clients in the Real World — Electrum, Neutrino, and Modern Wallets</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Everything we learned in Chapter 17 about SPV, merkle proofs, bloom filters, and compact block filters isn’t a theoretical concept, but rather all of it is implemented in Bitcoin wallets used by millions of people every day. But real-world implementations are often more complex and varied than the pure SPV model Satoshi described in the whitepaper.</p>
+
+          <p><strong>Electrum: SPV Hybrid with a Server</strong></p>
+          <p>Electrum is one of the most popular Bitcoin wallets since 2011. Electrum doesn’t implement pure SPV, but rather connects to a network of Electrum servers that have already processed the blockchain and store the UTXO set. The Electrum client can query the server for balance, historical transactions, and UTXOs very quickly. If you run your own Electrum server on top of a full node, you get Electrum’s query speed with full-node-level privacy.</p>
+
+          <p><strong>Neutrino: True BIP 157/158</strong></p>
+          <p>Neutrino is a Bitcoin light client implementation in Go developed by Lightning Labs. It fully implements BIP 157/158 (compact block filters). Neutrino is used as the backend for several Lightning Network mobile wallets like Phoenix Wallet and Breez. To pay a Lightning invoice, those wallets use Neutrino to verify the channel state on the Bitcoin blockchain without downloading the entire blockchain.</p>
+
+          <p><strong>Ordinary "SPV" Mobile Wallets: Most Use a Server</strong></p>
+          <p>Many mobile wallets that claim "SPV" actually connect to a backend server controlled by that wallet’s developer. They don’t download the header chain or do any PoW verification at all, but rather just query the developer’s server API to get balance and transactions. This isn’t SPV, it’s custodial-lite: you hold the private key but verification is done by someone else.</p>
+
+          <p><strong>Choosing the right one</strong></p>
+          <p>There’s no single right answer for everyone. For 99% of everyday users with small amounts, an ordinary mobile wallet is already safe enough. For users who care about privacy and verification, Electrum with your own server or Neutrino is a far better choice. For large values or business needs, a full node remains the best choice.</p>
+
+          <div class="p-callout">
+            <p>What matters most is understanding the trust model of the wallet you use. "Self-custody" doesn’t always mean "trustless," because many self-custody wallets quietly require trust in a server operator or developer. Choose deliberately based on the value you store and the level of trust you need.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Wallet Explorer — Comparing Light Clients in the Real World</div>
+          <div class="b17-s176-desc">
+            Click a wallet or implementation to see its verification model, privacy, trust model, who it’s suitable for, and its main trade-off.
+          </div>
+
+          <div class="b17-s176-wallets" id="b17-s176-wallets"></div>
+          <div class="b17-s176-detail" id="b17-s176-detail"></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-17-5" data-sb="sb-17-5">
+            ← 17.5 — SPV Trade-off
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 17.6 -->
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 20 · BAB 17 -->
+
+

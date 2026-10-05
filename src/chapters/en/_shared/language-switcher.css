@@ -1,0 +1,20 @@
+/* ---- toggle besar di welcome page (tampilan asli, tidak diubah) ---- */
+#bs-lang-toggle{display:inline-flex;align-self:center;border:1px solid #7C3AED;background:rgba(124,58,237,0.06);margin:0 auto 1.6rem;position:relative;z-index:11;font-family:'Sora',sans-serif;}
+#bs-lang-toggle button{appearance:none;-webkit-appearance:none;border:0;background:transparent;color:#7C3AED;font-family:'Sora',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.18em;padding:6px 14px;cursor:pointer;line-height:1;transition:background 0.15s,color 0.15s;}
+#bs-lang-toggle button.bs-active{background:#7C3AED;color:#FAFAF8;cursor:default;}
+#bs-lang-toggle button:not(.bs-active):hover{background:rgba(124,58,237,0.16);}
+@media (max-width:600px){#bs-lang-toggle button{padding:5px 11px;font-size:10px;letter-spacing:0.12em;}}
+
+/* ---- topbar dibuat sticky supaya switcher (dan tombol kembali) tetap
+        terjangkau saat halaman di-scroll. .apx-topbar memang sudah sticky. ---- */
+.topbar{position:sticky;top:0;z-index:20;background:#FAFAF8;}
+.apx-topbar{z-index:20;}
+
+/* ---- switch kecil di topbar setiap halaman ---- */
+.bs-tb-right{display:flex;align-items:center;gap:14px;margin-left:auto;flex-shrink:0;}
+.bs-lang-switch{display:inline-flex;flex-shrink:0;border:0.5px solid rgba(124,58,237,0.35);background:rgba(124,58,237,0.05);line-height:0;}
+.bs-lang-switch button{appearance:none;-webkit-appearance:none;border:0;background:transparent;color:#A78BFA;font-family:'Courier Prime',monospace;font-size:9px;font-weight:700;letter-spacing:0.16em;padding:5px 9px;cursor:pointer;line-height:1;transition:background 0.15s,color 0.15s;}
+.bs-lang-switch button.bs-active{background:#7C3AED;color:#FAFAF8;cursor:default;}
+.bs-lang-switch button:not(.bs-active):hover{color:#7C3AED;background:rgba(124,58,237,0.14);}
+@media (max-width:640px){.bs-tb-right{gap:0;}.bs-lang-switch button{padding:5px 8px;letter-spacing:0.1em;}}
+

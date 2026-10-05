@@ -1,0 +1,584 @@
+<!-- ============================================================
+     PAGE 14 · BAB 11 · Mining: Hardware, Pool, dan Ekonomi
+     |-- 11.1 · Apa itu Mining dan Mengapa Ada? [DONE]
+     |-- 11.2 · [LOCKED]
+     |-- 11.3 · [LOCKED]
+     |-- 11.4 · [LOCKED]
+     |-- 11.5 · [LOCKED]
+     |-- 11.6 · [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab11">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b11">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b11">← Chapter List</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab11">
+      <div class="sidebar-heading">Chapter 11</div>
+      <div class="sidebar-title">Mining: Hardware, Pools, and Economics</div>
+
+      <div class="sidebar-item active" id="sb-11-1">
+        <div class="sb-num">11.1</div>
+        <div class="sb-label">From Protocol to Industry</div>
+      </div>
+      <div class="sidebar-item" id="sb-11-2">
+        <div class="sb-num">11.2</div>
+        <div class="sb-label">Evolution of Mining Hardware</div>
+      </div>
+      <div class="sidebar-item" id="sb-11-3">
+        <div class="sb-num">11.3</div>
+        <div class="sb-label">Mining Pools</div>
+      </div>
+      <div class="sidebar-item" id="sb-11-4">
+        <div class="sb-num">11.4</div>
+        <div class="sb-label">Mining Economics</div>
+      </div>
+      <div class="sidebar-item" id="sb-11-5">
+        <div class="sb-num">11.5</div>
+        <div class="sb-label">Mining and Energy</div>
+      </div>
+      <div class="sidebar-item" id="sb-11-6">
+        <div class="sb-num">11.6</div>
+        <div class="sb-label">The Future of Mining and Decentralization</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab11-content">
+
+      <!-- ==============================
+           SECTION 11.1 · Dari Protokol ke Industri
+      ============================== -->
+      <div class="p-section active" id="section-11-1">
+        <div class="p-eyebrow">Chapter 11 · 11.1</div>
+        <div class="p-heading">In Chapter 5 we learned why mining exists — now we see how the industry works</div>
+        <div class="p-title">From Protocol to Industry</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>In Chapter 5 we already understood why mining exists: Proof of Work is the consensus mechanism that allows Bitcoin to reach agreement without a central authority. Every valid block represents real work that has been done, and that real work requires real energy.</p>
+
+          <p>In this chapter we won’t repeat that mechanism. What we’ll discuss is how mining operates as a real industry: what kind of hardware is used, how miners collaborate in pools, how the economics work, and what the implications are for energy and decentralization.</p>
+
+          <p><strong>Mining in 2009 vs now</strong></p>
+          <p>When Satoshi Nakamoto mined the first block in January 2009, he used an ordinary laptop CPU. There was no competition, no special hardware, no mining companies. One person, one computer, and a newly born protocol.</p>
+
+          <p>Today, Bitcoin mining is a global industry worth billions of dollars. Public mining companies are listed on stock exchanges. Warehouse-sized mining facilities operate in countries with cheap electricity. The hardware used is the ASIC (Application-Specific Integrated Circuit), a chip designed from scratch for one purpose only: to compute SHA-256 hashes as fast as possible. This chip can’t be used for anything else.</p>
+
+          <p><strong>Why did this industrialization happen?</strong></p>
+          <p>The answer is simple: economic incentives. As long as the block reward is valuable enough, there’s strong motivation to invest in more efficient hardware. More efficient miners get a larger share of the reward at a lower cost. This competition drives extraordinarily fast hardware innovation.</p>
+
+          <p>But this industrialization also brings consequences worth thinking about. Mining that anyone could once do at home now requires large capital and access to cheap electricity at industrial scale. This creates centralization pressure that conflicts with Bitcoin’s original spirit as a system everyone can participate in.</p>
+
+          <div class="p-callout">
+            <p>Bitcoin mining isn’t just "computers solving a puzzle." It’s an industry with a global supply chain, a complex hardware market, and unique economic dynamics. Understanding this industry helps us understand the resilience and vulnerabilities of the Bitcoin network in the real world.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualization — Mining 2009 vs now</div>
+          <div class="b11-s111-desc">
+            How dramatically the mining industry has changed in 15 years: from a laptop in the bedroom to an industrial facility with thousands of ASICs.
+          </div>
+
+          <div class="b11-s111-grid">
+            <div class="b11-s111-col">
+              <div class="b11-s111-col-head s111-then">
+                <div class="b11-s111-col-head-title">Mining 2009</div>
+                <div class="b11-s111-col-head-sub">The Satoshi era</div>
+              </div>
+              <div class="b11-s111-stats">
+                <div class="b11-s111-stat"><div class="b11-s111-stat-label">Hardware</div><div class="b11-s111-stat-val s111-then-val">Ordinary laptop CPU</div><div class="b11-s111-stat-sub">Can be used for other things</div></div>
+                <div class="b11-s111-stat"><div class="b11-s111-stat-label">Typical hash rate</div><div class="b11-s111-stat-val s111-then-val">~5 MH/s</div><div class="b11-s111-stat-sub">5 million attempts per second</div></div>
+                <div class="b11-s111-stat"><div class="b11-s111-stat-label">Power consumption</div><div class="b11-s111-stat-val s111-then-val">~65 Watts</div><div class="b11-s111-stat-sub">Standard laptop power</div></div>
+                <div class="b11-s111-stat"><div class="b11-s111-stat-label">Upfront capital</div><div class="b11-s111-stat-val s111-then-val">$0 extra</div><div class="b11-s111-stat-sub">Use a computer you already have</div></div>
+                <div class="b11-s111-stat"><div class="b11-s111-stat-label">Who could do it?</div><div class="b11-s111-stat-val s111-then-val">Anyone</div><div class="b11-s111-stat-sub">Satoshi, Hal Finney, and anyone who installed the software</div></div>
+              </div>
+              <div class="b11-s111-caps">
+                <div class="b11-s111-caps-label">Characteristics:</div>
+                <div class="b11-s111-cap"><span class="b11-s111-cap-icon">✓</span>No special capital needed</div>
+                <div class="b11-s111-cap"><span class="b11-s111-cap-icon">✓</span>Can be done from home</div>
+                <div class="b11-s111-cap"><span class="b11-s111-cap-icon">✓</span>Versatile hardware</div>
+                <div class="b11-s111-cap"><span class="b11-s111-cap-icon">~</span>Low hash rate, but low competition too</div>
+              </div>
+            </div>
+
+            <div class="b11-s111-col">
+              <div class="b11-s111-col-head s111-now">
+                <div class="b11-s111-col-head-title">Mining 2024</div>
+                <div class="b11-s111-col-head-sub">The industrial era</div>
+              </div>
+              <div class="b11-s111-stats">
+                <div class="b11-s111-stat"><div class="b11-s111-stat-label">Hardware</div><div class="b11-s111-stat-val s111-now-val">ASIC (Antminer S21)</div><div class="b11-s111-stat-sub">SHA-256-specific chip, can’t be used for anything else</div></div>
+                <div class="b11-s111-stat"><div class="b11-s111-stat-label">Typical hash rate</div><div class="b11-s111-stat-val s111-now-val">200 TH/s</div><div class="b11-s111-stat-sub">200 trillion attempts per second</div></div>
+                <div class="b11-s111-stat"><div class="b11-s111-stat-label">Power consumption</div><div class="b11-s111-stat-val s111-now-val">~3,500 Watts</div><div class="b11-s111-stat-sub">54x more, but far more efficient per hash</div></div>
+                <div class="b11-s111-stat"><div class="b11-s111-stat-label">Upfront capital</div><div class="b11-s111-stat-val s111-now-val">$3,000-5,000+</div><div class="b11-s111-stat-sub">Not including electrical infrastructure and cooling</div></div>
+                <div class="b11-s111-stat"><div class="b11-s111-stat-label">Who is competitive?</div><div class="b11-s111-stat-val s111-now-val">Large companies</div><div class="b11-s111-stat-sub">Industrial facilities with thousands of ASICs and cheap electricity</div></div>
+              </div>
+              <div class="b11-s111-caps">
+                <div class="b11-s111-caps-label">Characteristics:</div>
+                <div class="b11-s111-cap"><span class="b11-s111-cap-icon">✓</span>Very high hash rate, the network is very secure</div>
+                <div class="b11-s111-cap"><span class="b11-s111-cap-icon">✓</span>Far better energy efficiency per hash</div>
+                <div class="b11-s111-cap"><span class="b11-s111-cap-icon">✗</span>Needs large capital and cheap electricity</div>
+                <div class="b11-s111-cap"><span class="b11-s111-cap-icon">✗</span>Dominated by institutional players</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b11-s111-compare">
+            <div class="b11-s111-compare-head">Hash rate comparison (logarithmic scale)</div>
+            <div class="b11-s111-compare-body">
+              <div class="b11-s111-bar-row"><div class="b11-s111-bar-label">CPU 2009</div><div class="b11-s111-bar-wrap"><div class="b11-s111-bar-fill" style="width:4%;background:#52524C;">5 MH/s</div></div><div class="b11-s111-bar-note">5 MH/s</div></div>
+              <div class="b11-s111-bar-row"><div class="b11-s111-bar-label">ASIC 2024</div><div class="b11-s111-bar-wrap"><div class="b11-s111-bar-fill" style="width:100%;background:#534AB7;">200 TH/s</div></div><div class="b11-s111-bar-note">200 TH/s</div></div>
+              <div class="b11-s111-factor">A modern ASIC is <b>40 billion times</b> faster than a 2009 CPU — equivalent to the difference between running on foot and the speed of light.</div>
+            </div>
+          </div>
+
+          <div class="b11-s111-note">This industrialization is a natural consequence of Bitcoin’s economic incentives. But it also raises an important question: if mining can only be done by large companies, how "decentralized" is the Bitcoin network really? We’ll keep discussing this question throughout this chapter.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-11-2" data-sb="sb-11-2">
+            11.2 — Evolution of Mining Hardware →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 11.1 -->
+
+      <!-- ==============================
+           SECTION 11.2 · Evolusi Hardware Mining
+      ============================== -->
+      <div class="p-section" id="section-11-2">
+        <div class="p-eyebrow">Chapter 11 · 11.2</div>
+        <div class="p-heading">From laptop to factory — 15 years of the most dramatic hardware evolution in computing history</div>
+        <div class="p-title">Evolution of Mining Hardware</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>The history of Bitcoin mining hardware is one of the most dramatic technology evolution stories in computing history. In less than 15 years, mining efficiency increased trillions of times over.</p>
+
+          <p><strong>The CPU era (2009-2010)</strong></p>
+          <p>In Bitcoin’s early days, everyone mined with an ordinary laptop or desktop CPU. Satoshi Nakamoto himself mined with a CPU. The hash rate of the whole network at the time was so low that anyone could mine a block with a regular computer. There was no meaningful competition and a block could be found in minutes with a standard laptop.</p>
+
+          <p><strong>The GPU era (2010-2013)</strong></p>
+          <p>Someone realized that the GPU (Graphics Processing Unit), the chip usually used for rendering game graphics, was far more efficient at computing SHA-256 than a CPU. A GPU can perform thousands of parallel operations at once. The hash rate jumped drastically and CPU mining was practically no longer profitable.</p>
+
+          <p><strong>The FPGA era (2011-2013)</strong></p>
+          <p>An FPGA (Field-Programmable Gate Array) is a chip that can be reprogrammed for specific tasks. More efficient than a GPU for SHA-256, but still reprogrammable for other purposes. This era was short because it was soon replaced by the ASIC.</p>
+
+          <p><strong>The ASIC era (2013-present)</strong></p>
+          <p>The ASIC (Application-Specific Integrated Circuit) is a chip designed from scratch for one purpose only: to compute SHA-256 hashes as fast and efficiently as possible. It can’t be used for anything else at all. A modern ASIC like the Antminer S21 can reach more than 200 TH/s (terahashes per second) with an energy consumption of around 3,500 watts. This means hundreds of trillions of hash attempts every second.</p>
+
+          <p><strong>The ASIC’s impact on decentralization</strong></p>
+          <p>ASICs create a paradox: on one hand, ASICs make the network far more secure because the very high hash rate makes a 51% attack extremely expensive. On the other hand, ASICs make mining increasingly concentrated among players with large capital to buy hardware and pay for electricity at industrial scale. Mining that anyone could once do at home is now dominated by large mining companies with dedicated facilities.</p>
+
+          <div class="p-callout">
+            <p>The evolution of mining hardware reflects a simple economic law: as long as there’s a large enough financial incentive, innovation will keep pushing the limits of efficiency. What’s interesting is how this inadvertently changed who can participate in the Bitcoin mining process.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Timeline — Evolution of mining hardware</div>
+          <div class="b11-s112-desc">
+            Click each era to see the specifications, energy efficiency, and historical context. The logarithmic chart below shows how dramatic the difference between eras is.
+          </div>
+
+          <div class="b11-s112-timeline" id="b11-s112-timeline">
+            <div class="b11-s112-era active" data-era="0"><div class="b11-s112-era-dot">💻</div><div class="b11-s112-era-label">CPU</div><div class="b11-s112-era-year">2009-2010</div></div>
+            <div class="b11-s112-era" data-era="1"><div class="b11-s112-era-dot">🎮</div><div class="b11-s112-era-label">GPU</div><div class="b11-s112-era-year">2010-2013</div></div>
+            <div class="b11-s112-era" data-era="2"><div class="b11-s112-era-dot">🔧</div><div class="b11-s112-era-label">FPGA</div><div class="b11-s112-era-year">2011-2013</div></div>
+            <div class="b11-s112-era" data-era="3"><div class="b11-s112-era-dot">⚡</div><div class="b11-s112-era-label">ASIC</div><div class="b11-s112-era-year">2013-now</div></div>
+          </div>
+
+          <div class="b11-s112-detail" id="b11-s112-detail"></div>
+
+          <div class="b11-s112-chart">
+            <div class="b11-s112-chart-label">Hash rate comparison (logarithmic scale)</div>
+            <div class="b11-s112-chart-sub">Each era differs by billions of times — a log scale is used so the differences are visible</div>
+            <div class="b11-s112-bars">
+              <div class="b11-s112-bar-row"><div class="b11-s112-bar-era">CPU</div><div class="b11-s112-bar-wrap"><div class="b11-s112-bar-fill" style="width:8%;background:#52524C;">~10 MH/s</div></div><div class="b11-s112-bar-info">~10 MH/s</div></div>
+              <div class="b11-s112-bar-row"><div class="b11-s112-bar-era">GPU</div><div class="b11-s112-bar-wrap"><div class="b11-s112-bar-fill" style="width:30%;background:#854F0B;">~500 MH/s</div></div><div class="b11-s112-bar-info">~500 MH/s</div></div>
+              <div class="b11-s112-bar-row"><div class="b11-s112-bar-era">FPGA</div><div class="b11-s112-bar-wrap"><div class="b11-s112-bar-fill" style="width:50%;background:#534AB7;">~1 GH/s</div></div><div class="b11-s112-bar-info">~1 GH/s</div></div>
+              <div class="b11-s112-bar-row"><div class="b11-s112-bar-era">ASIC</div><div class="b11-s112-bar-wrap"><div class="b11-s112-bar-fill" style="width:100%;background:#0F6E56;">200+ TH/s</div></div><div class="b11-s112-bar-info">200+ TH/s</div></div>
+            </div>
+          </div>
+
+          <div class="b11-s112-note">Real scale: a modern ASIC is about 20 million times faster than a first-generation GPU, and more than 20 billion times faster than an early-era CPU.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-11-1" data-sb="sb-11-1">
+            ← 11.1 — What is Mining and Why Does it Exist?
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-11-3" data-sb="sb-11-3">
+            11.3 — Mining Pools →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 11.2 -->
+
+      <!-- ==============================
+           SECTION 11.3 · Mining Pool
+      ============================== -->
+      <div class="p-section" id="section-11-3">
+        <div class="p-eyebrow">Chapter 11 · 11.3</div>
+        <div class="p-heading">Rather than struggling alone, join up and share the rewards</div>
+        <div class="p-title">Mining Pools</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>When mining became very competitive, individual miners faced a problem similar to a gambler’s: they might never find a block even after working hard for months. The probability of finding a block for one small miner is very low, and their income becomes very uncertain. The mining pool emerged as a solution.</p>
+
+          <p><strong>What is a mining pool?</strong></p>
+          <p>A mining pool is a group of miners who combine their hash rate and share the rewards proportionally. Instead of each one struggling alone to find a block, they work together. When the pool finds a block, the reward is split among all members based on each one’s hash rate contribution. The analogy is like a lottery ticket: instead of one person buying one ticket with a very small chance of winning, a hundred people chip in to buy a hundred tickets and share the proceeds. The chance of winning is far higher, and although the prize is split, income becomes far more consistent.</p>
+
+          <p><strong>How does a pool work?</strong></p>
+          <p>The pool gives work to its member miners in the form of tasks that are easier than the actual network target. These tasks are called shares. Miners submit the shares they manage to find to the pool as proof that they really worked. Occasionally, a share a miner finds turns out to also meet the actual network target, meaning a new block is found and the pool gets the reward.</p>
+
+          <p><strong>Payment methods</strong></p>
+          <p>There are several ways pools split rewards. PPS (Pay Per Share): miners are paid for every valid share, regardless of whether the pool finds a block or not, and the pool bears the variance risk. PPLNS (Pay Per Last N Shares): payment is based on the shares contributed in the last period before a block is found, more volatile but advantageous when the pool is lucky. FPPS (Full Pay Per Share): like PPS but also accounts for transaction fees in the split.</p>
+
+          <p><strong>The pool’s impact on decentralization</strong></p>
+          <p>Mining pools create centralization concerns: a few large pools control a significant portion of the network’s total hash rate. But it’s worth noting that individual miners in a pool are still free to switch pools at any time. If a pool acts dishonestly, miners will leave it and move to another pool or mine on their own. Stratum V2 is the newest protocol that gives miners more control, including the ability to choose for themselves which transactions go into a block.</p>
+
+          <div class="p-callout">
+            <p>Mining pools are an innovation that makes mining more accessible to small miners, but at the same time create centralization pressure. This is a trade-off that’s continually debated in the Bitcoin community. Stratum V2 is one effort to preserve decentralization while still enabling efficient collaboration.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulation — Solo mining vs Pool mining</div>
+          <div class="b11-s113-desc">
+            You have 1% of the network hash rate. Simulate 20 blocks and see the income difference between solo mining and joining a pool.
+          </div>
+
+          <div class="b11-s113-top">
+            <button class="b11-s113-btn-primary" id="b11-s113-run">Simulate 20 Blocks</button>
+            <button class="b11-s113-btn-sec" id="b11-s113-rst">Reset</button>
+          </div>
+
+          <div class="b11-s113-grid">
+            <div class="b11-s113-col">
+              <div class="b11-s113-col-head s113-solo">⛏ Solo Mining</div>
+              <div class="b11-s113-chart-wrap">
+                <div class="b11-s113-chart-label">Income per block (very erratic)</div>
+                <canvas class="b11-s113-cv" id="b11-s113-cv-solo" height="100"></canvas>
+              </div>
+              <div class="b11-s113-stats">
+                <div class="b11-s113-stat"><div class="b11-s113-stat-label">Blocks found</div><div class="b11-s113-stat-val s113-warn" id="b11-s113-solo-blocks">0 / 20</div></div>
+                <div class="b11-s113-stat"><div class="b11-s113-stat-label">Total income</div><div class="b11-s113-stat-val" id="b11-s113-solo-income">0 BTC</div></div>
+                <div class="b11-s113-stat"><div class="b11-s113-stat-label">Variance</div><div class="b11-s113-stat-val s113-bad">Very high</div></div>
+              </div>
+            </div>
+            <div class="b11-s113-col">
+              <div class="b11-s113-col-head s113-pool">🤝 Pool Mining</div>
+              <div class="b11-s113-chart-wrap">
+                <div class="b11-s113-chart-label">Income per block (consistent)</div>
+                <canvas class="b11-s113-cv" id="b11-s113-cv-pool" height="100"></canvas>
+              </div>
+              <div class="b11-s113-stats">
+                <div class="b11-s113-stat"><div class="b11-s113-stat-label">Rewards received</div><div class="b11-s113-stat-val s113-good" id="b11-s113-pool-rewards">0 / 20</div></div>
+                <div class="b11-s113-stat"><div class="b11-s113-stat-label">Total income</div><div class="b11-s113-stat-val" id="b11-s113-pool-income">0 BTC</div></div>
+                <div class="b11-s113-stat"><div class="b11-s113-stat-label">Variance</div><div class="b11-s113-stat-val s113-good">Low</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="font-size:11px;font-weight:500;color:#1A1A18;font-family:'Sora',sans-serif;margin-bottom:6px;">Shares submitted to the pool (purple = yours, green = the share that became a block)</div>
+          <div class="b11-s113-shares" id="b11-s113-shares"></div>
+          <div class="b11-s113-legend">
+            <div class="b11-s113-leg"><div class="b11-s113-leg-box" style="background:rgba(83,74,183,0.25);"></div>Share from another miner</div>
+            <div class="b11-s113-leg"><div class="b11-s113-leg-box" style="background:#534AB7;"></div>Your share (1% of the pool)</div>
+            <div class="b11-s113-leg"><div class="b11-s113-leg-box" style="background:#0F6E56;"></div>The share that became a block</div>
+          </div>
+
+          <div class="b11-s113-note s113-idle" id="b11-s113-note">You have 1% of the network hash rate. As a solo miner, the probability of finding a block is very low. Joining a pool ensures a small but consistent income every block.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-11-2" data-sb="sb-11-2">
+            ← 11.2 — Evolution of Mining Hardware
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-11-4" data-sb="sb-11-4">
+            11.4 — Mining Economics →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 11.3 -->
+
+      <!-- ==============================
+           SECTION 11.4 · Ekonomi Mining
+      ============================== -->
+      <div class="p-section" id="section-11-4">
+        <div class="p-eyebrow">Chapter 11 · 11.4</div>
+        <div class="p-heading">Mining is a business — revenue must exceed costs</div>
+        <div class="p-title">Mining Economics</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Bitcoin mining is a business. Like any other business, its success is determined by one simple equation: revenue must exceed costs. But mining economics is far more complex than an ordinary business because some of its key variables keep changing dynamically.</p>
+
+          <p><strong>Sources of miner revenue</strong></p>
+          <p>Miners get two sources of revenue. First, the block reward: currently 3.125 BTC per block, and it will keep decreasing with every halving. Second, transaction fees: all the fees from transactions included in the block. When the mempool is busy, fees can become a significant portion of total revenue. A miner’s total revenue is calculated in USD or local currency, so the BTC price strongly determines profitability.</p>
+
+          <p><strong>Operating costs</strong></p>
+          <p>The biggest cost in mining is electricity. A modern ASIC needs thousands of watts to operate, and has to run 24 hours a day, 7 days a week. The electricity cost per kilowatt-hour (kWh) is the factor that most distinguishes profitable miners from unprofitable ones. Miners with access to cheap electricity (0.03-0.05 USD/kWh) can stay profitable even when the BTC price is low. Miners with expensive electricity (0.10-0.15 USD/kWh) can lose money even when the BTC price is high. Other costs include the ASIC hardware that needs replacing every few years, cooling infrastructure, facility rent, and labor.</p>
+
+          <p><strong>Hash rate and difficulty</strong></p>
+          <p>As more miners join the network with new hardware, the total hash rate rises and the difficulty adjusts so block time stays at 10 minutes. This means every miner gets a smaller share of the reward. Mining economics is a zero-sum game in the short term: if other miners become more efficient, less efficient miners come under more pressure.</p>
+
+          <p><strong>Hashprice and break-even price</strong></p>
+          <p>Hashprice is a metric that calculates how much USD is generated per terahash per second per day. This lets miners compare profitability regardless of the size of their operation. Break-even price is the minimum BTC price for a mining operation not to lose money, depending on the electricity cost and the efficiency of the hardware used.</p>
+
+          <p><strong>Halving and its impact</strong></p>
+          <p>At every halving, the block reward is cut in half. If the BTC price doesn’t rise enough to offset it, inefficient miners will shut off their hardware. The hash rate can drop temporarily, the difficulty adjusts down, and the remaining miners become more profitable. The halving is one of the most tense moments in Bitcoin’s mining economic cycle.</p>
+
+          <div class="p-callout">
+            <p>Mining economics is a very dynamic and self-correcting system. High profitability attracts more miners, which raises the difficulty, which reduces profitability. Low profitability pushes miners out, which lowers the difficulty, which increases profitability for those remaining. This is a balance that keeps moving.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Calculator — Mining profitability</div>
+          <div class="b11-s114-desc">
+            Enter the BTC price, electricity cost, and hardware specifications to see the estimated daily profit, break-even price, and the sensitivity of profit to changes in the BTC price.
+          </div>
+
+          <div style="font-size:11px;font-weight:500;color:#1A1A18;font-family:'Sora',sans-serif;margin-bottom:6px;">Hardware presets:</div>
+          <div class="b11-s114-preset-row">
+            <button class="b11-s114-preset" data-hash="100" data-watt="3250">Antminer S19 (100 TH/s)</button>
+            <button class="b11-s114-preset active" data-hash="200" data-watt="3500">Antminer S21 (200 TH/s)</button>
+            <button class="b11-s114-preset" data-hash="335" data-watt="5000">Antminer S21 Pro (335 TH/s)</button>
+          </div>
+
+          <div class="b11-s114-inputs">
+            <div class="b11-s114-field"><div class="b11-s114-label">BTC price <span class="b11-s114-label-sub">in USD</span></div><input class="b11-s114-input" id="b11-s114-btc" type="number" value="65000" min="1000" max="500000" step="1000"></div>
+            <div class="b11-s114-field"><div class="b11-s114-label">Electricity cost <span class="b11-s114-label-sub">USD per kWh</span></div><input class="b11-s114-input" id="b11-s114-elec" type="number" value="0.06" min="0.01" max="0.30" step="0.01"></div>
+            <div class="b11-s114-field"><div class="b11-s114-label">Hash rate <span class="b11-s114-label-sub">TH/s</span></div><input class="b11-s114-input" id="b11-s114-hash" type="number" value="200" min="1" max="1000"></div>
+            <div class="b11-s114-field"><div class="b11-s114-label">Power consumption <span class="b11-s114-label-sub">watts</span></div><input class="b11-s114-input" id="b11-s114-watt" type="number" value="3500" min="100" max="20000"></div>
+          </div>
+
+          <div class="b11-s114-result">
+            <div class="b11-s114-result-head">
+              <div class="b11-s114-result-head-label">Daily profit (estimate)</div>
+              <div class="b11-s114-profit-val s114-profit" id="b11-s114-profit">+$0.00</div>
+            </div>
+            <div class="b11-s114-result-body">
+              <div class="b11-s114-row"><div class="b11-s114-row-label">Daily revenue (BTC)</div><div class="b11-s114-row-val" id="b11-s114-inc-btc">0.00000000 BTC</div></div>
+              <div class="b11-s114-row"><div class="b11-s114-row-label">Daily revenue (USD)</div><div class="b11-s114-row-val s114-green" id="b11-s114-inc-usd">$0.00</div></div>
+              <div class="b11-s114-row"><div class="b11-s114-row-label">Daily electricity cost</div><div class="b11-s114-row-val s114-red" id="b11-s114-elec-cost">$0.00</div></div>
+              <div class="b11-s114-row"><div class="b11-s114-row-label">Hardware efficiency</div><div class="b11-s114-row-val" id="b11-s114-eff">0 W/TH</div></div>
+              <div class="b11-s114-row"><div class="b11-s114-row-label">Break-even BTC price</div><div class="b11-s114-row-val s114-amber" id="b11-s114-breakeven">$0</div></div>
+              <div class="b11-s114-row"><div class="b11-s114-row-label">Hashprice</div><div class="b11-s114-row-val" id="b11-s114-hashprice">$0.00 / TH/day</div></div>
+              <div class="b11-s114-margin-wrap">
+                <div class="b11-s114-margin-label">Profit margin:</div>
+                <div class="b11-s114-margin-track"><div class="b11-s114-margin-fill" id="b11-s114-margin-fill" style="width:50%;background:#0F6E56;"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b11-s114-chart-wrap">
+            <div class="b11-s114-chart-label">Daily profit vs BTC price (red line = break-even):</div>
+            <canvas class="b11-s114-cv" id="b11-s114-cv" height="120"></canvas>
+          </div>
+
+          <div class="b11-s114-note s114-profit" id="b11-s114-note">Fill in the inputs above to see the estimated mining profitability.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-11-3" data-sb="sb-11-3">
+            ← 11.3 — Mining Pools
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-11-5" data-sb="sb-11-5">
+            11.5 — Mining and Energy →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 11.4 -->
+
+      <!-- ==============================
+           SECTION 11.5 · Mining dan Energi
+      ============================== -->
+      <div class="p-section" id="section-11-5">
+        <div class="p-eyebrow">Chapter 11 · 11.5</div>
+        <div class="p-heading">Large energy consumption — wasteful or meaningful?</div>
+        <div class="p-title">Mining and Energy</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>No topic in the Bitcoin ecosystem is more frequently debated than mining’s energy consumption. Criticism comes from various directions, and the defenses are also varied. What matters is understanding the facts before drawing conclusions.</p>
+
+          <p><strong>How much energy does Bitcoin use?</strong></p>
+          <p>The energy consumption of the Bitcoin network cannot be measured directly, because there is no meter attached to it. All that exists are estimates, and the two most cited ones <b>differ considerably</b>. As of mid-2026 the Cambridge Centre for Alternative Finance estimates around <b>138 TWh per year</b>, while Digiconomist puts it near <b>204 TWh</b>. The gap is 66 TWh, and it is not carelessness.</p>
+          <p><strong>Why two equally credible figures can differ that much</strong></p>
+          <p>Because they answer slightly different questions. Cambridge builds from the bottom up: surveying mining companies, cataloguing the hardware actually in use, then computing its power draw. Digiconomist builds from the economics: assuming miners spend a fixed share of revenue on electricity, then working backwards. As a result the Digiconomist figure <b>rises when the price rises</b>, while the Cambridge figure stays anchored to physical hardware. Neither is wrong. What is wrong is quoting one number without saying which model it came from.</p>
+          <p>For context, that figure is roughly the electricity consumption of a mid-sized country such as Poland or Thailand, and sits around half a percent of all electricity worldwide. As another comparison, global data centres consumed roughly 485 TWh in 2025 and are growing about 15 percent a year, while Bitcoin’s figure stays broadly flat.</p>
+          <p><strong>What will not change, whatever the number becomes</strong></p>
+          <p>The figures above will certainly date, and any part of this book quoting TWh should be treated as a dated snapshot. But the following three things do not date. First, <b>Bitcoin’s energy use follows miner revenue, not transaction count</b>. Adding or removing transactions within a block does not change the energy at all, because what is paid for is finding the block, not filling it. This is why the widely quoted "energy per transaction" figure misleads: its denominator can move while the numerator does not.</p>
+          <p>Second, because it follows revenue, it <b>rises and falls with the price</b>. This is not theory: in December 2025 the annualised estimate approached 190 TWh at the market peak, then fell back into the 130s once prices weakened through 2026 and less efficient miners powered down. Third, <b>hardware efficiency keeps improving</b>, from around 98 J/TH in 2016 to roughly 13.5 J/TH in 2026. Energy per hash falls continuously while the number of hashes keeps climbing, and what settles the outcome is the price.</p>
+          <p>If you want a current figure, what to look for is not news coverage but one of those two indices directly, and what you should record is <b>the date and which model</b> you are quoting.</p>
+
+          <p><strong>Energy and security</strong></p>
+          <p>The energy used in mining isn’t wasted from Bitcoin’s perspective. It’s a cost that directly secures the network. The more energy used for mining, the more expensive it is to attack the network. This is a deliberate security mechanism: the work in proof of work must be real and expensive.</p>
+
+          <p><strong>Mining energy sources</strong></p>
+          <p>The composition of mining energy sources has shifted significantly. Because miners seek the cheapest electricity, they often head toward energy sources that are cheap because they’re in surplus or isolated: surplus hydro energy, flared gas from oil wells, geothermal energy, and other renewable sources. Recent estimates show about 50-60% of mining energy comes from renewable or low-carbon sources, although this figure is debated because of differing methodologies.</p>
+
+          <p><strong>Comparison with other systems</strong></p>
+          <p>Often overlooked in the debate is the energy consumption of the traditional financial system: banks, ATMs, offices, data centers, printing physical money, and transporting cash. This comparison is hard to do apples-to-apples because of the different scope, but it’s important to keep a balanced perspective.</p>
+
+          <p><strong>Mining as a flexible energy buyer</strong></p>
+          <p>There’s an interesting argument that mining can play a positive role in the energy grid. Miners can act as a very flexible energy buyer: they can be turned on when there’s an energy surplus and turned off when demand is high. This helps stabilize the grid and can make renewable energy projects more economical by being an always-present energy buyer even outside peak hours.</p>
+
+          <div class="p-callout">
+            <p>The Bitcoin energy debate has no simple answer. How expensive is a decentralized monetary security system worth paying for? This is a question of values, not just technicals. What you can do is make sure this debate is based on accurate facts, not numbers taken without context.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualization — Mining energy: sources and comparison</div>
+          <div class="b11-s115-desc">
+            First tab: the composition of energy sources used by Bitcoin mining. Second tab: a comparison of Bitcoin’s energy consumption with other systems and industries.
+          </div>
+
+          <div class="b11-s115-tabs">
+            <button class="b11-s115-tab s115-act" id="b11-s115-t1">Mining Energy Sources</button>
+            <button class="b11-s115-tab" id="b11-s115-t2">Consumption Comparison</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b11-s115-pane show" id="b11-s115-p1">
+            <div class="b11-s115-cards">
+              <div class="b11-s115-card"><div class="b11-s115-card-label">Bitcoin annual consumption</div><div class="b11-s115-card-val" style="color:#534AB7;">~138-204 TWh</div><div class="b11-s115-card-sub">Equivalent to a mid-sized country like Poland or Thailand</div></div>
+              <div class="b11-s115-card"><div class="b11-s115-card-label">Estimated renewable energy</div><div class="b11-s115-card-val" style="color:#0F6E56;">~50-60%</div><div class="b11-s115-card-sub">Different methodologies produce different figures</div></div>
+            </div>
+            <div class="b11-s115-donut-wrap">
+              <canvas class="b11-s115-donut" id="b11-s115-donut" height="180"></canvas>
+              <div class="b11-s115-donut-legend">
+                <div class="b11-s115-donut-leg"><div class="b11-s115-donut-leg-dot" style="background:#0F6E56;"></div><div class="b11-s115-donut-leg-label">Hydro</div><div class="b11-s115-donut-leg-pct" style="color:#0F6E56;">26%</div></div>
+                <div class="b11-s115-donut-leg"><div class="b11-s115-donut-leg-dot" style="background:#5DCAA5;"></div><div class="b11-s115-donut-leg-label">Wind & Solar</div><div class="b11-s115-donut-leg-pct" style="color:#5DCAA5;">17%</div></div>
+                <div class="b11-s115-donut-leg"><div class="b11-s115-donut-leg-dot" style="background:#534AB7;"></div><div class="b11-s115-donut-leg-label">Natural gas</div><div class="b11-s115-donut-leg-pct" style="color:#534AB7;">25%</div></div>
+                <div class="b11-s115-donut-leg"><div class="b11-s115-donut-leg-dot" style="background:#854F0B;"></div><div class="b11-s115-donut-leg-label">Coal</div><div class="b11-s115-donut-leg-pct" style="color:#854F0B;">22%</div></div>
+                <div class="b11-s115-donut-leg"><div class="b11-s115-donut-leg-dot" style="background:#52524C;"></div><div class="b11-s115-donut-leg-label">Other</div><div class="b11-s115-donut-leg-pct" style="color:#52524C;">10%</div></div>
+              </div>
+            </div>
+            <div class="b11-s115-note s115-info">Flared gas (waste gas from oil drilling that was previously burned off wastefully) is increasingly used for mining. This paradoxically reduces emissions because gas that used to be burned straight into the atmosphere is now converted into electricity first.</div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b11-s115-pane" id="b11-s115-p2">
+            <div class="b11-s115-hint">Estimated annual energy consumption of various systems and industries (TWh/year).</div>
+            <div class="b11-s115-bars">
+              <div class="b11-s115-bar-row"><div class="b11-s115-bar-label">Global banking system</div><div class="b11-s115-bar-track"><div class="b11-s115-bar-fill" style="width:100%;background:#A32D2D;">~4,000+ TWh</div></div><div class="b11-s115-bar-note">~4,000 TWh</div></div>
+              <div class="b11-s115-bar-row"><div class="b11-s115-bar-label">Global data centers</div><div class="b11-s115-bar-track"><div class="b11-s115-bar-fill" style="width:55%;background:#7C3AED;">~200-250 TWh</div></div><div class="b11-s115-bar-note">~200-250 TWh</div></div>
+              <div class="b11-s115-bar-row"><div class="b11-s115-bar-label">Household AC (US)</div><div class="b11-s115-bar-track"><div class="b11-s115-bar-fill" style="width:45%;background:#0F6E56;">~185 TWh</div></div><div class="b11-s115-bar-note">~185 TWh</div></div>
+              <div class="b11-s115-bar-row"><div class="b11-s115-bar-label">Gold industry (mining)</div><div class="b11-s115-bar-track"><div class="b11-s115-bar-fill" style="width:35%;background:#854F0B;">~130 TWh</div></div><div class="b11-s115-bar-note">~130 TWh</div></div>
+              <div class="b11-s115-bar-row"><div class="b11-s115-bar-label">Bitcoin mining</div><div class="b11-s115-bar-track"><div class="b11-s115-bar-fill" style="width:33%;background:#534AB7;">~138-204 TWh</div></div><div class="b11-s115-bar-note">~138-204 TWh</div></div>
+            </div>
+            <div class="b11-s115-note s115-warn">This comparison needs caution. The global banking system serves billions of people with thousands of different services. Bitcoin currently serves a small fraction of the world’s population. A fair comparison must consider the scale of service, not just absolute energy figures.</div>
+            <div class="b11-s115-disclaimer">Sources: Cambridge Centre for Alternative Finance (CCAF), Galaxy Digital, IEA. All figures are estimates with significant uncertainty ranges.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-11-4" data-sb="sb-11-4">
+            ← 11.4 — Mining Economics
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-11-6" data-sb="sb-11-6">
+            11.6 — The Future of Mining and Decentralization →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 11.5 -->
+
+      <!-- ==============================
+           SECTION 11.6 · Masa Depan Mining dan Desentralisasi
+      ============================== -->
+      <div class="p-section" id="section-11-6">
+        <div class="p-eyebrow">Chapter 11 · 11.6</div>
+        <div class="p-heading">Between centralization pressure and the spirit of decentralization — where will mining go?</div>
+        <div class="p-title">The Future of Mining and Decentralization</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Bitcoin mining sits at the intersection of two opposing forces: pressure toward centralization driven by economies of scale, and pressure toward decentralization driven by the spirit of the Bitcoin protocol itself. Where is this industry headed?</p>
+
+          <p><strong>Current hash rate concentration</strong></p>
+          <p>Today, most of the Bitcoin network’s hash rate is concentrated in a few large pools. This doesn’t mean the network is controlled by a handful of parties, because individual miners in a pool are free to switch at any time. But this concentration still creates a theoretical risk and questions about long-term resilience. Geographically, China once dominated with more than 60% of the hash rate, but the mining ban in 2021 drove a massive redistribution. Now the hash rate is spread across the United States, Kazakhstan, Russia, Canada, and many other countries. This broader geographic distribution is generally positive for the network’s resilience.</p>
+
+          <p><strong>Who chooses the transactions?</strong></p>
+          <p>In a traditional pool setup, the pool operator decides which transactions go into a block, not the individual miner running the hardware. For a long time this rarely became a problem because pools generally chose transactions based on the highest fee without filtering content.</p>
+
+          <p>But Ocean Pool changed this dynamic. Ocean is a pool that explicitly applies transaction filtering: they reject certain transactions they consider inconsistent with legitimate Bitcoin use, including some types of Ordinals and transactions that use OP_RETURN excessively. This isn’t cheating in a technical sense. By protocol, miners do have the right to choose which transactions go into a block.</p>
+
+          <p>But this opens a deeper debate: if large pools start censoring certain transactions based on content rather than just technical validity, is Bitcoin’s censorship-resistance threatened? On one hand, some argue miners have the right to choose based on their preferences. On the other hand, some worry this sets a dangerous precedent: if one pool may censor based on content, what stops other pools from censoring based on other, more political criteria?</p>
+
+          <p><strong>Stratum V2 and decentralizing transaction selection</strong></p>
+          <p>Stratum V2 emerges as a structural answer to this question. As an upgrade to the communication protocol between pool and miner, Stratum V2 gives individual miners the ability to choose for themselves which transactions they want to include in a block. This is a fundamental change: even if the hash rate is concentrated in large pools, the power to choose transactions is redistributed back to individual miners. If Stratum V2 is widely adopted, scenarios like Ocean Pool filtering transactions on behalf of all the miners in the pool become harder to happen without the miners’ explicit consent.</p>
+
+          <p><strong>Home mining and small-scale mining</strong></p>
+          <p>There’s a growing movement to bring mining back to small scale. Devices like the Bitaxe are small open-source ASICs that can run at home with a few watts of power. Their hash rate is very small compared to industrial ASICs, but their contribution to network decentralization is greater than the numbers suggest. The argument: a network with millions of small, geographically dispersed miners is more resistant to attack and regulation than a network that depends on a few hundred large industrial facilities.</p>
+
+          <p><strong>Transaction fees as a long-term incentive</strong></p>
+          <p>The block reward will keep decreasing with every halving. Eventually, there will be no more block reward. Miner incentives will depend entirely on transaction fees. If Bitcoin succeeds in becoming a system used by billions of people, the volume and aggregate fees might be more than enough. But if not, the hash rate could drop and network security could weaken. This is one of the most fundamental questions about Bitcoin’s long-term sustainability, and no one knows the answer for certain.</p>
+
+          <div class="p-callout">
+            <p>The future of Bitcoin mining depends on the balance between economic incentives, technological innovation, and community decisions. Questions about who has the right to choose transactions, how decentralized the hash rate should be, and whether fees are enough to replace the block reward are questions that will keep being debated. What’s interesting is that all of this happens without any single party who can decide the answer.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualization — Hash rate distribution</div>
+          <div class="b11-s116-desc">
+            First tab: hash rate distribution per mining pool. Second tab: geographic distribution after the major redistribution following the 2021 China ban.
+          </div>
+
+          <div class="b11-s116-tabs">
+            <button class="b11-s116-tab s116-act" id="b11-s116-t1">Per Mining Pool</button>
+            <button class="b11-s116-tab" id="b11-s116-t2">Per Country</button>
+          </div>
+
+          <div class="b11-s116-pane show" id="b11-s116-p1">
+            <div class="b11-s116-chart-wrap">
+              <canvas class="b11-s116-cv" id="b11-s116-cv-pool" height="200"></canvas>
+              <div class="b11-s116-legend" id="b11-s116-legend-pool"></div>
+            </div>
+            <div class="b11-s116-note s116-warn">Pool concentration is high, but miners in a pool are still free to switch at any time. A pool’s power depends on the trust of miners that can be withdrawn at any moment. Ocean Pool (not included above due to its small share) is an example of a pool that explicitly applies transaction filtering.</div>
+            <div class="b11-s116-disclaimer">Estimate based on blocks found ~Q1 2024. The distribution changes every day. Sources: mempool.space, BTC.com.</div>
+          </div>
+
+          <div class="b11-s116-pane" id="b11-s116-p2">
+            <div class="b11-s116-geo-bars" id="b11-s116-geo-bars"></div>
+            <div class="b11-s116-note s116-info">After China banned mining in 2021, the hash rate was massively redistributed to various countries. This broader geographic distribution is positive for the network’s resilience against regulation in any single country.</div>
+            <div class="b11-s116-disclaimer">Estimated geographic distribution ~2024. Source: CCAF Cambridge Bitcoin Electricity Consumption Index.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-11-5" data-sb="sb-11-5">
+            ← 11.5 — Mining and Energy
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 11.6 -->
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 14 · BAB 11 -->
+
+

@@ -1,0 +1,809 @@
+<!-- ============================================================
+     PAGE 16 · BAB 13 · Soft Fork: Sejarah, Proses, dan Governance
+     |-- 13.1 · Apa itu Soft Fork dan Hard Fork? [DONE]
+     |-- 13.2 · [LOCKED]
+     |-- 13.3 · [LOCKED]
+     |-- 13.4 · [LOCKED]
+     |-- 13.5 · [LOCKED]
+     |-- 13.6 · [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab13">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b13">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b13">← Chapter List</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab13">
+      <div class="sidebar-heading">Chapter 13</div>
+      <div class="sidebar-title">Soft Fork: History, Process, and Governance</div>
+
+      <div class="sidebar-item active" id="sb-13-1">
+        <div class="sb-num">13.1</div>
+        <div class="sb-label">What is a Soft Fork and a Hard Fork?</div>
+      </div>
+      <div class="sidebar-item" id="sb-13-2">
+        <div class="sb-num">13.2</div>
+        <div class="sb-label">BIP — How Ideas Get into Bitcoin</div>
+      </div>
+      <div class="sidebar-item" id="sb-13-3">
+        <div class="sb-num">13.3</div>
+        <div class="sb-label">Types of Soft Fork Activation</div>
+      </div>
+      <div class="sidebar-item" id="sb-13-4">
+        <div class="sb-num">13.4</div>
+        <div class="sb-label">SegWit — The Most Controversial Soft Fork</div>
+      </div>
+      <div class="sidebar-item" id="sb-13-5">
+        <div class="sb-num">13.5</div>
+        <div class="sb-label">Taproot — A Smoother Soft Fork</div>
+      </div>
+      <div class="sidebar-item" id="sb-13-6">
+        <div class="sb-num">13.6</div>
+        <div class="sb-label">Bitcoin Governance — Who Really Decides?</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab13-content">
+
+      <!-- ==============================
+           SECTION 13.1 · Apa itu Soft Fork dan Hard Fork?
+      ============================== -->
+      <div class="p-section active" id="section-13-1">
+        <div class="p-eyebrow">Chapter 13 · 13.1</div>
+        <div class="p-heading">How can a protocol with no owner change?</div>
+        <div class="p-title">What is a Soft Fork and a Hard Fork?</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>We introduced the terms soft fork and hard fork briefly in 5.1 when covering consensus. Here we take both apart properly, because the whole of Chapter 13 rests on the difference. If the opening feels familiar, that is deliberate.</p>
+          <p>Bitcoin is a living protocol. It needs to evolve to fix bugs, add features, or respond to new threats. But how do you change a protocol that has no owner, no CEO, and is run by thousands of independent nodes around the world? This is where the concept of a fork becomes important.</p>
+
+          <p><strong>Hard fork vs soft fork</strong></p>
+          <p>A hard fork is a protocol change that isn’t backward compatible. Nodes that don’t upgrade can no longer follow the new chain. If some nodes upgrade and some don’t, the network splits into two permanently separate chains. Each has its own longest chain, but they don’t compete with one another because one side’s blocks are irrelevant to the other. A hard fork requires almost universal coordination from the entire ecosystem.</p>
+
+          <p>A soft fork is a protocol change that is backward compatible. Old nodes that don’t upgrade can still follow the new chain, because the new rules only tighten the existing rules. A block that’s valid under the new rules is also valid under the old rules. This means it’s still one network with two candidate chains, and the longest one wins. Because the majority of hash rate is usually on the upgraded nodes, their chain is always the longest.</p>
+
+          <p><strong>A simple analogy</strong></p>
+          <p>Imagine a card game with the rule: "a card worth more than 5 wins." A hard fork is changing the rule to "a card worth more than 3 wins"; old players who don’t know the new rule can’t play at the same table. A soft fork is changing the rule to "a card worth more than 5 wins, and it must be red"; the rule becomes stricter, but old players can still play at the same table even if they play suboptimally.</p>
+
+          <p><strong>Why Bitcoin prefers soft forks</strong></p>
+          <p>A soft fork is safer because it doesn’t force all users to upgrade at once. Old nodes can still participate in the network. This reduces the risk of community fracture and allows changes to be made gradually. A hard fork in Bitcoin is considered very risky and is almost never done for new features, only for critical fixes that truly can’t be done with a soft fork.</p>
+
+          <div class="p-callout">
+            <p>The choice between a soft fork and a hard fork isn’t just technical, but also political and social. A soft fork allows change without forcing universal consensus, but it also means new features must be designed very carefully to be backward compatible. This is one reason Bitcoin development feels slow compared to other crypto projects.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualization — Hard fork vs Soft fork</div>
+          <div class="b13-s131-desc">
+            A hard fork splits the network in two permanently. A soft fork stays one network — the non-conforming candidate chain is abandoned because it loses the longest-chain race.
+          </div>
+
+          <div class="b13-s131-tabs">
+            <button class="b13-s131-tab s131-act" id="b13-s131-t1">Hard Fork</button>
+            <button class="b13-s131-tab" id="b13-s131-t2">Soft Fork</button>
+          </div>
+
+          <div class="b13-s131-pane show" id="b13-s131-p1">
+            <div class="b13-s131-hint">Hard fork: two separate networks. Each has its own longest chain — but the two don’t compete because one side’s blocks are irrelevant to the other.</div>
+            <div class="b13-s131-canvas"><canvas id="b13-s131-cv-hard"></canvas></div>
+            <div class="b13-s131-legend">
+              <div class="b13-s131-leg"><div class="b13-s131-leg-box" style="background:#EEEDFE;border:1.5px solid rgba(83,74,183,0.3);"></div>Shared block (before the fork)</div>
+              <div class="b13-s131-leg"><div class="b13-s131-leg-box" style="background:#534AB7;"></div>Chain A — upgraded nodes</div>
+              <div class="b13-s131-leg"><div class="b13-s131-leg-box" style="background:#FAEEDA;border:1.5px solid rgba(133,79,11,0.3);"></div>Chain B — old nodes</div>
+            </div>
+            <div class="b13-s131-callout s131-red">Chain A’s blocks are irrelevant to node B, and vice versa — not because one loses the longest-chain race, but because the rules are already different. There’s no competition between the chains.</div>
+            <div class="b13-s131-nodes">
+              <div class="b13-s131-node-card s131-a">
+                <div class="b13-s131-node-head">Upgraded nodes (Network A)</div>
+                <div class="b13-s131-node-body">Network A has its own longest chain. Blocks from network B are irrelevant.</div>
+                <span class="b13-s131-badge s131-split">Separate network</span>
+              </div>
+              <div class="b13-s131-node-card s131-b">
+                <div class="b13-s131-node-head">Old nodes (Network B)</div>
+                <div class="b13-s131-node-body">Network B has its own longest chain. Blocks from network A are irrelevant.</div>
+                <span class="b13-s131-badge s131-split">Separate network</span>
+              </div>
+            </div>
+            <div class="b13-s131-note s131-warn">Hard fork = two networks, two consensuses. Bitcoin Cash (2017) is a real example. After the fork, there’s no "winner" between the chains — both live on their own.</div>
+          </div>
+
+          <div class="b13-s131-pane" id="b13-s131-p2">
+            <div class="b13-s131-hint">Soft fork: one network, two candidate chains. The longest one wins — and because the majority of hash rate is on the upgraded nodes, their chain is always the longest.</div>
+            <div class="b13-s131-canvas"><canvas id="b13-s131-cv-soft"></canvas></div>
+            <div class="b13-s131-legend">
+              <div class="b13-s131-leg"><div class="b13-s131-leg-box" style="background:#EEEDFE;border:1.5px solid rgba(83,74,183,0.3);"></div>Shared block</div>
+              <div class="b13-s131-leg"><div class="b13-s131-leg-box" style="background:#EAF3DE;border:1.5px solid rgba(15,110,86,0.3);"></div>Block valid under both rules (majority)</div>
+              <div class="b13-s131-leg"><div class="b13-s131-leg-box" style="background:#FCEBEB;border:1.5px solid rgba(163,45,45,0.3);"></div>Non-conforming block (rejected by the majority)</div>
+            </div>
+            <div class="b13-s131-callout s131-grn">This is still one network. Old nodes can follow the majority chain. The longest one wins — and the majority always grows faster because it has more hash rate.</div>
+            <div class="b13-s131-nodes">
+              <div class="b13-s131-node-card s131-a">
+                <div class="b13-s131-node-head">Majority (upgraded nodes)</div>
+                <div class="b13-s131-node-body">Largest hash rate, the chain grows fastest. Non-conforming blocks from the minority are rejected. This chain is always the longest.</div>
+                <span class="b13-s131-badge s131-win">✓ Longest chain — wins</span>
+              </div>
+              <div class="b13-s131-node-card s131-b">
+                <div class="b13-s131-node-head">Minority (not upgraded)</div>
+                <div class="b13-s131-node-body">Their non-conforming blocks are rejected by the majority. Small hash rate makes their chain always shorter and abandoned.</div>
+                <span class="b13-s131-badge s131-lose">Shorter chain — abandoned</span>
+              </div>
+            </div>
+            <div class="b13-s131-note s131-good">A soft fork keeps one network. As long as the majority of hash rate supports the new rules, the non-conforming chain can never become the longest.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-13-2" data-sb="sb-13-2">
+            13.2 — BIP: How Ideas Get into Bitcoin →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 13.1 -->
+
+      <!-- ==============================
+           SECTION 13.2 · BIP — Bagaimana Ide Masuk ke Bitcoin
+      ============================== -->
+      <div class="p-section" id="section-13-2">
+        <div class="p-eyebrow">Chapter 13 · 13.2</div>
+        <div class="p-heading">No CEO, but there is a process — that’s how ideas get into Bitcoin</div>
+        <div class="p-title">BIP — How Ideas Get into Bitcoin</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Bitcoin has no CEO, no headquarters, no board of directors. But Bitcoin isn’t without process. There’s a formal mechanism to propose, discuss, and implement changes to the protocol. This mechanism is called a BIP, short for Bitcoin Improvement Proposal.</p>
+
+          <p><strong>What is a BIP?</strong></p>
+          <p>A BIP is a written document that proposes a change or addition to the Bitcoin protocol, its development process, or the standards used. The BIP was first introduced by Amir Taaki in 2011, inspired by the Python Enhancement Proposals (PEP) used by the Python community. Every BIP has a unique number: BIP 32 for HD wallets, BIP 141 for SegWit, BIP 340-342 for Taproot, BIP 352 for Silent Payments. This number becomes the way the community references a proposal consistently.</p>
+
+          <p><strong>Who can submit a BIP?</strong></p>
+          <p>Anyone. A BIP isn’t an exclusive document for core developers. Anyone can write and submit a BIP. But it’s the quality of the argument, the clarity of the technical specification, and support from the community that determine whether a BIP will be considered seriously or ignored.</p>
+
+          <p><strong>The BIP process</strong></p>
+          <p>A submitted BIP first goes through review by a BIP editor who ensures the document’s format and completeness. The editor doesn’t decide whether a BIP is technically good or bad. After being accepted as a draft, the BIP starts being discussed in various forums: the bitcoin-dev mailing list, GitHub, forums, and conferences. This discussion can last months or even years. There’s no formal voting, no single decision. Consensus forms organically from long discussion.</p>
+
+          <p><strong>Types of BIPs</strong></p>
+          <p>There are three types of BIPs. The Standards Track BIP is the most important: it proposes changes to the Bitcoin protocol that affect compatibility, further divided into several layers from the consensus layer to the applications layer. The Informational BIP provides information or guidance without proposing a new feature. The Process BIP proposes changes to Bitcoin’s development process itself.</p>
+
+          <p><strong>Why is this process slow?</strong></p>
+          <p>Because Bitcoin has no central authority that can decide. Every change to a protocol used by millions of people and storing billions of dollars in value must be considered very carefully. One bug in the consensus code could be catastrophic. The slowness is a feature, not a bug.</p>
+
+          <div class="p-callout">
+            <p>The BIP is how a decentralized community coordinates change without a central authority. The process is slow and often full of debate, but that’s what makes the legitimacy of the result depend on real consensus, not the decision of one party.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualization — BIP lifecycle and types</div>
+          <div class="b13-s132-desc">
+            First tab: the lifecycle of a BIP from draft to final, with well-known example BIPs you can click. Second tab: the three types of BIPs and their differences.
+          </div>
+
+          <div class="b13-s132-tabs">
+            <button class="b13-s132-tab s132-act" id="b13-s132-t1">BIP Lifecycle</button>
+            <button class="b13-s132-tab" id="b13-s132-t2">Types of BIPs</button>
+          </div>
+
+          <!-- PANE 1: LIFECYCLE -->
+          <div class="b13-s132-pane show" id="b13-s132-p1">
+            <div class="b13-s132-stages">
+              <div class="b13-s132-stage"><div class="b13-s132-stage-dot s132-draft">✍️</div><div class="b13-s132-stage-label">Draft</div><div class="b13-s132-stage-sub">Written, submitted to the editor</div></div>
+              <div class="b13-s132-stage-conn"></div>
+              <div class="b13-s132-stage"><div class="b13-s132-stage-dot s132-discuss">💬</div><div class="b13-s132-stage-label">Proposed</div><div class="b13-s132-stage-sub">Community discussion, technical review</div></div>
+              <div class="b13-s132-stage-conn"></div>
+              <div class="b13-s132-stage"><div class="b13-s132-stage-dot s132-review">🔍</div><div class="b13-s132-stage-label">Review</div><div class="b13-s132-stage-sub">Implementation, testing, feedback</div></div>
+              <div class="b13-s132-stage-conn s132-split"></div>
+              <div class="b13-s132-stage"><div class="b13-s132-stage-dot s132-final">✅</div><div class="b13-s132-stage-label">Final</div><div class="b13-s132-stage-sub">Accepted and implemented</div></div>
+              <div class="b13-s132-stage" style="opacity:0.6;"><div class="b13-s132-stage-dot s132-reject">✗</div><div class="b13-s132-stage-label">Rejected</div><div class="b13-s132-stage-sub">Rejected or withdrawn</div></div>
+            </div>
+
+            <div class="b13-s132-bips-label">Well-known example BIPs — click for detail:</div>
+            <div class="b13-s132-bips">
+              <div class="b13-s132-bip active" data-bip="32"><div class="b13-s132-bip-num" style="color:#0F6E56;">BIP 32</div><div class="b13-s132-bip-info"><div class="b13-s132-bip-name">Hierarchical Deterministic Wallets</div><div class="b13-s132-bip-meta">2012 · Pieter Wuille · Standards Track</div></div><span class="b13-s132-bip-status s132-final">Final</span></div>
+              <div class="b13-s132-bip" data-bip="141"><div class="b13-s132-bip-num" style="color:#534AB7;">BIP 141</div><div class="b13-s132-bip-info"><div class="b13-s132-bip-name">Segregated Witness (SegWit)</div><div class="b13-s132-bip-meta">2015 · Eric Lombrozo, Johnson Lau, Pieter Wuille · Standards Track</div></div><span class="b13-s132-bip-status s132-final">Final</span></div>
+              <div class="b13-s132-bip" data-bip="148"><div class="b13-s132-bip-num" style="color:#854F0B;">BIP 148</div><div class="b13-s132-bip-info"><div class="b13-s132-bip-name">UASF — Mandatory activation of segwit</div><div class="b13-s132-bip-meta">2017 · Shaolin Fry · Standards Track</div></div><span class="b13-s132-bip-status s132-final">Final</span></div>
+              <div class="b13-s132-bip" data-bip="340"><div class="b13-s132-bip-num" style="color:#534AB7;">BIP 340</div><div class="b13-s132-bip-info"><div class="b13-s132-bip-name">Schnorr Signatures (part of Taproot)</div><div class="b13-s132-bip-meta">2020 · Pieter Wuille, Jonas Nick, Tim Ruffing · Standards Track</div></div><span class="b13-s132-bip-status s132-final">Final</span></div>
+              <div class="b13-s132-bip" data-bip="352"><div class="b13-s132-bip-num" style="color:#534AB7;">BIP 352</div><div class="b13-s132-bip-info"><div class="b13-s132-bip-name">Silent Payments</div><div class="b13-s132-bip-meta">2022 · josibake, Ruben Somsen · Standards Track</div></div><span class="b13-s132-bip-status s132-active">Active</span></div>
+            </div>
+
+            <div class="b13-s132-detail" id="b13-s132-detail"></div>
+          </div>
+
+          <!-- PANE 2: JENIS BIP -->
+          <div class="b13-s132-pane" id="b13-s132-p2">
+            <div class="b13-s132-hint">There are three types of BIPs. Each has a different purpose and weight in the Bitcoin ecosystem.</div>
+            <div class="b13-s132-types">
+
+              <div class="b13-s132-type-card s132-standards">
+                <div class="b13-s132-type-head" data-type="0"><div class="b13-s132-type-icon">⚙️</div><div class="b13-s132-type-title">Standards Track BIP</div><div class="b13-s132-type-badge">Most important</div></div>
+                <div class="b13-s132-type-body open">
+                  <div class="b13-s132-type-desc">Proposes changes to the Bitcoin protocol, transaction format, or technical standards that affect compatibility between implementations. Divided into several layers:</div>
+                  <div class="b13-s132-sublayers">
+                    <div class="b13-s132-sublayer"><div class="b13-s132-sublayer-title">Consensus layer</div><div class="b13-s132-sublayer-desc">Changes the consensus rules. Needs a soft fork or hard fork. Examples: SegWit, Taproot.</div></div>
+                    <div class="b13-s132-sublayer"><div class="b13-s132-sublayer-title">Peer Services layer</div><div class="b13-s132-sublayer-desc">How nodes communicate with each other on the P2P network.</div></div>
+                    <div class="b13-s132-sublayer"><div class="b13-s132-sublayer-title">API/RPC layer</div><div class="b13-s132-sublayer-desc">The communication standard between software and a Bitcoin node.</div></div>
+                    <div class="b13-s132-sublayer"><div class="b13-s132-sublayer-title">Applications layer</div><div class="b13-s132-sublayer-desc">Standards for wallets, addresses, transactions. Examples: BIP 32 (HD wallet), BIP 173 (bech32).</div></div>
+                  </div>
+                  <div class="b13-s132-type-examples">
+                    <span class="b13-s132-type-ex">BIP 32 — HD Wallet</span>
+                    <span class="b13-s132-type-ex">BIP 141 — SegWit</span>
+                    <span class="b13-s132-type-ex">BIP 340-342 — Taproot</span>
+                    <span class="b13-s132-type-ex">BIP 352 — Silent Payments</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="b13-s132-type-card s132-info">
+                <div class="b13-s132-type-head" data-type="1"><div class="b13-s132-type-icon">📄</div><div class="b13-s132-type-title">Informational BIP</div><div class="b13-s132-type-badge">Guidance and reference</div></div>
+                <div class="b13-s132-type-body">
+                  <div class="b13-s132-type-desc">Provides information, guidance, or documentation for the Bitcoin community without proposing a new feature or protocol change. Doesn’t require consensus to be adopted — free to follow or ignore.</div>
+                  <div class="b13-s132-type-examples">
+                    <span class="b13-s132-type-ex">BIP 1 — BIP Purpose and Guidelines</span>
+                    <span class="b13-s132-type-ex">BIP 44 — Derivation path for multi-account HD wallets</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="b13-s132-type-card s132-process">
+                <div class="b13-s132-type-head" data-type="2"><div class="b13-s132-type-icon">🔄</div><div class="b13-s132-type-title">Process BIP</div><div class="b13-s132-type-badge">Meta and governance</div></div>
+                <div class="b13-s132-type-body">
+                  <div class="b13-s132-type-desc">Proposes changes to Bitcoin’s development process itself, not the protocol. Includes guidance or procedures that affect how the community develops Bitcoin. Similar to an Informational BIP but more binding in community practice.</div>
+                  <div class="b13-s132-type-examples">
+                    <span class="b13-s132-type-ex">BIP 2 — BIP Workflow (revision of the BIP process)</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-13-1" data-sb="sb-13-1">
+            ← 13.1 — What is a Soft Fork and a Hard Fork?
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-13-3" data-sb="sb-13-3">
+            13.3 — Types of Soft Fork Activation →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 13.2 -->
+
+      <!-- ==============================
+           SECTION 13.3 · Jenis-jenis Soft Fork Activation
+      ============================== -->
+      <div class="p-section" id="section-13-3">
+        <div class="p-eyebrow">Chapter 13 · 13.3</div>
+        <div class="p-heading">Who has the power to activate a change?</div>
+        <div class="p-title">Types of Soft Fork Activation</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>A soft fork is clearly safer than a hard fork. But how exactly is a soft fork "activated"? It turns out there are several different activation mechanisms, each with a different trade-off between speed, security, and who has the power to activate a change.</p>
+
+          <p><strong>MASF: Miner Activated Soft Fork</strong></p>
+          <p>MASF is the earliest activation mechanism used. Miners mark the blocks they create with a signal of support for a particular soft fork. This signal is placed in the version field of the block header. If a certain threshold, for example 95% of 2016 blocks in one difficulty period, is reached, the soft fork is activated automatically. The advantage of MASF is that the process is measurable and there’s certainty about when activation happens. Its weakness: miners have a de facto veto.</p>
+
+          <p><strong>UASF: User Activated Soft Fork</strong></p>
+          <p>UASF is a response to MASF’s weakness. Economic nodes, users, exchanges, and businesses that use Bitcoin activate the new rules on a certain date, regardless of whether miners have signaled or not. This creates back-pressure on miners: if miners don’t follow the new rules, their blocks will be rejected by the economic majority of the network, and their reward will be worthless. BIP 148, which activated SegWit in 2017, is the most famous and successful example of UASF.</p>
+
+          <p><strong>URSF: User Resisted Soft Fork</strong></p>
+          <p>URSF is the opposite of UASF. If UASF is users forcing activation, URSF is users forcing rejection. Economic nodes coordinate to reject a soft fork that has been activated by miners but is not wanted by the user community. URSF has never been used fully in Bitcoin’s history, but its existence as an option shows that users have the power to reject a change forced by miners.</p>
+
+          <p><strong>Version Bits: How Miners Signal</strong></p>
+          <p>Modern soft forks use the version bits mechanism defined in BIP 9. The block header has a 32-bit version field. Each bit can be used to signal support for a particular soft fork. This allows several soft forks to run in parallel without conflict. The miner’s signal is indicative, not binding: a miner can signal without actually implementing the new rules.</p>
+
+          <p><strong>Speedy Trial: An Evolution of MASF</strong></p>
+          <p>Speedy Trial is a variation of MASF used to activate Taproot in 2021. Its main idea: give a shorter activation window of about 3 months with a 90% threshold. If the threshold is reached within that window, the soft fork is activated. If not, the process can be repeated with a different mechanism. Speedy Trial worked: Taproot was activated in November 2021 after miners reached the threshold in a relatively short time, without drama like SegWit.</p>
+
+          <div class="p-callout">
+            <p>The choice of activation mechanism isn’t just a technical matter. It reflects who is considered most entitled to decide on changes in a decentralized network: the miners who provide computation, or the users who give economic value. Bitcoin’s history shows that both need each other, and no single party can fully impose its will.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Interactive simulation — Soft fork activation mechanisms</div>
+          <div class="b13-s133-desc">
+            Choose one of the mechanisms to see how its process works, who holds the power, and a real example from Bitcoin’s history.
+          </div>
+
+          <div class="b13-s133-cards">
+            <div class="b13-s133-card active" data-mech="masf" style="--card-color:#534AB7;--card-bg:#EEEDFE;">
+              <div class="b13-s133-card-tag" style="background:#534AB7;color:#fff;">MASF</div>
+              <div class="b13-s133-card-title">Miner Activated</div>
+              <div class="b13-s133-card-sub">Miners signal via the block header, the threshold is reached and then it activates</div>
+            </div>
+            <div class="b13-s133-card" data-mech="uasf" style="--card-color:#0F6E56;--card-bg:#EAF3DE;">
+              <div class="b13-s133-card-tag" style="background:#0F6E56;color:#fff;">UASF</div>
+              <div class="b13-s133-card-title">User Activated</div>
+              <div class="b13-s133-card-sub">Economic nodes activate on a certain date, miners are forced to follow</div>
+            </div>
+            <div class="b13-s133-card" data-mech="ursf" style="--card-color:#A32D2D;--card-bg:#FCEBEB;">
+              <div class="b13-s133-card-tag" style="background:#A32D2D;color:#fff;">URSF</div>
+              <div class="b13-s133-card-title">User Resisted</div>
+              <div class="b13-s133-card-sub">Economic nodes reject a soft fork forced by miners</div>
+            </div>
+            <div class="b13-s133-card" data-mech="speedy" style="--card-color:#854F0B;--card-bg:#FAEEDA;">
+              <div class="b13-s133-card-tag" style="background:#854F0B;color:#fff;">Speedy Trial</div>
+              <div class="b13-s133-card-title">Speedy Trial</div>
+              <div class="b13-s133-card-sub">A variation of MASF with a short activation window, used for Taproot</div>
+            </div>
+          </div>
+
+          <div class="b13-s133-detail" id="b13-s133-detail"></div>
+
+          <div class="b13-lab">
+            <div class="b13-lab-head">Try it: how many miners have to agree?</div>
+            <div class="b13-lab-body">
+              <div class="b13-lab-ctrl">
+                <label>Miners signalling</label>
+                <input type="range" id="b13-s133-sig" min="0" max="100" step="1" value="70">
+                <span class="b13-lab-ctrl-val" id="b13-s133-sig-val">70%</span>
+              </div>
+              <div class="b13-lab-scale"><span>0%</span><span>50%</span><span>90%</span><span>95%</span><span>100%</span></div>
+              <div class="b13-lab-rows" id="b13-s133-rows"></div>
+              <div class="b13-lab-note" id="b13-s133-lab-note"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-13-2" data-sb="sb-13-2">
+            ← 13.2 — BIP: How Ideas Get into Bitcoin
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-13-4" data-sb="sb-13-4">
+            13.4 — SegWit: The Most Controversial Soft Fork →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 13.3 -->
+
+      <!-- ==============================
+           SECTION 13.4 · SegWit — Soft Fork Paling Kontroversial
+      ============================== -->
+      <div class="p-section" id="section-13-4">
+        <div class="p-eyebrow">Chapter 13 · 13.4</div>
+        <div class="p-heading">Two years of political war that changed how Bitcoin makes decisions</div>
+        <div class="p-title">SegWit — The Most Controversial Soft Fork</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>If there’s one moment in Bitcoin’s history that truly tested whether a decentralized network can make hard decisions without a central authority, it’s the SegWit debate. Running from 2015 to 2017, this wasn’t just a technical debate, it was a political war involving developers, miners, exchanges, users, and Bitcoin businesses around the world.</p>
+
+          <p><strong>What is SegWit?</strong></p>
+          <p>SegWit, short for Segregated Witness, is a soft fork that separates the signature data (witness data) from the main transaction data. Technically, it moves the witness data to a separate part of the block that isn’t counted in the 1 MB block size limit. The result: transactions with SegWit become effectively smaller, increasing network capacity without explicitly changing the 1 MB limit. Besides capacity, SegWit also fixes transaction malleability, a weakness that was one of the main obstacles to implementing the Lightning Network.</p>
+
+          <p><strong>Why was it controversial?</strong></p>
+          <p>The debate began not because of SegWit itself, but because of the larger context: Bitcoin’s scaling debate. Part of the community, especially some miners and large businesses, wanted a simpler solution: just raise the block limit from 1 MB to 2 MB or more through a hard fork. They saw SegWit as too complicated and not enough. On the other side, core developers and most users wanted SegWit because besides capacity, it brought other important improvements and could be done without a risky hard fork.</p>
+
+          <p><strong>The New York Agreement and UASF</strong></p>
+          <p>In May 2017, a large group of Bitcoin businesses and miners signed the New York Agreement, promising to activate SegWit while also raising the block limit to 2 MB through a hard fork, known as SegWit2x. But many Bitcoin Core developers and users rejected this hard fork part. When miners appeared unwilling to activate SegWit without a hard fork guarantee, the user community launched BIP 148: UASF. Nodes running BIP 148 would reject miner blocks that didn’t support SegWit starting August 1, 2017.</p>
+
+          <p><strong>The result</strong></p>
+          <p>The pressure worked. Miners activated SegWit before the August 1 deadline. SegWit officially became active on August 24, 2017 at block 481,824. The hard fork part of the New York Agreement, SegWit2x, was eventually canceled in November 2017 due to insufficient support. Part of the community that wanted large blocks split off to create Bitcoin Cash through a hard fork on August 1, 2017.</p>
+
+          <div class="p-callout">
+            <p>SegWit taught several important lessons about Bitcoin governance: miners don’t have an absolute veto, users and economic nodes have real power through UASF, and consensus in Bitcoin can’t be forced by any single party. But the process also showed how hard it is to make a collective decision without a central authority.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Timeline — The SegWit debate from 2015 to 2017</div>
+          <div class="b13-s134-desc">
+            Click each event for detail. Filter by the party involved.
+          </div>
+
+          <div class="b13-s134-filters">
+            <div class="b13-s134-filter s134-act" data-f="all">All</div>
+            <div class="b13-s134-filter" data-f="dev">Developer</div>
+            <div class="b13-s134-filter" data-f="miner">Miner</div>
+            <div class="b13-s134-filter" data-f="community">Community</div>
+            <div class="b13-s134-filter" data-f="result">Result</div>
+          </div>
+
+          <div class="b13-s134-legend">
+            <div class="b13-s134-leg"><div class="b13-s134-leg-dot" style="background:#0F6E56;"></div>Developer</div>
+            <div class="b13-s134-leg"><div class="b13-s134-leg-dot" style="background:#854F0B;"></div>Miner</div>
+            <div class="b13-s134-leg"><div class="b13-s134-leg-dot" style="background:#534AB7;"></div>Community</div>
+            <div class="b13-s134-leg"><div class="b13-s134-leg-dot" style="background:#1A1A18;"></div>Result</div>
+            <div class="b13-s134-leg"><div class="b13-s134-leg-dot" style="background:#A32D2D;"></div>Split</div>
+          </div>
+
+          <div class="b13-s134-timeline">
+
+            <div class="b13-s134-event" data-t="dev">
+              <div class="b13-s134-date">Dec 2015</div>
+              <div class="b13-s134-dot-wrap"><div class="b13-s134-dot s134-dev"></div></div>
+              <div class="b13-s134-card">
+                <div class="b13-s134-tag s134-dev">Developer</div>
+                <div class="b13-s134-title">BIP 141 submitted — SegWit introduced for the first time</div>
+                <div class="b13-s134-summary">Pieter Wuille, Eric Lombrozo, and Johnson Lau submit the SegWit proposal as a soft fork.</div>
+                <div class="b13-s134-detail">SegWit separates witness data from the main transaction. This fixes transaction malleability and effectively increases network capacity without explicitly changing the 1 MB limit. This proposal was well received by developers but immediately sparked debate in the wider community.</div>
+              </div>
+            </div>
+
+            <div class="b13-s134-event" data-t="community">
+              <div class="b13-s134-date">2016</div>
+              <div class="b13-s134-dot-wrap"><div class="b13-s134-dot s134-community"></div></div>
+              <div class="b13-s134-card">
+                <div class="b13-s134-tag s134-community">Community</div>
+                <div class="b13-s134-title">The scaling debate heats up — the block size war begins</div>
+                <div class="b13-s134-summary">Part of the community wants a simpler solution: raise the block limit directly through a hard fork.</div>
+                <div class="b13-s134-detail">Two camps form. The big blocks camp, led by large miners and businesses like Roger Ver, want a hard fork to raise the block limit. The small blocks camp, along with Bitcoin Core developers, want SegWit as a more cautious solution. The debate runs fiercely on forums, social media, and at conferences.</div>
+              </div>
+            </div>
+
+            <div class="b13-s134-event" data-t="miner">
+              <div class="b13-s134-date">2016-2017</div>
+              <div class="b13-s134-dot-wrap"><div class="b13-s134-dot s134-miner"></div></div>
+              <div class="b13-s134-card">
+                <div class="b13-s134-tag s134-miner">Miner</div>
+                <div class="b13-s134-title">Miners don’t signal SegWit — deadlock</div>
+                <div class="b13-s134-summary">Even though SegWit was technically ready, most miners refused to signal support.</div>
+                <div class="b13-s134-detail">Large miners, especially those based in China, refused to signal SegWit without a guarantee that the block limit would also be raised. This created a deadlock: developers didn’t want a hard fork, miners didn’t want SegWit without a hard fork. Transaction fees started spiking because network capacity was full.</div>
+              </div>
+            </div>
+
+            <div class="b13-s134-event" data-t="community">
+              <div class="b13-s134-date">Mar 2017</div>
+              <div class="b13-s134-dot-wrap"><div class="b13-s134-dot s134-community"></div></div>
+              <div class="b13-s134-card">
+                <div class="b13-s134-tag s134-community">Community</div>
+                <div class="b13-s134-title">BIP 148 submitted — UASF as a user weapon</div>
+                <div class="b13-s134-summary">Shaolin Fry submits BIP 148: supporting nodes will reject miner blocks that don’t support SegWit starting August 1, 2017.</div>
+                <div class="b13-s134-detail">BIP 148 is a grassroots movement, not from core developers. Users, exchanges, and businesses tired of the deadlock threatened to use their economic power. If enough nodes ran BIP 148, miners who didn’t signal SegWit would produce blocks rejected by the economic network.</div>
+              </div>
+            </div>
+
+            <div class="b13-s134-event" data-t="community">
+              <div class="b13-s134-date">May 2017</div>
+              <div class="b13-s134-dot-wrap"><div class="b13-s134-dot s134-community"></div></div>
+              <div class="b13-s134-card">
+                <div class="b13-s134-tag s134-community">Community</div>
+                <div class="b13-s134-title">New York Agreement — a compromise that didn’t last</div>
+                <div class="b13-s134-summary">More than 50 Bitcoin companies sign an agreement: activate SegWit, then raise the block size to 2 MB (SegWit2x).</div>
+                <div class="b13-s134-detail">The New York Agreement was signed by the majority of hash rate and many Bitcoin businesses. The plan: activate SegWit via MASF, then within 3 months do a hard fork to raise the block to 2 MB. Bitcoin Core developers refused to be involved because they opposed the hard fork part. This agreement created a fragile illusion of consensus.</div>
+              </div>
+            </div>
+
+            <div class="b13-s134-event" data-t="miner">
+              <div class="b13-s134-date">Jul 2017</div>
+              <div class="b13-s134-dot-wrap"><div class="b13-s134-dot s134-miner"></div></div>
+              <div class="b13-s134-card">
+                <div class="b13-s134-tag s134-miner">Miner</div>
+                <div class="b13-s134-title">Miners start signaling SegWit — UASF pressure works</div>
+                <div class="b13-s134-summary">Under the threat of BIP 148, miners start activating the SegWit signal before the August 1 deadline.</div>
+                <div class="b13-s134-detail">In the weeks leading up to August 1, the percentage of SegWit signaling from miners jumped drastically. Not out of conviction, but out of economic calculation: producing blocks that might be rejected by the economic network is a risk that isn’t worth it. This moment proved that miners don’t have an absolute veto.</div>
+              </div>
+            </div>
+
+            <div class="b13-s134-event" data-t="split">
+              <div class="b13-s134-date">Aug 1, 2017</div>
+              <div class="b13-s134-dot-wrap"><div class="b13-s134-dot s134-split"></div></div>
+              <div class="b13-s134-card">
+                <div class="b13-s134-tag s134-split">Split</div>
+                <div class="b13-s134-title">Bitcoin Cash is born — a hard fork by the big blocks camp</div>
+                <div class="b13-s134-summary">The community that wanted large blocks splits off and creates Bitcoin Cash with an 8 MB block limit.</div>
+                <div class="b13-s134-detail">At block 478,558, Bitcoin Cash split off from Bitcoin. This was the first significant real hard fork in Bitcoin’s history. Bitcoin holders automatically received the same amount of BCH. Bitcoin Cash used replay protection to ensure a transaction on one chain isn’t valid on the other.</div>
+              </div>
+            </div>
+
+            <div class="b13-s134-event" data-t="result">
+              <div class="b13-s134-date">Aug 24, 2017</div>
+              <div class="b13-s134-dot-wrap"><div class="b13-s134-dot s134-result"></div></div>
+              <div class="b13-s134-card">
+                <div class="b13-s134-tag s134-result">Result</div>
+                <div class="b13-s134-title">SegWit officially active in Bitcoin — block 481,824</div>
+                <div class="b13-s134-summary">After almost two years of debate, SegWit was finally activated on the main Bitcoin network.</div>
+                <div class="b13-s134-detail">SegWit lock-in happened on August 8, 2017 after the threshold was reached, and became fully active on August 24 at block 481,824. This opened the way for the Lightning Network and other technical improvements. The network’s effective capacity increased and transaction malleability was fixed.</div>
+              </div>
+            </div>
+
+            <div class="b13-s134-event" data-t="result">
+              <div class="b13-s134-date">Nov 2017</div>
+              <div class="b13-s134-dot-wrap"><div class="b13-s134-dot s134-result"></div></div>
+              <div class="b13-s134-card">
+                <div class="b13-s134-tag s134-result">Result</div>
+                <div class="b13-s134-title">SegWit2x canceled — the hard fork doesn’t happen</div>
+                <div class="b13-s134-summary">The hard fork part of the New York Agreement was officially canceled due to insufficient community support.</div>
+                <div class="b13-s134-detail">The signatories of the New York Agreement announced the cancellation of SegWit2x on November 8, 2017. The reason: not enough support to split the community. This ended the most dramatic chapter in Bitcoin’s history. SegWit ran without a hard fork, exactly as Bitcoin Core developers wanted from the start.</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-13-3" data-sb="sb-13-3">
+            ← 13.3 — Types of Soft Fork Activation
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-13-5" data-sb="sb-13-5">
+            13.5 — Taproot: A Smoother Soft Fork →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 13.4 -->
+
+      <!-- ==============================
+           SECTION 13.5 · Taproot — Soft Fork yang Lebih Mulus
+      ============================== -->
+      <div class="p-section" id="section-13-5">
+        <div class="p-eyebrow">Chapter 13 · 13.5</div>
+        <div class="p-heading">From concept to activation in 3 years, without a single drama</div>
+        <div class="p-title">Taproot — A Smoother Soft Fork</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>After the SegWit drama, the Bitcoin community learned a lot about how a major upgrade should not be done. Taproot was a chance to prove that Bitcoin could change in a more mature and coordinated way.</p>
+
+          <p><strong>What is Taproot?</strong></p>
+          <p>Taproot is a package of three BIPs activated together in November 2021: BIP 340 (Schnorr Signatures), BIP 341 (Taproot itself), and BIP 342 (Tapscript). All three are interconnected and designed to work together. Schnorr Signatures replace ECDSA as Bitcoin’s signature scheme. Schnorr is more mathematically efficient and enables signature aggregation: several signatures in one transaction can be combined into a single signature. This reduces transaction size and improves privacy because a multi-signature transaction looks like an ordinary transaction from the outside.</p>
+
+          <p>Tapscript introduces a new way to write smart contracts in Bitcoin using the MAST (Merkelized Alternative Script Trees) structure. With MAST, only the script branch that is actually executed needs to be revealed on the blockchain. A complex contract with many conditions looks like an ordinary payment from the outside as long as the executed path is the "happy path".</p>
+
+          <p><strong>Why smoother than SegWit?</strong></p>
+          <p>Taproot was activated using Speedy Trial with a short activation window and a 90% threshold. No UASF drama, no threats, no split. Miners reached the threshold in just 6 weeks after the window opened. Several factors contributed: everyone was already tired of the SegWit drama, there was no controversial trade-off like the block size debate, Taproot’s technical benefits were clear, and Speedy Trial provided a fair mechanism with a clear time limit.</p>
+
+          <p><strong>What changed after Taproot?</strong></p>
+          <p>Taproot became active at block 709,632 on November 14, 2021. Initial adoption was slow because wallets and services needed to be updated to support the new P2TR (Pay-to-Taproot) address format. Taproot opened the way for a more private Lightning Network with PTLCs (Point Time Lock Contracts) replacing HTLCs, and for a richer smart contract ecosystem in Bitcoin.</p>
+
+          <div class="p-callout">
+            <p>Taproot is proof that Bitcoin can change without major conflict. But this doesn’t mean Bitcoin governance is already perfect. Taproot succeeded because its benefits weren’t controversial and no major economic interest was threatened. The next, more controversial upgrade could require a process just as hard as SegWit.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualization — Taproot: before, after, and activation</div>
+          <div class="b13-s135-desc">
+            First tab: a comparison of transactions before and after Taproot. Second tab: the activation timeline via Speedy Trial from 2018 to November 2021.
+          </div>
+
+          <div class="b13-s135-tabs">
+            <button class="b13-s135-tab s135-act" id="b13-s135-t1">Before vs After Taproot</button>
+            <button class="b13-s135-tab" id="b13-s135-t2">Activation via Speedy Trial</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b13-s135-pane show" id="b13-s135-p1">
+            <div class="b13-s135-hint">Taproot brought three major changes at once. From the outside, a complex transaction now looks like an ordinary transaction.</div>
+
+            <div class="b13-s135-bips">
+              <div class="b13-s135-bip"><div class="b13-s135-bip-num">BIP 340</div><div class="b13-s135-bip-name">Schnorr Signatures</div><div class="b13-s135-bip-desc">Replaces ECDSA. More efficient, enables signature aggregation.</div></div>
+              <div class="b13-s135-bip"><div class="b13-s135-bip-num">BIP 341</div><div class="b13-s135-bip-name">Taproot</div><div class="b13-s135-bip-desc">Complex scripts can be hidden. Only the executed path is visible.</div></div>
+              <div class="b13-s135-bip"><div class="b13-s135-bip-num">BIP 342</div><div class="b13-s135-bip-name">Tapscript</div><div class="b13-s135-bip-desc">Updates the Bitcoin script language to support Schnorr and new features.</div></div>
+            </div>
+
+            <div class="b13-s135-grid">
+              <div class="b13-s135-col">
+                <div class="b13-s135-col-head s135-before">
+                  <div class="b13-s135-col-head-title">Before Taproot</div>
+                  <div class="b13-s135-col-head-sub">ECDSA, script exposed</div>
+                </div>
+                <div class="b13-s135-feature">
+                  <div class="b13-s135-feature-head">Signature scheme</div>
+                  <div class="b13-s135-feature-body">
+                    <div class="b13-s135-feature-val">ECDSA</div>
+                    Each input has its own signature. A multi-sig transaction with 3 signers has 3 separate signatures that are all visible on the blockchain.
+                  </div>
+                </div>
+                <div class="b13-s135-tx">
+                  <div class="b13-s135-tx-head s135-before">2-of-3 Multi-sig transaction (visible on the blockchain)</div>
+                  <div class="b13-s135-tx-body">
+                    <div class="b13-s135-tx-row"><div class="b13-s135-tx-label">Script type</div><div class="b13-s135-tx-val s135-bad">P2SH multisig</div></div>
+                    <div class="b13-s135-tx-divider"></div>
+                    <div class="b13-s135-tx-row"><div class="b13-s135-tx-label">Sig #1</div><div class="b13-s135-tx-val s135-bad">3045022100a4...3044</div></div>
+                    <div class="b13-s135-tx-row"><div class="b13-s135-tx-label">Sig #2</div><div class="b13-s135-tx-val s135-bad">3044021f5b...2201</div></div>
+                    <div class="b13-s135-tx-row"><div class="b13-s135-tx-label">Redeem script</div><div class="b13-s135-tx-val s135-bad">OP_2 key1 key2 key3 OP_3</div></div>
+                    <div class="b13-s135-tx-divider"></div>
+                    <div class="b13-s135-tx-row"><div class="b13-s135-tx-label">Privacy</div><div class="b13-s135-tx-val"><span class="b13-s135-badge s135-bad">Exposed — clearly a multi-sig</span></div></div>
+                    <div class="b13-s135-tx-row"><div class="b13-s135-tx-label">Size</div><div class="b13-s135-tx-val s135-bad">250-350 vbytes</div></div>
+                  </div>
+                </div>
+                <div class="b13-s135-feature">
+                  <div class="b13-s135-feature-head">Smart contract / script conditions</div>
+                  <div class="b13-s135-feature-body s135-bad">All script conditions are exposed on the blockchain, even conditions that aren’t used.</div>
+                </div>
+              </div>
+
+              <div class="b13-s135-col">
+                <div class="b13-s135-col-head s135-after">
+                  <div class="b13-s135-col-head-title">After Taproot</div>
+                  <div class="b13-s135-col-head-sub">Schnorr, script hidden</div>
+                </div>
+                <div class="b13-s135-feature">
+                  <div class="b13-s135-feature-head">Signature scheme</div>
+                  <div class="b13-s135-feature-body">
+                    <div class="b13-s135-feature-val">Schnorr + MuSig2</div>
+                    Signature aggregation: several signatures can be combined into one. A 3-signer multi-sig transaction looks exactly like an ordinary 1-signer transaction.
+                  </div>
+                </div>
+                <div class="b13-s135-tx">
+                  <div class="b13-s135-tx-head s135-after">2-of-3 Multi-sig transaction via Taproot (visible on the blockchain)</div>
+                  <div class="b13-s135-tx-body">
+                    <div class="b13-s135-tx-row"><div class="b13-s135-tx-label">Script type</div><div class="b13-s135-tx-val s135-good">P2TR (Pay-to-Taproot)</div></div>
+                    <div class="b13-s135-tx-divider"></div>
+                    <div class="b13-s135-tx-row"><div class="b13-s135-tx-label">Signature</div><div class="b13-s135-tx-val s135-good">a1b2c3d4...e5f6 (64 bytes)</div></div>
+                    <div class="b13-s135-tx-row"><div class="b13-s135-tx-label">Number of sigs</div><div class="b13-s135-tx-val s135-good">1 (aggregated)</div></div>
+                    <div class="b13-s135-tx-row"><div class="b13-s135-tx-label">Script</div><div class="b13-s135-tx-val s135-neutral">hidden</div></div>
+                    <div class="b13-s135-tx-divider"></div>
+                    <div class="b13-s135-tx-row"><div class="b13-s135-tx-label">Privacy</div><div class="b13-s135-tx-val"><span class="b13-s135-badge s135-good">Looks like an ordinary tx</span></div></div>
+                    <div class="b13-s135-tx-row"><div class="b13-s135-tx-label">Size</div><div class="b13-s135-tx-val s135-good">57 vbytes (key-path spend)</div></div>
+                  </div>
+                </div>
+                <div class="b13-s135-feature">
+                  <div class="b13-s135-feature-head">Smart contract / script conditions</div>
+                  <div class="b13-s135-feature-body s135-good">With MAST, only the executed script branch needs to be revealed. Other conditions stay hidden.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="b13-s135-note s135-info">The key insight of Taproot: if all parties agree (happy path), any transaction looks identical from the outside, whether it’s an ordinary payment, a 2-of-3 multisig, a Lightning channel close, or a complex smart contract.</div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b13-s135-pane" id="b13-s135-p2">
+            <div class="b13-s135-hint">Taproot was activated using Speedy Trial, a short 3-month activation window with a 90% threshold. Very different from the 2-year SegWit drama.</div>
+            <div class="b13-s135-tl">
+              <div class="b13-s135-tl-event">
+                <div class="b13-s135-tl-dot" style="background:#534AB7;">1</div>
+                <div class="b13-s135-tl-content">
+                  <div class="b13-s135-tl-date">Jan 2018 — beginning</div>
+                  <div class="b13-s135-tl-title">Pieter Wuille starts working on Schnorr/Taproot</div>
+                  <div class="b13-s135-tl-desc">The basic idea of Taproot was first presented informally. It took 3 years from concept to activation.</div>
+                </div>
+              </div>
+              <div class="b13-s135-tl-event">
+                <div class="b13-s135-tl-dot" style="background:#534AB7;">2</div>
+                <div class="b13-s135-tl-content">
+                  <div class="b13-s135-tl-date">Jan 2020</div>
+                  <div class="b13-s135-tl-title">BIP 340, 341, 342 officially submitted</div>
+                  <div class="b13-s135-tl-desc">Three BIPs submitted together as a package. Technical review ran for almost a full year.</div>
+                </div>
+              </div>
+              <div class="b13-s135-tl-event">
+                <div class="b13-s135-tl-dot" style="background:#534AB7;">3</div>
+                <div class="b13-s135-tl-content">
+                  <div class="b13-s135-tl-date">Oct 2020</div>
+                  <div class="b13-s135-tl-title">Bitcoin Core 0.21.1 releases the Taproot code</div>
+                  <div class="b13-s135-tl-desc">The code was ready to implement but the activation mechanism was still being discussed. The community agreed to use Speedy Trial.</div>
+                </div>
+              </div>
+              <div class="b13-s135-tl-event">
+                <div class="b13-s135-tl-dot" style="background:#854F0B;">4</div>
+                <div class="b13-s135-tl-content">
+                  <div class="b13-s135-tl-date">May 1, 2021</div>
+                  <div class="b13-s135-tl-title">Speedy Trial window opens — miners start signaling</div>
+                  <div class="b13-s135-tl-desc">The 3-month activation window begins. Threshold: 90% of 2016 blocks in one retarget period must signal.</div>
+                </div>
+              </div>
+              <div class="b13-s135-tl-event">
+                <div class="b13-s135-tl-dot" style="background:#0F6E56;">5</div>
+                <div class="b13-s135-tl-content">
+                  <div class="b13-s135-tl-date">Jun 12, 2021</div>
+                  <div class="b13-s135-tl-title">90% threshold reached — Taproot lock-in</div>
+                  <div class="b13-s135-tl-desc">Just 6 weeks after the window opened, the threshold was reached. Taproot was locked in and couldn’t be canceled.</div>
+                </div>
+              </div>
+              <div class="b13-s135-tl-event">
+                <div class="b13-s135-tl-dot" style="background:#0F6E56;">6</div>
+                <div class="b13-s135-tl-content">
+                  <div class="b13-s135-tl-date">Nov 14, 2021</div>
+                  <div class="b13-s135-tl-title">Taproot active — block 709,632</div>
+                  <div class="b13-s135-tl-desc">Taproot officially active on the Bitcoin network. The grace period between lock-in and activation gave all nodes time to upgrade.</div>
+                </div>
+              </div>
+            </div>
+            <div class="b13-s135-note s135-good">Taproot: from window opening to activation in less than 6 months. Compare with SegWit which needed almost 2 full years of debate.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-13-4" data-sb="sb-13-4">
+            ← 13.4 — SegWit: The Most Controversial Soft Fork
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-13-6" data-sb="sb-13-6">
+            13.6 — Bitcoin Governance →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 13.5 -->
+
+      <!-- ==============================
+           SECTION 13.6 · Governance Bitcoin — Siapa yang Sebenarnya Memutuskan?
+      ============================== -->
+      <div class="p-section" id="section-13-6">
+        <div class="p-eyebrow">Chapter 13 · 13.6</div>
+        <div class="p-heading">No one decides — everyone influences</div>
+        <div class="p-title">Bitcoin Governance — Who Really Decides?</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>After studying BIPs, soft forks, UASF, SegWit, and Taproot, a reasonable question arises: who actually has the power to change Bitcoin? The answer isn’t simple, and that’s what makes it interesting.</p>
+
+          <p><strong>No one decides, everyone influences</strong></p>
+          <p>Bitcoin has no formal governance. No voting, no board of directors, no defined decision mechanism. But change still happens, through an organic process in which various parties influence each other and ultimately reach consensus or not.</p>
+
+          <p><strong>Developers</strong></p>
+          <p>Developers who contribute to various Bitcoin implementations like Bitcoin Core, Bitcoin Knots, and others are the people who write and review the code that nodes run. They have great influence because they’re the ones who implement technical changes. But they can’t force anyone to run their code, and anyone is free to fork those implementations.</p>
+
+          <p><strong>Miners</strong></p>
+          <p>Miners are the party that produces blocks and secures the network. In MASF, the miners’ signal determines when a soft fork is activated. But the SegWit UASF case proved that miners can be forced by economic nodes: blocks rejected by economic nodes don’t generate real income.</p>
+
+          <p><strong>Nodes</strong></p>
+          <p>Nodes are the most often overlooked but most fundamental actor in Bitcoin governance. There are two kinds: independent nodes run by individuals, communities, or organizations without a direct economic motive, and economic nodes run by exchanges, wallets, and businesses. What matters: one home node has the same weight as one large exchange when it comes to validating and enforcing the consensus rules. They are the true guardians of the rules.</p>
+
+          <p><strong>Users and Economic Actors</strong></p>
+          <p>Ordinary users are the hardest to measure in influence, but in the long term they’re the ones who determine Bitcoin’s value. Economic actors and businesses like exchanges, merchants, payment processors, and institutions have significant economic power: exchanges can determine which chain gets liquidity, merchants who accept Bitcoin give the network real value. But they also have limitations, depending on user trust and unable to force a protocol change directly.</p>
+
+          <p><strong>Why can no one force change?</strong></p>
+          <p>Because Bitcoin is opt-in. Every node is free to choose what software it runs. If an implementation releases a new version the community doesn’t like, people can keep running the old version or fork the implementation. This informal governance process has advantages: there’s no single point of failure and no one can hijack Bitcoin for their own interest. Its drawback: the process is very slow and debates can last years.</p>
+
+          <div class="p-callout">
+            <p>Bitcoin governance isn’t a democracy, isn’t an autocracy, and isn’t anarchy. It’s a system where power is spread among many parties that don’t trust each other, but are forced to coordinate because they all depend on the same network. This may be the most interesting governance experiment of the digital era.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Power Map — Bitcoin Governance</div>
+          <div class="b13-s136-desc">
+            No single party has absolute authority. Click each actor to see their power, limitations, and a real example of their influence in Bitcoin’s history.
+          </div>
+
+          <div class="b13-s136-actors">
+            <div class="b13-s136-actor active" data-actor="dev" style="--ac:#534AB7;--ab:#EEEDFE;">
+              <div class="b13-s136-actor-top"><div class="b13-s136-actor-icon">💻</div><div><div class="b13-s136-actor-name">Developers</div><div class="b13-s136-actor-sub">Various Bitcoin implementations</div></div></div>
+              <div class="b13-s136-actor-bar-wrap"><div class="b13-s136-actor-bar-bg"><div class="b13-s136-actor-bar-fill" style="width:70%;background:#534AB7;"></div></div><div class="b13-s136-actor-bar-label" style="color:#534AB7;">High</div></div>
+            </div>
+            <div class="b13-s136-actor" data-actor="miner" style="--ac:#854F0B;--ab:#FAEEDA;">
+              <div class="b13-s136-actor-top"><div class="b13-s136-actor-icon">⛏️</div><div><div class="b13-s136-actor-name">Miners</div><div class="b13-s136-actor-sub">Block production, activation signaling</div></div></div>
+              <div class="b13-s136-actor-bar-wrap"><div class="b13-s136-actor-bar-bg"><div class="b13-s136-actor-bar-fill" style="width:60%;background:#854F0B;"></div></div><div class="b13-s136-actor-bar-label" style="color:#854F0B;">Medium</div></div>
+            </div>
+            <div class="b13-s136-actor" data-actor="node" style="--ac:#0F6E56;--ab:#EAF3DE;">
+              <div class="b13-s136-actor-top"><div class="b13-s136-actor-icon">🖥️</div><div><div class="b13-s136-actor-name">Nodes</div><div class="b13-s136-actor-sub">Independent and economic nodes</div></div></div>
+              <div class="b13-s136-actor-bar-wrap"><div class="b13-s136-actor-bar-bg"><div class="b13-s136-actor-bar-fill" style="width:85%;background:#0F6E56;"></div></div><div class="b13-s136-actor-bar-label" style="color:#0F6E56;">Very high</div></div>
+            </div>
+            <div class="b13-s136-actor" data-actor="user" style="--ac:#534AB7;--ab:#EEEDFE;">
+              <div class="b13-s136-actor-top"><div class="b13-s136-actor-icon">👤</div><div><div class="b13-s136-actor-name">Users</div><div class="b13-s136-actor-sub">Determiners of long-term value</div></div></div>
+              <div class="b13-s136-actor-bar-wrap"><div class="b13-s136-actor-bar-bg"><div class="b13-s136-actor-bar-fill" style="width:50%;background:#534AB7;"></div></div><div class="b13-s136-actor-bar-label" style="color:#534AB7;">Medium</div></div>
+            </div>
+            <div class="b13-s136-actor" data-actor="biz" style="--ac:#1A1A18;--ab:#F4F4F0;">
+              <div class="b13-s136-actor-top"><div class="b13-s136-actor-icon">🏢</div><div><div class="b13-s136-actor-name">Economic Actors and Businesses</div><div class="b13-s136-actor-sub">Exchanges, merchants, institutions, payment processors</div></div></div>
+              <div class="b13-s136-actor-bar-wrap"><div class="b13-s136-actor-bar-bg"><div class="b13-s136-actor-bar-fill" style="width:65%;background:#1A1A18;"></div></div><div class="b13-s136-actor-bar-label" style="color:#1A1A18;">High</div></div>
+            </div>
+          </div>
+
+          <div class="b13-s136-detail" id="b13-s136-detail"></div>
+
+          <div class="b13-s136-note">Bitcoin governance isn’t a democracy, isn’t an autocracy, and isn’t anarchy. Power is spread among many parties that don’t trust each other, but are forced to coordinate because they all depend on the same network.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-13-5" data-sb="sb-13-5">
+            ← 13.5 — Taproot: A Smoother Soft Fork
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 13.6 -->
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 16 · BAB 13 -->
+
+

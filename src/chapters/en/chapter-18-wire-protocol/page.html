@@ -1,0 +1,861 @@
+<!-- ============================================================
+     PAGE 21 · BAB 18 · Wire Protocol & Block Propagation
+     |-- 18.1 · Arsitektur P2P & Struktur Pesan Wire [DONE]
+     |-- 18.2 · [LOCKED]
+     |-- 18.3 · [LOCKED]
+     |-- 18.4 · [LOCKED]
+     |-- 18.5 · [LOCKED]
+     |-- 18.6 · [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab18">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b18">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b18">← Chapter List</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab18">
+      <div class="sidebar-heading">Chapter 18</div>
+      <div class="sidebar-title">Wire Protocol & Block Propagation</div>
+
+      <div class="sidebar-item active" id="sb-18-1">
+        <div class="sb-num">18.1</div>
+        <div class="sb-label">P2P Architecture & Wire Message Structure</div>
+      </div>
+      <div class="sidebar-item" id="sb-18-2">
+        <div class="sb-num">18.2</div>
+        <div class="sb-label">Handshake & Message Flow</div>
+      </div>
+      <div class="sidebar-item" id="sb-18-3">
+        <div class="sb-num">18.3</div>
+        <div class="sb-label">Block Sync — From One Block to the Whole Blockchain</div>
+      </div>
+      <div class="sidebar-item" id="sb-18-4">
+        <div class="sb-num">18.4</div>
+        <div class="sb-label">Compact Blocks — Speeding Up Block Propagation (BIP 152)</div>
+      </div>
+      <div class="sidebar-item" id="sb-18-5">
+        <div class="sb-num">18.5</div>
+        <div class="sb-label">Erlay — More Efficient Transaction Propagation (BIP 330)</div>
+      </div>
+      <div class="sidebar-item" id="sb-18-6">
+        <div class="sb-num">18.6</div>
+        <div class="sb-label">Dandelion & Transaction Privacy (BIP 156)</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab18-content">
+
+      <!-- ==============================
+           SECTION 18.1 · Arsitektur P2P & Struktur Pesan Wire
+      ============================== -->
+      <div class="p-section active" id="section-18-1">
+        <div class="p-eyebrow">Chapter 18 · 18.1</div>
+        <div class="p-heading">Behind every Bitcoin transaction you send, there’s a very strict binary conversation between thousands of computers</div>
+        <div class="p-title">P2P Architecture & Wire Message Structure</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Chapter 8 explained Bitcoin’s P2P network in terms of what happens. Chapter 18 covers the how: which bytes exactly move between nodes. If Chapter 8 was the map of the city, Chapter 18 is its road signs and traffic rules.</p>
+          <p>Imagine two people talking over a walkie-talkie with a military protocol. Every transmission must start with the station identification code, followed by the command code, then the message body, then the verification code. You can’t just talk freely; if the format is wrong, the transmission is ignored. The Bitcoin wire protocol works exactly like that, except it’s not the human voice being sent, but binary bytes that follow very strict rules.</p>
+
+          <p>If you open Wireshark and look at the traffic between two Bitcoin nodes, you won’t see HTTP, no JSON, no REST API. What you see is a raw byte stream, a binary format designed for maximum efficiency, not human readability.</p>
+
+          <p><strong>A network without a central server</strong></p>
+          <p>Bitcoin runs on top of a pure, unstructured peer-to-peer network. There’s no central server, no coordinator, no single point of failure. Every node is both a client and a server, it receives data from other peers while also serving data to other peers. This is different from how the ordinary internet works, where you are the client and Google, YouTube, or your bank is the server.</p>
+
+          <p>Every node maintains two kinds of connections. Outbound connections (8 regular + 2 block-only) are connections you initiate yourself, where you choose the peer. Inbound connections (roughly 115, since Bitcoin Core caps total connections at 125 and 10 of those are already used by outbound) are connections initiated by other peers that come to you, if port 8333 is open. Outbound connections are more trusted because you choose who to talk to, rather than passively accepting anyone who comes knocking.</p>
+
+          <p><strong>How does a node find someone to talk to?</strong></p>
+          <p>When first run, a Bitcoin node doesn’t know anyone yet. It uses DNS seeds, like a special phone book, to get a list of IPs of active nodes. There are several DNS seeds maintained by trusted contributors. After connecting to a few peers, the node exchanges lists of acquaintances via addr messages, like friends recommending new acquaintances to each other. This list is stored in peers.dat for use on restart.</p>
+
+          <p><strong>Anatomy of one Bitcoin message</strong></p>
+          <p>Every Bitcoin P2P message, whatever its contents, always has the exact same header structure. It’s like a standard envelope that always has a "sender," "recipient," and "contents" field in the same place, so whoever receives the envelope immediately knows how to read it.</p>
+
+          <p>The magic bytes (4 bytes) are the network identifier code. Like the area code in a phone number: 0xF9BEB4D9 means "this is a Bitcoin mainnet message." If the first byte a node receives differs from what it expects, the connection is closed immediately without reading the rest.</p>
+
+          <p>The command (12 bytes) is the command name in ASCII text. "version", "inv", "tx", "block", always padded with null bytes up to 12 characters. Like an email subject that always has exactly the same length.</p>
+
+          <p>The length (4 bytes) tells the recipient how many payload bytes are coming. This is important so the recipient knows when one message ends and the next begins in the continuously flowing byte stream.</p>
+
+          <p>The checksum (4 bytes) is the first 4 bytes of SHA256(SHA256(payload)). If the payload is corrupted in transit, the checksum won’t match and the message is ignored. Like a serial number on a banknote that can detect forgery.</p>
+
+          <p><strong>Services Flags: A Node’s Capability Business Card</strong></p>
+          <p>Inside the version message, every node advertises what it can do via services flags. It’s like a LinkedIn profile listing skills: NODE_NETWORK means "I have the full blockchain and can serve historical blocks," NODE_COMPACT_FILTERS means "I support BIP 157/158 for modern SPV clients," NODE_WITNESS means "I support SegWit." Peers read these flags to decide what can be requested from that node.</p>
+
+          <div class="p-callout">
+            <p>Bitcoin’s binary, minimal wire format is a deliberate design decision. There’s no overhead from a text format like HTTP or JSON, every byte has a specific meaning. This lets a node process thousands of messages per second with very little CPU overhead. Simplicity at the protocol level is what makes complexity at the network level possible.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Wire Message Inspector & P2P Network Topology</div>
+          <div class="b18-s181-desc">
+            First tab: choose a Bitcoin message type and see the byte-by-byte breakdown — each field explained with an everyday analogy. Second tab: a diagram of how your node connects to the Bitcoin P2P network.
+          </div>
+
+          <div class="b18-s181-tabs">
+            <button class="b18-s181-tab s181-act" id="b18-s181-t1">Wire Message Inspector</button>
+            <button class="b18-s181-tab" id="b18-s181-t2">P2P Network Topology</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b18-s181-pane show" id="b18-s181-p1">
+            <div class="b18-s181-hint">Every Bitcoin P2P message is a binary byte stream with the same format: magic bytes, command, length, checksum, then payload. Choose a message type to see the byte-by-byte breakdown along with helpful analogies.</div>
+
+            <div class="b18-s181-msg-label">Choose a message type:</div>
+            <div class="b18-s181-msgs" id="b18-s181-msgs"></div>
+
+            <div class="b18-s181-hex-wrap">
+              <div class="b18-s181-hex-bar">
+                <div class="b18-s181-hex-dot" style="background:#FF5F57;"></div>
+                <div class="b18-s181-hex-dot" style="background:#FEBC2E;"></div>
+                <div class="b18-s181-hex-dot" style="background:#28C840;"></div>
+                <div class="b18-s181-hex-title">Bitcoin Wire Protocol — Hex View</div>
+                <div class="b18-s181-hex-cmd" id="b18-s181-hex-cmd"></div>
+              </div>
+              <div class="b18-s181-hex-body" id="b18-s181-hex-body"></div>
+            </div>
+
+            <div class="b18-s181-legend">
+              <div class="b18-s181-leg"><div class="b18-s181-leg-dot" style="background:#534AB7;"></div>Magic (4B)</div>
+              <div class="b18-s181-leg"><div class="b18-s181-leg-dot" style="background:#854F0B;"></div>Command (12B)</div>
+              <div class="b18-s181-leg"><div class="b18-s181-leg-dot" style="background:#0F6E56;"></div>Length (4B)</div>
+              <div class="b18-s181-leg"><div class="b18-s181-leg-dot" style="background:#A32D2D;"></div>Checksum (4B)</div>
+              <div class="b18-s181-leg"><div class="b18-s181-leg-dot" style="background:#2A2A28;border:0.5px solid rgba(168,208,141,0.4);"></div>Payload</div>
+            </div>
+
+            <div class="b18-s181-fields" id="b18-s181-fields"></div>
+            <div class="b18-s181-flags" id="b18-s181-flags" style="display:none;">
+              <div class="b18-s181-flags-label">Services flags in the version payload:</div>
+              <div id="b18-s181-flags-inner"></div>
+            </div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b18-s181-pane" id="b18-s181-p2">
+            <div class="b18-s181-hint">The Bitcoin P2P network is unstructured P2P — no hierarchy, no node more important than another. Every node maintains outbound connections it chooses itself and accepts inbound connections from other peers.</div>
+            <div class="b18-s181-net">
+              <div class="b18-s181-net-label">Your node’s topology in the Bitcoin network:</div>
+              <svg class="b18-s181-net-svg" id="b18-s181-net-svg" viewBox="0 0 560 280" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;max-width:560px;margin:0 auto;"></svg>
+              <div class="b18-s181-net-note" id="b18-s181-net-note"></div>
+            </div>
+            <div class="b18-s181-flags">
+              <div class="b18-s181-flags-label">Services flags — the capabilities a node advertises:</div>
+              <div id="b18-s181-svc-flags"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-18-2" data-sb="sb-18-2">
+            18.2 — Handshake & Message Flow →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 18.1 -->
+
+      <!-- ==============================
+           SECTION 18.2 · Handshake & Message Flow
+      ============================== -->
+      <div class="p-section" id="section-18-2">
+        <div class="p-eyebrow">Chapter 18 · 18.2</div>
+        <div class="p-heading">Before they can exchange data, two nodes must first complete a three-step ritual</div>
+        <div class="p-title">Handshake & Message Flow — The Language Two Nodes Use When They First Meet</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Imagine two diplomats from different countries meeting for the first time. There’s a protocol to follow before they can discuss important matters: a formal introduction, identity verification, confirmation that both speak the same language, and only then move on to substance. Bitcoin nodes work exactly like that.</p>
+
+          <p><strong>Handshake: three steps before they can talk</strong></p>
+          <p>When two nodes first connect, they don’t immediately exchange transactions or blocks. There’s a three-step ritual that has to be completed first. The node that initiates the connection sends a version message containing the software version, services flags, timestamp, user agent, and the highest known block height. The receiving node replies with its own version. Then both send a verack as confirmation. After both veracks are received, the handshake is complete and the official communication session begins.</p>
+
+          <p>The nonce in the version message has a special function: detecting a self-connection. If a node receives a version with the same nonce it sent, it means it accidentally connected to itself through a relay or a strange network configuration. The connection is closed immediately.</p>
+
+          <p><strong>Transaction lifecycle: from wallet to network</strong></p>
+          <p>When you send a Bitcoin transaction from your wallet, three P2P messages work in sequence. First, the node announces the txid via inv without sending the full data, like a "new product available" poster without forcing everyone to grab it. A peer that doesn’t have the transaction yet replies with getdata. Only then is the full transaction sent via tx. A peer that already has the transaction from another node doesn’t need to respond at all, so there’s no redundant data transfer.</p>
+
+          <p>Propagation spreads like ripples in water: one transaction can reach the entire network in seconds via this flooding process.</p>
+
+          <p><strong>Block propagation: three generations of mechanisms</strong></p>
+          <p>When a miner finds a new block, propagation must be as fast as possible. Every second of delay increases the risk of another block being found before this one spreads, causing a stale block that wastes the miner’s reward.</p>
+
+          <p>The old way uses the classic inv/getdata/block, where the full 1-2 MB block must be sent to every peer that requests it. A better way is headers-first: send the 80-byte header first so the peer can verify the proof-of-work before deciding whether it needs the full block. The best way is compact blocks (BIP 152), discussed in 18.4: send a sketch of the block that can be reconstructed from the mempool, so only a small fraction of the data needs to be transferred.</p>
+
+          <p><strong>Other supporting messages</strong></p>
+          <p>getheaders requests block headers from a peer to build a picture of the chain quickly without downloading full blocks. addr and addrv2 share lists of known peer IP addresses, continuing the peer discovery process that started from DNS seeds. feefilter lets a node tell a peer the minimum fee it accepts in its mempool, so transactions with too low a fee aren’t sent at all.</p>
+
+          <div class="p-callout">
+            <p>The inv/getdata design that separates announcement from data delivery is a very important efficiency decision. Without it, every new transaction would be sent in full to all peers redundantly. With inv/getdata, each piece of data is only sent to the peer that actually needs it, saving network bandwidth significantly.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Handshake Timeline & Message Flow</div>
+          <div class="b18-s182-desc">
+            Three tabs: the handshake and transaction lifecycle step by step, block propagation from the old way to compact blocks, and a complete reference for all Bitcoin P2P messages.
+          </div>
+
+          <div class="b18-s182-tabs">
+            <button class="b18-s182-tab s182-act" id="b18-s182-t1">Handshake & Transaction</button>
+            <button class="b18-s182-tab" id="b18-s182-t2">Block Propagation</button>
+            <button class="b18-s182-tab" id="b18-s182-t3">Message Reference</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b18-s182-pane show" id="b18-s182-p1">
+            <div class="b18-s182-hint">The three-step handshake, then the transaction lifecycle. Click "Next Step" to advance one step.</div>
+            <div class="b18-s182-actors">
+              <div class="b18-s182-actor s182-left">Your Node (Initiator)<div class="b18-s182-actor-sub">the one that initiates the connection</div></div>
+              <div class="b18-s182-actor s182-right">Peer (Responder)<div class="b18-s182-actor-sub">the one that accepts the connection</div></div>
+            </div>
+            <div class="b18-s182-timeline" id="b18-s182-tl1"></div>
+            <div class="b18-s182-detail s182-d-idle" id="b18-s182-detail1">
+              <div class="b18-s182-detail-label">Waiting</div>
+              <div class="b18-s182-detail-title">A TCP connection was just opened</div>
+              <div class="b18-s182-detail-text">Two nodes just connected at the TCP level. The handshake must be completed before Bitcoin communication can begin.</div>
+            </div>
+            <div class="b18-s182-ctrl">
+              <button class="b18-s182-btn-primary" id="b18-s182-next1">Next Step →</button>
+              <button class="b18-s182-btn-sec" id="b18-s182-rst1">Reset</button>
+              <div class="b18-s182-step-ind" id="b18-s182-ind1">0 / 9 steps</div>
+            </div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b18-s182-pane" id="b18-s182-p2">
+            <div class="b18-s182-hint">The evolution of the block propagation mechanism from the old way to compact blocks. Click to see each step.</div>
+            <div class="b18-s182-actors">
+              <div class="b18-s182-actor s182-left">Miner / First Node<div class="b18-s182-actor-sub">the first to have the new block</div></div>
+              <div class="b18-s182-actor s182-right">Other Node<div class="b18-s182-actor-sub">the one that doesn’t have this block yet</div></div>
+            </div>
+            <div class="b18-s182-timeline" id="b18-s182-tl2"></div>
+            <div class="b18-s182-detail s182-d-idle" id="b18-s182-detail2">
+              <div class="b18-s182-detail-label">Waiting</div>
+              <div class="b18-s182-detail-title">A miner just found block #870,143</div>
+              <div class="b18-s182-detail-text">The new block is valid. It must be propagated to the entire network as fast as possible before another miner finds a block at the same height.</div>
+            </div>
+            <div class="b18-s182-ctrl">
+              <button class="b18-s182-btn-primary" id="b18-s182-next2">Next Step →</button>
+              <button class="b18-s182-btn-sec" id="b18-s182-rst2">Reset</button>
+              <div class="b18-s182-step-ind" id="b18-s182-ind2">0 / 8 steps</div>
+            </div>
+          </div>
+
+          <!-- PANE 3 -->
+          <div class="b18-s182-pane" id="b18-s182-p3">
+            <div class="b18-s182-hint">A summary of all the important Bitcoin P2P messages, grouped by function.</div>
+            <div class="b18-s182-refs">
+              <div class="b18-s182-ref s182-r-h">
+                <div class="b18-s182-ref-label">HANDSHAKE</div>
+                <div class="b18-s182-ref-msg"><code>version</code> — introduction: version, services, height</div>
+                <div class="b18-s182-ref-msg"><code>verack</code> — confirms the handshake is complete</div>
+              </div>
+              <div class="b18-s182-ref s182-r-t">
+                <div class="b18-s182-ref-label">TRANSAKSI</div>
+                <div class="b18-s182-ref-msg"><code>inv</code> — announce the txids you have</div>
+                <div class="b18-s182-ref-msg"><code>getdata</code> — request specific data from a peer</div>
+                <div class="b18-s182-ref-msg"><code>tx</code> — send the full transaction</div>
+                <div class="b18-s182-ref-msg"><code>mempool</code> — request the peer’s mempool tx list</div>
+              </div>
+              <div class="b18-s182-ref s182-r-b">
+                <div class="b18-s182-ref-label">BLOCK & SYNC</div>
+                <div class="b18-s182-ref-msg"><code>block</code> — send the full block (~1-2 MB)</div>
+                <div class="b18-s182-ref-msg"><code>headers</code> — send headers only (80 bytes/block)</div>
+                <div class="b18-s182-ref-msg"><code>getheaders</code> — request headers from a peer</div>
+                <div class="b18-s182-ref-msg"><code>getblocks</code> — request inv for blocks you don’t have</div>
+                <div class="b18-s182-ref-msg"><code>cmpctblock</code> — compact block (BIP 152)</div>
+                <div class="b18-s182-ref-msg"><code>getblocktxn</code> — request tx missing from a compact block</div>
+              </div>
+              <div class="b18-s182-ref s182-r-g">
+                <div class="b18-s182-ref-label">NETWORK & MISC</div>
+                <div class="b18-s182-ref-msg"><code>ping</code> / <code>pong</code> — connection keepalive</div>
+                <div class="b18-s182-ref-msg"><code>addr</code> / <code>addrv2</code> — share peer lists</div>
+                <div class="b18-s182-ref-msg"><code>getaddr</code> — request a peer list from another node</div>
+                <div class="b18-s182-ref-msg"><code>feefilter</code> — set the minimum fee accepted</div>
+                <div class="b18-s182-ref-msg"><code>sendcmpct</code> — negotiate compact block mode</div>
+                <div class="b18-s182-ref-msg"><code>wtxidrelay</code> — enable relay via witness txid</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-18-1" data-sb="sb-18-1">
+            ← 18.1 — P2P Architecture
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-18-3" data-sb="sb-18-3">
+            18.3 — Block Sync →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 18.2 -->
+
+      <!-- ==============================
+           SECTION 18.3 · Block Sync
+      ============================== -->
+      <div class="p-section" id="section-18-3">
+        <div class="p-eyebrow">Chapter 18 · 18.3</div>
+        <div class="p-heading">A new node can’t just trust data from one peer — it has to know which chain is correct before starting to download</div>
+        <div class="p-title">Block Sync — From One Block to the Whole Blockchain</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>In Chapter 16 we discussed IBD from the node’s perspective: what gets verified and how long it takes. Here we look at it from a different angle: what P2P messages are actually sent during the sync process, and why there are two sync strategies with very different efficiency.</p>
+
+          <p><strong>Strategy 1: Blocks-first sync, the abandoned way</strong></p>
+          <p>The most naive way is to request blocks one by one from a single peer. The node sends getblocks with a block locator, the peer replies with an inv containing up to 500 of the next block hashes, then the node requests each block via getdata and waits for it to be validated before requesting the next. The problem: the entire sync depends on a single peer. If the peer is slow, everything is slow. The node also can’t tell whether it’s on the correct chain until it has already downloaded many blocks.</p>
+
+          <p><strong>Strategy 2: Headers-first sync, the modern way since 2015</strong></p>
+          <p>Headers-first solves this problem by separating two phases. First phase: download all headers via getheaders. The peer replies with up to 2,000 headers per response (each header 80 bytes plus 1 byte varint, about 162 KB per response). Within a few minutes, the node has all the headers from genesis to the tip, about 70 MB total. From this header chain, the node can compute the accumulated proof-of-work of each chain offered by various peers and know which is valid, even before downloading a single full block.</p>
+
+          <p>Second phase: download blocks in parallel from many different peers. Since the order is already known from the header chain, the node can request blocks from any peer without the risk of being tricked by a wrong order.</p>
+
+          <p><strong>Block locator algorithm</strong></p>
+          <p>The block locator is a clever, economical list of hashes. The node doesn’t send the hashes of all the blocks it has, but rather chooses them exponentially sparse: the 10 most recent blocks one by one, then every 2 blocks, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, and so on up to the genesis block. This lets a peer efficiently find the chain divergence point even with a very long reorg, using only about 40 hashes, even for a chain hundreds of thousands of blocks long.</p>
+
+          <p><strong>Minimum chain work threshold</strong></p>
+          <p>For extra security, modern nodes have a minimum chain work threshold: the minimum accumulated proof-of-work a chain must have before it’s considered worth following. This prevents a node from being tricked into following a fake, very short chain with very little PoW, even before the header chain is fully verified.</p>
+
+          <div class="p-callout">
+            <p>The shift from blocks-first to headers-first is one of the biggest improvements in Bitcoin Core’s history (version 0.10.0, 2015). By separating chain verification from data download, IBD became far faster, safer, and more resistant to misbehaving peers.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Block Sync Visualizer</div>
+          <div class="b18-s183-desc">
+            First tab: compare blocks-first vs headers-first — click to see the phases, messages, and speed comparison. Second tab: a visualization of the block locator algorithm that determines which hashes are sent during sync.
+          </div>
+
+          <div class="b18-s183-tabs">
+            <button class="b18-s183-tab s183-act" id="b18-s183-t1">Blocks-first vs Headers-first</button>
+            <button class="b18-s183-tab" id="b18-s183-t2">Block Locator Algorithm</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b18-s183-pane show" id="b18-s183-p1">
+            <div class="b18-s183-hint">Choose a sync strategy to see the sequence of steps, the P2P messages used, and why headers-first is far more efficient.</div>
+            <div class="b18-s183-strats" id="b18-s183-strats">
+              <div class="b18-s183-strat s183-act s183-red" data-strat="blocks">
+                <div class="b18-s183-strat-icon">🐌</div>
+                <div class="b18-s183-strat-body">
+                  <div class="b18-s183-strat-title">Blocks-first Sync — The Old Way</div>
+                  <div class="b18-s183-strat-desc">Download blocks one by one from a single peer. Slow, can’t parallelize, vulnerable to slow or dishonest peers.</div>
+                </div>
+              </div>
+              <div class="b18-s183-strat s183-green" data-strat="headers">
+                <div class="b18-s183-strat-icon">🚀</div>
+                <div class="b18-s183-strat-body">
+                  <div class="b18-s183-strat-title">Headers-first Sync — The Modern Way (since 2015)</div>
+                  <div class="b18-s183-strat-desc">Download all headers first (~70 MB), then download blocks in parallel from many peers. Faster and safer.</div>
+                </div>
+              </div>
+            </div>
+            <div class="b18-s183-phases" id="b18-s183-phases"></div>
+            <div class="b18-s183-compare-label">Sync time comparison:</div>
+            <div class="b18-s183-compare-rows">
+              <div class="b18-s183-compare-row"><div class="b18-s183-compare-name">Blocks-first (old)</div><div class="b18-s183-compare-bar-wrap"><div class="b18-s183-compare-bar" style="width:100%;background:#A32D2D;"><span class="b18-s183-compare-bar-txt">~3-7 days IBD (average hardware)</span></div></div><div class="b18-s183-compare-val">~3-7 days</div></div>
+              <div class="b18-s183-compare-row"><div class="b18-s183-compare-name">Headers-first (modern)</div><div class="b18-s183-compare-bar-wrap"><div class="b18-s183-compare-bar" style="width:35%;background:#0F6E56;"><span class="b18-s183-compare-bar-txt">~4-24 hours</span></div></div><div class="b18-s183-compare-val">~4-24 hours</div></div>
+              <div class="b18-s183-compare-row"><div class="b18-s183-compare-name">Header chain only</div><div class="b18-s183-compare-bar-wrap"><div class="b18-s183-compare-bar" style="width:3%;background:#534AB7;"><span class="b18-s183-compare-bar-txt">~5 minutes</span></div></div><div class="b18-s183-compare-val">~5 minutes</div></div>
+            </div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b18-s183-pane" id="b18-s183-p2">
+            <div class="b18-s183-hint">The block locator chooses hashes exponentially sparse — the 10 most recent are dense, then sparser going back. Only ~30-40 hashes for an 870,000-block chain.</div>
+            <div class="b18-s183-locator-label">Block locator visualization from a node at block #870,142:</div>
+            <div class="b18-s183-locator-chain" id="b18-s183-locator-chain"></div>
+            <div class="b18-s183-locator-cards">
+              <div class="b18-s183-lcard s183-lcard-purple">
+                <div class="b18-s183-lcard-label">How the locator is chosen:</div>
+                <div class="b18-s183-lcard-text">The 10 most recent blocks one by one (#870,142 to #870,133), then every 2 blocks, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048... up to the genesis block #0. Only ~30-40 hashes total for an 870,000-block chain.</div>
+              </div>
+              <div class="b18-s183-lcard s183-lcard-green">
+                <div class="b18-s183-lcard-label">Why this is clever:</div>
+                <div class="b18-s183-lcard-text">A short reorg (1-5 blocks) is detected immediately from the dense hashes at the start. A long reorg is detected from the sparse hashes. The peer only needs to send headers starting from the divergence point, with no large data transfer.</div>
+              </div>
+              <div class="b18-s183-lcard s183-lcard-amber">
+                <div class="b18-s183-lcard-label">Messages used:</div>
+                <div class="b18-s183-lcard-text"><code>getheaders</code> — sent with the block locator, requests headers from the divergence point to the tip (max 2,000 per response, ~162 KB).<br><code>headers</code> — the peer’s reply with up to 2,000 headers.<br><code>getblocks</code> — the old version: requests block inv (max 500 per response).</div>
+              </div>
+            </div>
+            <div class="b18-s183-note">Block locator analogy: instead of naming every tree you passed (thousands), you name the last 10 trees in detail, then every major intersection, then every large village you remember. The rescue team immediately knows where to start looking.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-18-2" data-sb="sb-18-2">
+            ← 18.2 — Handshake & Message Flow
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-18-4" data-sb="sb-18-4">
+            18.4 — Compact Blocks →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 18.3 -->
+
+      <!-- ==============================
+           SECTION 18.4 · Compact Blocks (BIP 152)
+      ============================== -->
+      <div class="p-section" id="section-18-4">
+        <div class="p-eyebrow">Chapter 18 · 18.4</div>
+        <div class="p-heading">Why download data you already have? Compact blocks solve the biggest inefficiency in block propagation</div>
+        <div class="p-title">Compact Blocks — Speeding Up Block Propagation (BIP 152)</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Imagine someone sends you a copy of a 200-page newspaper, when you already have 198 of its pages. A waste of time and paper, right? That’s what happened with block propagation before compact blocks: every node had to download the full block (~1-2 MB) even though it already knew almost all the transactions in it from its own mempool.</p>
+
+          <p><strong>The problem being solved</strong></p>
+          <p>A node well-connected to the network usually already has 95-99% of the transactions in a block before the block is found. This is because transactions are propagated across the network when first sent, long before they enter a block. Compact blocks (BIP 152, 2016) take advantage of this fact: instead of sending the whole block, send just a list of short transaction IDs and let the recipient reconstruct the rest from its local mempool.</p>
+
+          <p><strong>The cmpctblock message format</strong></p>
+          <p>The cmpctblock message contains three main components. The block header (80 bytes) the same as usual, containing the proof-of-work, merkle root, and timestamp. Shortids of 6 bytes for each transaction in the block (much smaller than the 32-byte txid), created with SipHash-2-4 using a unique nonce per block so they’re only valid for this block. Prefill transactions, a few transactions sent directly without a shortid, especially the coinbase transaction, which is guaranteed not to be in any mempool.</p>
+
+          <p>The recipient matches each shortid against a transaction in its mempool. Found transactions are used directly to reconstruct the block. If a shortid doesn’t match, the recipient sends getblocktxn with a list of the transaction indices it needs, and the sender replies with blocktxn containing only those transactions.</p>
+
+          <p><strong>High-bandwidth vs low-bandwidth mode</strong></p>
+          <p>These two modes are negotiated via the sendcmpct message during the handshake. High-bandwidth mode (sendcmpct(1)): the node sends the cmpctblock unsolicited as soon as a new block is found, suitable for a maximum of 3 peers with trusted, low-latency connections. Low-bandwidth mode (sendcmpct(0)): the node announces via inv or headers first, and only sends the cmpctblock if the peer requests it via getdata.</p>
+
+          <p><strong>Real-world impact</strong></p>
+          <p>Compact blocks reduce the data transferred from ~1,500 KB to ~20-60 KB under normal conditions. This is equivalent to a 95-98% reduction in bandwidth for block propagation. Block propagation latency drops drastically because less data has to be transferred and verified.</p>
+
+          <div class="p-callout">
+            <p>Compact blocks are an elegant example of the principle "don’t send data the recipient already has." By taking advantage of the fact that the mempools of well-connected nodes are almost always in sync, BIP 152 turns block propagation from a bandwidth-heavy operation into a near-real-time one.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Compact Block Simulator</div>
+          <div class="b18-s184-desc">
+            First tab: drag the slider to see how much data has to be transferred with compact blocks vs a full block, depending on what percentage of tx are already in the mempool. Second tab: the difference between high-bandwidth and low-bandwidth mode.
+          </div>
+
+          <div class="b18-s184-tabs">
+            <button class="b18-s184-tab s184-act" id="b18-s184-t1">Compact Block Simulator</button>
+            <button class="b18-s184-tab" id="b18-s184-t2">High-bandwidth vs Low-bandwidth</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b18-s184-pane show" id="b18-s184-p1">
+            <div class="b18-s184-hint">Compact blocks take advantage of the fact that a well-connected node already has almost all the transactions in its mempool. Drag the slider to see the impact.</div>
+
+            <div class="b18-s184-analogy">
+              <div class="b18-s184-analogy-label">Analogy</div>
+              <div class="b18-s184-analogy-text">Instead of sending a full copy of a 200-page newspaper, your friend just sends a <em>list of page numbers</em> in that edition. You match it against the old newspaper you already have — and only request the pages you’re missing. The transfer goes from 200 pages to just 2-3 pages.</div>
+            </div>
+
+            <div class="b18-s184-slider-wrap">
+              <div class="b18-s184-slider-label">What percentage of transactions are already in the receiving node’s mempool?</div>
+              <div class="b18-s184-slider-sub">A node well-connected to the network usually already has 95-99% of the transactions before a block is found.</div>
+              <div class="b18-s184-slider-row">
+                <span class="b18-s184-slider-mm">80%</span>
+                <input type="range" class="b18-s184-slider" id="b18-s184-sl" min="80" max="100" value="97" step="1">
+                <span class="b18-s184-slider-mm">100%</span>
+                <div class="b18-s184-slider-val" id="b18-s184-sl-val">97% already present</div>
+              </div>
+            </div>
+
+            <div class="b18-s184-stats">
+              <div class="b18-s184-stat s184-purple">
+                <div class="b18-s184-stat-label">Total transactions in the block</div>
+                <div class="b18-s184-stat-val">3,000 tx</div>
+                <div class="b18-s184-stat-sub">A typical modern Bitcoin block</div>
+              </div>
+              <div class="b18-s184-stat s184-green">
+                <div class="b18-s184-stat-label">Already in the mempool</div>
+                <div class="b18-s184-stat-val" id="b18-s184-known">2,910 tx</div>
+                <div class="b18-s184-stat-sub">Reconstructed locally, no download needed</div>
+              </div>
+              <div class="b18-s184-stat s184-amber">
+                <div class="b18-s184-stat-label">Need to download</div>
+                <div class="b18-s184-stat-val" id="b18-s184-missing">90 tx</div>
+                <div class="b18-s184-stat-sub">Via getblocktxn + blocktxn</div>
+              </div>
+            </div>
+
+            <div class="b18-s184-bw-label">Comparison of data transferred:</div>
+            <div class="b18-s184-bw-rows">
+              <div class="b18-s184-bw-row"><div class="b18-s184-bw-name">Full block (old way)</div><div class="b18-s184-bw-wrap"><div class="b18-s184-bw-bar" style="width:100%;background:#A32D2D;"><span class="b18-s184-bw-txt">~1,500 KB (full block)</span></div></div><div class="b18-s184-bw-val">~1,500 KB</div></div>
+              <div class="b18-s184-bw-row"><div class="b18-s184-bw-name">cmpctblock (header+shortids)</div><div class="b18-s184-bw-wrap"><div class="b18-s184-bw-bar" id="b18-s184-bar-cmpct" style="background:#534AB7;"><span class="b18-s184-bw-txt" id="b18-s184-bar-cmpct-txt"></span></div></div><div class="b18-s184-bw-val" id="b18-s184-val-cmpct"></div></div>
+              <div class="b18-s184-bw-row"><div class="b18-s184-bw-name">blocktxn (unknown tx)</div><div class="b18-s184-bw-wrap"><div class="b18-s184-bw-bar" id="b18-s184-bar-extra" style="background:#854F0B;"><span class="b18-s184-bw-txt" id="b18-s184-bar-extra-txt"></span></div></div><div class="b18-s184-bw-val" id="b18-s184-val-extra"></div></div>
+              <div class="b18-s184-bw-row"><div class="b18-s184-bw-name" style="font-weight:500;color:#0F6E56;">Total compact blocks</div><div class="b18-s184-bw-wrap"><div class="b18-s184-bw-bar" id="b18-s184-bar-total" style="background:#0F6E56;"><span class="b18-s184-bw-txt" id="b18-s184-bar-total-txt"></span></div></div><div class="b18-s184-bw-val" id="b18-s184-val-total" style="color:#0F6E56;font-weight:600;"></div></div>
+            </div>
+
+            <div class="b18-s184-breakdown-label">cmpctblock component breakdown:</div>
+            <div class="b18-s184-breakdown-rows">
+              <div class="b18-s184-bdr br-header"><div class="b18-s184-bdr-name">Block header</div><div class="b18-s184-bdr-val">80 bytes</div><div class="b18-s184-bdr-desc">The same 80-byte header as usual — proof-of-work, merkle root, timestamp</div></div>
+              <div class="b18-s184-bdr br-shortid"><div class="b18-s184-bdr-name">Shortids (6 bytes × 3,000 tx)</div><div class="b18-s184-bdr-val" id="b18-s184-shortid-val">18,000 bytes</div><div class="b18-s184-bdr-desc">A 6-byte short ID per transaction. Created with SipHash-2-4 + a unique nonce per block — only valid for this block</div></div>
+              <div class="b18-s184-bdr br-prefill"><div class="b18-s184-bdr-name">Prefill tx (coinbase + a few)</div><div class="b18-s184-bdr-val">~500 bytes</div><div class="b18-s184-bdr-desc">Tx guaranteed not to be in any mempool (coinbase) is sent directly without being requested</div></div>
+              <div class="b18-s184-bdr br-missing"><div class="b18-s184-bdr-name">blocktxn (unknown tx)</div><div class="b18-s184-bdr-val" id="b18-s184-missing-val">~45,000 bytes</div><div class="b18-s184-bdr-desc">Sent via getblocktxn/blocktxn only if there are tx not found in the mempool</div></div>
+              <div class="b18-s184-bdr br-total"><div class="b18-s184-bdr-name">Total compact vs full block</div><div class="b18-s184-bdr-val" id="b18-s184-total-val">~63 KB vs 1,500 KB</div><div class="b18-s184-bdr-desc" id="b18-s184-saving-desc">Saves ~96% bandwidth.</div></div>
+            </div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b18-s184-pane" id="b18-s184-p2">
+            <div class="b18-s184-hint">The two modes are negotiated via sendcmpct during the handshake. A node can use different modes for different peers.</div>
+            <div class="b18-s184-analogy">
+              <div class="b18-s184-analogy-label">Analogy</div>
+              <div class="b18-s184-analogy-text"><strong>High-bandwidth</strong>: immediately WhatsApp 3 trusted friends as soon as there’s news, without waiting for them to ask. <strong>Low-bandwidth</strong>: post a status first, and only those who actively ask get the full details.</div>
+            </div>
+            <div class="b18-s184-modes">
+              <div class="b18-s184-mode s184-m-high">
+                <div class="b18-s184-mode-label">HIGH-BANDWIDTH MODE</div>
+                <div class="b18-s184-mode-title">sendcmpct(1) — Send immediately</div>
+                <div class="b18-s184-mode-desc">The node sends the cmpctblock to a peer as soon as a new block is found, without waiting for the peer to ask.</div>
+                <div class="b18-s184-mode-item">Lowest latency — the block arrives in milliseconds</div>
+                <div class="b18-s184-mode-item">Used for a maximum of 3 peers per node</div>
+                <div class="b18-s184-mode-item">Suitable for peers with fast, low-latency connections</div>
+                <div class="b18-s184-mode-analogy">Like a push notification — told immediately without having to check yourself</div>
+              </div>
+              <div class="b18-s184-mode s184-m-low">
+                <div class="b18-s184-mode-label">LOW-BANDWIDTH MODE</div>
+                <div class="b18-s184-mode-title">sendcmpct(0) — Send if requested</div>
+                <div class="b18-s184-mode-desc">The node announces via inv or headers first. An interested peer requests the cmpctblock via getdata.</div>
+                <div class="b18-s184-mode-item">Higher latency but more bandwidth-efficient</div>
+                <div class="b18-s184-mode-item">A peer that already got it elsewhere doesn’t need to ask</div>
+                <div class="b18-s184-mode-item">The default for most connections</div>
+                <div class="b18-s184-mode-analogy">Like a news headline — see the title first, then click if interested</div>
+              </div>
+            </div>
+            <div class="b18-s184-flow-wrap">
+              <div class="b18-s184-flow-label">Message flow per mode:</div>
+              <div class="b18-s184-flows">
+                <div class="b18-s184-flow s184-flow-high">
+                  <div class="b18-s184-flow-title">High-bandwidth:</div>
+                  <div class="b18-s184-flow-msgs">Node → <code>cmpctblock</code><br>[if tx are missing:]<br>Peer → <code>getblocktxn</code><br>Node → <code>blocktxn</code></div>
+                </div>
+                <div class="b18-s184-flow s184-flow-low">
+                  <div class="b18-s184-flow-title">Low-bandwidth:</div>
+                  <div class="b18-s184-flow-msgs">Node → <code>inv</code> / <code>headers</code><br>Peer → <code>getdata</code> (MSG_CMPCT_BLOCK)<br>Node → <code>cmpctblock</code><br>[if tx are missing:]<br>Peer → <code>getblocktxn</code><br>Node → <code>blocktxn</code></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-18-3" data-sb="sb-18-3">
+            ← 18.3 — Block Sync
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-18-5" data-sb="sb-18-5">
+            18.5 — Erlay →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 18.4 -->
+
+      <!-- ==============================
+           SECTION 18.5 · Erlay (BIP 330)
+      ============================== -->
+      <div class="p-section" id="section-18-5">
+        <div class="p-eyebrow">Chapter 18 · 18.5</div>
+        <div class="p-heading">If compact blocks solve block propagation, Erlay solves transaction propagation — with a very elegant mathematical approach</div>
+        <div class="p-title">Erlay — More Efficient Transaction Propagation (BIP 330)</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Imagine you live in a village of 1,000 residents. There’s fresh news: "The village head got married again." The old way: everyone who knows immediately tells all their neighbors. The same news can be heard by one person from 10 different people before they get a chance to pass it on. A waste of conversation. Erlay is a smarter way: exchange a list of news periodically, and only tell what’s genuinely new.</p>
+
+          <p><strong>The flooding problem we have now</strong></p>
+          <p>Currently transaction propagation uses a flooding mechanism via inv/getdata/tx. Every new transaction is announced to all peers via inv. The result: each transaction is announced on average 8-16 times to each node, almost all of it redundant. On a network with 10,000+ nodes and hundreds of thousands of transactions per day, the bandwidth overhead from this redundancy is very significant and limits how many connections a node can maintain without large bandwidth.</p>
+
+          <p><strong>Set reconciliation: Erlay’s core idea</strong></p>
+          <p>Erlay (BIP 330) introduces a technique called set reconciliation. For a small subset of chosen peers, the node still uses flooding as usual (fanout) to ensure fast propagation. For the other peers, the node periodically exchanges a very compact sketch of its transaction set using a data structure called minisketch. From the two exchanged sketches, both can learn which transactions are held by only one side, without needing to send the full list.</p>
+
+          <p><strong>Minisketch: clever mathematics</strong></p>
+          <p>Minisketch is an implementation of PinSketch, a set reconciliation technique built on BCH codes. It lets two parties learn the difference between their sets by transferring only as much data as the difference, not as much as the total set. If node A and node B each have 10,000 transactions and differ by only 50 transactions, the sketch sent is only about 50 elements in size, not 10,000. It’s like a small "fingerprint" of the collection that’s enough to mathematically reveal the difference.</p>
+
+          <p><strong>Long-term impact</strong></p>
+          <p>Erlay reduces transaction propagation bandwidth by about 40%. More importantly: because each peer connection needs less bandwidth, a node can maintain more peer connections without proportional overhead. More connections means a more decentralized network that’s more resistant to eclipse attacks. Transaction propagation latency barely changes because fanout to several peers is still done.</p>
+
+          <div class="p-callout">
+            <p>Erlay is an example of how mathematical theory (error-correcting codes and set reconciliation) can be applied to solve a practical problem in a P2P network. The result isn’t just bandwidth savings, but an improvement in network decentralization, which is one of Bitcoin’s most valuable properties.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Erlay Visualizer — Flooding vs Set Reconciliation</div>
+          <div class="b18-s185-desc">
+            First tab: a visual comparison of flooding vs Erlay — how many redundant arrows are eliminated. Second tab: how set reconciliation works step by step with an easy-to-understand analogy.
+          </div>
+
+          <div class="b18-s185-tabs">
+            <button class="b18-s185-tab s185-act" id="b18-s185-t1">Flooding vs Erlay</button>
+            <button class="b18-s185-tab" id="b18-s185-t2">How Set Reconciliation Works</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b18-s185-pane show" id="b18-s185-p1">
+            <div class="b18-s185-hint">Every new transaction must be propagated to thousands of nodes. Flooding produces a lot of duplication. Erlay replaces most of the flooding with set reconciliation, which is far more efficient.</div>
+            <div class="b18-s185-analogy">
+              <div class="b18-s185-analogy-label">Analogy</div>
+              <div class="b18-s185-analogy-text"><strong>Flooding:</strong> You get fresh news and immediately tell all 8 of your neighbors. The result is that many people get the same news from many different people.<br><strong>Erlay:</strong> Tell just 2-3 of your closest neighbors. For the rest: periodically exchange a "news list" with your neighbors. Only what’s genuinely new gets told. The result is the same, 40% more efficient.</div>
+            </div>
+            <div class="b18-s185-nets">
+              <div class="b18-s185-net-wrap">
+                <div class="b18-s185-net-head s185-h-flood">Flooding (The Old Way)</div>
+                <svg class="b18-s185-net-svg" id="b18-s185-svg-flood" viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:180px;border-radius:var(--border-radius-lg);background:#F4F4F0;"></svg>
+                <div class="b18-s185-net-stat">
+                  <div class="b18-s185-badge s185-b-red">~16 inv per tx per node</div>
+                  <div class="b18-s185-badge s185-b-red">~93% redundant</div>
+                </div>
+              </div>
+              <div class="b18-s185-net-wrap">
+                <div class="b18-s185-net-head s185-h-erlay">Erlay (BIP 330)</div>
+                <svg class="b18-s185-net-svg" id="b18-s185-svg-erlay" viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:180px;border-radius:var(--border-radius-lg);background:#F4F4F0;"></svg>
+                <div class="b18-s185-net-stat">
+                  <div class="b18-s185-badge s185-b-green">2-3 direct fanout</div>
+                  <div class="b18-s185-badge s185-b-amber">the rest via sketch</div>
+                  <div class="b18-s185-badge s185-b-green">~40% bandwidth saved</div>
+                </div>
+              </div>
+            </div>
+            <div class="b18-s185-stats">
+              <div class="b18-s185-stat s185-s-red">
+                <div class="b18-s185-stat-label">Average redundant announces (flooding)</div>
+                <div class="b18-s185-stat-val">~8-16×</div>
+                <div class="b18-s185-stat-sub">Each tx is announced to nodes that already have it</div>
+              </div>
+              <div class="b18-s185-stat s185-s-green">
+                <div class="b18-s185-stat-label">Erlay bandwidth savings</div>
+                <div class="b18-s185-stat-val">~40%</div>
+                <div class="b18-s185-stat-sub">For transaction propagation across the network</div>
+              </div>
+              <div class="b18-s185-stat s185-s-purple">
+                <div class="b18-s185-stat-label">Main benefit</div>
+                <div class="b18-s185-stat-val">+connections</div>
+                <div class="b18-s185-stat-sub">Bandwidth saved = can maintain more peers</div>
+              </div>
+            </div>
+            <div class="b18-s185-bw-label">Transaction propagation bandwidth comparison:</div>
+            <div class="b18-s185-bw-rows">
+              <div class="b18-s185-bw-row"><div class="b18-s185-bw-name">Flooding (old way)</div><div class="b18-s185-bw-track"><div class="b18-s185-bw-fill" style="width:100%;background:#A32D2D;"><span class="b18-s185-bw-txt">100% bandwidth</span></div></div><div class="b18-s185-bw-val">100%</div></div>
+              <div class="b18-s185-bw-row"><div class="b18-s185-bw-name">Erlay (BIP 330)</div><div class="b18-s185-bw-track"><div class="b18-s185-bw-fill" style="width:60%;background:#0F6E56;"><span class="b18-s185-bw-txt">~60% bandwidth</span></div></div><div class="b18-s185-bw-val">~60%</div></div>
+            </div>
+            <div class="b18-s185-note">Erlay doesn’t slow down transaction propagation. Transactions still spread quickly via fanout to several peers directly. What’s saved is the redundant delivery to peers that already have the transaction.</div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b18-s185-pane" id="b18-s185-p2">
+            <div class="b18-s185-hint">Set reconciliation lets two nodes learn the difference between their transaction collections by exchanging only a tiny amount of data — without sending the entire list.</div>
+            <div class="b18-s185-analogy">
+              <div class="b18-s185-analogy-label">Minisketch analogy</div>
+              <div class="b18-s185-analogy-text">You and your friend each have 10,000 songs. You want to know which songs only one of you has, but you don’t want to send a list of 10,000 songs. Minisketch lets you exchange a very small "fingerprint" of the collection (~50 entries). From those two fingerprints, you know exactly: "you have songs X and Y that I don’t have" — without ever sending the full list.</div>
+            </div>
+            <div class="b18-s185-steps-label">How Erlay works step by step:</div>
+            <div class="b18-s185-steps">
+              <div class="b18-s185-step s185-step-erlay">
+                <div class="b18-s185-step-num">1</div>
+                <div class="b18-s185-step-body">
+                  <div class="b18-s185-step-title">Fanout: announce directly to 2-3 chosen peers</div>
+                  <div class="b18-s185-step-desc">As usual (inv/getdata/tx), a new transaction is sent directly to a small number of chosen peers to ensure fast propagation to the network.</div>
+                  <div class="b18-s185-step-analogy">Like telling 2-3 trusted friends first so the news spreads quickly.</div>
+                </div>
+              </div>
+              <div class="b18-s185-step s185-step-sketch">
+                <div class="b18-s185-step-num">2</div>
+                <div class="b18-s185-step-body">
+                  <div class="b18-s185-step-title">Accumulate: collect the difference for ~2 seconds</div>
+                  <div class="b18-s185-step-desc">For the other peers, the node accumulates new transactions it has but hasn’t sent. Every ~2 seconds, one reconciliation round is done.</div>
+                  <div class="b18-s185-step-analogy">Like noting down all the new news for 2 seconds before sharing the list with your neighbors.</div>
+                </div>
+              </div>
+              <div class="b18-s185-step s185-step-sketch">
+                <div class="b18-s185-step-num">3</div>
+                <div class="b18-s185-step-body">
+                  <div class="b18-s185-step-title">Sketch: send a transaction-set "fingerprint" via minisketch</div>
+                  <div class="b18-s185-step-desc">The node sends a compact sketch of its transaction set using minisketch (a PinSketch implementation). Its size is proportional to the number of differences, not the total set size.</div>
+                  <div class="b18-s185-step-analogy">Like exchanging fingerprints of a song collection — small but enough to know the difference.</div>
+                </div>
+              </div>
+              <div class="b18-s185-step s185-step-sketch">
+                <div class="b18-s185-step-num">4</div>
+                <div class="b18-s185-step-body">
+                  <div class="b18-s185-step-title">Decode: find the difference from the two sketches via XOR</div>
+                  <div class="b18-s185-step-desc">The recipient combines the received sketch with its own. The XOR operation reveals the difference set without needing to send larger data.</div>
+                  <div class="b18-s185-step-analogy">Two fingerprints combined produce a list of differences directly and mathematically.</div>
+                </div>
+              </div>
+              <div class="b18-s185-step s185-step-erlay">
+                <div class="b18-s185-step-num">5</div>
+                <div class="b18-s185-step-body">
+                  <div class="b18-s185-step-title">Request: ask only for transactions that are genuinely missing</div>
+                  <div class="b18-s185-step-desc">After knowing the difference, the node requests via getdata only the txids it doesn’t have. No redundancy.</div>
+                  <div class="b18-s185-step-analogy">Only after knowing which songs are missing do you ask for those specific songs.</div>
+                </div>
+              </div>
+            </div>
+            <div class="b18-s185-impact">
+              <div class="b18-s185-impact-label">Erlay’s impact on decentralization:</div>
+              <div class="b18-s185-impact-text">Because each peer connection needs less bandwidth with Erlay, a node can maintain more peer connections without proportional overhead. More connections means a more decentralized network that’s more resistant to eclipse attacks.</div>
+            </div>
+            <div class="b18-s185-status">
+              <div class="b18-s185-status-label">Implementation status (as of 2025):</div>
+              <div class="b18-s185-status-text">Erlay has been merged into Bitcoin Core as an optional feature. Both peers must support BIP 330 to use set reconciliation. During the transition period, a node that supports Erlay can still operate normally with old nodes using ordinary flooding.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-18-4" data-sb="sb-18-4">
+            ← 18.4 — Compact Blocks
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-18-6" data-sb="sb-18-6">
+            18.6 — Dandelion →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 18.5 -->
+
+      <!-- ==============================
+           SECTION 18.6 · Dandelion & Transaction Privacy
+      ============================== -->
+      <div class="p-section" id="section-18-6">
+        <div class="p-eyebrow">Chapter 18 · 18.6</div>
+        <div class="p-heading">You can verify transactions without your identity being known — but transaction propagation can expose your IP address before the transaction enters a block</div>
+        <div class="p-title">Dandelion & Transaction Privacy (BIP 156)</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>We mentioned Dandelion in 8.3 as the most widely discussed answer to the privacy problem in propagation. Here we look at how it works, and also at why it still has not made it into Bitcoin Core.</p>
+          <p>Imagine you’re standing in the middle of a crowd and shout "I have this letter!" Everyone immediately knows you’re the sender. That’s what happens with Bitcoin transaction propagation today: the node that first spreads a transaction to the network is almost certainly the sending node.</p>
+
+          <p><strong>How transaction propagation exposes the sender’s IP</strong></p>
+          <p>When you create a transaction, your node is the first to spread it via flooding. An attacker running many nodes can observe from which node a transaction is first seen. The node that first broadcasts a transaction to many different peers is most likely the original source. This isn’t a theoretical attack, and blockchain analytics companies have long used this technique to link Bitcoin transactions to the sender’s IP address.</p>
+
+          <p><strong>Dandelion: stem phase and fluff phase</strong></p>
+          <p>Dandelion (BIP 156) solves this problem in an elegant way. Its name comes from the dandelion flower: a thin stem at first, then bursting out in all directions. In the stem phase, a new transaction isn’t immediately flooded to all peers. Instead, it’s forwarded to one peer at random, then that peer to one more peer, for several hops. During the stem phase, the transaction doesn’t enter the normal mempool, but is only forwarded silently. In the fluff phase, after a few hops, one node randomly decides to start spreading the transaction normally via flooding. The node that starts the fluff isn’t the original sender, so an attacker can’t determine the true source.</p>
+
+          <p><strong>Dandelion++: A Refinement of the Original Version</strong></p>
+          <p>The original BIP 156 has a weakness: if an attacker is on the stem path, they can trace it. Dandelion++ fixes this by choosing a different stem peer for each transaction from a stable, random subset of peers, so an attacker can’t predict or influence the stem path.</p>
+
+          <p><strong>Implementation status</strong></p>
+          <p>Dandelion++ hasn’t been merged into Bitcoin Core because of implementation complexity and concerns about potential new DoS attacks that could be exploited via the stem phase. Instead, Bitcoin Core uses a simpler technique: transactions are sent with a random delay to make timing analysis harder, though not as effective as Dandelion.</p>
+
+          <div class="p-callout">
+            <p>Privacy in Bitcoin isn’t just about hiding transaction amounts or on-chain identity, but also about hiding where a transaction originates at the P2P network level. Dandelion is one of the cleverest attempts to solve this problem without sacrificing transaction propagation speed.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Dandelion Visualizer — Stem Phase & Fluff Phase</div>
+          <div class="b18-s186-desc">
+            First tab: a comparison of ordinary flooding vs Dandelion — how hard it is for an attacker to determine a transaction’s source. Second tab: how the stem phase and fluff phase work, visually.
+          </div>
+
+          <div class="b18-s186-tabs">
+            <button class="b18-s186-tab s186-act" id="b18-s186-t1">Flooding vs Dandelion</button>
+            <button class="b18-s186-tab" id="b18-s186-t2">Stem Phase & Fluff Phase</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b18-s186-pane show" id="b18-s186-p1">
+            <div class="b18-s186-hint">When you send a transaction, anyone monitoring the network can see which node the transaction first appears from. Dandelion hides the original source by spreading the transaction silently first before flooding it.</div>
+            <div class="b18-s186-analogy">
+              <div class="b18-s186-analogy-label">Analogy</div>
+              <div class="b18-s186-analogy-text"><strong>Ordinary flooding:</strong> You stand in the middle of a crowd and shout "I have this letter!" Everyone immediately knows you’re the sender.<br><br><strong>Dandelion:</strong> You whisper the letter to one person. They whisper it to the next person. After a few whispers, only then does someone announce it out loud. No one knows the letter came from you.</div>
+            </div>
+            <div class="b18-s186-nets">
+              <div class="b18-s186-net-wrap">
+                <div class="b18-s186-net-head s186-h-flood">Ordinary Flooding — Source Easily Traced</div>
+                <svg id="b18-s186-svg-flood" viewBox="0 0 220 190" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:190px;border-radius:var(--border-radius-lg);background:#F4F4F0;"></svg>
+                <div class="b18-s186-badge-row">
+                  <div class="b18-s186-badge s186-b-red">source directly visible</div>
+                  <div class="b18-s186-badge s186-b-red">IP easily traced</div>
+                </div>
+              </div>
+              <div class="b18-s186-net-wrap">
+                <div class="b18-s186-net-head s186-h-dan">Dandelion — Source Hidden</div>
+                <svg id="b18-s186-svg-dan" viewBox="0 0 220 190" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:190px;border-radius:var(--border-radius-lg);background:#F4F4F0;"></svg>
+                <div class="b18-s186-badge-row">
+                  <div class="b18-s186-badge s186-b-green">stem phase hidden</div>
+                  <div class="b18-s186-badge s186-b-amber">fluff from a random node</div>
+                  <div class="b18-s186-badge s186-b-purple">source unclear</div>
+                </div>
+              </div>
+            </div>
+            <div class="b18-s186-privacy-label">The attacker’s ability to determine a transaction’s source:</div>
+            <div class="b18-s186-privacy-rows">
+              <div class="b18-s186-privacy-row"><div class="b18-s186-privacy-name">Ordinary flooding</div><div class="b18-s186-privacy-track"><div class="b18-s186-privacy-fill" style="width:90%;background:#A32D2D;"><span class="b18-s186-privacy-txt">~90% accurate — almost certainly traceable</span></div></div><div class="b18-s186-privacy-val" style="color:#A32D2D;">~90%</div></div>
+              <div class="b18-s186-privacy-row"><div class="b18-s186-privacy-name">Dandelion (BIP 156)</div><div class="b18-s186-privacy-track"><div class="b18-s186-privacy-fill" style="width:12%;background:#0F6E56;"><span class="b18-s186-privacy-txt">~12%</span></div></div><div class="b18-s186-privacy-val" style="color:#0F6E56;">~12%</div></div>
+              <div class="b18-s186-privacy-row"><div class="b18-s186-privacy-name">Random delay (Bitcoin Core)</div><div class="b18-s186-privacy-track"><div class="b18-s186-privacy-fill" style="width:55%;background:#854F0B;"><span class="b18-s186-privacy-txt">~55% — harder but still possible</span></div></div><div class="b18-s186-privacy-val" style="color:#854F0B;">~55%</div></div>
+            </div>
+            <div class="b18-s186-status s186-st-warn">
+              <div class="b18-s186-status-label">Implementation status (as of 2025):</div>
+              Dandelion++ hasn’t been merged into Bitcoin Core because of complexity and concerns about potential DoS attacks via the stem phase. Bitcoin Core currently uses a simple random delay. Some other node software has already implemented Dandelion++.
+            </div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b18-s186-pane" id="b18-s186-p2">
+            <div class="b18-s186-hint">Dandelion splits transaction propagation into two very different phases. The stem phase is hidden, the fluff phase is like ordinary flooding but from an unexpected point.</div>
+            <div class="b18-s186-analogy">
+              <div class="b18-s186-analogy-label">Why is it called Dandelion (the dandelion flower)?</div>
+              <div class="b18-s186-analogy-text">A dandelion flower has a thin, long stem, then at its tip tiny seeds scatter in all directions when the wind blows (fluff). A Bitcoin transaction in Dandelion moves exactly like that: silent and linear at first, then bursting out across the entire network from one unexpected point.</div>
+            </div>
+            <div class="b18-s186-phase-cards">
+              <div class="b18-s186-phase s186-ph-stem">
+                <div class="b18-s186-phase-label">PHASE 1 — STEM PHASE</div>
+                <div class="b18-s186-phase-title">The Dandelion Stem — Silent Propagation</div>
+                <div class="b18-s186-phase-desc">The transaction is forwarded one by one linearly, not entering the normal mempool.</div>
+                <div class="b18-s186-phase-item">The node picks one peer at random</div>
+                <div class="b18-s186-phase-item">That peer forwards to one more peer</div>
+                <div class="b18-s186-phase-item">Continues for ~2-10 hops</div>
+                <div class="b18-s186-phase-item">No flooding, no mempool</div>
+                <div class="b18-s186-phase-item">The attacker can’t distinguish the original source from a forwarder</div>
+                <div class="b18-s186-phase-analogy">Like whispering from ear to ear — no one outside can hear</div>
+              </div>
+              <div class="b18-s186-phase s186-ph-fluff">
+                <div class="b18-s186-phase-label">PHASE 2 — FLUFF PHASE</div>
+                <div class="b18-s186-phase-title">Dandelion Bursts — Normal Flooding</div>
+                <div class="b18-s186-phase-desc">After a few hops, one node decides to start flooding as usual.</div>
+                <div class="b18-s186-phase-item">The node chooses at random: keep stemming or start fluffing</div>
+                <div class="b18-s186-phase-item">Fluff probability: ~10% per hop</div>
+                <div class="b18-s186-phase-item">On fluff: the transaction enters the mempool and is flooded to all peers</div>
+                <div class="b18-s186-phase-item">From here, propagation is as usual</div>
+                <div class="b18-s186-phase-item">The node that starts the fluff isn’t the original sender</div>
+                <div class="b18-s186-phase-analogy">Like someone in the middle of a crowd suddenly announcing — it doesn’t mean they’re the sender</div>
+              </div>
+            </div>
+            <div class="b18-s186-flow-wrap">
+              <div class="b18-s186-flow-label">Dandelion flow visualization:</div>
+              <svg id="b18-s186-flow-svg" viewBox="0 0 520 100" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:100px;"></svg>
+            </div>
+            <div class="b18-s186-status s186-st-info">
+              <div class="b18-s186-status-label">Dandelion++ vs the original Dandelion (BIP 156):</div>
+              The original Dandelion is vulnerable: if an attacker is on the stem path, they can trace it. Dandelion++ fixes this by choosing a different stem peer for each transaction from a stable subset of peers, so an attacker can’t predict or influence the stem path.
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-18-5" data-sb="sb-18-5">
+            ← 18.5 — Erlay
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 18.6 -->
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 21 · BAB 18 -->
+
+

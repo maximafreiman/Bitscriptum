@@ -1,0 +1,104 @@
+/* ============================================================
+   RESPONSIVE · MOBILE (max-width: 640px)
+============================================================ */
+@media (max-width: 640px) {
+
+  /* TOPBAR */
+  .topbar { padding:14px 20px; }
+  .topbar-name { display:none; }
+  .topbar-block { display:none; }
+
+  /* PAGE WELCOME */
+  .page-title { font-size:clamp(28px,8vw,48px); }
+  .hero-actions { flex-direction:column; gap:12px; }
+
+  /* CHAPTER LIST */
+  .chapter-item { padding:18px 20px; }
+  .chapter-item-desc { display:none; }
+
+  /* PROLOGUE BODY — stack sidebar di atas content */
+  .prologue-body { flex-direction:column; overflow:visible; }
+
+  /* SIDEBAR — horizontal scroll di mobile */
+  .sidebar {
+    width:100%;
+    flex-direction:row;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    overflow-y:hidden;
+    padding:10px 0;
+    border-right:none;
+    border-bottom:0.5px solid rgba(124,58,237,0.15);
+    gap:0;
+    -webkit-overflow-scrolling:touch;
+  }
+  .sidebar-heading { display:none; }
+  .sidebar-title   { display:none; }
+  .sidebar-item {
+    flex-direction:column;
+    flex-shrink:0;
+    padding:8px 14px;
+    border-left:none;
+    border-bottom:2px solid transparent;
+    white-space:nowrap;
+    gap:2px;
+    min-width:80px;
+    text-align:center;
+    align-items:center;
+  }
+  .sidebar-item.active {
+    border-left:none;
+    border-bottom:2px solid #7C3AED;
+  }
+  .sb-num   { font-size:9px; }
+  .sb-label { font-size:10px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:80px; }
+
+  /* CONTENT AREA */
+  .prologue-content { padding:28px 20px 60px; max-width:100%; }
+  .p-heading { font-size:12px; }
+  .p-title   { font-size:clamp(22px,6vw,32px); }
+  .p-body p  { font-size:14px; }
+  .p-callout { padding:14px 16px; }
+  .p-callout p { font-size:13px; }
+
+  /* NAV BUTTONS */
+  .p-nav { flex-direction:column; gap:8px; }
+  .p-nav-btn { width:100%; text-align:center; }
+
+  /* SIMULATION GRIDS — 1 kolom */
+  .utxo-summary    { grid-template-columns:1fr 1fr; }
+  .fee-result      { grid-template-columns:1fr 1fr; }
+  .fee-rates       { grid-template-columns:1fr; }
+  .fee-ctrl-row    { grid-template-columns:100px 1fr 50px; }
+  .sc-grid         { grid-template-columns:1fr; }
+  .ecc-cards       { gap:6px; }
+  .csm-grid        { grid-template-columns:1fr; }
+  .mp-stage        { grid-template-columns:1fr; gap:6px; }
+  .ec-steps        { flex-direction:column; }
+  .ec-step-tab     { border-right:none; border-bottom:0.5px solid rgba(124,58,237,0.1); }
+
+  /* MERKLE CANVAS */
+  #b04-s45-canvas  { height:auto; }
+
+  /* RAW PANEL */
+  .raw-panel-body  { font-size:9px; }
+  .raw-toggle-hint { display:none; }
+
+  /* CHAPTER LIST */
+  .chapter-num  { font-size:24px; }
+  .chapter-item-title { font-size:16px; }
+
+}
+
+/* RESPONSIVE · TABLET (641px - 900px) */
+@media (min-width:641px) and (max-width:900px) {
+  .topbar { padding:16px 28px; }
+  .prologue-content { padding:36px 36px 80px; }
+  .sidebar { width:200px; }
+  .sidebar-title { font-size:13px; }
+  .fee-rates { grid-template-columns:1fr 1fr 1fr; }
+  .sc-grid   { grid-template-columns:1fr 1fr; }
+  .csm-grid  { grid-template-columns:1fr 1fr; }
+}
+
+

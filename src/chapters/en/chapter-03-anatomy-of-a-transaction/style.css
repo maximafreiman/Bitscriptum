@@ -1,0 +1,197 @@
+/* ============================================================
+   PAGE 6 · BAB 3 · Anatomi Sebuah Transaksi
+============================================================ */
+#page-bab3 { flex-direction:column; }
+
+/* ============================================================
+   PAGE 6 · BAB 3 · 3.2 SIMULATION (UTXO)
+============================================================ */
+.b03-s32-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1.25rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.utxo-send-wrap { margin-bottom:1.25rem; }
+.utxo-section-label { font-size:11px; color:#52524C; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:10px; font-family:'Sora',sans-serif; }
+.utxo-send-row { display:flex; align-items:center; gap:12px; }
+.utxo-send-row label { font-size:13px; color:#3A3A35; white-space:nowrap; font-family:'Sora',sans-serif; }
+.utxo-send-row input[type=range] { flex:1; accent-color:#534AB7; }
+.utxo-send-val { font-size:14px; font-weight:500; color:#1A1A18; min-width:80px; font-family:'Courier Prime',monospace; }
+.utxo-coins-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:8px; margin-bottom:1.25rem; }
+.utxo-coin { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-md); padding:10px 12px; cursor:pointer; transition:all 0.2s; background:#FAFAF8; }
+.utxo-coin:hover { border-color:#534AB7; }
+.utxo-coin.selected { border:1.5px solid #534AB7; background:#EEEDFE; }
+.utxo-coin.spent { opacity:0.35; pointer-events:none; }
+.utxo-coin-val { font-size:15px; font-weight:500; color:#1A1A18; font-family:'Courier Prime',monospace; }
+.utxo-coin-label { font-size:11px; color:#3A3A35; margin-top:3px; }
+.utxo-coin-age { font-size:10px; color:#52524C; margin-top:2px; }
+.utxo-summary { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:1.25rem; }
+.utxo-stat { background:#F4F4F0; border-radius:var(--border-radius-md); padding:12px 14px; }
+.utxo-stat-label { font-size:11px; color:#52524C; margin-bottom:4px; font-family:'Sora',sans-serif; }
+.utxo-stat-val { font-size:15px; font-weight:500; color:#1A1A18; font-family:'Courier Prime',monospace; }
+.utxo-stat-val.ok   { color:#3B6D11; }
+.utxo-stat-val.warn { color:#A32D2D; }
+.utxo-btn-row { display:flex; gap:8px; margin-bottom:1.25rem; flex-wrap:wrap; }
+.utxo-result { border:0.5px solid rgba(124,58,237,0.15); border-radius:var(--border-radius-lg); overflow:hidden; margin-bottom:1.25rem; display:none; }
+.utxo-result.show { display:block; }
+.utxo-result-head { padding:8px 14px; background:#1A1A18; font-size:11px; color:#C4B5FD; letter-spacing:0.1em; font-family:'Sora',sans-serif; }
+.utxo-result-body { padding:12px 14px; background:#FAFAF8; display:flex; flex-direction:column; gap:8px; }
+.utxo-flow-row { display:flex; align-items:center; gap:8px; font-size:12px; flex-wrap:wrap; }
+.utxo-flow-arrow { color:#52524C; }
+.utxo-flow-tag { padding:3px 10px; border-radius:99px; font-size:11px; font-weight:500; font-family:'Sora',sans-serif; }
+.utxo-flow-tag.consumed { background:#FCEBEB; color:#791F1F; }
+.utxo-flow-tag.created  { background:#EAF3DE; color:#27500A; }
+.utxo-flow-tag.fee      { background:#FAEEDA; color:#633806; }
+.utxo-flow-val { font-family:'Courier Prime',monospace; font-size:12px; color:#1A1A18; }
+.utxo-flow-sub { font-size:11px; color:#52524C; }
+.utxo-hr { border:none; border-top:0.5px solid rgba(124,58,237,0.1); margin:4px 0; }
+.utxo-note { font-size:12px; color:#3A3A35; line-height:1.6; padding:10px 12px; background:#F4F4F0; border-radius:var(--border-radius-md); }
+
+/* ============================================================
+   PAGE 6 · BAB 3 · 3.3 SIMULATION (Input dan Output)
+============================================================ */
+.b03-s33-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1.25rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.tx-preset-row { display:flex; gap:6px; margin-bottom:1.25rem; flex-wrap:wrap; }
+.tx-preset-btn { padding:6px 14px; font-size:11px; border-radius:99px; border:0.5px solid rgba(124,58,237,0.2); background:transparent; color:#3A3A35; cursor:pointer; transition:all 0.2s; font-family:'Sora',sans-serif; }
+.tx-preset-btn:hover { border-color:#534AB7; color:#534AB7; }
+.tx-preset-btn.active { background:#534AB7; color:#fff; border-color:#534AB7; }
+.tx-anatomy { display:grid; grid-template-columns:1fr 40px 1fr; gap:0; margin-bottom:1.25rem; align-items:center; }
+.tx-col-label { font-size:10px; color:#52524C; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:8px; font-family:'Sora',sans-serif; }
+.tx-items { display:flex; flex-direction:column; gap:6px; }
+.tx-item { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-md); padding:10px 12px; cursor:pointer; transition:all 0.2s; background:#FAFAF8; }
+.tx-item:hover { border-color:#534AB7; }
+.tx-item.active { border-color:#534AB7; background:#EEEDFE; }
+.tx-item.input-item  { border-left:2px solid #A32D2D; }
+.tx-item.output-item { border-left:2px solid #3B6D11; }
+.tx-item.change-item { border-left:2px solid #534AB7; }
+.tx-item.fee-item    { border-left:2px solid #C8A020; }
+.tx-item-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:3px; }
+.tx-item-tag { font-size:9px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; }
+.tx-item-tag.inp { color:#A32D2D; }
+.tx-item-tag.out { color:#3B6D11; }
+.tx-item-tag.chg { color:#534AB7; }
+.tx-item-tag.fee { color:#C8A020; }
+.tx-item-val { font-size:13px; font-weight:500; color:#1A1A18; font-family:'Courier Prime',monospace; }
+.tx-item-sub { font-size:10px; color:#3A3A35; }
+.tx-middle { display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.tx-box { background:#1A1A18; border-radius:var(--border-radius-md); padding:8px 6px; text-align:center; }
+.tx-box-label { font-size:9px; color:#C4B5FD; letter-spacing:0.1em; writing-mode:vertical-rl; transform:rotate(180deg); font-family:'Sora',sans-serif; }
+.tx-detail { border:0.5px solid rgba(124,58,237,0.2); border-radius:var(--border-radius-lg); overflow:hidden; margin-bottom:1.25rem; display:none; }
+.tx-detail.show { display:block; }
+.tx-detail-head { padding:8px 14px; background:#534AB7; font-size:11px; color:#fff; font-weight:500; font-family:'Sora',sans-serif; }
+.tx-detail-body { padding:12px 14px; background:#FAFAF8; font-size:12px; color:#1A1A18; line-height:1.7; }
+.tx-balance { display:flex; align-items:center; gap:8px; font-size:12px; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); flex-wrap:wrap; }
+.tx-balance-item { font-family:'Courier Prime',monospace; }
+.tx-balance-sep  { color:#52524C; }
+.tx-balance-ok   { color:#3B6D11; font-weight:500; font-family:'Courier Prime',monospace; }
+.tx-balance-bad  { color:#A32D2D; font-weight:500; font-family:'Courier Prime',monospace; }
+
+/* ============================================================
+   PAGE 6 · BAB 3 · 3.4 SIMULATION (Transaction Fee)
+============================================================ */
+.b03-s34-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1.25rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.fee-controls { display:flex; flex-direction:column; gap:12px; margin-bottom:1.25rem; }
+.fee-ctrl-row { display:grid; grid-template-columns:140px 1fr 60px; align-items:center; gap:12px; }
+.fee-ctrl-label { font-size:12px; color:#3A3A35; font-family:'Sora',sans-serif; }
+.fee-ctrl-row input[type=range] { accent-color:#534AB7; }
+.fee-ctrl-val { font-size:12px; font-weight:500; color:#1A1A18; font-family:'Courier Prime',monospace; text-align:right; }
+.fee-size-box { border:0.5px solid rgba(124,58,237,0.15); border-radius:var(--border-radius-lg); overflow:hidden; margin-bottom:1.25rem; }
+.fee-size-head { padding:8px 14px; background:#1A1A18; font-size:10px; color:#C4B5FD; letter-spacing:0.1em; display:flex; justify-content:space-between; align-items:center; font-family:'Sora',sans-serif; }
+.fee-size-total { font-size:13px; font-weight:500; color:#fff; font-family:'Courier Prime',monospace; }
+.fee-size-body { padding:12px 14px; background:#FAFAF8; display:flex; flex-direction:column; gap:6px; }
+.fee-size-row { display:flex; justify-content:space-between; align-items:center; font-size:11px; }
+.fee-size-name { color:#3A3A35; font-family:'Sora',sans-serif; }
+.fee-size-bytes { font-family:'Courier Prime',monospace; color:#1A1A18; font-weight:500; }
+.fee-size-bar-row { height:8px; border-radius:4px; overflow:hidden; display:flex; margin-bottom:4px; }
+.fee-size-bar { height:100%; transition:flex 0.4s ease; }
+.fee-size-bar.overhead { background:#C4B5FD; }
+.fee-size-bar.inputs   { background:#A32D2D; }
+.fee-size-bar.outputs  { background:#3B6D11; }
+.fee-rates { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:1.25rem; }
+.fee-rate-card { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-md); padding:12px; cursor:pointer; transition:all 0.2s; text-align:center; background:#FAFAF8; }
+.fee-rate-card:hover { border-color:#534AB7; }
+.fee-rate-card.active { border-color:#534AB7; background:#EEEDFE; }
+.fee-rate-label { font-size:10px; color:#52524C; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px; font-family:'Sora',sans-serif; }
+.fee-rate-val { font-size:14px; font-weight:500; color:#1A1A18; font-family:'Courier Prime',monospace; margin-bottom:4px; }
+.fee-rate-time { font-size:11px; color:#534AB7; font-family:'Sora',sans-serif; }
+.fee-result { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:1.25rem; }
+.fee-stat { background:#F4F4F0; border-radius:var(--border-radius-md); padding:12px 14px; }
+.fee-stat-label { font-size:11px; color:#52524C; margin-bottom:4px; font-family:'Sora',sans-serif; }
+.fee-stat-val { font-size:15px; font-weight:500; color:#1A1A18; font-family:'Courier Prime',monospace; }
+.fee-stat-sub { font-size:10px; color:#52524C; margin-top:2px; font-family:'Sora',sans-serif; }
+.fee-mempool { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-md); padding:12px 14px; background:#FAFAF8; }
+.fee-mempool-label { font-size:11px; color:#3A3A35; margin-bottom:8px; font-family:'Sora',sans-serif; }
+.fee-mempool-bar { height:32px; border-radius:4px; overflow:hidden; display:flex; align-items:stretch; margin-bottom:8px; background:#F4F4F0; }
+.fee-mempool-seg { transition:flex 0.4s ease; }
+.fee-mempool-seg.high { background:#534AB7; }
+.fee-mempool-seg.med  { background:#A58AE8; }
+.fee-mempool-seg.low  { background:#C4B5FD; }
+.fee-mempool-seg.mine { background:#3B6D11; border:2px solid #1A1A18; min-width:8px; }
+.fee-mempool-legend { display:flex; gap:12px; flex-wrap:wrap; }
+.fee-mempool-leg-item { display:flex; align-items:center; gap:4px; font-size:10px; color:#3A3A35; font-family:'Sora',sans-serif; }
+.fee-mempool-dot { width:8px; height:8px; border-radius:2px; flex-shrink:0; }
+
+/* ============================================================
+   PAGE 6 · BAB 3 · 3.5 SIMULATION (Mempool)
+============================================================ */
+.b03-s35-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1.25rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.mp-pills { display:flex; gap:8px; margin-bottom:1.25rem; }
+.mp-pill { padding:8px 12px; border-radius:var(--border-radius-md); border:0.5px solid rgba(124,58,237,0.15); background:#FAFAF8; cursor:pointer; transition:all 0.2s; text-align:center; flex:1; }
+.mp-pill:hover { border-color:#534AB7; }
+.mp-pill.active { border-color:#534AB7; background:#EEEDFE; }
+.mp-pill-label { font-size:10px; color:#52524C; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:3px; font-family:'Sora',sans-serif; }
+.mp-pill.active .mp-pill-label { color:#534AB7; }
+.mp-pill-val { font-size:13px; font-weight:500; color:#1A1A18; font-family:'Courier Prime',monospace; }
+.mp-pill-sub { font-size:10px; color:#52524C; margin-top:2px; }
+.mp-status { padding:10px 14px; border-radius:var(--border-radius-md); font-size:12px; line-height:1.6; margin-bottom:1.25rem; border:0.5px solid rgba(124,58,237,0.15); background:#FAFAF8; min-height:52px; }
+.mp-status-step { font-size:10px; color:#52524C; margin-bottom:3px; text-transform:uppercase; letter-spacing:0.1em; font-family:'Sora',sans-serif; }
+.mp-stage { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:1.25rem; }
+.mp-col { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-lg); overflow:hidden; }
+.mp-col-head { padding:7px 10px; background:#1A1A18; font-size:10px; color:#C4B5FD; letter-spacing:0.1em; text-transform:uppercase; font-family:'Sora',sans-serif; }
+.mp-col-body { padding:8px; min-height:160px; max-height:220px; overflow-y:auto; display:flex; flex-direction:column; gap:5px; }
+.mp-tx { border-radius:var(--border-radius-md); padding:7px 8px; font-size:11px; border:0.5px solid transparent; }
+.mp-tx.yours { border-color:#534AB7; background:#EEEDFE; }
+.mp-tx.other { background:#F4F4F0; border-color:rgba(124,58,237,0.08); }
+.mp-tx-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:2px; }
+.mp-tx-id { font-size:9px; font-family:'Courier Prime',monospace; color:#52524C; }
+.mp-tx-fee { font-size:10px; font-weight:500; font-family:'Courier Prime',monospace; }
+.mp-tx-fee.y { color:#534AB7; }
+.mp-tx-fee.o { color:#52524C; }
+.mp-tx-lbl { font-size:9px; color:#3A3A35; font-family:'Sora',sans-serif; }
+.mp-block { border:0.5px solid #3B6D11; border-radius:var(--border-radius-md); padding:7px 8px; background:#EAF3DE; margin-bottom:4px; }
+.mp-block-head { display:flex; justify-content:space-between; font-size:9px; margin-bottom:2px; }
+.mp-block-num { font-weight:500; color:#27500A; font-family:'Courier Prime',monospace; }
+.mp-block-conf { color:#3B6D11; font-family:'Sora',sans-serif; }
+.mp-block-txs { font-size:9px; color:#3A3A35; font-family:'Sora',sans-serif; }
+.mp-conf { margin-bottom:1.25rem; display:none; }
+.mp-conf.show { display:block; }
+.mp-conf-lbl { font-size:11px; color:#3A3A35; margin-bottom:6px; font-family:'Sora',sans-serif; }
+.mp-dots { display:flex; gap:5px; margin-bottom:6px; }
+.mp-dot { width:28px; height:28px; border-radius:50%; border:0.5px solid rgba(124,58,237,0.15); background:#F4F4F0; display:flex; align-items:center; justify-content:center; font-size:10px; color:#52524C; font-weight:500; transition:all 0.4s; }
+.mp-dot.on   { background:#534AB7; border-color:#534AB7; color:#fff; }
+.mp-dot.done { background:#3B6D11; border-color:#3B6D11; color:#fff; }
+.mp-conf-note { font-size:11px; color:#3A3A35; line-height:1.6; font-family:'Sora',sans-serif; }
+.mp-conf-caveat { font-size:11px; color:#52524C; line-height:1.6; margin-top:8px; padding:8px 10px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.2); font-family:'Sora',sans-serif; }
+.mp-btns { display:flex; gap:8px; flex-wrap:wrap; }
+
+/* ============================================================
+   PAGE 6 · BAB 3 · 3.6 SIMULATION (Lifecycle Transaksi)
+============================================================ */
+.b03-s36-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1.25rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.lc-timeline { display:flex; flex-direction:column; gap:0; margin-bottom:1.5rem; }
+.lc-step { display:flex; gap:12px; align-items:flex-start; cursor:pointer; padding:8px 0; }
+.lc-step:last-child { padding-bottom:0; }
+.lc-left { display:flex; flex-direction:column; align-items:center; width:28px; flex-shrink:0; }
+.lc-dot { width:28px; height:28px; border-radius:50%; border:1.5px solid rgba(124,58,237,0.2); background:#F4F4F0; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:500; color:#52524C; transition:all 0.4s; flex-shrink:0; font-family:'Sora',sans-serif; }
+.lc-dot.active { border-color:#534AB7; background:#534AB7; color:#fff; }
+.lc-dot.done   { border-color:#3B6D11; background:#3B6D11; color:#fff; }
+.lc-line { width:1.5px; flex:1; background:rgba(124,58,237,0.1); min-height:20px; margin-top:4px; transition:background 0.4s; }
+.lc-line.done { background:#3B6D11; }
+.lc-right { flex:1; padding-bottom:16px; }
+.lc-step:last-child .lc-right { padding-bottom:0; }
+.lc-step-head { display:flex; align-items:center; gap:8px; margin-bottom:4px; }
+.lc-step-num { font-size:9px; color:#52524C; text-transform:uppercase; letter-spacing:0.1em; font-family:'Sora',sans-serif; }
+.lc-step-title { font-size:13px; font-weight:500; color:#52524C; transition:color 0.4s; font-family:'Sora',sans-serif; }
+.lc-step-title.active { color:#534AB7; }
+.lc-step-title.done   { color:#1A1A18; }
+.lc-step-body { font-size:12px; color:#3A3A35; line-height:1.7; display:none; margin-top:6px; padding:10px 12px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.25); font-family:'Sora',sans-serif; }
+.lc-step-body.show { display:block; }
+.lc-step-body.active-body { border-left-color:#534AB7; background:#EEEDFE; color:#1A1A18; }
+.lc-controls { display:flex; gap:8px; flex-wrap:wrap; }
+

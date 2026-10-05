@@ -1,0 +1,730 @@
+<!-- ============================================================
+     PAGE 7 · BAB 4 · Kriptografi Bitcoin
+     |-- 4.1 · Fungsi Hash [DONE]
+     |-- 4.2 · Elliptic Curve (ECC) [LOCKED]
+     |-- 4.3 · ECDSA [LOCKED]
+     |-- 4.4 · Schnorr [LOCKED]
+     |-- 4.5 · Merkle Tree [LOCKED]
+     |-- 4.6 · Dari kriptografi ke keamanan jaringan [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab4">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b4">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b4">← Chapter List</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-heading">Chapter 4</div>
+      <div class="sidebar-title">Bitcoin Cryptography</div>
+
+      <!-- 4.1 · DONE -->
+      <div class="sidebar-item active" id="sb-4-1">
+        <div class="sb-num">4.1</div>
+        <div class="sb-label">Hash Functions</div>
+      </div>
+      <!-- 4.2 · DONE -->
+      <div class="sidebar-item" id="sb-4-2">
+        <div class="sb-num">4.2</div>
+        <div class="sb-label">Elliptic Curve (ECC)</div>
+      </div>
+      <!-- 4.3 · DONE -->
+      <div class="sidebar-item" id="sb-4-3">
+        <div class="sb-num">4.3</div>
+        <div class="sb-label">ECDSA</div>
+      </div>
+      <!-- 4.4 · DONE -->
+      <div class="sidebar-item" id="sb-4-4">
+        <div class="sb-num">4.4</div>
+        <div class="sb-label">Schnorr</div>
+      </div>
+      <!-- 4.5 · DONE -->
+      <div class="sidebar-item" id="sb-4-5">
+        <div class="sb-num">4.5</div>
+        <div class="sb-label">Merkle Tree, Root & Proof</div>
+      </div>
+      <!-- 4.6 · DONE -->
+      <div class="sidebar-item" id="sb-4-6">
+        <div class="sb-num">4.6</div>
+        <div class="sb-label">From cryptography to security</div>
+      </div>
+    </div>
+    <!-- END SIDEBAR -->
+
+    <!-- CONTENT AREA -->
+    <div class="prologue-content" id="bab4-content">
+
+      <!-- ==============================
+           SECTION 4.1 · Fungsi Hash
+      ============================== -->
+      <div class="p-section active" id="section-4-1">
+        <div class="p-eyebrow">Chapter 4 · 4.1</div>
+        <div class="p-heading">A deterministic shredding machine</div>
+        <div class="p-title">Hash Functions</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Imagine a magic machine. You can put anything into it: a piece of paper, a single word, or the entire contents of the national library. The machine will always output a card of the same size, containing a string of letters and numbers 64 characters long.</p>
+          <p>That is a hash function.</p>
+
+          <p><strong>Like a fingerprint, but for data</strong></p>
+          <p>Every piece of data has a unique hash "fingerprint." Like a human fingerprint, the hash of some data can be used to verify its identity without comparing its entire contents. And like a fingerprint, the original data can’t be reconstructed from the hash.</p>
+          <p>If you want to make sure a file you download isn’t corrupted or tampered with along the way, you can compare its hash with the hash provided by the source. If the hashes match, the files are identical. If even one bit differs, the hash is completely different.</p>
+
+          <p><strong>First property: deterministic</strong></p>
+          <p>The same input always produces the same output. SHA-256("Bitcoin") will always produce exactly the same hash, on any computer, anytime. No variation, no randomness.</p>
+
+          <p><strong>Second property: the avalanche effect</strong></p>
+          <p>Change just one small letter, and the entire hash changes completely. "Bitcoin" and "bitcoin" produce hashes with no similarity at all. No pattern can be guessed, no smooth transition. One small change, a huge earthquake in the output.</p>
+          <p>It’s like a cake recipe. If you swap one gram of sugar for salt, the taste changes drastically. There’s no way to guess how much was swapped just from tasting the result.</p>
+
+          <p><strong>Third property: one-way</strong></p>
+          <p>From the output, it’s impossible to reconstruct the input. This isn’t about a secret key or encryption. It’s about mathematics. There’s no equation that can be reversed. The only way to find the input from a hash is to try every possibility one by one. For SHA-256, with every computer in the world working together, it would take longer than the age of the universe. Not hyperbole.</p>
+
+          <p><strong>Fourth property: collision resistant</strong></p>
+          <p>SHA-256 produces a 256-bit output, meaning there are 2²⁵⁶ possible different outputs. The chance of two different inputs producing the same hash is, practically, zero.</p>
+
+          <p><strong>SHA-256 in Bitcoin</strong></p>
+          <p>Bitcoin uses SHA-256 almost everywhere. To generate an address from a public key. To link blocks to one another on the blockchain. As the core of the mining process. Every block contains the hash of the previous block, forming a chain that can’t be manipulated without recomputing the entire chain that follows.</p>
+
+          <div class="p-callout">
+            <p>SHA-256 isn’t encryption. Encryption can be reversed if you have the key. A hash can’t be reversed at all. This is a fundamental difference that’s often misunderstood, even by people who have long worked in technology.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Hash Playground — SHA-256 real-time</div>
+
+          <div class="b04-s41-desc">
+            Type anything and watch its SHA-256 hash appear in real time. Try changing one small letter and notice how the entire hash changes completely.
+          </div>
+
+          <div class="hp-input-label">Input</div>
+          <textarea class="hp-textarea" id="b04-s41-input" rows="3" placeholder="Type something..."></textarea>
+
+          <div class="hp-hash-box">
+            <div class="hp-hash-head">
+              <span class="hp-hash-label">SHA-256 Hash</span>
+              <span class="hp-hash-algo">256-bit · 64 hex characters</span>
+            </div>
+            <div class="hp-hash-val hp-hash-empty" id="b04-s41-hash">Type something to see its hash...</div>
+          </div>
+
+          <div class="hp-meta">
+            <div class="hp-meta-item">Input length: <span class="hp-meta-val" id="b04-s41-len">0</span> characters</div>
+            <div class="hp-meta-item">Hash length: <span class="hp-meta-val">64</span> characters (always)</div>
+          </div>
+
+          <div class="hp-presets">
+            <span style="font-size:11px;color:#52524C;align-self:center;">Try an example:</span>
+            <button class="hp-preset" id="b04-s41-pr-0" data-text="Bitcoin">Bitcoin</button>
+            <button class="hp-preset" id="b04-s41-pr-1" data-text="bitcoin">bitcoin</button>
+            <button class="hp-preset" id="b04-s41-pr-2" data-text="Satoshi Nakamoto">Satoshi Nakamoto</button>
+            <button class="hp-preset" id="b04-s41-pr-3" data-text="Hello, World!">Hello, World!</button>
+            <button class="hp-preset" id="b04-s41-pr-4" data-text="1">1</button>
+            <button class="hp-preset" id="b04-s41-pr-5" data-text="2">2</button>
+          </div>
+
+          <div class="hp-avalanche">
+            <div class="hp-av-head">Avalanche Effect — comparing two nearly identical inputs</div>
+            <div class="hp-av-body" id="b04-s41-av-body">
+              <div style="font-size:12px;color:#52524C;">Type something above to see a comparison with a version that differs by one letter.</div>
+            </div>
+          </div>
+
+          <div class="sim-label" style="margin-top:1.5rem">Comparison of hash types</div>
+          <div class="b04-s41-cmp-desc">
+            Type an input above and see how different hash types produce different outputs. SHA-256 and SHA-256d are used directly in Bitcoin. Hash160 is used for addresses. SHA-1 is no longer secure and isn’t used by Bitcoin.
+          </div>
+
+          <div class="b04-s41-cmp-table">
+            <div class="b04-s41-cmp-row header">
+              <div class="b04-s41-cmp-name">Function</div>
+              <div class="b04-s41-cmp-bits">Bit</div>
+              <div class="b04-s41-cmp-use">Used in Bitcoin</div>
+              <div class="b04-s41-cmp-out">Output (hex)</div>
+            </div>
+
+            <div class="b04-s41-cmp-row">
+              <div class="b04-s41-cmp-name active">SHA-256</div>
+              <div class="b04-s41-cmp-bits">256</div>
+              <div class="b04-s41-cmp-use">Merkle Root, Mining</div>
+              <div class="b04-s41-cmp-out" id="b04-s41-cmp-sha256">—</div>
+            </div>
+
+            <div class="b04-s41-cmp-row">
+              <div class="b04-s41-cmp-name active">SHA-256d</div>
+              <div class="b04-s41-cmp-bits">256</div>
+              <div class="b04-s41-cmp-use">TXID, Block Hash</div>
+              <div class="b04-s41-cmp-out" id="b04-s41-cmp-sha256d">—</div>
+            </div>
+
+            <div class="b04-s41-cmp-row">
+              <div class="b04-s41-cmp-name active">Hash160</div>
+              <div class="b04-s41-cmp-bits">160</div>
+              <div class="b04-s41-cmp-use">Bitcoin address</div>
+              <div class="b04-s41-cmp-out" id="b04-s41-cmp-hash160">—</div>
+            </div>
+
+            <div class="b04-s41-cmp-row deprecated">
+              <div class="b04-s41-cmp-name">SHA-1 ⚠️</div>
+              <div class="b04-s41-cmp-bits">160</div>
+              <div class="b04-s41-cmp-use">Not used — deprecated</div>
+              <div class="b04-s41-cmp-out b04-s41-cmp-note-cell">Already deprecated and blocked in many modern browsers. Bitcoin doesn’t use it.</div>
+            </div>
+          </div>
+
+          <div class="b04-s41-cmp-note">
+            SHA-256, SHA-256d, and Hash160 are computed accurately — SHA-256 via the Web Crypto API, RIPEMD-160 via a direct implementation of the RFC 2286 specification. SHA-1 is deprecated, blocked by modern browsers, and not used by Bitcoin.
+          </div>
+        
+          <div class="lab-link"><span class="kode">C1</span><span class="isi"><span class="hd">Continue in the Laboratory</span>The tool above shows the result. If you want to watch <b>how it is cooked</b>, round by round until the avalanche happens, that is in Laboratory C1.</span></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-4-2" data-sb="sb-4-2">
+            4.2 — Elliptic Curve →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 4.1 -->
+
+      <!-- ==============================
+           SECTION 4.2 · Elliptic Curve (ECC)
+      ============================== -->
+      <div class="p-section" id="section-4-2">
+        <div class="p-eyebrow">Chapter 4 · 4.2</div>
+        <div class="p-heading">A jump that can’t be reversed</div>
+        <div class="p-title">Elliptic Curve Cryptography</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>In Chapter 2 we learned that a private key produces a public key through a one-way process. Now it’s time to understand why that process can’t be reversed.</p>
+          <p>The answer lies in a branch of mathematics called Elliptic Curve Cryptography, or ECC. But we won’t start from the math. We’ll start from the problem.</p>
+
+          <p><strong>The problem to be solved</strong></p>
+          <p>Imagine you want to build a system where someone can prove their identity without revealing the secret that proves that identity. Like this: you want to prove that you know the way to a hidden place, without having to show anyone the map. You simply arrive there. Others can verify that you arrived, but can’t reconstruct the route you took.</p>
+          <p>For that, you need a mathematical operation with one crucial property: easy to perform in one direction, but impossible to reverse.</p>
+
+          <p><strong>The combination lock analogy</strong></p>
+          <p>Imagine a combination lock with dozens of digits. Turning the dial according to a combination you already know: easy, a few seconds. Finding the combination when you don’t know it: there is no route except trying, and the number of attempts required runs far past the time available to anyone.</p>
+          <p>Notice that what blocks you is not lost information. The combination is still there, intact, fixing the position of the dial exactly. What blocks you is the cost of finding it again. That is the difference from mixing paint, where the original composition really is destroyed. ECC behaves like a combination lock, not like paint: the result is entirely determined by the input, but tracing back demands work that would never finish.</p>
+
+          <p><strong>Jumping along the curve</strong></p>
+          <p>An elliptic curve is a mathematical line with a particular shape. On this curve, there’s one agreed-upon starting point everyone shares, called the generator point G. From point G, we can "jump" to the next point with certain mathematical rules. From there, jump again. And again. Each jump follows the same rules, but produces points scattered randomly across the curve.</p>
+          <p>The private key is the number of jumps you make. It can be a very large number, up to 2²⁵⁶ possibilities. The public key is the final point where you land. Computing the final point from the number of jumps: easy, takes milliseconds. Finding the number of jumps from the final point: computationally impossible. There’s no shortcut.</p>
+
+          <p><strong>Public key format</strong></p>
+          <p>The final point on the elliptic curve is a pair of coordinates (x, y). In Bitcoin, these coordinates are encoded into a hex string. The most commonly used format now is the compressed format: prefix <strong>02</strong> if y is positive, or <strong>03</strong> if y is negative, followed by the x coordinate in hex. Because the elliptic curve is symmetric, the recipient can recompute y from x and the prefix whenever needed.</p>
+
+          <p><strong>SECP256K1</strong></p>
+          <p>Bitcoin uses a specific elliptic curve called SECP256K1. This curve was chosen for its mathematical properties that are efficient, secure, and have no hidden backdoor.</p>
+
+          <div class="p-callout">
+            <p>The security of Bitcoin’s entire ownership system rests on one unsolved mathematical problem: from the final point, there’s no way to find how many jumps were made. As long as this problem remains unsolved, a private key can’t be derived from a public key.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Interactive simulation — Jumping Along the Elliptic Curve</div>
+          <div class="b04-s42-desc">
+            Slide the slider to change the private key (number of jumps). Notice how the final point and the public key change completely even when adding just one jump.
+          </div>
+
+          <div class="ecc-ctrl">
+            <label class="ecc-label">Private key (number of jumps)</label>
+            <input type="range" id="b04-s42-slider" min="1" max="32" step="1" value="7">
+            <span class="ecc-k-val" id="b04-s42-k">7</span>
+          </div>
+
+          <div class="ecc-canvas-wrap">
+            <canvas id="b04-s42-canvas" height="300"></canvas>
+          </div>
+
+          <div class="ecc-cards">
+            <div class="ecc-card">
+              <div class="ecc-card-label">Private key</div>
+              <div class="ecc-card-val priv" id="b04-s42-priv">7 jumps</div>
+              <div class="ecc-card-sub">A secret number only you know. In real Bitcoin this is a random 256-bit number.</div>
+            </div>
+            <div class="ecc-card">
+              <div class="ecc-card-label">Final point — coordinates (x, y)</div>
+              <div class="ecc-card-val coord" id="b04-s42-coord">(x, y)</div>
+              <div class="ecc-card-sub">The result of multiplying k × G. This is the public key in raw coordinate form.</div>
+            </div>
+            <div class="ecc-card">
+              <div class="ecc-card-label">Public key — compressed format</div>
+              <div class="ecc-card-val pub" id="b04-s42-pub">02...</div>
+              <div class="ecc-card-sub" id="b04-s42-pub-sub"></div>
+            </div>
+          </div>
+
+          <div class="ecc-note" id="b04-s42-note">
+            Slide the slider to change the private key.
+          </div>
+
+          <div class="ecc-caveat">
+            This simulation shows at most 32 jumps, and it’s already hard to guess where each jump goes. A real Bitcoin private key is 2²⁵⁶ jumps. That number can’t be imagined by any human brain, and can’t be cracked by any computer that has ever existed.
+          </div>
+
+          <div class="b04-fmt">
+            <div class="b04-fmt-head">Public key formats: why half of it is enough</div>
+            <div class="b04-fmt-body">
+              <div class="b04-fmt-q">A point on the curve has an X and a Y coordinate. But the curve is symmetric about the X axis, so for any X there are only two possible Y values: one even, one odd. That means Y does not need to be stored, only which of the two it is.</div>
+              <div class="b04-fmt-cards">
+                <div class="b04-fmt-card unc">
+                  <div class="b04-fmt-tag">Uncompressed</div>
+                  <div class="b04-fmt-bytes"><span class="b04-fmt-pfx unc">04</span><span class="b04-fmt-x">X (32 bytes)</span><span class="b04-fmt-y">Y (32 bytes)</span></div>
+                  <div class="b04-fmt-size">65 bytes</div>
+                  <div class="b04-fmt-sub">The older format. Stores both X and Y.</div>
+                </div>
+                <div class="b04-fmt-card cmp">
+                  <div class="b04-fmt-tag">Compressed</div>
+                  <div class="b04-fmt-bytes"><span class="b04-fmt-pfx cmp">02/03</span><span class="b04-fmt-x">X (32 bytes)</span></div>
+                  <div class="b04-fmt-size">33 bytes</div>
+                  <div class="b04-fmt-sub">Prefix 02 if Y is even, 03 if odd. Y is recomputed when needed.</div>
+                </div>
+              </div>
+              <div class="b04-fmt-note">That saves <b>32 bytes</b> per public key, nearly half, without losing any information at all. Y is not discarded, it can be derived back from X using the curve equation. This is why almost every modern wallet uses the compressed format.</div>
+            </div>
+          </div>
+        
+          <div class="lab-link"><span class="kode">C2</span><span class="isi"><span class="hd">Continue in the Laboratory</span>The demo above shows the <b>effect</b> when a private key changes. The arithmetic behind it, including point addition and double-and-add, is dissected in Laboratory C2.</span></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-4-1" data-sb="sb-4-1">
+            ← 4.1 — Hash Functions
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-4-3" data-sb="sb-4-3">
+            4.3 — ECDSA →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 4.2 -->
+
+      <!-- ==============================
+           SECTION 4.3 · ECDSA
+      ============================== -->
+      <div class="p-section" id="section-4-3">
+        <div class="p-eyebrow">Chapter 4 · 4.3</div>
+        <div class="p-heading">Proving without revealing</div>
+        <div class="p-title">ECDSA</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>We already know that a private key produces a public key through ECC. Now the question: how is the private key used to prove ownership without revealing the private key itself?</p>
+          <p>The answer is a digital signature. In Bitcoin, this mechanism is called ECDSA, the Elliptic Curve Digital Signature Algorithm.</p>
+
+          <p><strong>The sealed letter analogy</strong></p>
+          <p>Imagine you send an official letter. You don’t want anyone to be able to forge your letter, and the recipient must be able to confirm it really came from you. In the physical world, you use a signature and a seal. In the Bitcoin world, you use ECDSA.</p>
+          <p>The difference from a physical signature: an ECDSA signature is unique for each message. Your signature for a 0.1 BTC transaction today is completely different from your signature for a 0.1 BTC transaction tomorrow, even though the private key used is the same. No one can copy your signature from one transaction and paste it onto another.</p>
+
+          <p><strong>How signing works</strong></p>
+          <p>When you send Bitcoin, the wallet takes the transaction data, combines it with your private key, and produces two numbers: r and s. Together they form the ECDSA signature. This process also involves a secret random number called the nonce. This nonce must be truly random and must never be used twice. If the same nonce is used to sign two different transactions, your private key can be recovered in full from those two signatures alone. This is not a theoretical weakness: implementation mistakes of exactly this kind have drained real wallets. Note also that this nonce has nothing to do with the nonce miners search for in Chapter 5. The name happens to be the same, the concept is not.</p>
+
+          <p><strong>How verification works</strong></p>
+          <p>Anyone who has the public key and the signature can verify that the signature was created by the owner of the corresponding private key, without needing to know the private key. The Bitcoin network performs this verification for every incoming transaction. If the signature isn’t valid, the transaction is rejected.</p>
+
+          <p><strong>One input, one signature</strong></p>
+          <p>Each input in a transaction must be signed separately. If your transaction has three inputs from three different UTXOs, you need to create three different signatures, each proving ownership of the corresponding UTXO.</p>
+
+          <div class="p-callout">
+            <p>ECDSA enables something remarkable: you can prove that you know a secret, without revealing the secret. The network knows you have the correct private key, but never sees your private key.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Interactive simulation — ECDSA: Sign, Verify, Tamper</div>
+          <div class="b04-s43-desc">
+            Follow three stages: sign the transaction, verify the signature, then try to tamper with it and see what happens.
+          </div>
+
+          <div class="ec-steps">
+            <div class="ec-step-tab active" id="b04-s43-tab-1"><div class="ec-step-num">Stage 1</div><div class="ec-step-title">✍️ Sign</div></div>
+            <div class="ec-step-tab" id="b04-s43-tab-2"><div class="ec-step-num">Stage 2</div><div class="ec-step-title">✅ Verify</div></div>
+            <div class="ec-step-tab" id="b04-s43-tab-3"><div class="ec-step-num">Stage 3</div><div class="ec-step-title">🔍 Tamper</div></div>
+          </div>
+
+          <!-- PANEL 1 -->
+          <div class="ec-panel show" id="b04-s43-panel-1">
+            <div class="ec-field">
+              <div class="ec-field-label">Transaction message</div>
+              <div class="ec-field-desc">The data to be signed. In real Bitcoin this is the complete transaction data: who the sender is, the recipient, and the amount.</div>
+              <textarea class="ec-field-input" id="b04-s43-msg" rows="2">Send 0.05 BTC to bc1q...3f8a</textarea>
+            </div>
+            <div class="ec-btns">
+              <button class="kp-btn kp-btn-gen" id="b04-s43-btn-sign">Sign the transaction ↗</button>
+              <button class="kp-btn kp-btn-reset" id="b04-s43-btn-reset">Reset</button>
+            </div>
+            <div id="b04-s43-sign-wrap" style="display:none">
+              <div class="ec-field">
+                <div class="ec-field-label">Private key</div>
+                <div class="ec-field-desc">Your secret key. Used to create the signature but never sent to the network or shared with anyone.</div>
+                <div class="ec-field-val priv" id="b04-s43-priv">—</div>
+              </div>
+              <div class="ec-field">
+                <div class="ec-field-label">Nonce (k)</div>
+                <div class="ec-field-desc">A random number created anew each time you sign. It must be truly unique — it must never be used twice for two different messages.</div>
+                <div class="ec-field-val nc" id="b04-s43-nonce">—</div>
+              </div>
+              <div class="ec-field">
+                <div class="ec-field-label">Signature (r, s)</div>
+                <div class="ec-field-desc">The mathematical result of message + private key + nonce. Unique to this transaction only. Anyone can verify it using the public key, without needing to know the private key.</div>
+                <div class="ec-field-val sig" id="b04-s43-sig">—</div>
+              </div>
+              <div class="ec-warning">
+                ⚠️ The same nonce used twice for two different messages can mathematically expose your private key. This has happened in the real world and resulted in lost Bitcoin.
+                <span class="ec-warning-sol">The solution: modern wallets use a CSPRNG (Cryptographically Secure Pseudo-Random Number Generator) to ensure every nonce is truly random and never repeats. You don’t need to manage this manually, a good wallet handles it automatically.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- PANEL 2 -->
+          <div class="ec-panel" id="b04-s43-panel-2">
+            <div class="ec-field">
+              <div class="ec-field-label">Message received</div>
+              <div class="ec-field-desc">The transaction data received by the network nodes.</div>
+              <div class="ec-field-val msg" id="b04-s43-v-msg">Complete Stage 1 first.</div>
+            </div>
+            <div class="ec-field">
+              <div class="ec-field-label">Signature (r, s)</div>
+              <div class="ec-field-desc">The signature included with the transaction. The node uses it together with the public key for verification.</div>
+              <div class="ec-field-val sig" id="b04-s43-v-sig">—</div>
+            </div>
+            <div class="ec-field">
+              <div class="ec-field-label">Sender’s public key</div>
+              <div class="ec-field-desc">Publicly known. The node uses this public key to verify the signature, without needing to know the private key.</div>
+              <div class="ec-field-val pub" id="b04-s43-v-pub">—</div>
+            </div>
+            <div class="ec-btns">
+              <button class="kp-btn kp-btn-gen" id="b04-s43-btn-verify">Verify the signature ↗</button>
+            </div>
+            <div class="ec-result" id="b04-s43-v-result"></div>
+          </div>
+
+          <!-- PANEL 3 -->
+          <div class="ec-panel" id="b04-s43-panel-3">
+            <div class="ec-note">Try tampering with the message or the signature, then verify. See how even the smallest change is instantly detected.</div>
+            <div class="ec-tamper-row">
+              <button class="ec-tamper-btn danger" id="b04-s43-t-msg">Change the BTC amount</button>
+              <button class="ec-tamper-btn danger" id="b04-s43-t-addr">Change the destination address</button>
+              <button class="ec-tamper-btn danger" id="b04-s43-t-sig">Change the signature</button>
+              <button class="ec-tamper-btn" id="b04-s43-t-reset">Restore to original</button>
+            </div>
+            <div class="ec-field">
+              <div class="ec-field-label">Message</div>
+              <div class="ec-field-val msg" id="b04-s43-t-msg-val">Complete Stage 1 first.</div>
+            </div>
+            <div class="ec-field">
+              <div class="ec-field-label">Signature (r, s)</div>
+              <div class="ec-field-val sig" id="b04-s43-t-sig-val">—</div>
+            </div>
+            <div class="ec-btns">
+              <button class="kp-btn kp-btn-gen" id="b04-s43-btn-t-verify">Verify ↗</button>
+            </div>
+            <div class="ec-result" id="b04-s43-t-result"></div>
+          </div>
+
+          <div class="raw-toggle-row">
+            <button class="raw-toggle-btn" id="b04-s43-raw-btn">
+              <span class="raw-toggle-icon">{}</span> View Raw Data
+            </button>
+            <span class="raw-toggle-hint">ECDSA signature in DER encoding format — the format used by Bitcoin</span>
+          </div>
+
+          <div class="raw-panel" id="b04-s43-raw-panel">
+            <div class="raw-panel-head">
+              <span>ECDSA Signature · DER Encoding</span>
+              <span class="raw-panel-src">scriptSig / witness</span>
+            </div>
+            <pre class="raw-panel-body" id="b04-s43-raw-body">Sign the transaction in Stage 1 first.</pre>
+          </div>
+        
+          <div class="lab-link"><span class="kode">C3</span><span class="isi"><span class="hd">Continue in the Laboratory</span>The demo above follows the <b>flow</b>. The actual computation of r and s, plus a demonstration of how a reused nonce leaks the private key, is in Laboratory C3.</span></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-4-2" data-sb="sb-4-2">
+            ← 4.2 — Elliptic Curve
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-4-4" data-sb="sb-4-4">
+            4.4 — Schnorr →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 4.3 -->
+
+      <!-- ==============================
+           SECTION 4.4 · Schnorr
+      ============================== -->
+      <div class="p-section" id="section-4-4">
+        <div class="p-eyebrow">Chapter 4 · 4.4</div>
+        <div class="p-heading">One signature, no matter how many people</div>
+        <div class="p-title">Schnorr Signature</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>ECDSA has worked well for as long as Bitcoin has existed. But there’s another signature algorithm that’s more elegant, more efficient, and has properties that open up new possibilities: the Schnorr signature.</p>
+          <p>Schnorr was activated in Bitcoin through the Taproot upgrade in November 2021.</p>
+
+          <p><strong>Why not Schnorr from the start?</strong></p>
+          <p>For nearly two decades, the Schnorr signature was covered by a patent and almost nobody used it. That patent expired in 2008, a few months before Bitcoin was released. So the reason Satoshi chose ECDSA was not the patent. At the time, Schnorr had not been standardised, had not been widely tested, and was not available in OpenSSL, the cryptography library the earliest Bitcoin code leaned on. ECDSA met all three. It took years afterwards for the Bitcoin community to mature Schnorr and reach consensus to activate it safely.</p>
+
+          <p><strong>First advantage: simpler</strong></p>
+          <p>Schnorr has a stronger security proof that’s easier to analyze. ECDSA is more complex and has more corners that can be implemented incorrectly, like the nonce problem we discussed in 4.3.</p>
+
+          <p><strong>Second advantage: linear and combinable</strong></p>
+          <p>This is the most important one. Schnorr signatures can be combined mathematically. If two people each have a private key, they can create a single signature that represents both. An outsider can’t tell whether the signature is from one person or a hundred.</p>
+
+          <p><strong>Third advantage: more private</strong></p>
+          <p>Because signatures can be combined, a multisignature transaction looks identical to an ordinary transaction from the outside. No one can tell whether a transaction requires 2 of 3 signatures or just 1.</p>
+
+          <p><strong>Fourth advantage: more efficient</strong></p>
+          <p>A combined signature is smaller in size than a collection of separate signatures. This saves space in a block and lowers the fee for complex transactions.</p>
+
+          <p><strong>MuSig</strong></p>
+          <p>This ability to combine Schnorr signatures is implemented in a protocol called MuSig. With MuSig, several parties can collaborate to create a single signature without any one party knowing another party’s private key.</p>
+
+          <p><strong>Taproot</strong></p>
+          <p>Schnorr is the foundation of Taproot, the biggest Bitcoin upgrade since SegWit. Taproot allows complex spending conditions to be hidden behind a simple single signature. As long as all parties agree, the transaction looks like an ordinary transaction. Only if there’s a dispute are those complex conditions revealed.</p>
+
+          <div class="p-callout">
+            <p>Schnorr isn’t just a technical upgrade. It’s the foundation of the next generation of Bitcoin privacy and scalability. Every Taproot transaction that looks simple can hide very complex logic behind it.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Interactive simulation — ECDSA vs Schnorr: Aggregation, Size, and Privacy</div>
+          <div class="b04-s44-desc">
+            Drag the number of signers on a multisig transaction. Watch three things at once: how many signatures end up stored on the blockchain, how large they are, and whether an outsider can tell this is a multisig at all.
+          </div>
+
+          <div class="b04-s44-ctrl">
+            <label>Signers</label>
+            <input type="range" id="b04-s44-signers" min="1" max="15" step="1" value="3">
+            <span class="b04-s44-ctrl-val" id="b04-s44-signers-val">3 of 3</span>
+          </div>
+
+          <div class="b04-s44-bars">
+            <div class="b04-s44-bar-row">
+              <span class="b04-s44-bar-lbl e">ECDSA</span>
+              <span class="b04-s44-bar-track"><span class="b04-s44-bar-fill e" id="b04-s44-bar-e" style="width:0%"></span></span>
+              <span class="b04-s44-bar-val" id="b04-s44-val-e">0 bytes</span>
+            </div>
+            <div class="b04-s44-bar-row">
+              <span class="b04-s44-bar-lbl s">Schnorr</span>
+              <span class="b04-s44-bar-track"><span class="b04-s44-bar-fill s" id="b04-s44-bar-s" style="width:0%"></span></span>
+              <span class="b04-s44-bar-val" id="b04-s44-val-s">0 bytes</span>
+            </div>
+            <div class="b04-s44-verdict" id="b04-s44-verdict"></div>
+          </div>
+
+          <div class="sc-grid">
+            <div class="sc-col">
+              <div class="sc-col-head e">⚡ ECDSA — signatures visible</div>
+              <div class="sc-col-body" id="b04-s44-e-body"></div>
+            </div>
+            <div class="sc-col">
+              <div class="sc-col-head s">Schnorr — all look the same</div>
+              <div class="sc-col-body" id="b04-s44-s-body"></div>
+            </div>
+          </div>
+
+          <div class="sc-obs bad" id="b04-s44-e-obs" style="margin-bottom:8px"></div>
+          <div class="sc-obs ok"  id="b04-s44-s-obs" style="margin-bottom:1.25rem"></div>
+          <div class="sc-note" id="b04-s44-note"></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-4-3" data-sb="sb-4-3">
+            ← 4.3 — ECDSA
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-4-5" data-sb="sb-4-5">
+            4.5 — Merkle Tree →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 4.4 -->
+
+      <!-- ==============================
+           SECTION 4.5 · Merkle Tree, Merkle Root, dan Merkle Proof
+      ============================== -->
+      <div class="p-section" id="section-4-5">
+        <div class="p-eyebrow">Chapter 4 · 4.5</div>
+        <div class="p-heading">One hash that summarizes everything</div>
+        <div class="p-title">Merkle Tree, Merkle Root, and Merkle Proof</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Every Bitcoin block contains hundreds or even thousands of transactions. There’s one simple question that needs an efficient answer: how do you prove that a particular transaction is inside a block, without having to download and inspect the entire block?</p>
+          <p>The answer is the Merkle Tree.</p>
+
+          <p><strong>A tree of hashes</strong></p>
+          <p>A Merkle Tree is a tree-shaped data structure built from hashes. Here’s how it works: first, each transaction is hashed to produce a Transaction ID, or TXID. These are the "leaves" of the tree. Second, the leaves are paired up two by two. Each pair is combined and hashed again, producing one new hash at the level above. Third, this process repeats upward until only a single hash remains at the top.</p>
+          <p>That single hash at the top is called the Merkle Root.</p>
+
+          <p><strong>The Merkle Root in the block header</strong></p>
+          <p>This Merkle Root is what’s stored in the header of every Bitcoin block. Not the entire list of transactions, but the result of this hierarchical tree structure. The Merkle Root summarizes the entire contents of the block in a single 32-byte hash. If one transaction changes, its TXID changes, which changes the hash above it, all the way up to the Merkle Root. No one can manipulate a transaction without changing the Merkle Root.</p>
+
+          <p><strong>Merkle Proof</strong></p>
+          <p>What makes the Merkle Tree truly powerful is the Merkle Proof. To prove that transaction T is inside a block, you don’t need to see the entire block. You only need the TXID of transaction T, a few "sibling" hashes along the path from T to the root, and the Merkle Root in the block header. With those elements, anyone can verify that T really is in that block by recomputing the hash path from the bottom up.</p>
+
+          <p><strong>SPV (Simplified Payment Verification)</strong></p>
+          <p>The Merkle Proof is the foundation of SPV, how lightweight wallets like the one on your smartphone work. An SPV wallet doesn’t download the entire blockchain that’s hundreds of gigabytes. It only downloads the block headers, then requests a Merkle Proof for the relevant transaction. Enough to verify a payment without becoming a full node.</p>
+
+          <div class="p-callout">
+            <p>To prove one transaction in a block containing 2.000 transactions, you only need about 11 hashes. Not 2.000, not 1.999, but 11. This is because a binary tree grows logarithmically, an elegant efficiency from simple mathematics.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Interactive simulation — Merkle Tree and Merkle Proof</div>
+          <div class="b04-s45-desc">
+            Click one of the transactions in the bottom row to see its Merkle Proof — the minimal hash path needed to prove that transaction is inside the block.
+          </div>
+
+          <div class="mt-canvas-wrap">
+            <canvas id="b04-s45-canvas" height="340"></canvas>
+          </div>
+
+          <div class="mt-proof" id="b04-s45-proof">
+            <div class="mt-proof-head">
+              <span>Merkle Proof</span>
+              <span id="b04-s45-proof-title"></span>
+            </div>
+            <div class="mt-proof-body" id="b04-s45-proof-body"></div>
+          </div>
+
+          <div class="mt-note" id="b04-s45-note">
+            To verify 1 transaction out of 8 transactions in this block, you only need 3 hashes. The larger the block, the more dramatic the efficiency.
+          </div>
+
+          <div class="raw-toggle-row">
+            <button class="raw-toggle-btn" id="b04-s45-raw-btn">
+              <span class="raw-toggle-icon">{}</span> View Raw Data
+            </button>
+            <span class="raw-toggle-hint">Merkle Root as in the Bitcoin block header</span>
+          </div>
+
+          <div class="raw-panel" id="b04-s45-raw-panel">
+            <div class="raw-panel-head">
+              <span>Block Header · Merkle Root</span>
+              <span class="raw-panel-src">bitcoin-cli getblockheader</span>
+            </div>
+            <pre class="raw-panel-body" id="b04-s45-raw-body">Click one of the Txs to see the Merkle Root and Merkle Proof in raw format.</pre>
+          </div>
+        
+          <div class="lab-link"><span class="kode">C7</span><span class="isi"><span class="hd">Continue in the Laboratory</span>One thing not covered here: what happens when a level holds an odd number of nodes. That rule, and the flaw it once produced, is in Laboratory C7.</span></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-4-4" data-sb="sb-4-4">
+            ← 4.4 — Schnorr
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-4-6" data-sb="sb-4-6">
+            4.6 — Cryptography and Security →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 4.5 -->
+
+      <!-- ==============================
+           SECTION 4.6 · Dari Kriptografi ke Keamanan Jaringan
+      ============================== -->
+      <div class="p-section" id="section-4-6">
+        <div class="p-eyebrow">Chapter 4 · 4.6</div>
+        <div class="p-heading">How it all works together</div>
+        <div class="p-title">From Cryptography to Network Security</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>We’ve studied all the cryptographic components that make up Bitcoin: the hash function, ECC, ECDSA, Schnorr, and the Merkle Tree. Now it’s time to see how they all work together as one whole system.</p>
+
+          <p><strong>Hashing protects the integrity of the blockchain</strong></p>
+          <p>Every block contains the hash of the previous block. This means if you want to change a transaction in an old block, you have to recompute the hash of the entire chain of blocks that follows. Meanwhile the network keeps mining new blocks. You will never be able to catch up. This is why the more confirmations a transaction has, the safer it is. Each new block mined on top of it makes an attack more impossible.</p>
+
+          <p><strong>ECC and ECDSA protect ownership</strong></p>
+          <p>Without the correct private key, no one can sign a valid transaction from your Bitcoin address. The network verifies every signature before accepting a transaction. No central authority, no password that can be reset, no "forgot password." Ownership is purely cryptographic.</p>
+
+          <p><strong>The Merkle Tree keeps verification efficient</strong></p>
+          <p>Without the Merkle Tree, to verify one transaction you’d have to download the entire block. With the Merkle Tree, you only need a few hashes. This is what lets Bitcoin be used on resource-constrained devices without having to trust a third party.</p>
+
+          <p><strong>Schnorr protects privacy and scalability</strong></p>
+          <p>With Schnorr, complex transactions look like ordinary transactions. Privacy improves, transaction size shrinks, and fees drop. This isn’t just a technical upgrade but a fundamental change in how Bitcoin can be used.</p>
+
+          <p><strong>A system that locks together</strong></p>
+          <p>What makes Bitcoin different isn’t any single cryptographic component, but how they all lock together. Hashing ensures history can’t be changed. ECC ensures ownership can’t be forged. The Merkle Tree ensures verification can be done efficiently. Schnorr ensures privacy and efficiency keep improving. There’s no single point of failure. There’s no single party that can manipulate the system. Trust is built from mathematics, not from institutions.</p>
+
+          <div class="p-callout">
+            <p>Satoshi didn’t invent all of this mathematics. SHA-256, ECC, the Merkle Tree, all existed before Bitcoin. What Satoshi did was assemble existing components into one system that, for the first time, solved the double-spend problem without a central authority. That’s what makes Bitcoin not merely a technology, but an invention.</p>
+
+          <p><strong>So what about quantum computers?</strong></p>
+          <p>Twice in this book we have leaned on the phrase "if some computational advance one day becomes a threat": once when covering addresses in 2.3, and again with P2PKH in 6.3. It is time to explain that phrase.</p>
+          <p>What is threatened is not all of Bitcoin’s cryptography, only one part of it. Hash functions like SHA-256 hold up relatively well: a quantum computer speeds up the search but does not collapse it, and lengthening the hash is enough to compensate. What is genuinely fragile is <strong>signatures</strong>. Shor’s algorithm, run on a large enough quantum computer, can compute a private key from a public key. That is precisely the reverse of the one-way property we covered in 4.2, and all of Bitcoin ownership rests on that property.</p>
+          <p>But note the condition: <strong>the public key has to be visible first</strong>. This is where the habit of hiding public keys behind a hash, which we covered in 2.3, turns out to be far more than tidiness.</p>
+          <p><strong>How much is actually exposed?</strong></p>
+          <p>Various analyses in 2026 estimate that roughly <strong>6.5 to 6.9 million BTC</strong>, about a third of all supply, have already revealed their public key on-chain. That figure splits in two. About 1.9 million come from the earliest P2PK format, which put the public key directly in the output, including an estimated 1.7 million believed to belong to Satoshi. The remaining 4.1 million are exposed not because of their format but because of <strong>address reuse</strong>. This is the real price of the habit we discussed in 10.5.</p>
+          <p>Which means most of that exposure is not a protocol flaw. It is the result of user choices, and that means most of it was avoidable.</p>
+          <p><strong>The debate underway</strong></p>
+          <p>In February 2026 came <strong>BIP-360</strong>, proposing a new output type called P2MR. It resembles Taproot but drops the key path, so no public key appears on-chain when the output is created. That closes the exposure for new transactions, but does nothing for coins whose public keys are already visible.</p>
+          <p>Two months later came <strong>BIP-361</strong>, and this is where the argument turned heated. It proposes a staged schedule: after some years the network stops accepting outputs to legacy formats, and some years after that, ECDSA and Schnorr verification is switched off entirely. Coins that have not migrated become <strong>permanently frozen</strong>.</p>
+          <p>The reaction was fierce, and both sides have a case. Opponents call it confiscation: freezing other people’s coins because they could not or did not migrate, including owners who have died, contradicts the promise that nobody can take your Bitcoin. Supporters answer that doing nothing is not neutral either: if those coins are not frozen, they will be taken by whoever builds a quantum computer first, and what circulates will no longer be Bitcoin that is owned but Bitcoin that was stolen. The choice is not between confiscating and not confiscating, but between freezing and surrendering.</p>
+          <p><strong>What will date, and what will not</strong></p>
+          <p>As of mid-2026, both remain proposals and neither has been activated. If you are reading this some years later, the situation has very likely moved on. Perhaps one of them is active, perhaps both were replaced by something else, perhaps the argument is still running. The BIP names and numbers above will date, so will that figure of 6.9 million, and so will every estimate of when a sufficiently large quantum computer will actually exist. The history of such estimates is full of deadlines that came and went.</p>
+          <p>But the following four things will not date, and they are what you should actually carry away from this section. First, only signatures are threatened, not hash functions. Second, that threat only applies once a public key has been seen on-chain. Third, the largest share of exposure comes from address reuse, not from a protocol flaw. Fourth, every solution must ultimately choose between freezing coins that are already exposed or letting them be taken, and there is no third option that pleases everyone.</p>
+          <p>If you want to know the current state of things, what to look for is not news about quantum computers but two far more grounded questions: is there a quantum-resistant output type active on the network, and does the wallet you use support it. The rest is noise.</p>
+          <p>And whatever the answers to those two questions turn out to be, what you can do yourself stays just as simple: <strong>do not reuse addresses</strong>. As long as your public key has never appeared on-chain, you are not in the exposed group, today or ten years from now. Advice that sounded like a privacy matter in 10.5 turns out to be about long-term resilience too.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">System map — Bitcoin Cryptography</div>
+          <div class="b04-s46-desc">
+            Click each component to see its role, how it works, and what would happen if that component didn’t exist.
+          </div>
+
+          <div class="csm-grid" id="b04-s46-grid"></div>
+
+          <div class="csm-detail" id="b04-s46-detail">
+            <div class="csm-detail-head" id="b04-s46-detail-head"></div>
+            <div class="csm-detail-body" id="b04-s46-detail-body"></div>
+          </div>
+
+          <div class="csm-summary" id="b04-s46-summary">
+            Click one of the components above to see its role in the Bitcoin system.
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-4-5" data-sb="sb-4-5">
+            ← 4.5 — Merkle Tree
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 4.6 -->
+
+    </div>
+    <!-- END CONTENT AREA -->
+
+  </div>
+
+</div>
+<!-- END PAGE 7 · BAB 4 -->
+
+

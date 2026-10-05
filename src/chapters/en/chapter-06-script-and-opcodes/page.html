@@ -1,0 +1,975 @@
+<!-- ============================================================
+     PAGE 9 · BAB 6 · Bitcoin Script dan Opcodes
+     |-- 6.1 · Apa itu Bitcoin Script? [DONE]
+     |-- 6.2 · Opcodes [LOCKED]
+     |-- 6.3 · P2PKH [LOCKED]
+     |-- 6.4 · P2WPKH dan SegWit [LOCKED]
+     |-- 6.5 · P2SH dan Multisig [LOCKED]
+     |-- 6.6 · Taproot dan P2TR [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab6">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b6">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b6">← Chapter List</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab6">
+      <div class="sidebar-heading">Chapter 6</div>
+      <div class="sidebar-title">Bitcoin Script and Opcodes</div>
+
+      <!-- 6.1 · DONE -->
+      <div class="sidebar-item active" id="sb-6-1">
+        <div class="sb-num">6.1</div>
+        <div class="sb-label">What is Bitcoin Script?</div>
+      </div>
+
+      <!-- 6.2 · DONE -->
+      <div class="sidebar-item" id="sb-6-2">
+        <div class="sb-num">6.2</div>
+        <div class="sb-label">Opcodes</div>
+      </div>
+
+      <!-- 6.3 · DONE -->
+      <div class="sidebar-item" id="sb-6-3">
+        <div class="sb-num">6.3</div>
+        <div class="sb-label">P2PKH</div>
+      </div>
+
+      <!-- 6.4 · DONE -->
+      <div class="sidebar-item" id="sb-6-4">
+        <div class="sb-num">6.4</div>
+        <div class="sb-label">P2WPKH and SegWit</div>
+      </div>
+
+      <!-- 6.5 · DONE -->
+      <div class="sidebar-item" id="sb-6-5">
+        <div class="sb-num">6.5</div>
+        <div class="sb-label">P2SH and Multisig</div>
+      </div>
+
+      <!-- 6.6 · DONE -->
+      <div class="sidebar-item" id="sb-6-6">
+        <div class="sb-num">6.6</div>
+        <div class="sb-label">Taproot and P2TR</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab6-content">
+
+      <!-- ==============================
+           SECTION 6.1 · Apa itu Bitcoin Script?
+      ============================== -->
+      <div class="p-section active" id="section-6-1">
+        <div class="p-eyebrow">Chapter 6 · 6.1</div>
+        <div class="p-heading">A small program behind every transaction</div>
+        <div class="p-title">What is Bitcoin Script?</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Every Bitcoin transaction that has ever existed includes one question and one answer. The question is in the output: "Who can spend this bitcoin?" The answer is in the next transaction’s input: "Here is the proof that I’m entitled to spend it." Both of these are encoded in a small program called Script.</p>
+
+          <p><strong>How Script works</strong></p>
+          <p>Script is a stack-based language. No variables, no loops, no functions. There are only two things: data and commands. Data is pushed onto the stack (push). A command takes data from the stack, does something, and returns the result (pop). Execution runs left to right, one instruction at a time.</p>
+          <p>Imagine a stack of plates. You can place a plate on top (push) or take a plate from the top (pop). Script works exactly like this, but the contents are data and computation results.</p>
+
+          <p><strong>Why not Turing complete?</strong></p>
+          <p>Satoshi deliberately designed Script not to be Turing complete. No loops, no recursion, no conditions that can run without bound. This isn’t a shortcoming, but a very deliberate design decision. Every node in the network has to verify every transaction. If Script could contain unbounded loops, one malicious transaction could paralyze the entire network. With limited Script, execution time is always predictable and short.</p>
+
+          <p><strong>scriptPubKey and scriptSig</strong></p>
+          <p>scriptPubKey is the "padlock" placed on the output. It defines the conditions that must be met to spend that output. scriptSig is the "key" carried by the sender of the next transaction. It contains the data needed to satisfy the conditions in scriptPubKey. For SegWit transactions, scriptSig is replaced or complemented by the witness field, which works on the same principle but more efficiently.</p>
+
+          <div class="p-callout">
+            <p>Script is one of the most frequently misunderstood parts of Bitcoin. Many think Bitcoin can only do simple transactions. But with Script, Bitcoin can express very complex spending conditions, from multisig to time-locked transactions, all without a central server and without trust.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Interactive simulation — Stack visualizer</div>
+          <div class="b06-s61-desc">
+            Choose one of the scripts then click "Next step" to see the execution step by step. Each instruction explains what happens on the stack.
+          </div>
+
+          <div class="sv-scripts-sim" id="b06-s61-scripts"></div>
+          <div class="sv-display-sim" id="b06-s61-display"></div>
+
+          <div class="sv-main-sim">
+            <div class="sv-stack-wrap-sim">
+              <div class="sv-stack-lbl-sim">Stack (bottom → top)</div>
+              <div class="sv-stack-sim" id="b06-s61-stack"><div class="sv-empty-sim">empty</div></div>
+            </div>
+            <div class="sv-info-sim">
+              <div class="sv-info-lbl-sim">Current instruction</div>
+              <div class="sv-info-op-sim" id="b06-s61-op">—</div>
+              <div class="sv-info-desc-sim" id="b06-s61-desc-info">Choose a script and click next step.</div>
+            </div>
+          </div>
+
+          <div class="sv-result-sim" id="b06-s61-result"></div>
+
+          <div class="sv-ctrl-sim">
+            <button class="kp-btn kp-btn-gen" id="b06-s61-next">Next step →</button>
+            <button class="kp-btn kp-btn-gen" id="b06-s61-auto">Run all ↗</button>
+            <button class="kp-btn kp-btn-reset" id="b06-s61-reset">Reset</button>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-6-2" data-sb="sb-6-2">
+            6.2 — Opcodes →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 6.1 -->
+
+      <!-- ==============================
+           SECTION 6.2 · Opcodes
+      ============================== -->
+      <div class="p-section" id="section-6-2">
+        <div class="p-eyebrow">Chapter 6 · 6.2</div>
+        <div class="p-heading">The commands that run Script</div>
+        <div class="p-title">Opcodes</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Script consists of two kinds of elements: data and opcodes. Data is the value pushed onto the stack. Opcodes are the commands that operate on that data.</p>
+
+          <p><strong>Categories of opcodes</strong></p>
+          <p>Stack operations manipulate the stack contents without computation. OP_DUP duplicates the top value. OP_DROP discards it. OP_SWAP swaps the top two values. Arithmetic operations do simple math: OP_ADD adds, OP_SUB subtracts. Comparison operations compare values: OP_EQUAL pushes TRUE if equal, OP_EQUALVERIFY immediately fails the script if not equal. Crypto operations do cryptography: OP_SHA256 hashes, OP_HASH160 is used to make addresses, OP_CHECKSIG verifies signatures. Flow control directs execution: OP_IF for conditions, OP_VERIFY to ensure a value is TRUE, OP_RETURN to create an unspendable output.</p>
+
+          <p><strong>Disabled opcodes</strong></p>
+          <p>Bitcoin once had more expressive opcodes, including string operations, multiplication, and bitwise operations. Most were disabled in 2010 after security flaws were found. Operations like OP_CAT could make the stack grow exponentially and be used for DoS attacks. OP_MUL and OP_DIV could potentially crash nodes due to poorly defined edge-case behavior. This is an example of how Bitcoin chooses security over features.</p>
+
+          <p><strong>OP_RETURN</strong></p>
+          <p>OP_RETURN deserves a mention of its own. It stops script execution entirely and marks the output as provably unspendable, impossible to spend, not because of a wrong key, but because the script is designed never to produce TRUE. It’s used to embed small data into the blockchain: a document hash, a message, or other metadata. The data size limit is not a consensus rule but relay policy that can differ per node and implementation — long-standing convention: 80 bytes.</p>
+
+          <p><strong>Miniscript</strong></p>
+          <p>Writing Bitcoin Script manually is very error-prone. A script that looks correct can have subtle bugs that cause funds to be locked forever or stolen. Miniscript is a structured language that compiles to Bitcoin Script, designed so that scripts can be analyzed automatically: can they be spent, what’s the cost, are there conflicting conditions?</p>
+
+          <p>Miniscript defines a set of "fragments" that can be combined safely: single keys, multisig, timelocks, hash preimages, and their combinations with AND, OR, and threshold. Each fragment has a strict type so the compiler can verify that the resulting script can really be executed as intended. A wallet that supports Miniscript can read any script made with Miniscript and immediately know its spending conditions.</p>
+
+          <div class="p-callout">
+            <p>With about 200 defined opcodes, most of them inactive, Bitcoin Script looks simple. But it’s this simplicity that makes it safe. Every active opcode has been tested and audited for over a decade. No surprises.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Interactive simulation — Opcode stack demo</div>
+          <div class="b06-s62-demo-desc">
+            Choose an opcode and see its effect on the stack immediately. Fill in the input values as you like then click Run.
+          </div>
+
+          <div class="od-ops-sim" id="b06-s62-ops"></div>
+
+          <div class="od-info-sim">
+            <div class="od-info-name-sim" id="b06-s62-name">—</div>
+            <div class="od-info-long-sim" id="b06-s62-long">—</div>
+            <div class="od-info-desc-sim" id="b06-s62-desc">Choose an opcode above.</div>
+          </div>
+
+          <div class="od-inputs-sim" id="b06-s62-inputs"></div>
+
+          <div class="od-stage-sim">
+            <div class="od-stack-wrap-sim">
+              <div class="od-stack-lbl-sim">Before</div>
+              <div class="od-stack-sim" id="b06-s62-before"></div>
+            </div>
+            <div class="od-arrow-sim">→</div>
+            <div class="od-stack-wrap-sim">
+              <div class="od-stack-lbl-sim">After</div>
+              <div class="od-stack-sim" id="b06-s62-after"></div>
+            </div>
+          </div>
+
+          <div class="od-note-sim" id="b06-s62-note" style="display:none;"></div>
+        </div>
+
+        <div class="p-simulation" style="margin-top:1.5rem;">
+          <div class="sim-label">Reference — Opcode dictionary</div>
+          <div class="b06-s62-ref-desc">
+            Filter by category to see the list of opcodes, their full names, and their effect on the stack.
+          </div>
+
+          <div class="or-cats-sim" id="b06-s62-cats"></div>
+          <div style="overflow-x:auto;margin-top:1rem;">
+            <table class="or-table-sim">
+              <thead>
+                <tr>
+                  <th class="or-th-sim">Opcode</th>
+                  <th class="or-th-sim">Hex</th>
+                  <th class="or-th-sim">Full name</th>
+                  <th class="or-th-sim">Category</th>
+                  <th class="or-th-sim">Effect on stack</th>
+                </tr>
+              </thead>
+              <tbody id="b06-s62-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-6-1" data-sb="sb-6-1">
+            ← 6.1 — What is Bitcoin Script?
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-6-3" data-sb="sb-6-3">
+            6.3 — P2PKH →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 6.2 -->
+
+      <!-- ==============================
+           SECTION 6.3 · P2PKH
+      ============================== -->
+      <div class="p-section" id="section-6-3">
+        <div class="p-eyebrow">Chapter 6 · 6.3</div>
+        <div class="p-heading">Bitcoin’s most classic transaction format</div>
+        <div class="p-title">P2PKH</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>P2PKH stands for Pay-to-Public-Key-Hash. This is the most classic and most widely used Bitcoin transaction format since Bitcoin was born. If you’ve ever seen a Bitcoin address starting with the number 1, that’s P2PKH.</p>
+
+          <p><strong>How P2PKH works</strong></p>
+          <p>The idea is simple: instead of stating the recipient’s public key directly in the output, what’s stored is the hash of that public key. This is the "Public Key Hash" in P2PKH. When someone wants to spend a P2PKH output, they have to prove two things: first, that they know the public key that produces that hash. Second, that they have the private key matching that public key, proven with a digital signature.</p>
+
+          <p><strong>scriptPubKey P2PKH</strong></p>
+          <p>scriptPubKey is the "padlock" placed on the output. For P2PKH, its form is always the same: <code>OP_DUP OP_HASH160 &lt;Public Key Hash&gt; OP_EQUALVERIFY OP_CHECKSIG</code>. It means: anyone who can prove they know the public key whose hash is this, and can sign with the matching private key, may spend this output.</p>
+
+          <p><strong>scriptSig P2PKH</strong></p>
+          <p>scriptSig is the "key" carried by the sender. For P2PKH there are only two elements: <code>&lt;Signature&gt; &lt;Public Key&gt;</code>. Very simple.</p>
+
+          <p><strong>The verification process</strong></p>
+          <p>The node combines scriptSig and scriptPubKey, then runs them as a single script. The stack runs from left to right. OP_DUP duplicates the public key. OP_HASH160 hashes one copy of it. OP_EQUALVERIFY compares the hash result with the hash stored in the output. If they match, OP_CHECKSIG verifies the signature against the public key. If everything succeeds, the result is TRUE and the transaction is valid.</p>
+
+          <p><strong>Why a hash, not the public key directly?</strong></p>
+          <p>Because the hash provides an extra layer of security. As long as the output hasn’t been spent, the public key is never exposed on the blockchain. Only its hash appears. This means even if one day quantum computing can break elliptic curve cryptography, bitcoin that has never been spent is still protected by the hash.</p>
+
+          <div class="p-callout">
+            <p>P2PKH has existed since Bitcoin’s first block. Even though there are now more efficient formats like P2WPKH, P2PKH remains valid and is still widely used. Backward compatibility is one of Bitcoin’s core principles.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Interactive simulation — P2PKH verification</div>
+          <div class="b06-s63-desc">
+            Click "Next step" to see how scriptSig and scriptPubKey are combined and executed step by step. Click "View raw data" to see the actual hex.
+          </div>
+
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:#52524C;margin-bottom:6px;font-family:'Sora',sans-serif;">Full script (scriptSig + scriptPubKey)</div>
+          <div class="b06-s63-script" id="b06-s63-script"></div>
+          <div style="display:flex;gap:16px;margin-top:6px;margin-bottom:1rem;font-size:10px;color:#52524C;font-family:'Sora',sans-serif;flex-wrap:wrap;">
+            <span>● <span style="background:#534AB7;color:#fff;padding:1px 6px;border-radius:3px;font-size:10px;">Data</span> — the value pushed onto the stack</span>
+            <span>● <span style="background:#F4F4F0;border:0.5px solid rgba(124,58,237,0.2);padding:1px 6px;border-radius:3px;font-size:10px;color:#1A1A18;">Opcode</span> — command</span>
+          </div>
+
+          <div class="b06-s63-main">
+            <div class="b06-s63-stack-wrap">
+              <div class="b06-s63-stack-lbl">Stack</div>
+              <div class="b06-s63-stack" id="b06-s63-stack"><div class="b06-s63-empty">empty</div></div>
+            </div>
+            <div class="b06-s63-info">
+              <div class="b06-s63-info-lbl">Current step</div>
+              <div class="b06-s63-info-op" id="b06-s63-op">—</div>
+              <div class="b06-s63-info-desc" id="b06-s63-desc">Click "Next step" to start.</div>
+            </div>
+          </div>
+
+          <div class="b06-s63-result" id="b06-s63-result"></div>
+
+          <div class="b06-s63-ctrl">
+            <button class="kp-btn kp-btn-gen" id="b06-s63-next">Next step →</button>
+            <button class="kp-btn kp-btn-gen" id="b06-s63-auto">Run all ↗</button>
+            <button class="kp-btn kp-btn-reset" id="b06-s63-reset">Reset</button>
+          </div>
+
+          <div style="margin-top:8px;">
+            <button class="b06-s63-raw-btn" id="b06-s63-raw-btn">View raw data →</button>
+            <div class="b06-s63-raw-panel" id="b06-s63-raw-panel"><span class="b06-rc">// scriptSig (from the transaction input)</span>
+<span class="b06-rk">"scriptSig"</span>: {
+  <span class="b06-rk">"asm"</span>: <span class="b06-rs">"3045022100a7b3e4f1...01 03d4e8c9f2..."</span>,
+  <span class="b06-rk">"hex"</span>: <span class="b06-rs">"483045022100a7b3e4f1c2d890ab12ef3456789012345 67890abcdef01210 3d4e8c9f2a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9"</span>
+}
+
+<span class="b06-rc">// scriptPubKey (from the UTXO output being spent)</span>
+<span class="b06-rk">"scriptPubKey"</span>: {
+  <span class="b06-rk">"asm"</span>: <span class="b06-rs">"OP_DUP OP_HASH160 89abcdef0123456789abcdef0123456789abcdef OP_EQUALVERIFY OP_CHECKSIG"</span>,
+  <span class="b06-rk">"hex"</span>: <span class="b06-rs">"76a91489abcdef0123456789abcdef0123456789abcdef88ac"</span>,
+  <span class="b06-rk">"type"</span>: <span class="b06-rs">"pubkeyhash"</span>,
+  <span class="b06-rc">// "address" is computed by the node from scriptPubKey, not on-chain data</span>
+  <span class="b06-rk">"address"</span>: <span class="b06-rs">"1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"</span>
+}
+
+<span class="b06-rc">// scriptPubKey hex breakdown: 76a914{20-byte PKH}88ac</span>
+<span class="b06-rc">// 76 = OP_DUP</span>
+<span class="b06-rc">// a9 = OP_HASH160</span>
+<span class="b06-rc">// 14 = push 20 bytes</span>
+<span class="b06-rc">// 89abcdef...abcdef = Public Key Hash (20 bytes)</span>
+<span class="b06-rc">// 88 = OP_EQUALVERIFY</span>
+<span class="b06-rc">// ac = OP_CHECKSIG</span></div>
+          </div>
+        
+          <div class="p-simulation">
+            <div class="sim-label">Flow diagram — Legacy (P2PKH)</div>
+            <div class="bs-flow"><svg width="100%" viewBox="0 0 700 580" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="p2pkh-t"><title id="p2pkh-t">Legacy, or Pay to Public Key Hash (P2PKH)</title><style>.fh{font-family:'Sora',sans-serif;font-size:12px;font-weight:600;fill:#1A1A18}.fs{font-family:'Sora',sans-serif;font-size:9.5px;fill:#3A3A35}.fx{font-family:'Courier Prime',monospace;font-size:8.5px;fill:#52524C;letter-spacing:0.04em}.fa{font-family:'Sora',sans-serif;font-size:9.5px;font-weight:600;fill:#534AB7}.fg{font-family:'Sora',sans-serif;font-size:9.5px;font-weight:600;fill:#3B6D11}.ftitle{font-family:'Sora',sans-serif;font-size:14px;font-weight:700;fill:#1A1A18;letter-spacing:-0.01em}</style><defs><marker id="fa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs><text class="ftitle" x="0" y="16" text-anchor="start" dominant-baseline="central">Legacy, or Pay to Public Key Hash (P2PKH)</text><rect x="21.0" y="75.0" width="150" height="34" rx="8" fill="#F4F4F0" stroke="rgba(124,58,237,0.28)" stroke-width="0.5"/><text class="fh" x="96" y="92.0" text-anchor="middle" dominant-baseline="central">Private Key</text><rect x="275.0" y="75.0" width="150" height="34" rx="8" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fh" x="350" y="92.0" text-anchor="middle" dominant-baseline="central">Public Key</text><rect x="524.0" y="75.0" width="160" height="34" rx="8" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fh" x="604" y="92.0" text-anchor="middle" dominant-baseline="central">Public Key Hash</text><path d="M 173 92 H 270" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/><text class="fx" x="223.0" y="77" text-anchor="middle" dominant-baseline="central">produces</text><circle cx="223.0" cy="58" r="9.5" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="223.0" y="58" text-anchor="middle" dominant-baseline="central" font-size="9">1</text><path d="M 427 92 H 520" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/><text class="fx" x="477.0" y="77" text-anchor="middle" dominant-baseline="central">hash160</text><circle cx="477.0" cy="52" r="9.5" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="477.0" y="52" text-anchor="middle" dominant-baseline="central" font-size="9">2</text><rect x="7.0" y="186.0" width="178" height="48" rx="8" fill="#F4F4F0" stroke="rgba(124,58,237,0.28)" stroke-width="0.5"/><text class="fh" x="96" y="203.0" text-anchor="middle" dominant-baseline="central">Digital Signature</text><text class="fh" x="96" y="217.0" text-anchor="middle" dominant-baseline="central">ECDSA</text><text class="fx" x="96" y="248.0" text-anchor="middle" dominant-baseline="central" opacity="0.8">(used to sign</text><text class="fx" x="96" y="259.0" text-anchor="middle" dominant-baseline="central" opacity="0.8">the transaction)</text><path d="M 96 114 V 180.0" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/><circle cx="62" cy="145.0" r="9.5" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="62" y="145.0" text-anchor="middle" dominant-baseline="central" font-size="9">4</text><text class="fx" x="118" y="145.0" text-anchor="start" dominant-baseline="central">produces</text><path d="M 185 210 H 324" fill="none" stroke="rgba(26,26,24,0.32)" stroke-width="1.1" stroke-linecap="round"/><path d="M 324 210 H 350 V 116" fill="none" stroke="rgba(26,26,24,0.32)" stroke-width="1.1" stroke-linecap="round"/><path d="M 345 123 L 350 115 L 355 123" fill="none" stroke="rgba(26,26,24,0.32)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><rect x="181.0" y="199" width="104" height="22" rx="11" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="233.0" y="210" text-anchor="middle" dominant-baseline="central">verified against</text><circle cx="233.0" cy="180" r="9.5" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="233.0" y="180" text-anchor="middle" dominant-baseline="central" font-size="9">5</text><rect x="414.0" y="193.0" width="172" height="34" rx="8" fill="#EAF3DE" stroke="rgba(59,109,17,0.28)" stroke-width="0.5"/><text class="fh" x="500" y="210.0" text-anchor="middle" dominant-baseline="central">Compared</text><text class="fx" x="500" y="240.0" text-anchor="middle" dominant-baseline="central" opacity="0.85">If they match,</text><text class="fx" x="500" y="251.0" text-anchor="middle" dominant-baseline="central" opacity="0.85">the spend is valid.</text><path d="M 384 116 V 210 H 408" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/><path d="M 604 118 V 210 H 592" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/><circle cx="384" cy="170" r="9.5" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="384" y="170" text-anchor="middle" dominant-baseline="central" font-size="9">3</text><path d="M 96 264.0 V 300" fill="none" stroke="rgba(26,26,24,0.32)" stroke-width="1.1" stroke-linecap="round" stroke-dasharray="3 4"/><path d="M 350 116 V 300" fill="none" stroke="rgba(26,26,24,0.32)" stroke-width="1.1" stroke-linecap="round" stroke-dasharray="3 4"/><rect x="56" y="298" width="300" height="76" rx="8" fill="#FDFDFC" stroke="rgba(124,58,237,0.28)" stroke-width="0.5"/><text class="fs" x="206" y="316" text-anchor="middle" dominant-baseline="central" opacity="0.85">Digital signature + public key</text><text class="fs" x="206" y="328" text-anchor="middle" dominant-baseline="central" opacity="0.85">is the</text><rect x="169.2" y="343" width="73.6" height="22" rx="11" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="206" y="354" text-anchor="middle" dominant-baseline="central">scriptSig</text><path d="M 604 118 V 300" fill="none" stroke="rgba(26,26,24,0.32)" stroke-width="1.1" stroke-linecap="round" stroke-dasharray="3 4"/><rect x="400" y="298" width="250" height="76" rx="8" fill="#FDFDFC" stroke="rgba(124,58,237,0.28)" stroke-width="0.5"/><text class="fs" x="525" y="316" text-anchor="middle" dominant-baseline="central" opacity="0.85">Pubkey hash</text><text class="fs" x="525" y="328" text-anchor="middle" dominant-baseline="central" opacity="0.85">is the</text><rect x="478.6" y="343" width="92.80000000000001" height="22" rx="11" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="525" y="354" text-anchor="middle" dominant-baseline="central">scriptPubKey</text><path d="M 56 424 H 650" fill="none" stroke="rgba(26,26,24,0.32)" stroke-width="1.1" stroke-linecap="round" stroke-dasharray="3 4"/><text class="fx" x="353" y="440" text-anchor="middle" dominant-baseline="central" opacity="0.8">Once the scriptPubKey and scriptSig are done,</text><text class="fx" x="353" y="451" text-anchor="middle" dominant-baseline="central" opacity="0.8">along with their verification steps</text><path d="M 353 454 V 474" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/><rect x="0" y="476" width="700" height="76" rx="10" fill="#FBFBF9" stroke="rgba(124,58,237,0.28)" stroke-width="0.5"/><text class="fa" x="353" y="492" text-anchor="middle" dominant-baseline="central">On to the recipient</text><text class="fs" x="122" y="522" text-anchor="middle" dominant-baseline="central">Decode the</text><text class="fs" x="122" y="534" text-anchor="middle" dominant-baseline="central">recipient address</text><text class="fs" x="353" y="522" text-anchor="middle" dominant-baseline="central">Take the recipient</text><text class="fs" x="353" y="534" text-anchor="middle" dominant-baseline="central">public key hash</text><text class="fs" x="353" y="546" text-anchor="middle" dominant-baseline="central">(PKH)</text><text class="fs" x="582" y="522" text-anchor="middle" dominant-baseline="central">Build a new scriptPubKey</text><text class="fs" x="582" y="534" text-anchor="middle" dominant-baseline="central">from the recipient PKH</text><path d="M 232 528 H 258" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/><path d="M 452 528 H 478" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/></svg></div>
+            <div class="bs-flow-hint">scroll the diagram sideways</div>
+            <div class="bs-flow-note">Notice that the <b>public key only appears when the coins are spent</b>. Until then, all the blockchain holds is its hash160. This is the extra layer we discussed in 2.3, and also why reusing a single address throws it away.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-6-2" data-sb="sb-6-2">
+            ← 6.2 — Opcodes
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-6-4" data-sb="sb-6-4">
+            6.4 — P2WPKH and SegWit →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 6.3 -->
+
+      <!-- ==============================
+           SECTION 6.4 · P2WPKH dan SegWit
+      ============================== -->
+      <div class="p-section" id="section-6-4">
+        <div class="p-eyebrow">Chapter 6 · 6.4</div>
+        <div class="p-heading">Separating the signature from the transaction</div>
+        <div class="p-title">P2WPKH and SegWit</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>P2PKH worked well for years. But as Bitcoin grew, there was an increasingly pressing problem: full blocks, expensive fees, and one technical flaw called transaction malleability.</p>
+
+          <p><strong>Transaction malleability</strong></p>
+          <p>Transaction malleability is the ability of a third party to change a transaction’s Transaction ID (txid) without invalidating the transaction. This is possible because the txid is computed from the entire transaction data including scriptSig, and scriptSig can be modified slightly without making the signature invalid. Malleability made the Lightning Network and more complex payment channels very hard to build on top of Bitcoin.</p>
+
+          <p><strong>SegWit (Segregated Witness)</strong></p>
+          <p>SegWit was activated in August 2017 through a soft fork. The idea is elegant: separate the signature data (witness data) from the main transaction data. In a SegWit transaction, scriptSig is emptied. The signature data is moved to a separate structure called the witness field. Because the txid is now computed only from the transaction data without the witness data, transaction malleability is fully resolved. As a bonus, witness data gets a fee discount: one byte of witness is counted as 0.25 vbyte, not 1 byte.</p>
+
+          <p><strong>P2WPKH</strong></p>
+          <p>P2WPKH stands for Pay-to-Witness-Public-Key-Hash, the SegWit version of P2PKH. Its scriptPubKey is far shorter: just <code>OP_0 &lt;Public Key Hash&gt;</code>. OP_0 marks this as SegWit version 0, followed by the 20-byte public key hash. The signature and public key are no longer in scriptSig, both are in the witness field which is processed separately.</p>
+
+          <p><strong>P2WPKH address</strong></p>
+          <p>P2WPKH addresses use the bech32 format starting with <code>bc1q</code>. This format uses only lowercase letters, contains no confusing characters like 0, O, I, and l, and has better error detection than Base58Check.</p>
+
+          <p><strong>Compatibility</strong></p>
+          <p>Old nodes that don’t understand SegWit see the scriptPubKey <code>OP_0 &lt;hash&gt;</code> as an output that’s always spendable. This is intentional as part of the soft fork design: old nodes don’t need to validate witness data, they just need to not reject it.</p>
+
+          <div class="p-callout">
+            <p>SegWit is one of the biggest upgrades in Bitcoin’s history. It resolved transaction malleability, made fees more efficient, and opened the way for the Lightning Network. All of this was achieved through a soft fork, without splitting the network.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualization — P2PKH vs P2WPKH</div>
+          <div class="b06-s64-desc">
+            A comparison of P2PKH and P2WPKH transaction structures. Notice how scriptSig is emptied and the data is moved to the witness field.
+          </div>
+
+          <div class="b06-s64-grid">
+            <!-- P2PKH -->
+            <div class="b06-s64-card">
+              <div class="b06-s64-head legacy">
+                <span>P2PKH</span>
+                <span class="b06-s64-badge">legacy</span>
+              </div>
+              <div class="b06-s64-section">
+                <div class="b06-s64-sh">Input — scriptSig</div>
+                <div class="b06-s64-field">
+                  <span class="b06-s64-fn">Signature</span>
+                  <span class="b06-s64-fv purple-fv">&lt;sig&gt; · 71-72 bytes</span>
+                </div>
+                <div class="b06-s64-field">
+                  <span class="b06-s64-fn">Public key</span>
+                  <span class="b06-s64-fv purple-fv">&lt;pubkey&gt; · 33 bytes</span>
+                </div>
+              </div>
+              <div class="b06-s64-section">
+                <div class="b06-s64-sh">Output — scriptPubKey</div>
+                <div class="b06-s64-field">
+                  <span class="b06-s64-fn">Script</span>
+                  <span class="b06-s64-fv dim-fv">OP_DUP OP_HASH160</span>
+                </div>
+                <div class="b06-s64-field">
+                  <span class="b06-s64-fn">PKH</span>
+                  <span class="b06-s64-fv dim-fv">&lt;20 bytes&gt;</span>
+                </div>
+                <div class="b06-s64-field">
+                  <span class="b06-s64-fn"></span>
+                  <span class="b06-s64-fv dim-fv">OP_EQUALVERIFY OP_CHECKSIG</span>
+                </div>
+              </div>
+              <div class="b06-s64-section">
+                <div class="b06-s64-sh">Witness field</div>
+                <div class="b06-s64-empty">none</div>
+              </div>
+              <div class="b06-s64-section">
+                <div class="b06-s64-sh">Address</div>
+                <div class="b06-s64-field">
+                  <span class="b06-s64-fn">Format</span>
+                  <span class="b06-s64-fv purple-fv">1... (Base58Check)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- P2WPKH -->
+            <div class="b06-s64-card">
+              <div class="b06-s64-head segwit">
+                <span>P2WPKH</span>
+                <span class="b06-s64-badge">SegWit v0</span>
+              </div>
+              <div class="b06-s64-section">
+                <div class="b06-s64-sh">Input — scriptSig</div>
+                <div class="b06-s64-empty">empty — data moved to witness</div>
+              </div>
+              <div class="b06-s64-section">
+                <div class="b06-s64-sh">Output — scriptPubKey</div>
+                <div class="b06-s64-field">
+                  <span class="b06-s64-fn">Script</span>
+                  <span class="b06-s64-fv dim-fv">OP_0</span>
+                </div>
+                <div class="b06-s64-field">
+                  <span class="b06-s64-fn">PKH</span>
+                  <span class="b06-s64-fv dim-fv">&lt;20 bytes&gt;</span>
+                </div>
+              </div>
+              <div class="b06-s64-section witness-section">
+                <div class="b06-s64-sh witness-sh">Witness field</div>
+                <div class="b06-s64-field">
+                  <span class="b06-s64-fn">Signature</span>
+                  <span class="b06-s64-fv green-fv">&lt;sig&gt; · 71-72 bytes</span>
+                </div>
+                <div class="b06-s64-field">
+                  <span class="b06-s64-fn">Public key</span>
+                  <span class="b06-s64-fv green-fv">&lt;pubkey&gt; · 33 bytes</span>
+                </div>
+              </div>
+              <div class="b06-s64-section">
+                <div class="b06-s64-sh">Address</div>
+                <div class="b06-s64-field">
+                  <span class="b06-s64-fn">Format</span>
+                  <span class="b06-s64-fv green-fv">bc1q... (bech32)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats -->
+          <div class="b06-s64-stats">
+            <div class="b06-s64-stat-card">
+              <div class="b06-s64-stat-title">Transaction size</div>
+              <div class="b06-s64-bar-wrap">
+                <div class="b06-s64-bar-lbl">
+                  <span style="color:#534AB7;">P2PKH</span>
+                  <span style="color:#534AB7;font-family:'Courier Prime',monospace;">~192 vbyte</span>
+                </div>
+                <div class="b06-s64-bar-bg">
+                  <div class="b06-s64-bar" style="width:100%;background:#534AB7;"></div>
+                </div>
+              </div>
+              <div class="b06-s64-bar-wrap">
+                <div class="b06-s64-bar-lbl">
+                  <span style="color:#1D9E75;">P2WPKH</span>
+                  <span style="color:#1D9E75;font-family:'Courier Prime',monospace;">~110 vbyte</span>
+                </div>
+                <div class="b06-s64-bar-bg">
+                  <div class="b06-s64-bar" style="width:57%;background:#1D9E75;"></div>
+                </div>
+              </div>
+              <div style="font-size:11px;color:#52524C;margin-top:2px;font-family:'Sora',sans-serif;">P2WPKH about 40% smaller</div>
+            </div>
+
+            <div class="b06-s64-stat-card">
+              <div class="b06-s64-stat-title">P2WPKH advantages</div>
+              <div class="b06-s64-benefits">
+                <div class="b06-s64-benefit"><span class="b06-s64-check">✓</span><span>Transaction malleability resolved, txid unaffected by witness data</span></div>
+                <div class="b06-s64-benefit"><span class="b06-s64-check">✓</span><span>Cheaper fees, witness data counted as 0.25 vbyte per byte</span></div>
+                <div class="b06-s64-benefit"><span class="b06-s64-check">✓</span><span>Opens the way for the Lightning Network</span></div>
+                <div class="b06-s64-benefit"><span class="b06-s64-check">✓</span><span>Soft fork, compatible with old nodes</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Raw data -->
+          <div style="margin-top:8px;">
+            <button class="b06-s64-raw-btn" id="b06-s64-raw-btn">View raw data P2WPKH →</button>
+            <div class="b06-s64-raw-panel" id="b06-s64-raw-panel"><span class="b06-rc">// P2WPKH transaction — getrawtransaction (decoded)</span>
+{
+  <span class="b06-rk">"txid"</span>: <span class="b06-rs">"a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2"</span>,
+  <span class="b06-rk">"version"</span>: <span class="b06-rn">2</span>,
+  <span class="b06-rk">"vin"</span>: [
+    {
+      <span class="b06-rk">"txid"</span>: <span class="b06-rs">"prev_txid..."</span>,
+      <span class="b06-rk">"vout"</span>: <span class="b06-rn">0</span>,
+      <span class="b06-rc">// scriptSig is empty in P2WPKH — data is in the witness</span>
+      <span class="b06-rk">"scriptSig"</span>: {
+        <span class="b06-rk">"asm"</span>: <span class="b06-rs">""</span>,
+        <span class="b06-rk">"hex"</span>: <span class="b06-rs">""</span>
+      },
+      <span class="b06-rc">// witness: a separate array, not included in the txid calculation</span>
+      <span class="b06-rk">"txinwitness"</span>: [
+        <span class="b06-rs">"3044022079be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f8179802205a..."</span>,
+        <span class="b06-rs">"0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"</span>
+      ],
+      <span class="b06-rk">"sequence"</span>: <span class="b06-rn">4294967295</span>
+    }
+  ],
+  <span class="b06-rk">"vout"</span>: [
+    {
+      <span class="b06-rk">"value"</span>: <span class="b06-rn">0.01500000</span>,
+      <span class="b06-rk">"scriptPubKey"</span>: {
+        <span class="b06-rc">// OP_0 + 20-byte PKH — far shorter than P2PKH</span>
+        <span class="b06-rk">"asm"</span>: <span class="b06-rs">"0 89abcdef0123456789abcdef0123456789abcdef"</span>,
+        <span class="b06-rk">"hex"</span>: <span class="b06-rs">"001489abcdef0123456789abcdef0123456789abcdef"</span>,
+        <span class="b06-rk">"type"</span>: <span class="b06-rs">"witness_v0_keyhash"</span>,
+        <span class="b06-rc">// address is computed by the node from scriptPubKey, not on-chain data</span>
+        <span class="b06-rk">"address"</span>: <span class="b06-rs">"bc1q3khdp5drgztj5gwkqcnwu9stvtcm7qhkz2vc83"</span>
+      }
+    }
+  ]
+}
+
+<span class="b06-rc">// P2WPKH scriptPubKey hex breakdown: 0014{20-byte PKH}</span>
+<span class="b06-rc">// 00 = OP_0 (SegWit version 0)</span>
+<span class="b06-rc">// 14 = push 20 bytes</span>
+<span class="b06-rc">// 89abcdef...abcdef = Public Key Hash (20 bytes)</span>
+<span class="b06-rc">//</span>
+<span class="b06-rc">// Compare with P2PKH: 76a914{PKH}88ac (5 bytes overhead)</span>
+<span class="b06-rc">// P2WPKH:                  0014{PKH}       (2 bytes overhead)</span></div>
+          </div>
+        
+          <div class="p-simulation">
+            <div class="sim-label">Flow diagram — SegWit (P2WPKH)</div>
+            <div class="bs-flow"><svg width="100%" viewBox="0 0 700 580" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="p2wpkh-t"><title id="p2wpkh-t">SegWit, or Pay to Witness Public Key Hash (P2WPKH)</title><style>.fh{font-family:'Sora',sans-serif;font-size:12px;font-weight:600;fill:#1A1A18}.fs{font-family:'Sora',sans-serif;font-size:9.5px;fill:#3A3A35}.fx{font-family:'Courier Prime',monospace;font-size:8.5px;fill:#52524C;letter-spacing:0.04em}.fa{font-family:'Sora',sans-serif;font-size:9.5px;font-weight:600;fill:#534AB7}.fg{font-family:'Sora',sans-serif;font-size:9.5px;font-weight:600;fill:#3B6D11}.ftitle{font-family:'Sora',sans-serif;font-size:14px;font-weight:700;fill:#1A1A18;letter-spacing:-0.01em}</style><defs><marker id="fa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs><text class="ftitle" x="0" y="16" text-anchor="start" dominant-baseline="central">SegWit, or Pay to Witness Public Key Hash (P2WPKH)</text><rect x="21.0" y="75.0" width="150" height="34" rx="8" fill="#F4F4F0" stroke="rgba(124,58,237,0.28)" stroke-width="0.5"/><text class="fh" x="96" y="92.0" text-anchor="middle" dominant-baseline="central">Private Key</text><rect x="275.0" y="75.0" width="150" height="34" rx="8" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fh" x="350" y="92.0" text-anchor="middle" dominant-baseline="central">Public Key</text><rect x="524.0" y="75.0" width="160" height="34" rx="8" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fh" x="604" y="92.0" text-anchor="middle" dominant-baseline="central">Public Key Hash</text><path d="M 173 92 H 270" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/><text class="fx" x="223.0" y="77" text-anchor="middle" dominant-baseline="central">produces</text><circle cx="223.0" cy="58" r="9.5" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="223.0" y="58" text-anchor="middle" dominant-baseline="central" font-size="9">1</text><path d="M 427 92 H 520" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/><text class="fx" x="477.0" y="77" text-anchor="middle" dominant-baseline="central">hash160</text><circle cx="477.0" cy="52" r="9.5" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="477.0" y="52" text-anchor="middle" dominant-baseline="central" font-size="9">2</text><rect x="7.0" y="186.0" width="178" height="48" rx="8" fill="#F4F4F0" stroke="rgba(124,58,237,0.28)" stroke-width="0.5"/><text class="fh" x="96" y="203.0" text-anchor="middle" dominant-baseline="central">Digital Signature</text><text class="fh" x="96" y="217.0" text-anchor="middle" dominant-baseline="central">ECDSA</text><text class="fx" x="96" y="248.0" text-anchor="middle" dominant-baseline="central" opacity="0.8">(used to sign</text><text class="fx" x="96" y="259.0" text-anchor="middle" dominant-baseline="central" opacity="0.8">the transaction)</text><path d="M 96 114 V 180.0" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/><circle cx="62" cy="145.0" r="9.5" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="62" y="145.0" text-anchor="middle" dominant-baseline="central" font-size="9">4</text><text class="fx" x="118" y="145.0" text-anchor="start" dominant-baseline="central">produces</text><path d="M 185 210 H 324" fill="none" stroke="rgba(26,26,24,0.32)" stroke-width="1.1" stroke-linecap="round"/><path d="M 324 210 H 350 V 116" fill="none" stroke="rgba(26,26,24,0.32)" stroke-width="1.1" stroke-linecap="round"/><path d="M 345 123 L 350 115 L 355 123" fill="none" stroke="rgba(26,26,24,0.32)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><rect x="181.0" y="199" width="104" height="22" rx="11" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="233.0" y="210" text-anchor="middle" dominant-baseline="central">verified against</text><circle cx="233.0" cy="180" r="9.5" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="233.0" y="180" text-anchor="middle" dominant-baseline="central" font-size="9">5</text><rect x="414.0" y="193.0" width="172" height="34" rx="8" fill="#EAF3DE" stroke="rgba(59,109,17,0.28)" stroke-width="0.5"/><text class="fh" x="500" y="210.0" text-anchor="middle" dominant-baseline="central">Compared</text><text class="fx" x="500" y="240.0" text-anchor="middle" dominant-baseline="central" opacity="0.85">If they match,</text><text class="fx" x="500" y="251.0" text-anchor="middle" dominant-baseline="central" opacity="0.85">the spend is valid.</text><path d="M 384 116 V 210 H 408" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/><path d="M 604 118 V 210 H 592" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/><circle cx="384" cy="170" r="9.5" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="384" y="170" text-anchor="middle" dominant-baseline="central" font-size="9">3</text><path d="M 96 264.0 V 300" fill="none" stroke="rgba(26,26,24,0.32)" stroke-width="1.1" stroke-linecap="round" stroke-dasharray="3 4"/><path d="M 350 116 V 300" fill="none" stroke="rgba(26,26,24,0.32)" stroke-width="1.1" stroke-linecap="round" stroke-dasharray="3 4"/><rect x="56" y="298" width="300" height="76" rx="8" fill="#FDFDFC" stroke="rgba(124,58,237,0.28)" stroke-width="0.5"/><text class="fs" x="206" y="316" text-anchor="middle" dominant-baseline="central" opacity="0.85">Digital signature + public key</text><text class="fs" x="206" y="328" text-anchor="middle" dominant-baseline="central" opacity="0.85">is the</text><rect x="102.0" y="343" width="208.0" height="22" rx="11" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="206" y="354" text-anchor="middle" dominant-baseline="central">witness data · scriptSig empty</text><path d="M 604 118 V 300" fill="none" stroke="rgba(26,26,24,0.32)" stroke-width="1.1" stroke-linecap="round" stroke-dasharray="3 4"/><rect x="400" y="298" width="250" height="76" rx="8" fill="#FDFDFC" stroke="rgba(124,58,237,0.28)" stroke-width="0.5"/><text class="fs" x="525" y="316" text-anchor="middle" dominant-baseline="central" opacity="0.85">Pubkey hash</text><text class="fs" x="525" y="328" text-anchor="middle" dominant-baseline="central" opacity="0.85">is the</text><rect x="478.6" y="343" width="92.80000000000001" height="22" rx="11" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="525" y="354" text-anchor="middle" dominant-baseline="central">scriptPubKey</text><path d="M 56 424 H 650" fill="none" stroke="rgba(26,26,24,0.32)" stroke-width="1.1" stroke-linecap="round" stroke-dasharray="3 4"/><text class="fx" x="353" y="440" text-anchor="middle" dominant-baseline="central" opacity="0.8">Once the scriptPubKey and scriptSig are done,</text><text class="fx" x="353" y="451" text-anchor="middle" dominant-baseline="central" opacity="0.8">along with their verification steps</text><path d="M 353 454 V 474" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/><rect x="0" y="476" width="700" height="76" rx="10" fill="#FBFBF9" stroke="rgba(124,58,237,0.28)" stroke-width="0.5"/><text class="fa" x="353" y="492" text-anchor="middle" dominant-baseline="central">On to the recipient</text><text class="fs" x="122" y="522" text-anchor="middle" dominant-baseline="central">Decode the</text><text class="fs" x="122" y="534" text-anchor="middle" dominant-baseline="central">recipient address</text><text class="fs" x="353" y="522" text-anchor="middle" dominant-baseline="central">Take the recipient</text><text class="fs" x="353" y="534" text-anchor="middle" dominant-baseline="central">public key hash</text><text class="fs" x="353" y="546" text-anchor="middle" dominant-baseline="central">(PKH)</text><text class="fs" x="582" y="522" text-anchor="middle" dominant-baseline="central">Build a new scriptPubKey</text><text class="fs" x="582" y="534" text-anchor="middle" dominant-baseline="central">from the recipient PKH</text><path d="M 232 528 H 258" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/><path d="M 452 528 H 478" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/></svg></div>
+            <div class="bs-flow-hint">scroll the diagram sideways</div>
+            <div class="bs-flow-note">The ingredients are identical to P2PKH. What changes is <b>where they are stored</b>: the signature and public key move into the witness, leaving the scriptSig empty. Because witness data counts as a quarter, the cost drops without altering a single cryptographic step.</div>
+          </div>
+        
+          <div class="lab-link"><span class="kode">F1</span><span class="isi"><span class="hd">Continue in the Laboratory</span>You can demonstrate the malleability mentioned above yourself: flip one bit of a signature and watch whether the txid changes, in Laboratory F1.</span></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-6-3" data-sb="sb-6-3">
+            ← 6.3 — P2PKH
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-6-5" data-sb="sb-6-5">
+            6.5 — P2SH and Multisig →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 6.4 -->
+
+      <!-- ==============================
+           SECTION 6.5 · P2SH dan Multisig
+      ============================== -->
+      <div class="p-section" id="section-6-5">
+        <div class="p-eyebrow">Chapter 6 · 6.5</div>
+        <div class="p-heading">Hiding complex spending conditions</div>
+        <div class="p-title">P2SH and Multisig</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Imagine a company that wants to store bitcoin with a rule: no single person can move the funds alone. At least 2 of 3 directors are required to approve each transaction. How does Bitcoin express this rule?</p>
+
+          <p><strong>P2MS (bare multisig)</strong></p>
+          <p>Before P2SH, Bitcoin had a multisig format called P2MS or Pay-to-Multisig. The script places all public keys directly in scriptPubKey: <code>OP_2 &lt;pubkey1&gt; &lt;pubkey2&gt; &lt;pubkey3&gt; OP_3 OP_CHECKMULTISIG</code>. The problem is that all public keys are exposed on the blockchain from the moment the output is created. Worse, there’s no standard address format for P2MS. The sender has to know the full script structure, not just an address.</p>
+
+          <p><strong>P2SH (Pay-to-Script-Hash)</strong></p>
+          <p>P2SH was activated in 2012 as a soft fork. The idea is brilliant: hide the complex script behind a hash. The recipient creates a redeem script that defines the spending conditions, then hashes it. This hash is what’s put into scriptPubKey: <code>OP_HASH160 &lt;redeem script hash&gt; OP_EQUAL</code>. Only 3 elements. The actual script is only revealed when the output is spent.</p>
+
+          <p><strong>P2SH address</strong></p>
+          <p>The hash of the redeem script is encoded using Base58Check with a prefix that produces an address starting with the number 3. The sender only needs to know this address without needing to know the multisig structure inside it.</p>
+
+          <p><strong>P2SH advantages</strong></p>
+          <p>First, privacy: the complex condition script isn’t exposed until the moment it’s spent. Second, standardization: the recipient can give a normal address without having to explain their multisig structure to the sender. Third, the burden on the recipient: the cost of including the long script is borne by the recipient when spending, not the sender when creating the output.</p>
+
+          <p><strong>P2SH-P2WPKH</strong></p>
+          <p>P2SH can also wrap a SegWit script, called P2SH-P2WPKH or wrapped SegWit. It’s used as a middle ground for old wallets that don’t yet support bech32 but want to enjoy SegWit’s benefits. The address still starts with 3 but contains a witness program inside.</p>
+
+          <div class="p-callout">
+            <p>P2SH changed how Bitcoin expresses complex spending conditions. Instead of putting all the logic in the output, the logic is hidden behind a hash. This is an example of how Bitcoin evolves through elegant abstraction, without changing the basic rules.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualization — P2MS vs P2SH</div>
+          <div class="b06-s65-desc">
+            Compare two multisig approaches. P2MS exposes all public keys directly in the output. P2SH hides them behind a hash — the public keys are only revealed when spent.
+          </div>
+
+          <div class="b06-s65-tabs">
+            <button class="b06-s65-tab active-amber" id="b06-s65-t1">P2MS — bare multisig</button>
+            <button class="b06-s65-tab" id="b06-s65-t2">P2SH — hidden script</button>
+          </div>
+
+          <!-- PANE P2MS -->
+          <div class="b06-s65-pane show" id="b06-s65-p1">
+            <div class="b06-s65-card">
+              <div class="b06-s65-head s65-amber">
+                <span>P2MS (bare multisig) · 2 of 3</span>
+                <span class="b06-s65-badge">historic</span>
+              </div>
+              <div class="b06-s65-section">
+                <div class="b06-s65-sh">Output — scriptPubKey (shown on-chain)</div>
+                <div class="b06-s65-field"><span class="b06-s65-fn">Script</span><span class="b06-s65-fv s65-amber-v">OP_2</span></div>
+                <div class="b06-s65-field"><span class="b06-s65-fn">Public key 1</span><span class="b06-s65-fv s65-amber-v">03a1b2c3... (33 bytes) — exposed</span></div>
+                <div class="b06-s65-field"><span class="b06-s65-fn">Public key 2</span><span class="b06-s65-fv s65-amber-v">03d4e5f6... (33 bytes) — exposed</span></div>
+                <div class="b06-s65-field"><span class="b06-s65-fn">Public key 3</span><span class="b06-s65-fv s65-amber-v">03g7h8i9... (33 bytes) — exposed</span></div>
+                <div class="b06-s65-field"><span class="b06-s65-fn">Script</span><span class="b06-s65-fv s65-amber-v">OP_3 OP_CHECKMULTISIG</span></div>
+              </div>
+              <div class="b06-s65-section">
+                <div class="b06-s65-sh">Input — scriptSig</div>
+                <div class="b06-s65-field"><span class="b06-s65-fn">Dummy</span><span class="b06-s65-fv s65-dim-v">OP_0 (old OP_CHECKMULTISIG bug)</span></div>
+                <div class="b06-s65-field"><span class="b06-s65-fn">Signature 1</span><span class="b06-s65-fv s65-dim-v">&lt;sig1&gt;</span></div>
+                <div class="b06-s65-field"><span class="b06-s65-fn">Signature 2</span><span class="b06-s65-fv s65-dim-v">&lt;sig2&gt;</span></div>
+              </div>
+              <div class="b06-s65-section">
+                <div class="b06-s65-sh">Address</div>
+                <div class="b06-s65-empty">no standard address format</div>
+              </div>
+            </div>
+            <div class="b06-s65-alert warn-alert">⚠️ All public keys are exposed on the blockchain from the moment the output is created. The sender has to know the full script structure. There is no standard address format.</div>
+            <div>
+              <button class="b06-s65-raw-btn" id="b06-s65-raw-btn-ms">View raw data P2MS →</button>
+              <div class="b06-s65-raw-panel" id="b06-s65-raw-panel-ms"><span class="b06-rc">// P2MS bare multisig 2-of-3 — scriptPubKey (shown on-chain from when the output is created)</span>
+<span class="b06-rk">"scriptPubKey"</span>: {
+  <span class="b06-rk">"asm"</span>: <span class="b06-rs">"2 03a1b2c3...b0c1 03d4e5f6...e3f4 03g7h8i9...z6 3 OP_CHECKMULTISIG"</span>,
+  <span class="b06-rk">"hex"</span>: <span class="b06-rs">"522103a1b2c3...2103d4e5f6...2103g7h8i9...53ae"</span>,
+  <span class="b06-rk">"type"</span>: <span class="b06-rs">"multisig"</span>
+  <span class="b06-rc">// no "address" field — P2MS has no standard address format</span>
+}
+
+<span class="b06-rc">// P2MS scriptPubKey hex breakdown:</span>
+<span class="b06-rc">// 52       = OP_2 (needs 2 signatures)</span>
+<span class="b06-rc">// 21       = push 33 bytes</span>
+<span class="b06-rc">// 03a1b2.. = public key 1 (33 bytes) — EXPOSED</span>
+<span class="b06-rc">// 21       = push 33 bytes</span>
+<span class="b06-rc">// 03d4e5.. = public key 2 (33 bytes) — EXPOSED</span>
+<span class="b06-rc">// 21       = push 33 bytes</span>
+<span class="b06-rc">// 03g7h8.. = public key 3 (33 bytes) — EXPOSED</span>
+<span class="b06-rc">// 53       = OP_3 (total 3 public keys)</span>
+<span class="b06-rc">// ae       = OP_CHECKMULTISIG</span>
+<span class="b06-rc">// Total P2MS scriptPubKey size: ~107 bytes</span>
+
+<span class="b06-rk">"scriptSig"</span>: {
+  <span class="b06-rk">"asm"</span>: <span class="b06-rs">"0 &lt;sig1&gt; &lt;sig2&gt;"</span>,
+  <span class="b06-rk">"hex"</span>: <span class="b06-rs">"004830450221...01483045022100..."</span>
+}</div>
+            </div>
+          </div>
+
+          <!-- PANE P2SH -->
+          <div class="b06-s65-pane" id="b06-s65-p2">
+            <div class="b06-s65-card">
+              <div class="b06-s65-head s65-purp">
+                <span>P2SH · when receiving</span>
+                <span class="b06-s65-badge">output on-chain</span>
+              </div>
+              <div class="b06-s65-section">
+                <div class="b06-s65-sh">Output — scriptPubKey (shown on-chain)</div>
+                <div class="b06-s65-field"><span class="b06-s65-fn">Script</span><span class="b06-s65-fv s65-purp-v">OP_HASH160</span></div>
+                <div class="b06-s65-field"><span class="b06-s65-fn">Redeem hash</span><span class="b06-s65-fv s65-purp-v">&lt;20 bytes&gt; — only the hash, script hidden</span></div>
+                <div class="b06-s65-field"><span class="b06-s65-fn">Script</span><span class="b06-s65-fv s65-purp-v">OP_EQUAL</span></div>
+              </div>
+              <div class="b06-s65-section">
+                <div class="b06-s65-sh">Address</div>
+                <div class="b06-s65-field"><span class="b06-s65-fn">Format</span><span class="b06-s65-fv s65-purp-v">3... (Base58Check)</span></div>
+              </div>
+            </div>
+            <div class="b06-s65-arrow">↓ when spent, the redeem script is finally revealed</div>
+            <div class="b06-s65-card">
+              <div class="b06-s65-head s65-green">
+                <span>P2SH · when spending</span>
+                <span class="b06-s65-badge">input on-chain</span>
+              </div>
+              <div class="b06-s65-section">
+                <div class="b06-s65-sh">Input — scriptSig</div>
+                <div class="b06-s65-field"><span class="b06-s65-fn">Dummy</span><span class="b06-s65-fv s65-dim-v">OP_0</span></div>
+                <div class="b06-s65-field"><span class="b06-s65-fn">Signature 1</span><span class="b06-s65-fv s65-dim-v">&lt;sig1&gt;</span></div>
+                <div class="b06-s65-field"><span class="b06-s65-fn">Signature 2</span><span class="b06-s65-fv s65-dim-v">&lt;sig2&gt;</span></div>
+                <div class="b06-s65-field"><span class="b06-s65-fn">Redeem script</span><span class="b06-s65-fv s65-green-v">OP_2 &lt;pk1&gt; &lt;pk2&gt; &lt;pk3&gt; OP_3 OP_CHECKMULTISIG</span></div>
+              </div>
+              <div class="b06-s65-section">
+                <div class="b06-s65-sh">Node verification</div>
+                <div class="b06-s65-field"><span class="b06-s65-fn">Step 1</span><span class="b06-s65-fv s65-dim-v">Hash the redeem script, match it against the hash in the output</span></div>
+                <div class="b06-s65-field"><span class="b06-s65-fn">Step 2</span><span class="b06-s65-fv s65-dim-v">Run the redeem script, verify the signatures</span></div>
+              </div>
+            </div>
+            <div class="b06-s65-alert ok-alert">✓ Public keys are only exposed when spending. The sender just needs to know the 3... address without needing to know the multisig structure inside it.</div>
+            <div>
+              <button class="b06-s65-raw-btn" id="b06-s65-raw-btn-sh">View raw data P2SH →</button>
+              <div class="b06-s65-raw-panel" id="b06-s65-raw-panel-sh"><span class="b06-rc">// P2SH multisig 2-of-3 — scriptPubKey (when the output is created)</span>
+<span class="b06-rk">"scriptPubKey"</span>: {
+  <span class="b06-rk">"asm"</span>: <span class="b06-rs">"OP_HASH160 8f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a OP_EQUAL"</span>,
+  <span class="b06-rk">"hex"</span>: <span class="b06-rs">"a9148f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a87"</span>,
+  <span class="b06-rk">"type"</span>: <span class="b06-rs">"scripthash"</span>,
+  <span class="b06-rc">// address is computed by the node from scriptPubKey, not on-chain data</span>
+  <span class="b06-rk">"address"</span>: <span class="b06-rs">"3FZbgi29cpjq2GjdwV8eyHuJJnkLtktZc5"</span>
+}
+
+<span class="b06-rc">// Hex breakdown: a914{20-byte hash}87 — only 23 bytes total</span>
+<span class="b06-rc">// a9 = OP_HASH160</span>
+<span class="b06-rc">// 14 = push 20 bytes</span>
+<span class="b06-rc">// 8f1a...8f9a = hash of the redeem script (20 bytes)</span>
+<span class="b06-rc">// 87 = OP_EQUAL</span>
+<span class="b06-rc">// Compare P2MS: 107 bytes. P2SH: 23 bytes.</span>
+
+<span class="b06-rc">// scriptSig (when spent — the redeem script is finally revealed)</span>
+<span class="b06-rk">"scriptSig"</span>: {
+  <span class="b06-rk">"asm"</span>: <span class="b06-rs">"0 &lt;sig1&gt; &lt;sig2&gt; 5221&lt;pk1&gt;21&lt;pk2&gt;21&lt;pk3&gt;53ae"</span>,
+  <span class="b06-rk">"hex"</span>: <span class="b06-rs">"004830450221...014830450221...475221...53ae"</span>
+}
+
+<span class="b06-rc">// Redeem script breakdown:</span>
+<span class="b06-rc">// 52 = OP_2 (needs 2 signatures)</span>
+<span class="b06-rc">// 21 = push 33 bytes (compressed pubkey)</span>
+<span class="b06-rc">// 53 = OP_3 (total 3 public keys)</span>
+<span class="b06-rc">// ae = OP_CHECKMULTISIG</span></div>
+            </div>
+          </div>
+        
+          <div class="p-simulation">
+            <div class="sim-label">Flow diagram — P2SH with 2-of-3 multisig</div>
+            <div class="bs-flow"><svg width="100%" viewBox="0 0 700 716" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="p2sh-t"><title id="p2sh-t">P2SH, or Pay to Script Hash (example: 2-of-3 multisig)</title><style>.fh{font-family:'Sora',sans-serif;font-size:12px;font-weight:600;fill:#1A1A18}.fs{font-family:'Sora',sans-serif;font-size:9.5px;fill:#3A3A35}.fx{font-family:'Courier Prime',monospace;font-size:8.5px;fill:#52524C;letter-spacing:0.04em}.fa{font-family:'Sora',sans-serif;font-size:9.5px;font-weight:600;fill:#534AB7}.fg{font-family:'Sora',sans-serif;font-size:9.5px;font-weight:600;fill:#3B6D11}.ftitle{font-family:'Sora',sans-serif;font-size:14px;font-weight:700;fill:#1A1A18;letter-spacing:-0.01em}</style><defs><marker id="fa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs><text class="ftitle" x="0" y="16" text-anchor="start" dominant-baseline="central">P2SH, or Pay to Script Hash (example: 2-of-3 multisig)</text><rect x="18.0" y="75.0" width="148" height="34" rx="8" fill="#F4F4F0" stroke="rgba(124,58,237,0.28)" stroke-width="0.5"/><text class="fh" x="92" y="92.0" text-anchor="middle" dominant-baseline="central">3 Private Keys</text><rect x="246.0" y="75.0" width="148" height="34" rx="8" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fh" x="320" y="92.0" text-anchor="middle" dominant-baseline="central">3 Public Keys</text><rect x="480.0" y="68.5" width="172" height="47" rx="8" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fh" x="566" y="85.5" text-anchor="middle" dominant-baseline="central">Redeem Script</text><text class="fx" x="566" y="99.5" text-anchor="middle" dominant-baseline="central" opacity="0.85">(needs 2 of 3 signatures)</text><path d="M 168 92 H 241" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/><text class="fx" x="206.0" y="77" text-anchor="middle" dominant-baseline="central">produce</text><circle cx="206.0" cy="58" r="9.5" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="206.0" y="58" text-anchor="middle" dominant-baseline="central" font-size="9">1</text><path d="M 396 92 H 476" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/><text class="fx" x="443.0" y="77" text-anchor="middle" dominant-baseline="central">assembled into</text><circle cx="443.0" cy="58" r="9.5" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="443.0" y="58" text-anchor="middle" dominant-baseline="central" font-size="9">2</text><rect x="488.0" y="179.0" width="156" height="34" rx="8" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fh" x="566" y="196.0" text-anchor="middle" dominant-baseline="central">Script Hash</text><path d="M 566 115.5 V 175.0" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/><text class="fx" x="586" y="147.25" text-anchor="start" dominant-baseline="central">hash160</text><circle cx="520" cy="147.25" r="9.5" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="520" y="147.25" text-anchor="middle" dominant-baseline="central" font-size="9">3</text><rect x="1.0" y="176.0" width="182" height="48" rx="8" fill="#F4F4F0" stroke="rgba(124,58,237,0.28)" stroke-width="0.5"/><text class="fh" x="92" y="193.0" text-anchor="middle" dominant-baseline="central">2 Digital Signatures</text><text class="fh" x="92" y="207.0" text-anchor="middle" dominant-baseline="central">ECDSA</text><text class="fx" x="92" y="238.0" text-anchor="middle" dominant-baseline="central" opacity="0.8">(from any 2 of the</text><text class="fx" x="92" y="249.0" text-anchor="middle" dominant-baseline="central" opacity="0.8">3 key holders)</text><path d="M 92 114 V 170.0" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/><circle cx="60" cy="140.0" r="9.5" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="60" y="140.0" text-anchor="middle" dominant-baseline="central" font-size="9">4</text><text class="fx" x="114" y="140.0" text-anchor="start" dominant-baseline="central">produce</text><rect x="176" y="288" width="500" height="118" rx="10" fill="#FDFDFC" stroke="rgba(83,74,183,0.28)" stroke-width="0.5"/><circle cx="200" cy="314" r="9.5" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="200" y="314" text-anchor="middle" dominant-baseline="central" font-size="9">5</text><text class="fa" x="220" y="314" text-anchor="start" dominant-baseline="central">Stage 1</text><text class="fs" x="220" y="328" text-anchor="start" dominant-baseline="central" opacity="0.9">hash160(redeem script) is compared to the script hash</text><circle cx="200" cy="348" r="9.5" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="200" y="348" text-anchor="middle" dominant-baseline="central" font-size="9">6</text><text class="fa" x="220" y="348" text-anchor="start" dominant-baseline="central">Stage 2</text><text class="fs" x="220" y="362" text-anchor="start" dominant-baseline="central" opacity="0.9">the redeem script runs, both signatures are checked</text><path d="M 194 380 H 658" fill="none" stroke="rgba(26,26,24,0.32)" stroke-width="1.1" stroke-linecap="round" stroke-dasharray="3 4"/><text class="fg" x="426.0" y="393" text-anchor="middle" dominant-baseline="central">Only if both stages pass is the spend valid.</text><path d="M 566 213.0 V 284" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/><path d="M 92 254.0 V 350 H 172" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/><path d="M 40 232.0 V 430" fill="none" stroke="rgba(26,26,24,0.32)" stroke-width="1.1" stroke-linecap="round" stroke-dasharray="3 4"/><rect x="46" y="430" width="300" height="76" rx="8" fill="#FDFDFC" stroke="rgba(124,58,237,0.28)" stroke-width="0.5"/><text class="fs" x="196" y="448" text-anchor="middle" dominant-baseline="central" opacity="0.85">2 signatures + redeem script</text><text class="fs" x="196" y="460" text-anchor="middle" dominant-baseline="central" opacity="0.85">are the</text><rect x="159.2" y="475" width="73.6" height="22" rx="11" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="196" y="486" text-anchor="middle" dominant-baseline="central">scriptSig</text><path d="M 656 213.0 V 430" fill="none" stroke="rgba(26,26,24,0.32)" stroke-width="1.1" stroke-linecap="round" stroke-dasharray="3 4"/><rect x="392" y="430" width="258" height="76" rx="8" fill="#FDFDFC" stroke="rgba(124,58,237,0.28)" stroke-width="0.5"/><text class="fs" x="521" y="448" text-anchor="middle" dominant-baseline="central" opacity="0.85">Script hash</text><text class="fs" x="521" y="460" text-anchor="middle" dominant-baseline="central" opacity="0.85">is the</text><rect x="474.6" y="475" width="92.80000000000001" height="22" rx="11" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="521" y="486" text-anchor="middle" dominant-baseline="central">scriptPubKey</text><path d="M 46 548 H 650" fill="none" stroke="rgba(26,26,24,0.32)" stroke-width="1.1" stroke-linecap="round" stroke-dasharray="3 4"/><text class="fx" x="348" y="562" text-anchor="middle" dominant-baseline="central" opacity="0.8">Once the scriptPubKey and scriptSig are done,</text><text class="fx" x="348" y="573" text-anchor="middle" dominant-baseline="central" opacity="0.8">along with both verification stages</text><path d="M 348 578 V 594" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/><rect x="0" y="596" width="700" height="84" rx="10" fill="#FBFBF9" stroke="rgba(124,58,237,0.28)" stroke-width="0.5"/><text class="fa" x="348" y="612" text-anchor="middle" dominant-baseline="central">On to the recipient</text><text class="fs" x="120" y="644" text-anchor="middle" dominant-baseline="central">Decode the recipient</text><text class="fs" x="120" y="656" text-anchor="middle" dominant-baseline="central">address</text><text class="fs" x="120" y="668" text-anchor="middle" dominant-baseline="central">(starts with 3)</text><text class="fs" x="348" y="644" text-anchor="middle" dominant-baseline="central">Take the recipient</text><text class="fs" x="348" y="656" text-anchor="middle" dominant-baseline="central">script hash</text><text class="fs" x="578" y="644" text-anchor="middle" dominant-baseline="central">Build a new scriptPubKey</text><text class="fs" x="578" y="656" text-anchor="middle" dominant-baseline="central">from the script hash</text><path d="M 230 650 H 254" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/><path d="M 444 650 H 468" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/></svg></div>
+            <div class="bs-flow-hint">scroll the diagram sideways</div>
+            <div class="bs-flow-note">This is what sets P2SH apart from the three diagrams before it: <b>verification happens in two stages, not one</b>. And notice that the redeem script is only revealed when the coins are spent. Until then the blockchain has no idea this is a 2-of-3 multisig, no idea three keys exist, no idea there is any rule at all. All it holds is a single hash.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-6-4" data-sb="sb-6-4">
+            ← 6.4 — P2WPKH and SegWit
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-6-6" data-sb="sb-6-6">
+            6.6 — Taproot and P2TR →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 6.5 -->
+
+      <!-- ==============================
+           SECTION 6.6 · Taproot dan P2TR
+      ============================== -->
+      <div class="p-section" id="section-6-6">
+        <div class="p-eyebrow">Chapter 6 · 6.6</div>
+        <div class="p-heading">Prove only what needs to be proven</div>
+        <div class="p-title">Taproot and P2TR</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Taproot was activated in November 2021 through a soft fork. It’s the biggest Bitcoin upgrade since SegWit, and brings three changes at once: Schnorr signatures, MAST, and a new output format called P2TR.</p>
+
+          <p><strong>The problem Taproot solves</strong></p>
+          <p>Before Taproot, there were two nagging problems. First, privacy: multisig transactions, lightning channels, and simple transactions looked different on the blockchain. Anyone could see that an output was multisig or a smart contract just from the shape of its script. Second, efficiency: a complex script with many conditions had to include all the conditions when spent, even conditions that weren’t used.</p>
+
+          <p><strong>Schnorr signature</strong></p>
+          <p>Schnorr signatures replace ECDSA for Taproot transactions. Their main advantage is key aggregation: several public keys can be combined into a single public key. This means a 3-of-5 multisig can look exactly like an ordinary single-signer transaction on the blockchain. No one can tell them apart just from looking at the output.</p>
+
+          <p><strong>MAST (Merkelized Alternative Script Trees)</strong></p>
+          <p>MAST allows an output to have many alternative spending conditions, each as a branch of a Merkle tree. When spending, the sender only needs to reveal the branch used, not the entire tree. Unused branches stay hidden forever. This saves space on the blockchain and preserves the privacy of unused conditions.</p>
+
+          <p><strong>P2TR (Pay-to-Taproot)</strong></p>
+          <p>P2TR combines Schnorr and MAST in one elegant output format. Its scriptPubKey is very simple: <code>OP_1 &lt;tweaked public key&gt;</code>. OP_1 marks SegWit version 1, followed by a 32-byte public key that has been modified to include a commitment to the entire script tree. A P2TR output can be spent with the key path (a direct Schnorr signature) or the script path (revealing one of the MAST branches).</p>
+
+          <p><strong>P2TR address</strong></p>
+          <p>P2TR addresses use the bech32m format starting with <code>bc1p</code>. Unlike the bech32 used by P2WPKH, bech32m has an updated checksum to handle different witness program lengths.</p>
+
+          <p><strong>Tapscript</strong></p>
+          <p>Tapscript is the version of Script used inside the Taproot script path spending. It is not a new language, but a revision of the old Script with several important changes. OP_CHECKSIG remains and now works with Schnorr signatures. What was disabled is OP_CHECKMULTISIG, replaced by a new opcode called OP_CHECKSIGADD. This enables more efficient multisig because all signatures can be checked in parallel, not one by one like in the old Script.</p>
+
+          <p>Tapscript also introduces OP_SUCCESS: a group of opcodes that currently always produce success. This is not a bug, but a deliberate design to make it easier to upgrade Script in the future without a hard fork. If one day a particular OP_SUCCESS is given new meaning through a soft fork, old scripts using it automatically support the new semantics.</p>
+
+          <div class="p-callout">
+            <p>Taproot isn’t just a technical upgrade. It’s a philosophical shift: from "prove everything" to "prove only what needs to be proven." Unused conditions don’t need to be revealed. This makes Bitcoin more private, more efficient, and more expressive all at once.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualization — Key path vs Script path</div>
+          <div class="b06-s66-desc">
+            A P2TR output can be spent two ways. Key path: a single Schnorr signature, looks like an ordinary transaction. Script path: reveal one MAST branch along with its Merkle proof.
+          </div>
+
+          <!-- Output P2TR -->
+          <div class="b06-s66-card" style="margin-bottom:1rem;">
+            <div class="b06-s66-head s66-dark">
+              <span>Output P2TR · scriptPubKey</span>
+              <span class="b06-s66-badge">SegWit v1 · the same for all spending types</span>
+            </div>
+            <div class="b06-s66-section">
+              <div class="b06-s66-sh">On-chain</div>
+              <div class="b06-s66-field"><span class="b06-s66-fn">OP_1</span><span class="b06-s66-fv s66-purp-v">SegWit version 1 (Taproot)</span></div>
+              <div class="b06-s66-field"><span class="b06-s66-fn">Tweaked pubkey</span><span class="b06-s66-fv s66-purp-v">&lt;32 bytes&gt; — public key containing a commitment to the entire script tree</span></div>
+              <div class="b06-s66-field"><span class="b06-s66-fn">Address</span><span class="b06-s66-fv s66-purp-v">bc1p... (bech32m)</span></div>
+            </div>
+          </div>
+
+          <div class="b06-s66-divider">
+            <div class="b06-s66-divider-line"></div>
+            <span>The output above can be spent two ways</span>
+            <div class="b06-s66-divider-line"></div>
+          </div>
+
+          <div class="b06-s66-tabs">
+            <button class="b06-s66-tab active-purp" id="b06-s66-t1">Key path — Schnorr signature</button>
+            <button class="b06-s66-tab" id="b06-s66-t2">Script path — reveal a MAST branch</button>
+          </div>
+
+          <!-- KEY PATH -->
+          <div class="b06-s66-pane show" id="b06-s66-p1">
+            <div class="b06-s66-card">
+              <div class="b06-s66-head s66-purp">
+                <span>Key path spending</span>
+                <span class="b06-s66-badge">the simplest and most private way</span>
+              </div>
+              <div class="b06-s66-section">
+                <div class="b06-s66-sh">Input — scriptSig</div>
+              <div class="b06-s66-field"><span class="b06-s66-fn"></span><span class="b06-s66-fv s66-dim-v">empty — data is in the witness</span></div>
+              </div>
+              <div class="b06-s66-section">
+                <div class="b06-s66-sh">Input — witness field (main contents)</div>
+                <div class="b06-s66-field"><span class="b06-s66-fn">Signature</span><span class="b06-s66-fv s66-purp-v">&lt;Schnorr sig&gt; · 64 bytes — the only data needed</span></div>
+              </div>
+              <div class="b06-s66-section">
+                <div class="b06-s66-sh">Public key</div>
+                <div class="b06-s66-field"><span class="b06-s66-fn"></span><span class="b06-s66-fv s66-dim-v">not included — already contained in the output’s tweaked pubkey</span></div>
+              </div>
+            </div>
+            <div class="b06-s66-alert info-alert">Just one 64-byte Schnorr signature. No public key, no script, no hint at all about other spending conditions. On the blockchain, this looks identical to an ordinary P2WPKH transaction.</div>
+
+            <div>
+              <button class="b06-s66-raw-btn" id="b06-s66-raw-btn-kp">View raw data key path →</button>
+              <div class="b06-s66-raw-panel" id="b06-s66-raw-panel-kp"><span class="b06-trc">// P2TR key path — witness has only 1 element</span>
+<span class="b06-trk">"txinwitness"</span>: [
+  <span class="b06-trc">// Schnorr signature 64 bytes (not DER like ECDSA)</span>
+  <span class="b06-trs">"b7e153914a144f5da87aec346c38b2c0f3f58e6e6c3b5d8a7f9e2c1b4d6a8f0e3c5a7b9d1f3e5a7c9e1b3d5f7a9c1e3"</span>
+],
+<span class="b06-trk">"scriptSig"</span>: { <span class="b06-trk">"asm"</span>: <span class="b06-trs">""</span>, <span class="b06-trk">"hex"</span>: <span class="b06-trs">""</span> }
+
+<span class="b06-trk">"scriptPubKey"</span>: {
+  <span class="b06-trc">// 5120{32-byte tweaked pubkey}</span>
+  <span class="b06-trc">// 51 = OP_1 (SegWit v1 / Taproot)</span>
+  <span class="b06-trc">// 20 = push 32 bytes</span>
+  <span class="b06-trk">"hex"</span>: <span class="b06-trs">"512079be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798"</span>,
+  <span class="b06-trk">"type"</span>: <span class="b06-trs">"witness_v1_taproot"</span>,
+  <span class="b06-trc">// address is computed by the node from scriptPubKey, not on-chain data</span>
+  <span class="b06-trk">"address"</span>: <span class="b06-trs">"bc1p0xlxvlhemja6c4dqv22uapctqupfhlxm9h8z3k2e72q4k9hcz7vqzk5jj0"</span>
+}
+
+<span class="b06-trc">// Witness size comparison:</span>
+<span class="b06-trc">// P2WPKH: [sig(71b), pubkey(33b)] = 104 bytes</span>
+<span class="b06-trc">// P2TR key path: [sig_schnorr(64b)] = 64 bytes — 38% smaller</span></div>
+            </div>
+          </div>
+
+          <!-- SCRIPT PATH -->
+          <div class="b06-s66-pane" id="b06-s66-p2">
+            <div class="b06-s66-mast">
+              <div class="b06-s66-mast-head">
+                <span>Script tree (MAST) · stored in the tweaked pubkey</span>
+                <span style="color:#0F6E56;">● revealed &nbsp; ○ hidden</span>
+              </div>
+              <div class="b06-s66-tree">
+                <div class="b06-s66-tree-row"><div class="b06-s66-node s66-root">Root</div></div>
+                <div class="b06-s66-tree-row">
+                  <span class="b06-s66-conn">├──</span>
+                  <div class="b06-s66-node s66-branch">Branch AB</div>
+                  <span class="b06-s66-conn">──┤</span>
+                  <div class="b06-s66-node s66-branch">Branch CD</div>
+                </div>
+                <div class="b06-s66-tree-row">
+                  <div class="b06-s66-node s66-revealed">● Script A: multisig 2-of-3</div>
+                  <div class="b06-s66-node s66-hidden">○ Script B: 6-month timelock</div>
+                  <div class="b06-s66-node s66-hidden">○ Script C: recovery key</div>
+                  <div class="b06-s66-node s66-hidden">○ Script D: emergency</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="b06-s66-card">
+              <div class="b06-s66-head s66-teal">
+                <span>Script path · reveal Script A</span>
+                <span class="b06-s66-badge">Scripts B, C, D stay hidden</span>
+              </div>
+              <div class="b06-s66-section">
+                <div class="b06-s66-sh">Input — scriptSig</div>
+                <div class="b06-s66-field"><span class="b06-s66-fn"></span><span class="b06-s66-fv s66-dim-v">empty</span></div>
+              </div>
+              <div class="b06-s66-section">
+                <div class="b06-s66-sh">Input — witness field</div>
+                <div class="b06-s66-field"><span class="b06-s66-fn">Signature 1</span><span class="b06-s66-fv s66-teal-v">&lt;sig1&gt; for Script A</span></div>
+                <div class="b06-s66-field"><span class="b06-s66-fn">Signature 2</span><span class="b06-s66-fv s66-teal-v">&lt;sig2&gt; for Script A</span></div>
+                <div class="b06-s66-field"><span class="b06-s66-fn">Script A</span><span class="b06-s66-fv s66-teal-v">OP_2 &lt;pk1&gt; &lt;pk2&gt; &lt;pk3&gt; OP_3 OP_CHECKSIGADD OP_2 OP_EQUAL</span></div>
+                <div class="b06-s66-field"><span class="b06-s66-fn">Control block</span><span class="b06-s66-fv s66-teal-v">version + internal pubkey + Merkle proof to root</span></div>
+              </div>
+            </div>
+
+            <div class="b06-s66-proof">Merkle proof: hash(B) + hash(CD) → verifies that Script A is a legitimate part of the tree committed in the tweaked pubkey</div>
+
+            <div class="b06-s66-alert ok-alert">Scripts B, C, and D are never revealed on the blockchain. Only Script A and its Merkle proof are included. The node verifies that Script A really is part of the tree, then runs Script A to verify the signatures.</div>
+
+            <div>
+              <button class="b06-s66-raw-btn" id="b06-s66-raw-btn-sp">View raw data script path →</button>
+              <div class="b06-s66-raw-panel" id="b06-s66-raw-panel-sp"><span class="b06-trc">// P2TR script path — witness has 4 elements</span>
+<span class="b06-trk">"txinwitness"</span>: [
+  <span class="b06-trc">// [0] signature 1</span>
+  <span class="b06-trs">"304402203a5b7c9d...01"</span>,
+  <span class="b06-trc">// [1] signature 2</span>
+  <span class="b06-trs">"304402201f2e3d4c...01"</span>,
+  <span class="b06-trc">// [2] the revealed Script A</span>
+  <span class="b06-trs">"5221{pk1}21{pk2}21{pk3}535287"</span>,
+  <span class="b06-trc">// [3] control block: leaf version + internal pubkey + Merkle proof</span>
+  <span class="b06-trs">"c179be667ef9...{hash_B}{hash_CD}"</span>
+]
+
+<span class="b06-trc">// Control block breakdown:</span>
+<span class="b06-trc">// c1        = leaf version 0xc0 + parity bit 0x01</span>
+<span class="b06-trc">// 79be...   = internal public key (32 bytes)</span>
+<span class="b06-trc">// {hash_B}  = hash Script B (32 bytes) — not revealed</span>
+<span class="b06-trc">// {hash_CD} = hash Branch CD (32 bytes) — not revealed</span>
+
+<span class="b06-trc">// Script A breakdown: 5221{pk1}21{pk2}21{pk3}535287</span>
+<span class="b06-trc">// 52 = OP_2, 21 = push 33 bytes, 53 = OP_3</span>
+<span class="b06-trc">// OP_CHECKSIGADD (0xba) replaces OP_CHECKMULTISIG in Taproot</span>
+<span class="b06-trc">// 52 = OP_2, 87 = OP_EQUAL (verify counter = 2)</span></div>
+            </div>
+          </div>
+        
+          <div class="p-simulation">
+            <div class="sim-label">Flow diagram — Taproot (P2TR)</div>
+            <div class="bs-flow"><svg width="100%" viewBox="0 0 700 580" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="p2tr-t"><title id="p2tr-t">Taproot, or Pay to Taproot (P2TR)</title><style>.fh{font-family:'Sora',sans-serif;font-size:12px;font-weight:600;fill:#1A1A18}.fs{font-family:'Sora',sans-serif;font-size:9.5px;fill:#3A3A35}.fx{font-family:'Courier Prime',monospace;font-size:8.5px;fill:#52524C;letter-spacing:0.04em}.fa{font-family:'Sora',sans-serif;font-size:9.5px;font-weight:600;fill:#534AB7}.fg{font-family:'Sora',sans-serif;font-size:9.5px;font-weight:600;fill:#3B6D11}.ftitle{font-family:'Sora',sans-serif;font-size:14px;font-weight:700;fill:#1A1A18;letter-spacing:-0.01em}</style><defs><marker id="fa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs><text class="ftitle" x="0" y="16" text-anchor="start" dominant-baseline="central">Taproot, or Pay to Taproot (P2TR)</text><rect x="21.0" y="75.0" width="150" height="34" rx="8" fill="#F4F4F0" stroke="rgba(124,58,237,0.28)" stroke-width="0.5"/><text class="fh" x="96" y="92.0" text-anchor="middle" dominant-baseline="central">Private Key</text><rect x="275.0" y="68.5" width="150" height="47" rx="8" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fh" x="350" y="85.5" text-anchor="middle" dominant-baseline="central">Public Key</text><text class="fx" x="350" y="99.5" text-anchor="middle" dominant-baseline="central" opacity="0.85">(x-only)</text><rect x="524.0" y="68.0" width="160" height="48" rx="8" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fh" x="604" y="85.0" text-anchor="middle" dominant-baseline="central">Tweaked</text><text class="fh" x="604" y="99.0" text-anchor="middle" dominant-baseline="central">Public Key</text><path d="M 173 92 H 270" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/><text class="fx" x="223.0" y="77" text-anchor="middle" dominant-baseline="central">produces</text><circle cx="223.0" cy="58" r="9.5" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="223.0" y="58" text-anchor="middle" dominant-baseline="central" font-size="9">1</text><path d="M 427 92 H 520" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/><text class="fx" x="477.0" y="72" text-anchor="middle" dominant-baseline="central">SHA256 &</text><text class="fx" x="477.0" y="83" text-anchor="middle" dominant-baseline="central">secp256k1</text><circle cx="477.0" cy="52" r="9.5" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="477.0" y="52" text-anchor="middle" dominant-baseline="central" font-size="9">2</text><rect x="7.0" y="186.0" width="178" height="48" rx="8" fill="#F4F4F0" stroke="rgba(124,58,237,0.28)" stroke-width="0.5"/><text class="fh" x="96" y="203.0" text-anchor="middle" dominant-baseline="central">Digital Signature</text><text class="fh" x="96" y="217.0" text-anchor="middle" dominant-baseline="central">Schnorr</text><text class="fx" x="96" y="248.0" text-anchor="middle" dominant-baseline="central" opacity="0.8">(used to sign</text><text class="fx" x="96" y="259.0" text-anchor="middle" dominant-baseline="central" opacity="0.8">the transaction)</text><path d="M 96 114 V 180.0" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/><circle cx="62" cy="145.0" r="9.5" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="62" y="145.0" text-anchor="middle" dominant-baseline="central" font-size="9">3</text><text class="fx" x="118" y="145.0" text-anchor="start" dominant-baseline="central">produces</text><path d="M 185 210 H 578" fill="none" stroke="rgba(26,26,24,0.32)" stroke-width="1.1" stroke-linecap="round"/><path d="M 578 210 H 604 V 116" fill="none" stroke="rgba(26,26,24,0.32)" stroke-width="1.1" stroke-linecap="round"/><path d="M 599 123 L 604 115 L 609 123" fill="none" stroke="rgba(26,26,24,0.32)" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><rect x="308.0" y="199" width="104" height="22" rx="11" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="360.0" y="210" text-anchor="middle" dominant-baseline="central">verified against</text><circle cx="360.0" cy="180" r="9.5" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="360.0" y="180" text-anchor="middle" dominant-baseline="central" font-size="9">4</text><path d="M 96 264.0 V 300" fill="none" stroke="rgba(26,26,24,0.32)" stroke-width="1.1" stroke-linecap="round" stroke-dasharray="3 4"/><rect x="56" y="298" width="300" height="76" rx="8" fill="#FDFDFC" stroke="rgba(124,58,237,0.28)" stroke-width="0.5"/><text class="fs" x="206" y="316" text-anchor="middle" dominant-baseline="central" opacity="0.85">Digital signature</text><text class="fs" x="206" y="328" text-anchor="middle" dominant-baseline="central" opacity="0.85">is the</text><rect x="102.0" y="343" width="208.0" height="22" rx="11" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="206" y="354" text-anchor="middle" dominant-baseline="central">witness data · scriptSig empty</text><path d="M 604 118 V 300" fill="none" stroke="rgba(26,26,24,0.32)" stroke-width="1.1" stroke-linecap="round" stroke-dasharray="3 4"/><rect x="400" y="298" width="250" height="76" rx="8" fill="#FDFDFC" stroke="rgba(124,58,237,0.28)" stroke-width="0.5"/><text class="fs" x="525" y="316" text-anchor="middle" dominant-baseline="central" opacity="0.85">Tweaked pubkey</text><text class="fs" x="525" y="328" text-anchor="middle" dominant-baseline="central" opacity="0.85">is the</text><rect x="478.6" y="343" width="92.80000000000001" height="22" rx="11" fill="#EEEDFE" stroke="rgba(83,74,183,0.35)" stroke-width="0.5"/><text class="fa" x="525" y="354" text-anchor="middle" dominant-baseline="central">scriptPubKey</text><path d="M 56 424 H 650" fill="none" stroke="rgba(26,26,24,0.32)" stroke-width="1.1" stroke-linecap="round" stroke-dasharray="3 4"/><text class="fx" x="353" y="440" text-anchor="middle" dominant-baseline="central" opacity="0.8">Once the scriptPubKey and scriptSig are done,</text><text class="fx" x="353" y="451" text-anchor="middle" dominant-baseline="central" opacity="0.8">along with their verification steps</text><path d="M 353 454 V 474" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/><rect x="0" y="476" width="700" height="76" rx="10" fill="#FBFBF9" stroke="rgba(124,58,237,0.28)" stroke-width="0.5"/><text class="fa" x="353" y="492" text-anchor="middle" dominant-baseline="central">On to the recipient</text><text class="fs" x="122" y="522" text-anchor="middle" dominant-baseline="central">Decode the</text><text class="fs" x="122" y="534" text-anchor="middle" dominant-baseline="central">recipient address</text><text class="fs" x="353" y="522" text-anchor="middle" dominant-baseline="central">Take the recipient</text><text class="fs" x="353" y="534" text-anchor="middle" dominant-baseline="central">tweaked public key</text><text class="fs" x="582" y="522" text-anchor="middle" dominant-baseline="central">Build a new scriptPubKey</text><text class="fs" x="582" y="534" text-anchor="middle" dominant-baseline="central">from the tweaked pubkey</text><path d="M 232 528 H 258" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/><path d="M 452 528 H 478" fill="none" stroke="rgba(26,26,24,0.55)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#fa)"/></svg></div>
+            <div class="bs-flow-hint">scroll the diagram sideways</div>
+            <div class="bs-flow-note">Notice that the <b>hash comparison step is gone</b>. There is no hash160 at all. The Schnorr signature is verified directly against the tweaked public key already sitting in the scriptPubKey, making the flow one step shorter than the two diagrams before it.</div>
+          </div>
+        
+          <div class="lab-link"><span class="kode">C6</span><span class="isi"><span class="hd">Continue in the Laboratory</span>How those two paths can live inside the same point, through the tweak operation, is dissected in Laboratory C6.</span></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-6-5" data-sb="sb-6-5">
+            ← 6.5 — P2SH and Multisig
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 6.6 -->
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 9 · BAB 6 -->
+
+

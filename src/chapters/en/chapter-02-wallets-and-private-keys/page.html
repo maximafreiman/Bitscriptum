@@ -1,0 +1,558 @@
+<!-- ============================================================
+     PAGE 5 · BAB 2 · Wallet dan Private Key
+     |-- 2.1 · Apa itu Wallet? [DONE]
+     |-- 2.2 · Private Key dan Public Key [LOCKED]
+     |-- 2.3 · Dari Key ke Address [LOCKED]
+     |-- 2.4 · Seed Phrase [LOCKED]
+     |-- 2.5 · Jenis-jenis Wallet [LOCKED]
+     |-- 2.6 · Custodial vs Non-Custodial [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab2">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b2">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b2">← Chapter List</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-heading">Chapter 2</div>
+      <div class="sidebar-title">Wallets and Private Keys</div>
+
+      <!-- 2.1 · DONE -->
+      <div class="sidebar-item active" id="sb-2-1">
+        <div class="sb-num">2.1</div>
+        <div class="sb-label">What is a wallet?</div>
+      </div>
+      <!-- 2.2 · DONE -->
+      <div class="sidebar-item" id="sb-2-2">
+        <div class="sb-num">2.2</div>
+        <div class="sb-label">Private and public keys</div>
+      </div>
+      <!-- 2.3 · DONE -->
+      <div class="sidebar-item" id="sb-2-3">
+        <div class="sb-num">2.3</div>
+        <div class="sb-label">From key to address</div>
+      </div>
+      <!-- 2.4 · DONE -->
+      <div class="sidebar-item" id="sb-2-4">
+        <div class="sb-num">2.4</div>
+        <div class="sb-label">Seed phrase</div>
+      </div>
+      <!-- 2.5 · DONE -->
+      <div class="sidebar-item" id="sb-2-5">
+        <div class="sb-num">2.5</div>
+        <div class="sb-label">Types of wallets</div>
+      </div>
+      <!-- 2.6 · DONE -->
+      <div class="sidebar-item" id="sb-2-6">
+        <div class="sb-num">2.6</div>
+        <div class="sb-label">Custodial vs non-custodial</div>
+      </div>
+    </div>
+    <!-- END SIDEBAR -->
+
+    <!-- CONTENT AREA -->
+    <div class="prologue-content" id="bab2-content">
+
+      <!-- ==============================
+           SECTION 2.1 · Apa itu wallet?
+      ============================== -->
+      <div class="p-section active" id="section-2-1">
+        <div class="p-eyebrow">Chapter 2 · 2.1</div>
+        <div class="p-heading">Not a place that stores Bitcoin</div>
+        <div class="p-title">What is a Wallet?</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>The name is misleading.</p>
+          <p>A wallet in Bitcoin doesn’t store Bitcoin. This is the first thing to clear up. Bitcoin isn’t inside the app on your phone. It isn’t stored on your device. It’s on the blockchain, and the blockchain lives on thousands of computers around the world.</p>
+          <p>What a wallet stores is something far more important: keys.</p>
+          <p>Imagine Bitcoin as a safe locked in a public place that everyone can see. Everyone knows how much is inside. But only the person with the key can open it and move what’s inside. The wallet is where you keep that key.</p>
+
+          <p><strong>Not an account, not a balance</strong></p>
+          <p>A bank account stores your records on the bank’s servers. The bank knows who you are, how much your balance is, and can change or freeze it at any time.</p>
+          <p>A Bitcoin wallet isn’t like that. There’s no name, no identity, no institution holding your data. All there is is a pair of mathematical keys that prove you are the rightful owner of the Bitcoin at a particular address.</p>
+
+          <p><strong>What is actually inside a wallet?</strong></p>
+          <p>It all begins with a single number, and everything else descends from it in a chain:</p>
+          <p><strong>Private key.</strong> A very large random number, generated once and impossible for anyone to guess. This is the proof of ownership. Anyone who knows your private key can move your Bitcoin. Anyone.</p>
+          <p><strong>Public key.</strong> Derived mathematically from the private key. It isn’t a secret, but it isn’t what you hand to other people either. Its job is to prove to the network that your transaction really came from you.</p>
+          <p><strong>Address.</strong> Derived once more from the public key, shorter and more resistant to typos. This is what you share when you want to receive Bitcoin. Like an account number, but with no identity of yours behind it.</p>
+
+          <div class="p-callout">
+            <p>A wallet isn’t a place to store Bitcoin. A wallet is a place to store the keys that prove you own Bitcoin. If you lose the keys, your Bitcoin isn’t lost from the blockchain, but no one can ever access it again, forever.</p>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-2-2" data-sb="sb-2-2">
+            2.2 — Private and Public Keys →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 2.1 -->
+
+      <!-- ==============================
+           SECTION 2.2 · Private key dan public key
+      ============================== -->
+      <div class="p-section" id="section-2-2">
+        <div class="p-eyebrow">Chapter 2 · 2.2</div>
+        <div class="p-heading">A number no one can guess</div>
+        <div class="p-title">Private and Public Keys</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Behind every Bitcoin wallet, there is a number.</p>
+          <p>Not an ordinary number. This is a very large random number, 256 bits, or about 78 decimal digits. This number isn’t created by a human, isn’t chosen by a server, and isn’t registered with anyone. It is born from pure randomness on your own device, at the moment the wallet is created.</p>
+          <p>This is your <strong>private key</strong>.</p>
+
+          <p><strong>How random?</strong></p>
+          <p>The number of possible private keys is 2²⁵⁶, or roughly 1.2 × 10⁷⁷. For comparison: the number of atoms in the entire observable universe is estimated at around 10⁸⁰. The private key space isn’t quite that large, but it sits in the same class of numbers, and that is already far beyond anything a computer could ever sweep through, now or later. The chance of two people accidentally producing the same private key is, practically, zero. This isn’t a promise. This is mathematics.</p>
+
+          <p><strong>From the private key, a public key is born</strong></p>
+          <p>A private key is never shared with anyone. But from a private key, a <strong>public key</strong> can be derived through a one-way mathematical process.</p>
+          <p>One-way means: going from the private key to the public key takes a fraction of a second. Going the other direction has no shortcut known to anyone. Not because information is lost along the way, since the public key is entirely determined by your private key and nothing gets dropped. But because reversing it demands an amount of computational work that, with the best methods we have today, would not finish within the lifetime of the universe.</p>
+          <p>Easy to compute forward, impossible to trace back. The whole security of Bitcoin rests on this imbalance.</p>
+
+          <p><strong>So what is the public key actually for?</strong></p>
+          <p>So far we only know that the public key is safe to share. But why does it need to exist at all?</p>
+          <p>To answer that, there is a third object we haven’t named yet: the <strong>digital signature</strong>.</p>
+          <p>When you send Bitcoin, your wallet doesn’t send your private key anywhere. What it does is take two ingredients, your private key and the contents of the transaction (how much, and to which address), and work them into a single new number. That number is the signature.</p>
+          <p>Two properties of that signature are what make the whole system work.</p>
+          <p><strong>It is bound to one transaction.</strong> Because it is born from the contents of that transaction, it is only valid for that transaction. Change the amount slightly, swap the destination address, and the same signature no longer matches. It cannot be cut from one transaction and pasted onto another.</p>
+          <p><strong>It can be checked without the private key.</strong> This is the most important part. Anyone holding your public key can confirm that the signature was made by whoever holds the matching private key, without ever learning that private key. Checking does not require the same secret as creating.</p>
+          <p>This is where the division of labour becomes clear. The private key creates signatures, and only it can. The public key checks signatures, and anyone can. One to prove, one to verify.</p>
+          <p>And that is the real reason the public key is safe to share. Not merely because it doesn’t leak your private key, but because what it hands to other people is only the ability to <strong>check</strong>, never the ability to <strong>create</strong>.</p>
+          <p>Exactly how that number is computed, and why checking is so much cheaper than forging, is what we take apart in Chapter 4 when we get to ECDSA and Schnorr.</p>
+
+          <p><strong>Why does this matter?</strong></p>
+          <p>Because the entire system of Bitcoin ownership rests on this principle. No username. No password. No email verification. Your ownership is proven solely by your ability to produce a valid signature using the private key, and the network can verify it using the public key without needing to know who you are.</p>
+
+          <div class="p-callout">
+            <p>A private key is your identity in Bitcoin. Whoever holds it, holds your Bitcoin. There’s no "forgot password," no "reset via email," no customer service that can help you. It is an absolute responsibility.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Interactive simulation — Private and Public Keys</div>
+
+          <div class="kp-desc">
+            Click "Generate" to create a new key pair. Notice how a different private key always produces a different public key. Then try changing a single character in the private key.
+          </div>
+
+          <div class="kp-keys">
+            <div class="kp-key-box priv" id="b02-s22-box-priv">
+              <div class="kp-key-head">
+                <div class="kp-key-label priv">Private Key</div>
+                <div class="kp-key-badge priv">Do not share</div>
+              </div>
+              <div class="kp-key-val" id="b02-s22-priv">Not generated yet...</div>
+            </div>
+            <div class="kp-key-box pub" id="b02-s22-box-pub">
+              <div class="kp-key-head">
+                <div class="kp-key-label pub">Public Key</div>
+                <div class="kp-key-badge pub">Safe to share</div>
+              </div>
+              <div class="kp-key-val" id="b02-s22-pub">Not generated yet...</div>
+            </div>
+          </div>
+
+          <div class="kp-oneway" id="b02-s22-oneway">
+            <div class="kp-oneway-item">
+              <span class="kp-oneway-key priv">Private Key</span>
+              <span class="kp-oneway-arrow">→</span>
+              <span class="kp-oneway-key pub">Public Key</span>
+              <span class="kp-oneway-result ok">✓ Easy</span>
+            </div>
+            <span class="kp-oneway-sep">|</span>
+            <div class="kp-oneway-item">
+              <span class="kp-oneway-key pub">Public Key</span>
+              <span class="kp-oneway-arrow">→</span>
+              <span class="kp-oneway-key priv">Private Key</span>
+              <span class="kp-oneway-result bad">✗ Impossible</span>
+            </div>
+          </div>
+
+          <div class="kp-tamper" id="b02-s22-tamper">
+            <div class="kp-tamper-label">Try changing one character in the private key below and see what happens to the public key:</div>
+            <textarea class="kp-tamper-input" id="b02-s22-tamper-input" rows="3"></textarea>
+            <div class="kp-tamper-result" id="b02-s22-tamper-result"></div>
+          </div>
+
+          <div class="kp-controls">
+            <button class="kp-btn kp-btn-gen" id="b02-s22-btn-gen">Generate Key Pair ↗</button>
+            <button class="kp-btn kp-btn-reset" id="b02-s22-btn-reset">Reset</button>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-2-1" data-sb="sb-2-1">
+            ← 2.1 — What is a Wallet?
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-2-3" data-sb="sb-2-3">
+            2.3 — From Key to Address →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 2.2 -->
+
+      <!-- ==============================
+           SECTION 2.3 · Dari key ke address
+      ============================== -->
+      <div class="p-section" id="section-2-3">
+        <div class="p-eyebrow">Chapter 2 · 2.3</div>
+        <div class="p-heading">One key, many faces</div>
+        <div class="p-title">From Key to Address</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>A private key produces a public key. But a public key can’t be used directly as an address to receive Bitcoin. There’s one more step.</p>
+          <p>The public key is processed through a series of hash functions, producing a shorter, more readable string. This is the Bitcoin <strong>address</strong>. This address is what you share with others when you want to receive Bitcoin. Not the private key, not the public key, but an address derived from both.</p>
+
+          <p><strong>Why not use the public key directly?</strong></p>
+          <p>Two main reasons. First, security. By hiding the public key behind a hash, there’s an extra layer of protection in case some computational advance one day becomes a threat. One important caveat: this protection only holds as long as you have never spent from that address. The moment you send funds from it, your public key is revealed on the blockchain. This is the real reason behind the advice you often hear about not reusing a single address, and we go further into it in 10.5. Second, practicality. A public key is a long string that’s hard for humans to read. An address is far shorter and has a checksum mechanism that detects typos.</p>
+
+          <p><strong>Different address formats</strong></p>
+          <p>If you’ve ever seen a Bitcoin address, you may have noticed some start with the number 1, some with 3, and some with bc1. Each represents a different generation of technology with different capabilities and efficiencies. The technical details behind each format we’ll cover in Chapter 6.</p>
+
+          <div class="p-callout">
+            <p>A single private key can produce many different addresses depending on the format used. But all of those addresses still belong to the same private key. This is why modern wallets can show several addresses at once without making you lose control.</p>
+
+          <p><strong>How does a wallet know which addresses are its own?</strong></p>
+          <p>That last sentence leaves one question open. If a single key can produce many addresses across several formats, how does a wallet know exactly which ones to watch? The old answer was a mess: every wallet had its own conventions, and moving a backup from one application to another often ended with a balance that appeared to have vanished when it had merely gone undetected.</p>
+          <p>The modern answer is the <strong>output descriptor</strong>, a single line of text that states the rule in full. It looks roughly like this:</p>
+          <p><code>wpkh([d34db33f/84h/0h/0h]xpub6.../0/*)</code></p>
+          <p>Read piece by piece, it makes sense. <code>wpkh</code> gives the format, P2WPKH or bc1q, which we cover in 6.4. The part in square brackets is its origin, marking which device and which derivation path it came from. <code>xpub6...</code> is the parent public key from which all the children descend. And <code>/0/*</code> means "every address on the receiving branch", with the star standing in for an unbounded sequence number.</p>
+          <p>That one line holds everything needed to find all of your funds again, and contains no secret at all. It uses an xpub, not an xprv, so it can scan but cannot spend. You can store it alongside your seed phrase, and the two complement each other: the seed phrase grants the ability to sign, the descriptor says where to look.</p>
+          <p>Descriptors can also express rules more elaborate than a single key, including the multisig we cover in 6.5. That is where they meet the Miniscript from 6.2: a descriptor becomes a way of writing spending conditions that humans can read and software can understand at the same time. Which is why, if you use any scheme involving more than one key, keeping the descriptor is no longer a nice extra but <strong>part of the backup itself</strong>. Without it, a seed phrase alone may not be enough to rebuild a multisig wallet.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Interactive simulation — From Key to Address</div>
+
+          <div class="ka-controls">
+            <button class="ka-btn ka-btn-gen" id="b02-s23-btn-gen">Generate ↗</button>
+            <button class="ka-btn ka-btn-reset" id="b02-s23-btn-reset">Reset</button>
+          </div>
+
+          <div class="ka-node">
+            <div class="ka-node-head">
+              <div class="ka-node-label priv">Private Key</div>
+              <div class="ka-node-badge priv">Secret</div>
+            </div>
+            <div class="ka-node-val" id="b02-s23-priv">Click Generate...</div>
+          </div>
+
+          <div class="ka-arrow">
+            <div class="ka-arrow-line"></div>
+            <div class="ka-arrow-tip"></div>
+            <div class="ka-arrow-lbl">Elliptic Curve Multiplication</div>
+          </div>
+
+          <div class="ka-node">
+            <div class="ka-node-head">
+              <div class="ka-node-label pub">Public Key</div>
+              <div class="ka-node-badge pub">Shareable</div>
+            </div>
+            <div class="ka-node-val" id="b02-s23-pub">Waiting...</div>
+          </div>
+
+          <div class="ka-arrow">
+            <div class="ka-arrow-line"></div>
+            <div class="ka-arrow-tip"></div>
+            <div class="ka-arrow-lbl">Hashing (SHA256 + RIPEMD160 / Bech32)</div>
+          </div>
+
+          <div id="b02-s23-addr-grid"><div class="ka-placeholder">Addresses will appear after Generate.</div></div>
+          <div class="ka-hint-bottom" id="b02-s23-hint-bottom">Click each address format to see its explanation. A single private key produces all of these formats at once.</div>
+        
+          <div class="lab-link"><span class="kode">C2</span><span class="isi"><span class="hd">Continue in the Laboratory</span>The compressed format mentioned above comes from a property of the curve itself. You can check it directly in Laboratory C2.</span></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-2-2" data-sb="sb-2-2">
+            ← 2.2 — Private and Public Keys
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-2-4" data-sb="sb-2-4">
+            2.4 — Seed Phrase →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 2.3 -->
+
+      <!-- ==============================
+           SECTION 2.4 · Seed phrase
+      ============================== -->
+      <div class="p-section" id="section-2-4">
+        <div class="p-eyebrow">Chapter 2 · 2.4</div>
+        <div class="p-heading">Words that hold everything</div>
+        <div class="p-title">Seed Phrase</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>The private key is everything in Bitcoin. But there’s one practical problem: a private key is a 64-character hex string that’s impossible for a human to memorize.</p>
+          <p>No one can remember that. And if it’s lost, your Bitcoin is lost forever.</p>
+          <p>The solution is the <strong>seed phrase</strong>, also called a mnemonic phrase or recovery phrase. The order is actually the reverse of what most people picture. The wallet does not turn a private key into words. What happens is this: the wallet generates the initial randomness, writes it out as a series of ordinary words, and it is from those words that every one of your private keys is then derived. The seed phrase comes first, the private keys follow.</p>
+
+          <p><strong>How does it work?</strong></p>
+          <p>A seed phrase usually consists of 12 or 24 words chosen from a standard list of 2048 words called the BIP-39 wordlist. These words aren’t random in just any way. They’re chosen because they’re easy to tell apart, avoiding words that look or sound similar.</p>
+          <p>With 2048 words and 12 positions, the number of possible word combinations is 2048¹². But not all of those combinations are valid: the final word carries a checksum, so a 12-word phrase actually represents 128 bits of entropy, and a 24-word phrase represents 256 bits. That last figure is exactly the size of the private key space we worked out in 2.2, roughly 1.2 × 10⁷⁷ possibilities. The chance of two people accidentally producing the same seed phrase is, practically, zero. Twelve unremarkable-sounding words carry exactly the same weight as the 256-bit number from the previous chapter.</p>
+          <p>From this seed phrase, the wallet can regenerate the entire hierarchy of keys. Not just one private key, but hundreds or even thousands of addresses at once. This is what’s called an HD wallet, or Hierarchical Deterministic wallet.</p>
+
+          <p><strong>One seed phrase, one wallet</strong></p>
+          <p>A seed phrase is a complete representation of your entire wallet. Anyone who has your seed phrase has access to all the Bitcoin in that wallet, across all addresses, all formats, all networks.</p>
+          <p>This means two important things. First, backing up the seed phrase is backing up the entire wallet. There’s no need to back up each private key one by one. Second, the seed phrase must be stored offline, in a safe place, never photographed, never typed on an internet-connected computer, and never given to anyone for any reason.</p>
+
+          <div class="p-callout">
+            <p>No legitimate wallet company will ever ask for your seed phrase. No support needs your seed phrase. No form requires you to fill in your seed phrase. If someone asks for it, it’s a scam. Always.</p>
+
+          <p><strong>The problem we have not solved yet</strong></p>
+          <p>The standard advice about seed phrases sounds simple: write it on paper, keep it somewhere safe. But think it through and you will find the advice pulls in two directions at once. The more copies you make, the smaller the risk of losing it, but the greater the chance one of them is found. The fewer and better hidden the copies, the safer from thieves, but the easier to lose to fire, flood, or simply forgetting where you put it.</p>
+          <p>No number of copies solves both. As long as a single sheet holds the entire secret, all you can do is choose which risk frightens you more.</p>
+          <p><strong>Splitting the secret into pieces</strong></p>
+          <p>There is a way out of that tug of war, and it is called <strong>Shamir Secret Sharing</strong>. The secret is split into several pieces, say five, with any three of them enough to rebuild it. What makes it interesting is not the splitting but its mathematical property: <strong>one or two pieces reveal nothing at all</strong>. Not part of it, not a narrowed set of guesses, genuinely nothing. Until the third piece joins them, their contents are as useless as random numbers.</p>
+          <p>That means you can scatter five pieces across five places. Two may be lost without you losing anything, and two may be found without the finder gaining anything. The tug of war is over.</p>
+          <p>But there is a weakness that gets mentioned far less often. To use it, the pieces have to be brought back together on one device, and for those seconds your whole seed phrase exists intact in one place again. If that device is compromised, all of the earlier care counts for nothing. The multisig we cover in 6.5 does not have this problem, because the keys are never combined: each one signs separately on its own device. That is why many people consider multisig safer for large amounts, and Shamir better suited to backups that are rarely touched.</p>
+          <p><strong>And if you die?</strong></p>
+          <p>This is a question Bitcoin books rarely address, even though it is the one that happens most. The very property that makes Bitcoin truly yours, that nobody can take it without your key, applies to your family too. There is no bank to call, no death certificate to present, no legal process that can compel the network to hand over anything. If the knowledge dies with you, so do the coins.</p>
+          <p>What is surprising is that the hardest obstacle is usually not technical. Your heirs need to know three things, and only the third is about technology: that the Bitcoin <strong>exists</strong>, where the pieces are <strong>kept</strong>, and how to <strong>use</strong> them. Many losses happen not because the cryptography was hard, but because the family never knew there was anything to look for.</p>
+          <p>The approaches vary. Some entrust individual Shamir pieces to a lawyer or to different family members. Some use a multisig where one key is held by a third party who only co-signs once a death is proven. Others use timelocks, so that a transaction to the heirs becomes valid automatically after a period passes without being refreshed. That last approach is covered in Chapter 15.</p>
+          <p>One warning is worth closing on honestly: <strong>complexity is itself a risk</strong>. Overly elaborate inheritance schemes have lost more Bitcoin than simple ones, because the owner forgot how their own plan worked, or the heirs gave up partway through. A plan genuinely understood by the people who will have to carry it out is worth far more than a sophisticated one on paper.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Interactive simulation — Seed Phrase Generator</div>
+
+          <div class="b02-s24-desc">
+            The wallet generates the initial randomness, writes it out as ordinary words, then derives every private key from those words. Click Generate to create a new seed phrase from the BIP-39 wordlist.
+          </div>
+
+          <div class="sp-toggle">
+            <button class="sp-toggle-btn active" id="b02-s24-btn-12">12 words</button>
+            <button class="sp-toggle-btn" id="b02-s24-btn-24">24 words</button>
+          </div>
+
+          <div class="sp-grid" id="b02-s24-grid"></div>
+
+          <div class="sp-warning" id="b02-s24-warning">
+            🔒 <strong>Warning:</strong> This seed phrase is created for educational purposes and must not be used to store real Bitcoin. A real seed phrase must be created by a trusted wallet and stored offline.
+          </div>
+
+          <div class="sp-derive" id="b02-s24-derive">
+            <div class="sp-derive-head">From this seed phrase, the wallet derives:</div>
+            <div class="sp-derive-body">
+              <div class="sp-derive-row">
+                <div class="sp-derive-label">Address #1</div>
+                <div class="sp-derive-val" id="b02-s24-addr-1"></div>
+              </div>
+              <div class="sp-derive-row">
+                <div class="sp-derive-label">Address #2</div>
+                <div class="sp-derive-val" id="b02-s24-addr-2"></div>
+              </div>
+              <div class="sp-derive-row">
+                <div class="sp-derive-label">Address #3</div>
+                <div class="sp-derive-val" id="b02-s24-addr-3"></div>
+              </div>
+              <div class="sp-derive-note">
+                A single seed phrase produces millions of different addresses deterministically. Backing up the seed phrase = backing up the entire wallet.
+              </div>
+            </div>
+          </div>
+
+          <div class="sp-controls">
+            <button class="sp-btn sp-btn-gen" id="b02-s24-btn-gen">Generate Seed Phrase ↗</button>
+            <button class="sp-btn sp-btn-reset" id="b02-s24-btn-reset">Reset</button>
+          </div>
+        
+          <div class="lab-link"><span class="kode">C5</span><span class="isi"><span class="hd">Continue in the Laboratory</span>The values in this demo are <b>illustrative</b>. To see real entropy turned into words through a SHA-256 checksum and the official 2048-word list, open Laboratory C5.</span></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-2-3" data-sb="sb-2-3">
+            ← 2.3 — From Key to Address
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-2-5" data-sb="sb-2-5">
+            2.5 — Types of Wallets →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 2.4 -->
+
+      <!-- ==============================
+           SECTION 2.5 · Jenis-jenis wallet
+      ============================== -->
+      <div class="p-section" id="section-2-5">
+        <div class="p-eyebrow">Chapter 2 · 2.5</div>
+        <div class="p-heading">Where is your private key stored?</div>
+        <div class="p-title">Types of Wallets</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>A wallet is a place to store keys. But not all wallets are created equal. Some are more convenient, some are more secure, some are both with certain trade-offs.</p>
+          <p>The main difference between wallet types isn’t in their appearance, but in one question: where is the private key stored?</p>
+
+          <p><strong>Hot Wallet</strong></p>
+          <p>A hot wallet is a wallet connected to the internet. The app on your phone, a browser extension, an online desktop app, all fall into this category.</p>
+          <p>Its advantages are easy access, fast for everyday transactions, and usually free. Its drawback is that because it’s connected to the internet, it’s more vulnerable to attack. Malware, phishing, or a security flaw in the app could expose your private key.</p>
+          <p>A hot wallet is suited for small amounts used often, like the wallet in your pocket. You don’t keep all your savings in a physical wallet you carry everywhere.</p>
+
+          <p><strong>Cold Wallet</strong></p>
+          <p>A cold wallet is a wallet that is never connected to the internet. The private key is generated and stored on a fully offline device.</p>
+          <p>The most common type is the hardware wallet, a dedicated physical device like a USB stick that stores the private key inside an isolated chip. To sign a transaction, you connect this device to a computer, but the private key never leaves the device.</p>
+          <p>The simplest is the paper wallet, where the private key and seed phrase are printed or written on paper and kept in a safe place. Nothing can hack it digitally because it isn’t digital.
+          </p>
+          <p>But paper wallets have long stopped being recommended, and the reason matters before you make one. To spend the funds, you have to load that private key onto an internet-connected device, and at that moment the entire offline advantage disappears. They also don’t support the address hierarchy that modern seed phrases do, so one sheet of paper serves only one address. If your goal is long-term storage, a handwritten seed phrase kept offline gives you the same security without any of those drawbacks.</p>
+          <p>A cold wallet is suited for storing large amounts long-term, like a safe at home.</p>
+
+          <p><strong>A practical rule</strong></p>
+          <p>There’s nothing wrong with using both. Many Bitcoin users keep a small portion in a hot wallet for daily transactions, and keep most in a cold wallet for the long term.</p>
+
+          <div class="p-callout">
+            <p>Bitcoin security isn’t about the most sophisticated platform or app. It’s about how well you keep your private key out of others’ reach and away from internet connections.</p>
+
+          <p><strong>Fully disconnected: air-gapped signing</strong></p>
+          <p>An ordinary hardware wallet still plugs into a computer over USB when it signs. The private key does not leave the device, but there is still a data path between your secret hardware and a machine that may be infected. For some people that path is already one too many.</p>
+          <p><strong>Air-gapped signing</strong> removes it entirely. The signing device never touches the computer, not over USB, not over Bluetooth, not over anything. The only thing that crosses between them is an <strong>image</strong>: a QR code shown on one screen and photographed by the other device’s camera.</p>
+          <p>The flow rests on the PSBT we cover in 3.6. Your computer assembles an unsigned transaction and displays it as a QR code. The air-gapped device scans it, shows the contents on its own screen so you can check the amount and destination, then signs it. The result is displayed as a new QR code, scanned back by the computer, and only then broadcast to the network.</p>
+          <p>Notice that what travels back and forth is only the transaction, never the key. And because the path is an image, malware on the computer has no channel through which to reach the signing device at all. Some devices are sold with no data port whatsoever, only a camera, a screen, and a microSD slot.</p>
+          <p>There is one step that must never be skipped, and it is where the real strength lies. The signing device shows the amount and destination on its own screen before you approve. <strong>Check it there, not on the computer screen.</strong> If your computer is compromised and quietly swaps the destination address, the only place that lie becomes visible is the screen of a device connected to nothing.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Exploration — Types of Wallets</div>
+          <div class="wt-grid" id="b02-s25-grid"></div>
+        
+          <div class="lab-link"><span class="kode">C4</span><span class="isi"><span class="hd">Continue in the Laboratory</span>How one seed derives every key in your wallet, and why derivation paths carry apostrophes, is computed for real in Laboratory C4.</span></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-2-4" data-sb="sb-2-4">
+            ← 2.4 — Seed Phrase
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-2-6" data-sb="sb-2-6">
+            2.6 — Custodial vs Non-Custodial →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 2.5 -->
+
+      <!-- ==============================
+           SECTION 2.6 · Custodial vs non-custodial
+      ============================== -->
+      <div class="p-section" id="section-2-6">
+        <div class="p-eyebrow">Chapter 2 · 2.6</div>
+        <div class="p-heading">Who holds the keys?</div>
+        <div class="p-title">Custodial vs Non-Custodial</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>There’s one question more important than choosing which wallet app is best: who holds your private key?</p>
+          <p>The answer determines everything.</p>
+
+          <p><strong>Custodial wallet</strong></p>
+          <p>Custodial means another party holds your private key on your behalf. Exchanges like Binance, Coinbase, or Indodax are the most common examples. When you buy Bitcoin there and don’t withdraw it, that Bitcoin is in their wallet, not yours.</p>
+          <p>You only have a balance in their ledger. Like saving at a bank.</p>
+          <p>This is convenient. No need to deal with a seed phrase, no fear of sending to the wrong place, there’s customer service if something goes wrong. But there’s a price to pay: you don’t truly hold your Bitcoin.</p>
+          <p>The exchange can freeze your account. The exchange can go bankrupt. The exchange can be hacked. All of this has happened, again and again, on various platforms around the world.</p>
+
+          <p><strong>Non-custodial wallet</strong></p>
+          <p>Non-custodial means you yourself hold the private key. No third party can block, freeze, or take your Bitcoin.</p>
+          <p>But the responsibility is entirely in your hands. There’s no customer service. There’s no account recovery. If the seed phrase is lost, the Bitcoin is lost forever.</p>
+
+          <p><strong>"Not your keys, not your coins"</strong></p>
+          <p>This isn’t just a slogan. It’s a fundamental principle of Bitcoin. As long as the private key is in someone else’s hands, you don’t truly own Bitcoin. You own a promise from someone else that they will give you Bitcoin if you ask.</p>
+          <p>And promises can be broken.</p>
+
+          <div class="p-callout">
+            <p>A custodial wallet isn’t an equal alternative to non-custodial. It’s a conscious trade-off: you trade sovereignty over your money for convenience. Understand the consequences before choosing.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulation — What happens when an exchange runs into trouble?</div>
+
+          <div class="b02-s26-desc">
+            Choose a scenario to see what happens to a custodial wallet user vs a non-custodial wallet user.
+          </div>
+
+          <div class="cv-pills">
+            <button class="cv-pill" id="b02-s26-pill-0">
+              <div class="cv-pill-tag">Scenario 1 · Mt. Gox (2014)</div>
+              <div class="cv-pill-title">Exchange hacked</div>
+              <div class="cv-pill-sub">850.000 BTC lost. The largest exchange in the world at the time.</div>
+            </button>
+            <button class="cv-pill" id="b02-s26-pill-1">
+              <div class="cv-pill-tag">Scenario 2 · FTX (2022)</div>
+              <div class="cv-pill-title">Exchange collapses from fraud</div>
+              <div class="cv-pill-sub">8 billion dollars of customer funds embezzled. Collapsed within days.</div>
+            </button>
+            <button class="cv-pill" id="b02-s26-pill-2">
+              <div class="cv-pill-tag">Scenario 3 · Regulation</div>
+              <div class="cv-pill-title">Account frozen by the authorities</div>
+              <div class="cv-pill-sub">The government orders the exchange to block user access.</div>
+            </button>
+          </div>
+
+          <div class="cv-compare" id="b02-s26-compare">
+            <div class="cv-side custodial">
+              <div class="cv-side-head">
+                <span class="cv-side-icon">🏦</span>
+                <span class="cv-side-name">Custodial Wallet</span>
+              </div>
+              <div class="cv-side-body">
+                <div class="cv-timeline" id="b02-s26-cust-tl"></div>
+              </div>
+            </div>
+            <div class="cv-side noncustodial">
+              <div class="cv-side-head">
+                <span class="cv-side-icon">🔑</span>
+                <span class="cv-side-name">Non-Custodial Wallet</span>
+              </div>
+              <div class="cv-side-body">
+                <div class="cv-timeline" id="b02-s26-non-tl"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cv-verdict" id="b02-s26-verdict"></div>
+
+          <div class="cv-reset">
+            <button class="cv-btn" id="b02-s26-reset">Reset</button>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-2-5" data-sb="sb-2-5">
+            ← 2.5 — Types of Wallets
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 2.6 -->
+
+    </div>
+    <!-- END CONTENT AREA -->
+
+  </div>
+
+</div>
+<!-- END PAGE 5 · BAB 2 -->
+
+

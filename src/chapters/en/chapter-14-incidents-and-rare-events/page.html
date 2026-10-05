@@ -1,0 +1,670 @@
+<!-- ============================================================
+     PAGE 17 · BAB 14 · Insiden dan Kejadian Langka di Bitcoin
+     |-- 14.1 · Nilai Overflow Bug 2010 [DONE]
+     |-- 14.2 · [LOCKED]
+     |-- 14.3 · [LOCKED]
+     |-- 14.4 · [LOCKED]
+     |-- 14.5 · [LOCKED]
+     |-- 14.6 · [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab14">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b14">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b14">← Chapter List</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab14">
+      <div class="sidebar-heading">Chapter 14</div>
+      <div class="sidebar-title">Incidents and Rare Events in Bitcoin</div>
+
+      <div class="sidebar-item active" id="sb-14-1">
+        <div class="sb-num">14.1</div>
+        <div class="sb-label">The 2010 Value Overflow Bug</div>
+      </div>
+      <div class="sidebar-item" id="sb-14-2">
+        <div class="sb-num">14.2</div>
+        <div class="sb-label">Chain Reorganization (Reorg)</div>
+      </div>
+      <div class="sidebar-item" id="sb-14-3">
+        <div class="sb-num">14.3</div>
+        <div class="sb-label">March 2013 Chain Split</div>
+      </div>
+      <div class="sidebar-item" id="sb-14-4">
+        <div class="sb-num">14.4</div>
+        <div class="sb-label">Selfish Mining</div>
+      </div>
+      <div class="sidebar-item" id="sb-14-5">
+        <div class="sb-num">14.5</div>
+        <div class="sb-label">Eclipse Attack</div>
+      </div>
+      <div class="sidebar-item" id="sb-14-6">
+        <div class="sb-num">14.6</div>
+        <div class="sb-label">What Keeps Bitcoin Strong?</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab14-content">
+
+      <!-- ==============================
+           SECTION 14.1 · Nilai Overflow Bug 2010
+      ============================== -->
+      <div class="p-section active" id="section-14-1">
+        <div class="p-eyebrow">Chapter 14 · 14.1</div>
+        <div class="p-heading">184 billion bitcoin created in one block — and fixed in 5 hours</div>
+        <div class="p-title">The 2010 Value Overflow Bug</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>On August 15, 2010, someone found a critical bug in the Bitcoin code: an integer overflow. By exploiting this bug, the attacker managed to create a transaction that appeared to create bitcoin far beyond the protocol’s rules. This transaction was briefly confirmed in block #74,638 before being rolled back by the community in about 5 hours. It’s important to understand: this was a bug in the code implementation, not a bug in the Bitcoin protocol itself. The 21 million BTC supply was never truly threatened.</p>
+
+          <p><strong>Two things to distinguish</strong></p>
+          <p>Bitcoin has two different limits that are often confused. First, MAX_MONEY: this is a Bitcoin protocol consensus rule that states no transaction output may exceed the total supply of 21 million BTC (2.1 quadrillion satoshi). Second, MAX_INT64: this is the mathematical limit of the 64-bit integer data type in computers, namely 9,223,372,036,854,775,807. This number has nothing to do with Bitcoin’s rules, it’s just the technical limit of storing numbers in computer memory. This bug isn’t about violating MAX_INT64, but about code that forgot to check MAX_MONEY before performing the addition.</p>
+
+          <p><strong>How the bug works</strong></p>
+          <p>The Bitcoin code at the time didn’t check whether the value of each transaction output exceeded MAX_MONEY before adding them up. The attacker took advantage of this by creating two outputs that each far exceeded 21 million BTC. When the two were added together, the total exceeded MAX_INT64 and an integer overflow occurred: the number "wrapped" into a large negative number. The validation code then checked whether the total output was less than the total input, and because the total output had become a negative number, this condition was always met. The transaction passed validation when it shouldn’t have.</p>
+
+          <p><strong>The community response</strong></p>
+          <p>Satoshi Nakamoto himself responded to this incident. In about 5 hours, Satoshi released a patch that added a check: if an output value is less than zero or exceeds MAX_MONEY, the transaction is immediately rejected. The Bitcoin community at the time, which was still very small, managed to organize an emergency soft fork: nodes upgraded and started ignoring block #74,638. The clean chain became dominant. The bitcoin that appeared to be "created" never really existed because it was immediately rolled back before anyone could use it.</p>
+
+          <div class="p-callout">
+            <p>This bug is an example of the important difference between a protocol bug and an implementation bug. The Bitcoin protocol defines the rules correctly, but the code that implements those rules had a gap. This is one reason Bitcoin’s consensus code is audited very strictly: a single missing line of code can create a dangerous gap.</p>
+
+          <p><strong>Eight years later, it almost happened again</strong></p>
+          <p>It is tempting to file the 2010 incident under growing pains: the code was raw, the users were few, gaps were to be expected. But in September 2018 Bitcoin came close to losing the 21 million cap a second time, and this time in a mature era, with code under far heavier review.</p>
+          <p>The bug is catalogued as <strong>CVE-2018-17144</strong>. It came not from a new feature but from an <strong>optimization</strong>. In Bitcoin Core 0.14.0, released in March 2017, a duplicate-input check was removed because it was believed to happen elsewhere already, so repeating it only cost time. That belief was wrong. As a result, nodes were willing to partly process blocks that spent the same input more than once.</p>
+          <p>In the 0.14.x versions the consequence was "only" that the node died abruptly, because a safety check deliberately halted the program on encountering an impossible state. But that check was rewritten in 0.15.0, and from then on the node no longer stopped. It carried on. Which meant a miner could spend one output twice inside a single block and claim its value twice as well. Repeated enough times, that is minting Bitcoin out of thin air.</p>
+          <p>The bug lay dormant for about a year and a half. What finally surfaced it was not the core team but a developer using the alias <strong>awemany</strong>, from the Bitcoin Cash camp, while reading code his project had inherited from Bitcoin Core. He disclosed it privately on 17 September 2018, and not only to Bitcoin Core but to other projects running the same code.</p>
+          <p>What he reported was only a crash bug. It was the Bitcoin Core developers themselves who then realised the same root cause carried something far worse: inflation. At that point they faced an uncomfortable choice. Full disclosure meant telling everyone how to mint Bitcoin before most nodes had a chance to update. Saying nothing meant leaving the hole wide open.</p>
+          <p>The path they took was staged disclosure: announce and patch the lesser crash bug in the open, so that people had an urgent reason to upgrade immediately, while quietly reaching out to miners and large businesses about the real issue. The fix shipped on 18 September in version 0.16.3, less than a day after the report arrived. The full impact was only announced on 20 September, once most of the network was safe.</p>
+          <p>The bug was never exploited. But its lessons cut deeper than those of 2010, and there are three. First, the most dangerous change is often not an addition but the <strong>removal of something believed unnecessary</strong>. Second, the person who found it came from a rival project reading inherited code, which makes open source not merely an ideal but a defence mechanism that demonstrably works. Third, Bitcoin’s security does not end with the mathematics we covered in Chapter 4. It also rests on humans reading code carefully, and on hard judgement calls about when a danger is best made public.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulation — How an integer overflow works</div>
+          <div class="b14-s141-desc">
+            Two things to distinguish: MAX_MONEY is a Bitcoin protocol rule (21 million BTC), while MAX_INT64 is the limit of the computer data type. The bug happens because the code doesn’t check MAX_MONEY before adding the values.
+          </div>
+
+          <div class="b14-s141-concept">
+            <div class="b14-s141-concept-card s141-proto">
+              <div class="b14-s141-concept-label">Bitcoin Protocol Rule</div>
+              <div class="b14-s141-concept-val">MAX_MONEY</div>
+              <div class="b14-s141-concept-desc">21 million BTC = 2,100,000,000,000,000 satoshi. No transaction output may exceed this. This is a consensus rule.</div>
+            </div>
+            <div class="b14-s141-concept-card s141-impl">
+              <div class="b14-s141-concept-label">Computer Data Type Limit</div>
+              <div class="b14-s141-concept-val">MAX_INT64</div>
+              <div class="b14-s141-concept-desc">9,223,372,036,854,775,807. The mathematical limit of a 64-bit integer. It has nothing to do with Bitcoin’s rules, just the technical limit of storing numbers.</div>
+            </div>
+          </div>
+
+          <div class="b14-s141-bits-wrap">
+            <div class="b14-s141-bits-label">64-bit signed integer representation — the leftmost bit is the sign bit (0=positive, 1=negative):</div>
+            <div class="b14-s141-bits" id="b14-s141-bits"></div>
+            <div class="b14-s141-bits-val" id="b14-s141-bits-val">Value: 0 satoshi</div>
+          </div>
+
+          <div class="b14-s141-steps" id="b14-s141-steps"></div>
+
+          <div class="b14-s141-btn-wrap">
+            <button class="b14-s141-btn-primary" id="b14-s141-run">Simulate the Bug</button>
+            <button class="b14-s141-btn-sec" id="b14-s141-rst">Reset</button>
+          </div>
+
+          <div class="b14-s141-note s141-idle" id="b14-s141-note">Click "Simulate the Bug" to see how a value exceeding MAX_MONEY passes validation because the code doesn’t check it.</div>
+        
+          <div class="lab-link"><span class="kode">C7</span><span class="isi"><span class="hd">Continue in the Laboratory</span>There is another flaw with a similar pattern, born from the rule for building Merkle trees. It is dissected in Laboratory C7.</span></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-14-2" data-sb="sb-14-2">
+            14.2 — Chain Reorganization (Reorg) →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 14.1 -->
+
+      <!-- ==============================
+           SECTION 14.2 · Reorganisasi Chain (Reorg)
+      ============================== -->
+      <div class="p-section" id="section-14-2">
+        <div class="p-eyebrow">Chapter 14 · 14.2</div>
+        <div class="p-heading">When Bitcoin’s history is rewritten — and why that’s normal</div>
+        <div class="p-title">Chain Reorganization (Reorg)</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>A reorg, short for chain reorganization, happens when a node finds that there’s an alternative chain longer than the chain they’re currently following. The node then switches to the longer chain, discarding the blocks that are no longer part of the longest chain. These discarded blocks are called orphan blocks.</p>
+
+          <p><strong>Small reorgs are normal</strong></p>
+          <p>A 1-2 block reorg is a routine event that happens almost every day in Bitcoin. This can happen when two miners find a valid block almost simultaneously: the network is temporarily split because some nodes receive miner A’s block first, while others receive miner B’s first. As soon as one of the miners finds the next block, its chain becomes longer and the whole network converges to that chain. The losing miner loses the block reward but the network stays safe.</p>
+
+          <p><strong>A large reorg is dangerous</strong></p>
+          <p>A deep reorg, 6 blocks or more, requires very large hash rate and can be exploited for a double spend. An attacker with enough hash rate can mine an alternative chain in secret, do a large transaction on the main chain (for example selling bitcoin to an exchange), then release the longer alternative chain that doesn’t contain that transaction. A merchant or exchange that already considered the transaction final could become a victim.</p>
+
+          <p><strong>The history of reorgs in Bitcoin</strong></p>
+          <p>The deepest reorgs ever recorded on Bitcoin mainnet were not attacks at all, but fallout from software bugs. Rolling back the 2010 overflow bug we covered in 14.1 required reversing dozens of blocks, and the March 2013 chain split we will cover in 14.3 ran for 24 blocks. Outside those two incidents, reorgs on Bitcoin are almost always just 1 to 2 blocks. Deliberate deep reorgs have happened on other networks like Ethereum Classic (a 100+ block reorg in 2019) and Bitcoin Gold, but both have far smaller hash rate than Bitcoin so the cost of attack is far lower.</p>
+
+          <div class="p-callout">
+            <p>The "6 confirmations" standard often mentioned in Bitcoin isn’t an arbitrary number. It’s an estimate that after 6 blocks, the cost of doing a reorg deep enough to cancel that transaction becomes very uneconomical for any attacker. For small everyday transactions, 1-3 confirmations is already safe enough.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulation — How a reorg happens</div>
+          <div class="b14-s142-desc">
+            First tab: a step-by-step simulation of a 1-block reorg between two miners. Second tab: a table of reorg risk based on depth and number of confirmations.
+          </div>
+
+          <div class="b14-s142-tabs">
+            <button class="b14-s142-tab s142-act" id="b14-s142-t1">Reorg Simulation</button>
+            <button class="b14-s142-tab" id="b14-s142-t2">Reorg and Double Spend</button>
+          </div>
+
+          <div class="b14-s142-pane show" id="b14-s142-p1">
+            <div class="b14-s142-hint">A reorg happens when a node finds a longer alternative chain. The node switches to the longest chain and discards the losing block. Click "Next Step" to see the process.</div>
+            <div class="b14-s142-canvas"><canvas id="b14-s142-cv" style="display:block;width:100%;height:220px;"></canvas></div>
+            <div class="b14-s142-status" id="b14-s142-status"></div>
+            <div class="b14-s142-ctrl">
+              <button class="b14-s142-btn-primary" id="b14-s142-next">Next Step →</button>
+              <button class="b14-s142-btn-sec" id="b14-s142-rst">Reset</button>
+              <div class="b14-s142-step-ind" id="b14-s142-step-ind">Step 0 / 4</div>
+            </div>
+            <div class="b14-s142-note s142-idle" id="b14-s142-note">Click "Next Step" to start the reorg simulation step by step.</div>
+          </div>
+
+          <div class="b14-s142-pane" id="b14-s142-p2">
+            <div class="b14-s142-hint">A small reorg (1-2 blocks) is normal and happens routinely. A large reorg can be exploited for a double spend. The number of confirmations you wait for determines how safe your transaction is.</div>
+            <div class="b14-s142-table">
+              <div class="b14-s142-table-head">Reorg depth vs double spend risk</div>
+              <div class="b14-s142-table-body">
+                <div class="b14-s142-table-row s142-header"><div>Reorg depth</div><div>Hash rate needed</div><div>Risk</div><div>Real example</div></div>
+                <div class="b14-s142-table-row"><div class="b14-s142-cell s142-safe">1-2 blocks</div><div>Low — coincidence</div><div class="b14-s142-cell s142-safe">Normal, happens routinely</div><div>Every day in Bitcoin</div></div>
+                <div class="b14-s142-table-row"><div class="b14-s142-cell s142-warn">3-5 blocks</div><div>Medium</div><div class="b14-s142-cell s142-warn">Rare, needs large hash rate</div><div>Bitcoin: 4-block reorg (2012)</div></div>
+                <div class="b14-s142-table-row"><div class="b14-s142-cell s142-risk">6+ blocks</div><div>Very high (51%+)</div><div class="b14-s142-cell s142-risk">Dangerous, double spend possible</div><div>Ethereum Classic, Bitcoin Gold</div></div>
+                <div class="b14-s142-table-row"><div class="b14-s142-cell s142-risk">100+ blocks</div><div>Almost impossible in Bitcoin</div><div class="b14-s142-cell s142-safe">Never happened in Bitcoin</div><div>Only on networks with very small hash rate</div></div>
+              </div>
+            </div>
+            <div class="b14-s142-note s142-warn">A merchant who accepts a large payment without waiting for enough confirmations is a potential target for a double spend via reorg. Common standard: 6 confirmations for high-value transactions, 1-3 confirmations for small transactions.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-14-1" data-sb="sb-14-1">
+            ← 14.1 — The 2010 Value Overflow Bug
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-14-3" data-sb="sb-14-3">
+            14.3 — March 2013 Chain Split →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 14.2 -->
+
+      <!-- ==============================
+           SECTION 14.3 · March 2013 Chain Split
+      ============================== -->
+      <div class="p-section" id="section-14-3">
+        <div class="p-eyebrow">Chapter 14 · 14.3</div>
+        <div class="p-heading">When two software versions produced two different realities for 6 hours</div>
+        <div class="p-title">March 2013 Chain Split</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>On March 11, 2013, an unintended chain split occurred between nodes running Bitcoin 0.7 and Bitcoin 0.8. This wasn’t an attack, wasn’t a deliberate bug exploit, but an unexpected consequence of a difference in database implementation between two software versions that both claimed to follow the same rules.</p>
+
+          <p><strong>The root cause: BerkeleyDB vs LevelDB</strong></p>
+          <p>Bitcoin 0.8 switched the storage database from BerkeleyDB to LevelDB as a performance optimization. What wasn’t realized: BerkeleyDB had a limit of 10,000 keys that could be locked simultaneously. This wasn’t part of Bitcoin’s consensus rules, just an implementation detail. LevelDB didn’t have the same limit. Block #225,430, mined on the night of March 11, affected the status of more than 5,000 transactions at once, requiring more than 10,000 BerkeleyDB keys simultaneously. Bitcoin 0.7 nodes couldn’t process this block and rejected it. Bitcoin 0.8 nodes accepted it without issue.</p>
+
+          <p><strong>Six hours with two Bitcoins</strong></p>
+          <p>For about 6 hours, there were two versions of Bitcoin running in parallel. The 0.8 chain had about 60% hash rate so it grew faster. The split lasted for 24 blocks before being resolved. The split wasn’t detected immediately: it was only about an hour later, at 23:10 GMT, that a user named thermoman reported an anomaly on the bitcoin-dev IRC. One minute later, Mark Karpelès of Mt. Gox immediately halted block processing as a precaution.</p>
+
+          <p><strong>An unusual solution</strong></p>
+          <p>The community had to choose: upgrade everyone to 0.8, or go back to 0.7? The decision was to go back to 0.7, not because 0.7 was more technically correct, but because it was easier to coordinate a handful of large mining pools to downgrade than to force the entire ecosystem to upgrade at once. BTCGuild and Slush Pool downgraded even though they had to give up the reward they’d already earned on the 0.8 chain. At block #225,454, the 0.7 chain managed to surpass the 0.8 chain and the network reunited.</p>
+
+          <p><strong>The recorded double spend</strong></p>
+          <p>During the split period, one double spend was recorded. But according to BIP 50, the official post-mortem written by Gavin Andresen, this was done by someone experimenting to test whether it was possible, not with intent to steal.</p>
+
+          <div class="p-callout">
+            <p>This incident taught an important lesson: two implementations that claim to follow the same rules can still produce different behavior because of hidden implementation details. This is one reason Bitcoin is very careful about changing consensus code, and why there’s a big effort to ensure all implementations behave identically on every edge case.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualization — March 2013 Chain Split</div>
+          <div class="b14-s143-desc">
+            Three tabs: a bident split diagram, a chronology of events with accurate GMT times based on BIP 50, and a comparison of the technical cause and the reasoning behind the decision to go back to the 0.7 chain.
+          </div>
+
+          <div class="b14-s143-tabs">
+            <button class="b14-s143-tab s143-act" id="b14-s143-t1">Diagram Split</button>
+            <button class="b14-s143-tab" id="b14-s143-t2">Chronology (GMT)</button>
+            <button class="b14-s143-tab" id="b14-s143-t3">Cause and Solution</button>
+          </div>
+
+          <div class="b14-s143-pane show" id="b14-s143-p1">
+            <div class="b14-s143-hint">March 11, 2013: Bitcoin 0.7 and 0.8 produced different chains for 24 blocks (~6 hours). The 0.8 chain was briefly longer because it had ~60% hash rate, but the community chose to go back to the 0.7 chain.</div>
+            <div class="b14-s143-canvas"><canvas id="b14-s143-cv" style="display:block;width:100%;height:230px;"></canvas></div>
+            <div class="b14-s143-note s143-info">An unusual solution: not by upgrading everyone to 0.8, but by asking the miners who had already upgraded to temporarily downgrade to 0.7. BTCGuild and Slush Pool lost the reward they’d already earned on the 0.8 chain in order to restore the network.</div>
+          </div>
+
+          <div class="b14-s143-pane" id="b14-s143-p2">
+            <div class="b14-s143-hint">All times in GMT, March 11-12, 2013. Source: BIP 50 (the official post-mortem by Gavin Andresen).</div>
+            <div class="b14-s143-tl">
+              <div class="b14-s143-tl-event" data-t="trigger"><div class="b14-s143-tl-time">~22:00</div><div class="b14-s143-tl-dot-wrap"><div class="b14-s143-tl-dot s143-trigger"></div></div><div class="b14-s143-tl-card s143-trigger"><div class="b14-s143-tl-tag s143-trigger">Trigger</div><div class="b14-s143-tl-title">Block #225,430 mined — requires more than 10,000 BerkeleyDB keys</div><div class="b14-s143-tl-desc">This block affected the status of more than 5,000 transactions at once, exceeding the BerkeleyDB limit of 10,000 keys. Bitcoin 0.7 nodes couldn’t process it and rejected it. Bitcoin 0.8 nodes accepted it without issue.</div></div></div>
+              <div class="b14-s143-tl-event" data-t="split"><div class="b14-s143-tl-time">~22:00</div><div class="b14-s143-tl-dot-wrap"><div class="b14-s143-tl-dot s143-split"></div></div><div class="b14-s143-tl-card s143-split"><div class="b14-s143-tl-tag s143-split">Split</div><div class="b14-s143-tl-title">Two chains form silently</div><div class="b14-s143-tl-desc">Bitcoin 0.8 nodes mine on top of block #225,430. Bitcoin 0.7 nodes mine on the alternative chain. The 0.8 chain has about 60% hash rate and grows faster.</div></div></div>
+              <div class="b14-s143-tl-event" data-t="split"><div class="b14-s143-tl-time">23:10</div><div class="b14-s143-tl-dot-wrap"><div class="b14-s143-tl-dot s143-split"></div></div><div class="b14-s143-tl-card s143-split"><div class="b14-s143-tl-tag s143-split">Detected</div><div class="b14-s143-tl-title">"thermoman" reports an anomaly on the bitcoin-dev IRC</div><div class="b14-s143-tl-desc">About an hour after the split began, someone finally reported the anomaly on the bitcoin-dev IRC channel.</div></div></div>
+              <div class="b14-s143-tl-event" data-t="split"><div class="b14-s143-tl-time">23:11</div><div class="b14-s143-tl-dot-wrap"><div class="b14-s143-tl-dot s143-split"></div></div><div class="b14-s143-tl-card s143-split"><div class="b14-s143-tl-tag s143-split">Exchange</div><div class="b14-s143-tl-title">Mark Karpelès (Mt. Gox) halts Bitcoin block import</div><div class="b14-s143-tl-desc">One minute after the first report, Mark Karpelès immediately halted block processing at Mt. Gox as a precaution.</div></div></div>
+              <div class="b14-s143-tl-event" data-t="fix"><div class="b14-s143-tl-time">23:18</div><div class="b14-s143-tl-dot-wrap"><div class="b14-s143-tl-dot s143-fix"></div></div><div class="b14-s143-tl-card s143-fix"><div class="b14-s143-tl-tag s143-fix">Discussion</div><div class="b14-s143-tl-title">Pieter Wuille informs the mailing list of the problem</div><div class="b14-s143-tl-desc">Pieter Wuille sent an email to the bitcoin-dev mailing list but initially suggested upgrading as the solution. Downgrading was the correct solution, but that only became clear 45 minutes later.</div></div></div>
+              <div class="b14-s143-tl-event" data-t="fix"><div class="b14-s143-tl-time">~00:00 (Mar 12)</div><div class="b14-s143-tl-dot-wrap"><div class="b14-s143-tl-dot s143-fix"></div></div><div class="b14-s143-tl-card s143-fix"><div class="b14-s143-tl-tag s143-fix">Solution</div><div class="b14-s143-tl-title">BTCGuild and Slush Pool downgrade to 0.7</div><div class="b14-s143-tl-desc">After intensive discussion, the community agreed to go back to the 0.7 chain. BTCGuild and Slush Pool downgraded even though they had to give up the reward they’d already earned on the 0.8 chain.</div></div></div>
+              <div class="b14-s143-tl-event" data-t="result"><div class="b14-s143-tl-time">~04:00 (Mar 12)</div><div class="b14-s143-tl-dot-wrap"><div class="b14-s143-tl-dot s143-result"></div></div><div class="b14-s143-tl-card s143-result"><div class="b14-s143-tl-tag s143-result">Resolved</div><div class="b14-s143-tl-title">The 0.7 chain wins at block #225,454 — the network reunites</div><div class="b14-s143-tl-desc">After 24 blocks (~6 hours), the 0.7 chain surpassed the 0.8 chain. All 0.8 nodes did a reorg. One double spend was recorded during the split, but it was done by someone experimenting to test whether it was possible, not with intent to steal.</div></div></div>
+            </div>
+          </div>
+
+          <div class="b14-s143-pane" id="b14-s143-p3">
+            <div class="b14-s143-hint">The difference in database implementation between the two versions caused an unintended split.</div>
+            <div class="b14-s143-compare">
+              <div class="b14-s143-compare-col">
+                <div class="b14-s143-compare-head s143-v07">Bitcoin 0.7 — BerkeleyDB</div>
+                <div class="b14-s143-compare-row s143-v07"><strong>Database:</strong> BerkeleyDB (old)</div>
+                <div class="b14-s143-compare-row s143-v07"><strong>Key limit:</strong> maximum 10,000 simultaneous keys</div>
+                <div class="b14-s143-compare-row s143-v07"><strong>Large block:</strong> fails when it needs more than 10,000 keys at once</div>
+                <div class="b14-s143-compare-row s143-v07"><strong>Hash rate:</strong> about 40% at the split</div>
+                <div class="b14-s143-compare-row s143-conflict">Rejects block #225,430 — the 0.7 chain forms</div>
+              </div>
+              <div class="b14-s143-compare-col">
+                <div class="b14-s143-compare-head s143-v08">Bitcoin 0.8 — LevelDB</div>
+                <div class="b14-s143-compare-row s143-v08"><strong>Database:</strong> LevelDB (new, more efficient)</div>
+                <div class="b14-s143-compare-row s143-v08"><strong>Key limit:</strong> doesn’t have the same limit</div>
+                <div class="b14-s143-compare-row s143-v08"><strong>Large block:</strong> accepts the block without issue</div>
+                <div class="b14-s143-compare-row s143-v08"><strong>Hash rate:</strong> about 60% at the split</div>
+                <div class="b14-s143-compare-row s143-conflict">Accepts block #225,430 — the 0.8 chain forms</div>
+              </div>
+            </div>
+            <div class="b14-s143-note s143-warn">Why go back to 0.7? It was easier to coordinate a handful of large mining pools to downgrade than to force the entire ecosystem to upgrade at once. Coordination speed mattered more than technical logic in an emergency.</div>
+            <div class="b14-s143-note s143-good">The lesson: two implementations that claim to follow the same rules can produce different behavior because of hidden implementation details. Edge cases can come from unexpected places.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-14-2" data-sb="sb-14-2">
+            ← 14.2 — Chain Reorganization (Reorg)
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-14-4" data-sb="sb-14-4">
+            14.4 — Selfish Mining →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 14.3 -->
+
+      <!-- ==============================
+           SECTION 14.4 · Selfish Mining
+      ============================== -->
+      <div class="p-section" id="section-14-4">
+        <div class="p-eyebrow">Chapter 14 · 14.4</div>
+        <div class="p-heading">A mining strategy that’s profitable on paper — but has never been proven to work</div>
+        <div class="p-title">Selfish Mining</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Selfish mining is a strategy where a miner with significant hash rate hides the blocks they manage to find and doesn’t immediately broadcast them to the network. By withholding these blocks, they gain an advantage: they can start mining on top of the hidden block while the network is still mining on the previous block.</p>
+
+          <p><strong>How selfish mining works</strong></p>
+          <p>If the dishonest miner manages to find the next block before the network knows about their hidden block, they can release two blocks at once and turn the other honest block into an orphan. The honest miner who worked hard to find a block loses their reward, while the dishonest miner gets the reward of two blocks at once.</p>
+
+          <p><strong>Formal analysis and the threshold</strong></p>
+          <p>This attack was first formally analyzed by Ittay Eyal and Emin Gun Sirer in their 2013 paper. They showed that with about 33% hash rate, selfish mining can be economically profitable. With larger hash rate, the theoretical profit grows.</p>
+
+          <p><strong>The real technical risks</strong></p>
+          <p>Although it looks profitable on paper, selfish mining has serious technical risks. First, block secrecy is hard to maintain on a P2P network: once a block is found, the propagation signal on the network can leak before the dishonest miner is ready to release their hidden chain. Second, if an honest miner finds a block before the dishonest miner releases their chain, all the hidden work becomes wasted and the dishonest miner loses all the reward they’d invested. Third, the longer they hide blocks, the greater the risk that the hidden chain can never catch up to the public chain. Fourth, an abnormal orphan pattern can be detected by the community and cause a boycott of the suspicious pool.</p>
+
+          <p><strong>Why it has never happened in Bitcoin</strong></p>
+          <p>In practice, selfish mining has never been proven to happen at a significant scale. There are several reasons: it’s hard to maintain secrecy on a peer-to-peer network, the risk of losing rewards is far more real than the theoretical profit, the distributed mining pool landscape makes it very hard for one entity to reach 33% hash rate without being noticed, and the economic incentive for honest mining remains stronger in the long term.</p>
+
+          <div class="p-callout">
+            <p>Selfish mining is a reminder that Bitcoin’s economic incentives are designed to make dishonesty more expensive than honesty. But this isn’t an absolute guarantee: if the mining landscape changes drastically and one entity dominates the hash rate, these incentive dynamics could change.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulation — How selfish mining works</div>
+          <div class="b14-s144-desc">
+            First tab: a 5-step simulation of selfish mining from hidden block to orphan. Second tab: the technical conditions, risks, and the reality on Bitcoin mainnet.
+          </div>
+
+          <div class="b14-s144-tabs">
+            <button class="b14-s144-tab s144-act" id="b14-s144-t1">Selfish Mining Simulation</button>
+            <button class="b14-s144-tab" id="b14-s144-t2">Conditions, Risks, and Reality</button>
+          </div>
+
+          <div class="b14-s144-pane show" id="b14-s144-p1">
+            <div class="b14-s144-hint">The dishonest miner hides the block they manage to find. They mine on top of the hidden block while honest miners are still mining on the previous block.</div>
+            <div class="b14-s144-canvas"><canvas id="b14-s144-cv" style="display:block;width:100%;height:220px;"></canvas></div>
+            <div class="b14-s144-status" id="b14-s144-status"></div>
+            <div class="b14-s144-ctrl">
+              <button class="b14-s144-btn-primary" id="b14-s144-next">Next Step →</button>
+              <button class="b14-s144-btn-sec" id="b14-s144-rst">Reset</button>
+              <div class="b14-s144-step-ind" id="b14-s144-step-ind">Step 0 / 4</div>
+            </div>
+            <div class="b14-s144-note s144-idle" id="b14-s144-note">Click "Next Step" to see how the selfish mining strategy works step by step.</div>
+          </div>
+
+          <div class="b14-s144-pane" id="b14-s144-p2">
+            <div class="b14-s144-hint">Selfish mining is theoretically profitable, but has serious technical risks and has never been proven to happen at a significant scale in Bitcoin.</div>
+            <div class="b14-s144-table">
+              <div class="b14-s144-table-head">Conditions for selfish mining to be profitable</div>
+              <div class="b14-s144-table-body">
+                <div class="b14-s144-table-row s144-header"><div>Factor</div><div>Theoretical threshold</div><div>Reality in Bitcoin</div></div>
+                <div class="b14-s144-table-row"><div>Minimum hash rate</div><div class="b14-s144-cell s144-warn">~33% of the total</div><div class="b14-s144-cell s144-safe">No pool reaches this consistently</div></div>
+                <div class="b14-s144-table-row"><div>Block secrecy</div><div class="b14-s144-cell s144-warn">Must be 100% hidden</div><div class="b14-s144-cell s144-safe">Hard to maintain on a distributed P2P network</div></div>
+                <div class="b14-s144-table-row"><div>Risk vs reward</div><div class="b14-s144-cell s144-risk">Small reward, large risk</div><div class="b14-s144-cell s144-safe">Honest mining is more profitable long-term</div></div>
+                <div class="b14-s144-table-row"><div>Community detection</div><div class="b14-s144-cell s144-risk">The pattern can be detected</div><div class="b14-s144-cell s144-safe">A pool that tries will be boycotted by the community</div></div>
+              </div>
+            </div>
+            <div class="b14-s144-risks-label">Specific technical risks:</div>
+            <div class="b14-s144-risks">
+              <div class="b14-s144-risk-item">⚠️ <strong>Propagation leak:</strong> the signal of a found block can be detected by other nodes on the P2P network before the dishonest miner is ready to release their chain</div>
+              <div class="b14-s144-risk-item">⚠️ <strong>Race condition:</strong> if an honest miner finds a block before the hidden chain is released, all the hidden work becomes wasted and the reward is lost entirely</div>
+              <div class="b14-s144-risk-item">⚠️ <strong>Risk accumulation:</strong> the longer the hidden chain, the smaller the probability of catching up to the continuously growing public chain</div>
+              <div class="b14-s144-risk-item">⚠️ <strong>Pattern detection:</strong> an abnormal orphan rate around a particular pool can be detected and trigger an investigation or community boycott</div>
+            </div>
+            <div class="b14-s144-note s144-warn">Selfish mining is most dangerous when combined with an eclipse attack: the dishonest miner isolates certain nodes and forces them to follow the wrong chain. But this combination requires enormous resources and coordination.</div>
+            <div class="b14-s144-note s144-good">Empirical evidence: selfish mining has never been proven to happen at a significant scale on Bitcoin mainnet. The economic incentive for honest mining remains stronger in the long term as long as no single entity dominates the hash rate.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-14-3" data-sb="sb-14-3">
+            ← 14.3 — March 2013 Chain Split
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-14-5" data-sb="sb-14-5">
+            14.5 — Eclipse Attack →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 14.4 -->
+
+      <!-- ==============================
+           SECTION 14.5 · Eclipse Attack
+      ============================== -->
+      <div class="p-section" id="section-14-5">
+        <div class="p-eyebrow">Chapter 14 · 14.5</div>
+        <div class="p-heading">An attack that isolates one node, not the whole network</div>
+        <div class="p-title">Eclipse Attack</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>An eclipse attack is an attack where the attacker controls all of a target node’s peer connections, so that node only communicates with nodes controlled by the attacker. It’s important to understand from the start: this is an attack against one specific node, not against the Bitcoin network as a whole. The Bitcoin network keeps running normally.</p>
+
+          <p><strong>A simple analogy</strong></p>
+          <p>Imagine you live in a big city but all your information sources, neighbors, friends, radio, and TV, are replaced by an attacker’s agents delivering fake news. You’re still in the same city, but you don’t know what’s really happening. The city itself keeps running normally without you. That’s an eclipse attack: the attacked node lives in a fake reality controlled by the attacker, while thousands of other nodes on the network keep operating correctly.</p>
+
+          <p><strong>How an eclipse attack works</strong></p>
+          <p>Every Bitcoin node maintains a number of connections to other peers. If the attacker can fill all these connection slots with nodes they control, the target node can no longer communicate with the real network. The attacker does this by flooding the network with IP addresses they control, waiting for the target node to restart and pick new peers, or exploiting weaknesses in the peer selection mechanism.</p>
+
+          <p><strong>Possible impacts</strong></p>
+          <p>An eclipsed node can be tricked into accepting fake transactions (a double spend against a merchant), wasting hash rate on a fake chain (for a miner), or exposing transaction information to the attacker before it’s broadcast to the real network. But once again, all these impacts only happen to the node that was successfully isolated, not to the network as a whole.</p>
+
+          <p><strong>Mitigations in Bitcoin Core</strong></p>
+          <p>Bitcoin Core has already implemented several mitigations. Anchor connections maintain 2 outbound connections to trusted nodes even during a restart. Limits on connections from the same IP subnet make it harder for an attacker to dominate all the slots. Tor support and multiple network interfaces make it harder to identify and isolate the target node.</p>
+
+          <div class="p-callout">
+            <p>An eclipse attack isn’t proof that Bitcoin is easy to attack or that its decentralization is weak. It’s an attack that requires great effort to target one specific node, and Bitcoin Core keeps improving peer connection resilience to make this attack harder. The network as a whole is actually very hard to attack precisely because it’s distributed across thousands of nodes that don’t depend on each other.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualization — Normal vs Eclipse</div>
+          <div class="b14-s145-desc">
+            First tab: a comparison of a normally connected node vs an eclipsed node. Second tab: the specific impacts and the mitigations Bitcoin Core has already implemented.
+          </div>
+
+          <div class="b14-s145-tabs">
+            <button class="b14-s145-tab s145-act" id="b14-s145-t1">Normal vs Eclipse</button>
+            <button class="b14-s145-tab" id="b14-s145-t2">Impacts and Mitigations</button>
+          </div>
+
+          <div class="b14-s145-pane show" id="b14-s145-p1">
+            <div class="b14-s145-analogy">
+              <div class="b14-s145-analogy-label">A simple analogy</div>
+              <div class="b14-s145-analogy-text">Imagine you live in a big city, but all your information sources are replaced by an attacker’s agents delivering fake news. You’re still in the same city, but you don’t know what’s really happening. The city itself keeps running normally without you. That’s an eclipse attack: an attack against <strong>one specific node</strong>, not against the Bitcoin network as a whole.</div>
+            </div>
+            <div class="b14-s145-hint">Left: a node normally connected to many diverse peers. Right: an eclipsed node, all its connections controlled by the attacker.</div>
+            <div class="b14-s145-canvas"><canvas id="b14-s145-cv" style="display:block;width:100%;height:250px;"></canvas></div>
+            <div class="b14-s145-legend">
+              <div class="b14-s145-leg"><div class="b14-s145-leg-dot" style="background:#534AB7;"></div>Honest Bitcoin node</div>
+              <div class="b14-s145-leg"><div class="b14-s145-leg-dot" style="background:#0F6E56;"></div>Target node (normal)</div>
+              <div class="b14-s145-leg"><div class="b14-s145-leg-dot" style="background:#A32D2D;"></div>Attacker node</div>
+            </div>
+            <div class="b14-s145-kp s145-safe">✓ The Bitcoin network as a whole keeps running normally. Thousands of other nodes stay connected and validate transactions correctly. An eclipse attack only attacks one specific node.</div>
+            <div class="b14-s145-kp s145-warn">⚠ The eclipsed node lives in a "fake reality" — only receiving information from the attacker. It doesn’t know there’s a real Bitcoin network operating out there.</div>
+          </div>
+
+          <div class="b14-s145-pane" id="b14-s145-p2">
+            <div class="b14-s145-hint">An eclipse attack doesn’t require large hash rate. All it requires is the ability to control all the network connections of one target node.</div>
+            <div class="b14-s145-impacts">
+              <div class="b14-s145-impact s145-attack"><div class="b14-s145-impact-icon">💥</div><div class="b14-s145-impact-content"><div class="b14-s145-impact-title">Double spend against a merchant using the eclipsed node</div><div class="b14-s145-impact-desc">The attacker sends a fake transaction that looks valid to the target node. The merchant thinks the payment is confirmed, when on the real network that transaction doesn’t exist. The attacker then spends the same bitcoin elsewhere.</div></div></div>
+              <div class="b14-s145-impact s145-attack"><div class="b14-s145-impact-icon">💥</div><div class="b14-s145-impact-content"><div class="b14-s145-impact-title">An eclipsed miner wastes hash rate on a fake chain</div><div class="b14-s145-impact-desc">A miner whose node is eclipsed will mine on top of the attacker’s fake blocks. All the electricity and computation is wasted because the blocks produced won’t be recognized by the real network.</div></div></div>
+              <div class="b14-s145-impact s145-attack"><div class="b14-s145-impact-icon">💥</div><div class="b14-s145-impact-content"><div class="b14-s145-impact-title">The attacker monitors transactions before they’re broadcast</div><div class="b14-s145-impact-desc">All transactions sent by the target node must pass through the attacker’s node first, exposing financial information that should be private.</div></div></div>
+              <div class="b14-s145-impact s145-mitigation"><div class="b14-s145-impact-icon">🛡️</div><div class="b14-s145-impact-content"><div class="b14-s145-impact-title">Anchor connections: maintaining 2 connections to trusted nodes</div><div class="b14-s145-impact-desc">Bitcoin Core keeps 2 outbound connections to known nodes even during a restart, making it harder for an attacker to replace all connections at once.</div></div></div>
+              <div class="b14-s145-impact s145-mitigation"><div class="b14-s145-impact-icon">🛡️</div><div class="b14-s145-impact-content"><div class="b14-s145-impact-title">Limits on connections from one IP subnet</div><div class="b14-s145-impact-desc">Limiting inbound connections from the same IP subnet makes it harder for an attacker to dominate all the connection slots from just one address block.</div></div></div>
+              <div class="b14-s145-impact s145-mitigation"><div class="b14-s145-impact-icon">🛡️</div><div class="b14-s145-impact-content"><div class="b14-s145-impact-title">Run the node via Tor or a different IP address</div><div class="b14-s145-impact-desc">A node running via Tor or multiple network interfaces is far harder to isolate because the attacker can’t identify all the connection entry points.</div></div></div>
+            </div>
+            <div class="b14-s145-note s145-good">An eclipse attack isn’t the end of Bitcoin’s decentralization. It’s a very specific and targeted attack that only affects one node. Thousands of other nodes around the world keep working normally. Bitcoin Core keeps improving peer connection resilience to make this attack harder.</div>
+            <div class="b14-s145-note s145-warn">The most vulnerable nodes: home nodes with few outbound peers or that are rarely maintained. The simplest solution is to run a node with connections to many geographically diverse peers.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-14-4" data-sb="sb-14-4">
+            ← 14.4 — Selfish Mining
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-14-6" data-sb="sb-14-6">
+            14.6 — What Keeps Bitcoin Strong? →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 14.5 -->
+
+      <!-- ==============================
+           SECTION 14.6 · Apa yang Membuat Bitcoin Tetap Kuat?
+      ============================== -->
+      <div class="p-section" id="section-14-6">
+        <div class="p-eyebrow">Chapter 14 · 14.6</div>
+        <div class="p-heading">Not a perfect system — but a system that has been battle-tested for 15+ years</div>
+        <div class="p-title">What Keeps Bitcoin Strong?</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>After studying the overflow bug, chain split, reorg, selfish mining, and eclipse attack, a reasonable question arises: if all these threats exist, why is Bitcoin still standing today?</p>
+
+          <p><strong>Aligned economic incentives</strong></p>
+          <p>Successfully attacking Bitcoin requires a cost far exceeding the gain that can be obtained. Selfish mining is more expensive than honest mining in the long term. An eclipse attack needs large resources for a very specific target. A 51% attack needs astronomical electricity and hardware costs. Honest miners get a larger and more consistent reward than dishonest ones because the system is designed that way.</p>
+
+          <p><strong>Extreme network redundancy</strong></p>
+          <p>There’s no single point of failure in Bitcoin. If one node is attacked, thousands of others keep running. If one implementation has a bug, another implementation can be a reference. If one mining pool is compromised, the remaining hash rate still secures the network. There’s no central server, no CEO to pressure, no off switch.</p>
+
+          <p><strong>A vigilant and responsive community</strong></p>
+          <p>The 2010 bug was found, reported, and fixed in 5 hours. The 2013 chain split was detected in an hour and resolved with extraordinary coordination between developers, mining pools, and exchanges. Developers, miners, node operators, and users all have an incentive to keep the network healthy because Bitcoin’s value depends on trust in the network.</p>
+
+          <p><strong>Open source and total transparency</strong></p>
+          <p>The Bitcoin code can be examined by anyone, anytime. No gap can be hidden for long because thousands of eyes keep watching. Every change is strictly audited before being implemented. Weaknesses that are found are fixed openly and the result becomes a lesson for the entire ecosystem.</p>
+
+          <div class="p-callout">
+            <p>Bitcoin isn’t a perfect system. It’s a system that has been battle-tested since 2009, attacked from various directions, and still standing. Every weakness found becomes a lesson. Every failed attack proves the resilience of its architecture. And every incident successfully resolved proves that a distributed community can coordinate without a central authority.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Summary — Incidents, Responses, and Lessons</div>
+          <div class="b14-s146-desc">
+            Click each row to see the incident details, how the community responded, and the lesson learned. Below the table: the four pillars of Bitcoin’s resilience.
+          </div>
+
+          <div class="b14-s146-table">
+            <div class="b14-s146-table-head">
+              <div>Incident</div>
+              <div>Year</div>
+              <div>Status</div>
+            </div>
+            <div class="b14-s146-row" id="b14-s146-r1">
+              <div class="b14-s146-row-main">
+                <div class="b14-s146-row-title">Value Overflow Bug</div>
+                <div class="b14-s146-row-year">2010</div>
+                <div class="b14-s146-row-badge s146-fixed">Fixed</div>
+              </div>
+              <div class="b14-s146-row-detail" id="b14-s146-d1">
+                <div class="b14-s146-detail-section s146-what">
+                  <div class="b14-s146-detail-label">What happened</div>
+                  <div class="b14-s146-detail-text">An attacker exploited a bug in code that didn’t check MAX_MONEY before adding up transaction outputs. A very large value caused an integer overflow and the illegal transaction was confirmed in block #74,638.</div>
+                </div>
+                <div class="b14-s146-detail-section s146-response">
+                  <div class="b14-s146-detail-label">Community response</div>
+                  <div class="b14-s146-detail-text">Satoshi Nakamoto released a patch in 5 hours. The community did an emergency soft fork: nodes upgraded and ignored the problematic block. The clean chain became dominant.</div>
+                </div>
+                <div class="b14-s146-detail-section s146-lesson">
+                  <div class="b14-s146-detail-label">Lesson</div>
+                  <div class="b14-s146-detail-text">Consensus code must check MAX_MONEY before adding up values. A single missing line of code can create a critical gap. Since then, value validation has become standard.</div>
+                </div>
+              </div>
+            </div>
+            <div class="b14-s146-row" id="b14-s146-r2">
+              <div class="b14-s146-row-main">
+                <div class="b14-s146-row-title">March 2013 Chain Split</div>
+                <div class="b14-s146-row-year">2013</div>
+                <div class="b14-s146-row-badge s146-fixed">Resolved</div>
+              </div>
+              <div class="b14-s146-row-detail" id="b14-s146-d2">
+                <div class="b14-s146-detail-section s146-what">
+                  <div class="b14-s146-detail-label">What happened</div>
+                  <div class="b14-s146-detail-text">A difference in database implementation between Bitcoin 0.7 (BerkeleyDB) and 0.8 (LevelDB) caused two chains to run in parallel for 24 blocks (~6 hours). The 0.8 chain was briefly longer because it had 60% hash rate.</div>
+                </div>
+                <div class="b14-s146-detail-section s146-response">
+                  <div class="b14-s146-detail-label">Community response</div>
+                  <div class="b14-s146-detail-text">BTCGuild and Slush Pool downgraded to 0.7 even though they had to give up the reward. The community chose to go back to the 0.7 chain because it was easier to coordinate. The network reunited at block #225,454.</div>
+                </div>
+                <div class="b14-s146-detail-section s146-lesson">
+                  <div class="b14-s146-detail-label">Lesson</div>
+                  <div class="b14-s146-detail-text">Two implementations that claim to follow the same rules can produce different behavior. A database infrastructure change must be tested on every edge case. Mining pool coordination can resolve a crisis quickly.</div>
+                </div>
+              </div>
+            </div>
+            <div class="b14-s146-row" id="b14-s146-r3">
+              <div class="b14-s146-row-main">
+                <div class="b14-s146-row-title">The Largest Reorg in Bitcoin</div>
+                <div class="b14-s146-row-year">2012</div>
+                <div class="b14-s146-row-badge s146-fixed">Normal</div>
+              </div>
+              <div class="b14-s146-row-detail" id="b14-s146-d3">
+                <div class="b14-s146-detail-section s146-what">
+                  <div class="b14-s146-detail-label">What happened</div>
+                  <div class="b14-s146-detail-text">A 4-block reorg happened on Bitcoin mainnet in 2012 because of a software bug, not a deliberate attack. This is the deepest reorg that has ever happened in Bitcoin.</div>
+                </div>
+                <div class="b14-s146-detail-section s146-response">
+                  <div class="b14-s146-detail-label">Community response</div>
+                  <div class="b14-s146-detail-text">The protocol resolved it automatically by following the longest chain. No manual intervention was needed. This proved the consensus mechanism works as designed.</div>
+                </div>
+                <div class="b14-s146-detail-section s146-lesson">
+                  <div class="b14-s146-detail-label">Lesson</div>
+                  <div class="b14-s146-detail-text">The 6-confirmation standard proved to provide enough security. A reorg of this scale can’t be exploited for a double spend without very large hash rate.</div>
+                </div>
+              </div>
+            </div>
+            <div class="b14-s146-row" id="b14-s146-r4">
+              <div class="b14-s146-row-main">
+                <div class="b14-s146-row-title">Selfish Mining</div>
+                <div class="b14-s146-row-year">Theoretical</div>
+                <div class="b14-s146-row-badge s146-theory">Unproven</div>
+              </div>
+              <div class="b14-s146-row-detail" id="b14-s146-d4">
+                <div class="b14-s146-detail-section s146-what">
+                  <div class="b14-s146-detail-label">What happened</div>
+                  <div class="b14-s146-detail-text">Ittay Eyal and Emin Gun Sirer formalized the analysis of selfish mining in 2013. They showed that with about 33% hash rate, this strategy is theoretically profitable.</div>
+                </div>
+                <div class="b14-s146-detail-section s146-response">
+                  <div class="b14-s146-detail-label">Community response</div>
+                  <div class="b14-s146-detail-text">The community discussed various mitigations. The economic incentive proved stronger: no pool has been proven to do selfish mining at a significant scale on Bitcoin mainnet.</div>
+                </div>
+                <div class="b14-s146-detail-section s146-lesson">
+                  <div class="b14-s146-detail-label">Lesson</div>
+                  <div class="b14-s146-detail-text">Economic incentives are Bitcoin’s strongest defense. A strategy that’s profitable on paper is often impractical because of larger hidden risks and costs.</div>
+                </div>
+              </div>
+            </div>
+            <div class="b14-s146-row" id="b14-s146-r5">
+              <div class="b14-s146-row-main">
+                <div class="b14-s146-row-title">Eclipse Attack</div>
+                <div class="b14-s146-row-year">Actively researched</div>
+                <div class="b14-s146-row-badge s146-mitigated">Mitigated</div>
+              </div>
+              <div class="b14-s146-row-detail" id="b14-s146-d5">
+                <div class="b14-s146-detail-section s146-what">
+                  <div class="b14-s146-detail-label">What happened</div>
+                  <div class="b14-s146-detail-text">Security researchers demonstrated that a Bitcoin node can be isolated from the network by controlling all of its peer connections. An isolated node can be tricked into accepting fake information.</div>
+                </div>
+                <div class="b14-s146-detail-section s146-response">
+                  <div class="b14-s146-detail-label">Community response</div>
+                  <div class="b14-s146-detail-text">Bitcoin Core implemented anchor connections, per-subnet connection limits, and better Tor support. Research continues to strengthen peer connection resilience.</div>
+                </div>
+                <div class="b14-s146-detail-section s146-lesson">
+                  <div class="b14-s146-detail-label">Lesson</div>
+                  <div class="b14-s146-detail-text">Peer diversification is the best protection. A node connected to many peers from various geographic locations is far harder to isolate. Open source allows mitigation to be done transparently.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b14-s146-pillars-label">The four pillars of Bitcoin’s resilience:</div>
+          <div class="b14-s146-pillars">
+            <div class="b14-s146-pillar">
+              <div class="b14-s146-pillar-icon">💰</div>
+              <div class="b14-s146-pillar-title">Economic Incentives</div>
+              <div class="b14-s146-pillar-desc">Attacking Bitcoin is more expensive than the gain. The system is designed so honesty is always more profitable than cheating in the long term.</div>
+            </div>
+            <div class="b14-s146-pillar">
+              <div class="b14-s146-pillar-icon">🌐</div>
+              <div class="b14-s146-pillar-title">Network Redundancy</div>
+              <div class="b14-s146-pillar-desc">There’s no single point of failure. Thousands of nodes around the world that don’t depend on each other make the network very hard to shut down.</div>
+            </div>
+            <div class="b14-s146-pillar">
+              <div class="b14-s146-pillar-icon">👥</div>
+              <div class="b14-s146-pillar-title">Vigilant Community</div>
+              <div class="b14-s146-pillar-desc">Every major incident is responded to quickly. Developers, miners, and users all have an incentive to keep the network healthy because Bitcoin’s value depends on it.</div>
+            </div>
+            <div class="b14-s146-pillar">
+              <div class="b14-s146-pillar-icon">🔓</div>
+              <div class="b14-s146-pillar-title">Open Source</div>
+              <div class="b14-s146-pillar-desc">The code is open for anyone to examine. No gap can be hidden for long. Every change is audited by many eyes before being implemented.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-14-5" data-sb="sb-14-5">
+            ← 14.5 — Eclipse Attack
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 14.6 -->
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 17 · BAB 14 -->
+
+

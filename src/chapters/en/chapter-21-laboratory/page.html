@@ -1,0 +1,1703 @@
+<!-- ============================================================
+     PAGE 24 · BAB 21 · Simulasi Atas Semuanya
+     |-- 21.1 · Kriptografi, Wallet & Kepemilikan Bitcoin [DONE]
+     |-- 21.2+ · [segera hadir]
+============================================================ -->
+<div class="page" id="page-bab21">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b21">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b21">← Chapter List</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab21">
+      <div class="sidebar-heading">Laboratory</div>
+      <div class="sidebar-title">Open it up, do not just use it</div>
+
+      <div class="lab-group first">Flows<span style="opacity:.35;margin-left:6px">·</span><span class="lab-letter">A</span></div>
+      <div class="lab-group-d">End-to-end processes you can run</div>
+      <div class="sidebar-item active" id="sb-21-1">
+        <div class="sb-num">A1</div>
+        <div class="sb-label">Cryptography, Wallets & Bitcoin Ownership</div>
+      </div>
+      <div class="sidebar-item" id="sb-21-2">
+        <div class="sb-num">A2</div>
+        <div class="sb-label">Transaction Builder, Script Inspector & Stack Executor</div>
+      </div>
+      <div class="sidebar-item" id="sb-21-3">
+        <div class="sb-num">A3</div>
+        <div class="sb-label">Opcodes Explorer</div>
+      </div>
+      <div class="sidebar-item" id="sb-21-4">
+        <div class="sb-num">A4</div>
+        <div class="sb-label">Block Explorer</div>
+      </div>
+      <div class="sidebar-item" id="sb-21-5">
+        <div class="sb-num">A5</div>
+        <div class="sb-label">Mining Nonce Hunt</div>
+      </div>
+      <div class="sidebar-item" id="sb-21-6">
+        <div class="sb-num">A6</div>
+        <div class="sb-label">Mempool Simulator</div>
+      </div>
+      <div class="sidebar-item" id="sb-21-7">
+        <div class="sb-num">A7</div>
+        <div class="sb-label">HD Wallet & Derivation Tree</div>
+      </div>
+      <div class="sidebar-item" id="sb-21-8">
+        <div class="sb-num">A8</div>
+        <div class="sb-label">Schnorr vs ECDSA</div>
+      </div>
+      <div class="sidebar-item" id="sb-21-9">
+        <div class="sb-num">A9</div>
+        <div class="sb-label">Lightning TX Flow</div>
+      </div>
+
+      <div class="lab-group">Cryptographic Primitives<span style="opacity:.35;margin-left:6px">·</span><span class="lab-letter">C</span></div>
+      <div class="lab-group-d">Cryptographic functions opened from the inside</div>
+      <div class="sidebar-item" id="sb-lab-c1">
+        <div class="sb-num">C1</div>
+        <div class="sb-label">SHA-256 round by round</div>
+      </div>
+      <div class="sidebar-item" id="sb-lab-c2">
+        <div class="sb-num">C2</div>
+        <div class="sb-label">secp256k1: point arithmetic</div>
+      </div>
+      <div class="sidebar-item" id="sb-lab-c3">
+        <div class="sb-num">C3</div>
+        <div class="sb-label">ECDSA &amp; Schnorr: r and s</div>
+      </div>
+      <div class="sidebar-item" id="sb-lab-c4">
+        <div class="sb-num">C4</div>
+        <div class="sb-label">BIP32: key derivation</div>
+      </div>
+      <div class="sidebar-item" id="sb-lab-c5">
+        <div class="sb-num">C5</div>
+        <div class="sb-label">BIP39: entropy to words</div>
+      </div>
+      <div class="sidebar-item" id="sb-lab-c6">
+        <div class="sb-num">C6</div>
+        <div class="sb-label">Taproot tweak</div>
+      </div>
+      <div class="sidebar-item" id="sb-lab-c7">
+        <div class="sb-num">C7</div>
+        <div class="sb-label">Odd nodes & CVE-2012-2459</div>
+      </div>
+      <div class="lab-group">Formats &amp; Protocols<span style="opacity:.35;margin-left:6px">·</span><span class="lab-letter">F</span></div>
+      <div class="lab-group-d">Byte anatomy, encodings, and network messages</div>
+      
+      <div class="sidebar-item" id="sb-lab-f1">
+        <div class="sb-num">F1</div>
+        <div class="sb-label">Transaction serialization</div>
+      </div>
+      <div class="sidebar-item" id="sb-lab-f2">
+        <div class="sb-num">F2</div>
+        <div class="sb-label">bech32 &amp; base58check</div>
+      </div>
+      <div class="sidebar-item" id="sb-lab-f3">
+        <div class="sb-num">F3</div>
+        <div class="sb-label">nBits encoding</div>
+      </div>
+      
+      
+      <div class="lab-group">Calculators<span style="opacity:.35;margin-left:6px">·</span><span class="lab-letter">D</span></div>
+      <div class="lab-group-d">Arithmetic that touches you directly</div>
+      <div class="sidebar-item" id="sb-lab-d1">
+        <div class="sb-num">D1</div>
+        <div class="sb-label">Halving &amp; DCA</div>
+      </div>
+      <div class="sidebar-item" id="sb-lab-d2">
+        <div class="sb-num">D2</div>
+        <div class="sb-label">Address type distribution</div>
+      </div>
+
+    </div>
+
+    <div class="prologue-content" id="bab21-content">
+
+      <!-- ==============================
+           SECTION 21.1 · Kriptografi, Wallet & Kepemilikan Bitcoin
+      ============================== -->
+      <div class="p-section active" id="section-21-1">
+        <div class="p-eyebrow">Laboratory · Flows 1</div>
+        <div class="p-heading">From random entropy to a Bitcoin address — every cryptographic step that happens when a wallet is created and a transaction is signed</div>
+        <div class="p-title">Cryptography, Wallets & Bitcoin Ownership</div>
+        <div class="p-divider"></div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Crypto Flow Simulator — CSPRNG to Address & Signature</div>
+          <div class="b21-s211-desc">
+            Choose an address format to see how the encoding path differs at steps 7-9. Click "Regenerate" to produce new values. Each value is a visual simulation — not a real cryptographic implementation.
+          </div>
+
+          <div class="b21-s211-wrap" id="b21-s211-wrap">
+            <div class="b21-s211-top">
+              <div class="b21-s211-addr-btns">
+                <button class="b21-s211-addr-btn s211-act" data-type="p2wpkh">P2WPKH (bc1q)</button>
+                <button class="b21-s211-addr-btn" data-type="p2pkh">P2PKH (1...)</button>
+                <button class="b21-s211-addr-btn" data-type="p2tr">P2TR (bc1p)</button>
+              </div>
+              <button class="b21-s211-gen-btn" id="b21-s211-gen">Regenerate</button>
+            </div>
+            <div class="b21-s211-flow" id="b21-s211-flow"></div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-21-2" data-sb="sb-21-2">
+            21.2 — Transaction Builder & Script →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 21.1 -->
+
+      <!-- ==============================
+           SECTION 21.2 · Transaction Builder, Script Inspector & Stack Executor
+      ============================== -->
+      <div class="p-section" id="section-21-2">
+        <div class="p-eyebrow">Laboratory · Flows 2</div>
+        <div class="p-heading">Every Bitcoin transaction is a communication between two parties through Script — the sender consumes a UTXO, the recipient gets a new UTXO locked with a condition anyone can verify</div>
+        <div class="p-title">Transaction Builder, Script Inspector & Stack Executor</div>
+        <div class="p-divider"></div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Transaction Builder · Script Inspector · Stack Executor</div>
+          <div class="b21-s212-desc">
+            Tab 1: a simulation of Alice sending to Bob — see the UTXO consumed, a new UTXO created, the miner getting a fee. Choose a script type to see the different locking scripts. Tab 2: inspect each opcode of 7 script formats — click for an explanation of why that opcode is there. Tab 3: execute a script step by step and watch the stack change per opcode.
+          </div>
+
+          <div class="b21-s212-tabs">
+            <button class="b21-s212-tab s212-act" id="b21-s212-t1">Alice → Bob</button>
+            <button class="b21-s212-tab" id="b21-s212-t2">Script Inspector</button>
+            <button class="b21-s212-tab" id="b21-s212-t3">Stack Executor</button>
+            <button class="b21-s212-tab" id="b21-s212-t4">Full TX Flow</button>
+          </div>
+
+          <!-- PANE 1: ALICE & BOB -->
+          <div class="b21-s212-pane show" id="b21-s212-p1">
+            <div class="b21-s212-hint">Every Bitcoin transaction involves two parties: the sender who consumes their UTXO, and the recipient who gets a new UTXO locked to their address. The miner gets the fee as the difference. Choose a script type to see the different locking scripts.</div>
+            <div class="b21-s212-type-btns" id="b21-s212-type-btns"></div>
+            <div class="b21-s212-ab-layout">
+              <div class="b21-s212-party">
+                <div class="b21-s212-party-hdr s212-alice">
+                  <div class="b21-s212-avatar s212-alice">A</div>
+                  <div><div class="b21-s212-name">Alice (sender)</div><div class="b21-s212-addr" id="b21-s212-alice-addr">bc1q...a7f2</div></div>
+                </div>
+                <div class="b21-s212-utxo s212-alice-in" id="b21-s212-alice-utxo">
+                  <div class="b21-s212-utxo-lbl s212-purple">Alice’s UTXO (INPUT)</div>
+                  <div class="b21-s212-utxo-val">0.05 BTC</div>
+                  <div class="b21-s212-utxo-script" id="b21-s212-alice-lock"></div>
+                  <div class="b21-s212-utxo-note">← locked to Alice’s address</div>
+                </div>
+                <div class="b21-s212-utxo s212-change-out" id="b21-s212-change-utxo">
+                  <div class="b21-s212-utxo-lbl s212-purple">Alice’s change (OUTPUT)</div>
+                  <div class="b21-s212-utxo-val">0.009 BTC</div>
+                  <div class="b21-s212-utxo-script" id="b21-s212-change-lock"></div>
+                  <div class="b21-s212-utxo-note">← locked to Alice’s new address</div>
+                </div>
+              </div>
+              <div class="b21-s212-middle">
+                <div class="b21-s212-tx-box" id="b21-s212-tx-box">TX<br>pending</div>
+                <div class="b21-s212-arrow">⇄</div>
+                <button class="b21-s212-send-btn" id="b21-s212-send">Send Transaction</button>
+                <button class="b21-s212-reset-btn" id="b21-s212-ab-reset">Reset</button>
+              </div>
+              <div class="b21-s212-party">
+                <div class="b21-s212-party-hdr s212-bob">
+                  <div class="b21-s212-avatar s212-bob">B</div>
+                  <div><div class="b21-s212-name">Bob (recipient)</div><div class="b21-s212-addr" id="b21-s212-bob-addr">bc1q...3c9d</div></div>
+                </div>
+                <div class="b21-s212-utxo s212-bob-out" id="b21-s212-bob-utxo">
+                  <div class="b21-s212-utxo-lbl s212-green">Bob’s new UTXO (OUTPUT)</div>
+                  <div class="b21-s212-utxo-val">0.04 BTC</div>
+                  <div class="b21-s212-utxo-script" id="b21-s212-bob-lock"></div>
+                  <div class="b21-s212-utxo-note">← locked to Bob’s address</div>
+                </div>
+              </div>
+            </div>
+            <div class="b21-s212-miner" id="b21-s212-miner">
+              <div class="b21-s212-miner-avatar">M</div>
+              <div class="b21-s212-miner-body">
+                <div class="b21-s212-miner-name">Miner (fee collector)</div>
+                <div class="b21-s212-miner-val">0.001 BTC fee</div>
+                <div class="b21-s212-miner-note">input − output difference · claimed via coinbase tx · no unlocking script needed</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PANE 2: SCRIPT INSPECTOR -->
+          <div class="b21-s212-pane" id="b21-s212-p2">
+            <div class="b21-s212-hint">Click each opcode for an explanation of why that opcode is here and how it communicates the conditions for transferring ownership between the sender and the recipient.</div>
+            <div class="b21-s212-si-btns" id="b21-s212-si-btns"></div>
+            <div id="b21-s212-si-display"></div>
+          </div>
+
+          <!-- PANE 4: FULL TX FLOW -->
+
+          <!-- PANE 3: STACK EXECUTOR -->
+          <div class="b21-s212-pane" id="b21-s212-p3">
+            <div class="b21-s212-hint">Execute a script step by step. See how the stack changes per opcode and how TRUE finally appears on top of the stack when the script succeeds.</div>
+                        <div class="b21-s212-si-btns" id="b21-s212-se-btns"></div>
+                        <div class="b21-s212-exec-ctrl">
+                          <button class="b21-s212-exec-btn s212-primary" id="b21-s212-step">▶ Step</button>
+                          <button class="b21-s212-exec-btn" id="b21-s212-se-reset">Reset</button>
+                          <span class="b21-s212-step-lbl" id="b21-s212-step-lbl">Press Step to begin</span>
+                        </div>
+                        <div class="b21-s212-exec-layout">
+                          <div>
+                            <div class="b21-s212-col-lbl">Script (unlock + lock):</div>
+                            <div id="b21-s212-exec-script"></div>
+                          </div>
+                          <div>
+                            <div class="b21-s212-col-lbl">Stack:</div>
+                            <div class="b21-s212-stack" id="b21-s212-stack"></div>
+                          </div>
+                        </div>
+                        <div class="b21-s212-exec-result s212-idle" id="b21-s212-result">Execution not started yet.</div>
+          </div>
+        </div>
+
+          <!-- PANE 4: FULL TX FLOW -->
+          <div class="b21-s212-pane" id="b21-s212-p4">
+            <div class="b21-s212-hint">Follow the full flow of a transaction from Bob’s address as the destination to a new UTXO locked to his address. Choose a format to see the difference in address decode, locking script, signing method, and verification per type.</div>
+                        <div style="display:flex;flex-direction:column;gap:4px;">
+                          <div class="b21-s212-si-lbl">Legacy (before SegWit):</div>
+                          <div class="b21-s212-script-btns" id="b21-s212-tf-btns-legacy"></div>
+                          <div class="b21-s212-si-lbl">SegWit &amp; Taproot:</div>
+                          <div class="b21-s212-script-btns" id="b21-s212-tf-btns-segwit"></div>
+                        </div>
+                        <div id="b21-s212-tf-flow"></div>
+          </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-21-1" data-sb="sb-21-1">
+            ← 21.1 — Cryptography & Wallets
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-21-3" data-sb="sb-21-3">
+            21.3 — Opcodes Explorer →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 21.2 -->
+
+      <!-- ==============================
+           SECTION 21.3 · Opcodes Explorer
+      ============================== -->
+      <div class="p-section" id="section-21-3">
+        <div class="p-eyebrow">Laboratory · Flows 3</div>
+        <div class="p-heading">Every opcode is an instruction in the "language" Bitcoin uses to communicate the conditions for transferring ownership between the sender and the recipient</div>
+        <div class="p-title">Opcodes Explorer — Status, Stack Effect, and Real Case per Address Type</div>
+        <div class="p-divider"></div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Opcodes Explorer</div>
+          <div class="b21-s213-desc">
+            Choose an opcode from the left panel to see: its status active or disabled, the stack effect (input to output), an explanation of its function, the difference in usage per address type (P2PKH vs P2WPKH vs P2TR, etc.), and a real script example with that opcode highlighted.
+          </div>
+          <div class="b21-s213-layout">
+            <div class="b21-s213-left" id="b21-s213-left"></div>
+            <div class="b21-s213-right" id="b21-s213-right">
+              <div class="b21-s213-empty">← Choose an opcode to begin</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-21-2" data-sb="sb-21-2">
+            ← 21.2 — Transaction Builder & Script
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-21-4" data-sb="sb-21-4">
+            21.4 — Block Explorer →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 21.3 -->
+
+      <!-- ==============================
+           SECTION 21.4 · Block Explorer
+      ============================== -->
+      <div class="p-section" id="section-21-4">
+        <div class="p-eyebrow">Laboratory · Flows 4</div>
+        <div class="p-heading">Every block is an 80-byte header container that summarizes thousands of transactions via the Merkle tree — changing any single transaction invalidates the entire proof of work</div>
+        <div class="p-title">Block Explorer — Header, Merkle Tree & Transaction Anatomy</div>
+        <div class="p-divider"></div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Block Explorer — Block #840,000 (4th Halving)</div>
+          <div class="b21-s214-desc">
+            Explore the anatomy of a real block: the Overview tab shows block statistics, Header shows the 6 fields of the 80-byte header that can be clicked, Merkle Tree shows how all the txids connect to one root in the header, and Transactions shows various tx formats with different efficiency.
+          </div>
+
+          <div class="b21-s214-tabs">
+            <button class="b21-s214-tab s214-act" id="b21-s214-t1">Block Overview</button>
+            <button class="b21-s214-tab" id="b21-s214-t2">Block Header</button>
+            <button class="b21-s214-tab" id="b21-s214-t3">Merkle Tree</button>
+            <button class="b21-s214-tab" id="b21-s214-t4">Transactions</button>
+          </div>
+
+          <!-- PANE 1: OVERVIEW -->
+          <div class="b21-s214-pane show" id="b21-s214-p1">
+            <div class="b21-s214-block-card">
+              <div class="b21-s214-block-top">
+                <div class="b21-s214-block-num">Block #840,000</div>
+                <div class="b21-s214-block-meta">
+                  <div class="b21-s214-block-time">19 Apr 2024 · 00:09:27 UTC</div>
+                  <div class="b21-s214-block-sub">4th halving — reward dropped from 6.25 to 3.125 BTC</div>
+                </div>
+              </div>
+              <div class="b21-s214-stats">
+                <div class="b21-s214-stat s214-st-tx"><div class="b21-s214-stat-lbl">Transactions</div><div class="b21-s214-stat-val">3,050</div></div>
+                <div class="b21-s214-stat s214-st-fee"><div class="b21-s214-stat-lbl">Total Fee</div><div class="b21-s214-stat-val">37.626 BTC</div></div>
+                <div class="b21-s214-stat s214-st-rew"><div class="b21-s214-stat-lbl">Block Reward</div><div class="b21-s214-stat-val">3.125 BTC</div></div>
+                <div class="b21-s214-stat s214-st-sz"><div class="b21-s214-stat-lbl">Size</div><div class="b21-s214-stat-val">1.54 MB</div></div>
+              </div>
+            </div>
+            <div class="b21-s214-overview-note">
+              <strong>Block #840,000</strong> is Bitcoin’s 4th halving block. The block reward dropped from 6.25 BTC to 3.125 BTC automatically according to the schedule embedded in the protocol since the genesis block. This block is unique because the total transaction fees (37.626 BTC) far exceeded the block reward (3.125 BTC), one of the early pieces of evidence that the fee market can function as a long-term miner incentive.<br><br>
+              Every block contains: one <strong>80-byte header</strong> that summarizes the entire block content, one <strong>coinbase transaction</strong> that creates new Bitcoin for the miner, and thousands of <strong>regular transactions</strong> that move Bitcoin between parties. Explore each part in the tabs above.
+            </div>
+          </div>
+
+          <!-- PANE 2: HEADER -->
+          <div class="b21-s214-pane" id="b21-s214-p2">
+            <div class="b21-s214-pane-hint">The block header is 80 bytes that summarize the entire block. This is what the miner hashes to prove proof of work. Click each field for an explanation.</div>
+            <div id="b21-s214-fields"></div>
+            <div class="b21-s214-header-note">Total header: 80 bytes (4 + 32 + 32 + 4 + 4 + 4). The double SHA256 of these 80 bytes is the block hash — this is what must meet the difficulty target.</div>
+          </div>
+
+          <!-- PANE 3: MERKLE TREE -->
+          <div class="b21-s214-pane" id="b21-s214-p3">
+            <div class="b21-s214-pane-hint">The Merkle tree is a hash structure that connects all the txids to one Merkle root stored in the block header. Click each node for an explanation.</div>
+            <div class="b21-s214-merkle-tree" id="b21-s214-merkle-tree"></div>
+            <div class="b21-s214-merkle-detail" id="b21-s214-merkle-detail">
+              <div class="b21-s214-merkle-hint-inner">Click a node for an explanation</div>
+            </div>
+            <div class="b21-s214-merkle-note">Merkle proof: to prove a single transaction is in a block, just provide the hashes along the path from leaf to root — the entire block isn’t needed. This is what SPV wallets use.</div>
+          </div>
+
+          <!-- PANE 4: TX LIST -->
+          <div class="b21-s214-pane" id="b21-s214-p4">
+            <div class="b21-s214-pane-hint">Every block starts with a coinbase transaction that creates new Bitcoin. Click a transaction for the details of input, output, fee, and an explanation of its script format.</div>
+            <div id="b21-s214-tx-list"></div>
+            <div class="b21-s214-tx-detail" id="b21-s214-tx-detail" style="display:none;"></div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-21-3" data-sb="sb-21-3">
+            ← 21.3 — Opcodes Explorer
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-21-5" data-sb="sb-21-5">
+            21.5 — Mining Nonce Hunt →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 21.4 -->
+
+      <!-- ==============================
+           SECTION 21.5 · Mining Nonce Hunt
+      ============================== -->
+      <div class="p-section" id="section-21-5">
+        <div class="p-eyebrow">Laboratory · Flows 5</div>
+        <div class="p-heading">A miner repeatedly changes the nonce until the block hash meets the difficulty target — there’s no shortcut other than trying one by one</div>
+        <div class="p-title">Mining Nonce Hunt — Proof of Work Simulation</div>
+        <div class="p-divider"></div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Mining Simulator — Block Header Nonce Hunt</div>
+          <div class="b21-s215-desc">
+            Choose a difficulty, press Mine, and see how the nonce keeps changing until the double SHA256 of the block header produces a hash that meets the target. Green characters = match the target, red = not yet. Real Bitcoin requires 19+ leading zeros.
+          </div>
+
+          <div class="b21-s215-diff-wrap">
+            <div class="b21-s215-diff-lbl">Choose difficulty (number of leading zeros required):</div>
+            <div class="b21-s215-diff-btns">
+              <button class="b21-s215-diff-btn s215-act" data-zeros="2">2 zeros (easy)</button>
+              <button class="b21-s215-diff-btn" data-zeros="3">3 zeros (medium)</button>
+              <button class="b21-s215-diff-btn" data-zeros="4">4 zeros (hard)</button>
+              <button class="b21-s215-diff-btn" data-zeros="6">6 zeros (very hard)</button>
+            </div>
+          </div>
+
+          <div class="b21-s215-stats">
+            <div class="b21-s215-stat s215-st-nonce">
+              <div class="b21-s215-stat-lbl">Current nonce</div>
+              <div class="b21-s215-stat-val" id="b21-s215-nonce-display">0</div>
+              <div class="b21-s215-stat-sub">hex: <span id="b21-s215-nonce-hex">0x00000000</span></div>
+            </div>
+            <div class="b21-s215-stat s215-st-hash">
+              <div class="b21-s215-stat-lbl">Hashes tried</div>
+              <div class="b21-s215-stat-val" id="b21-s215-hash-count">0</div>
+              <div class="b21-s215-stat-sub">per second: <span id="b21-s215-hps">—</span></div>
+            </div>
+            <div class="b21-s215-stat s215-st-diff">
+              <div class="b21-s215-stat-lbl">Target zeros</div>
+              <div class="b21-s215-stat-val" id="b21-s215-zeros-display">2</div>
+              <div class="b21-s215-stat-sub">probability: 1/<span id="b21-s215-prob">256</span></div>
+            </div>
+          </div>
+
+          <div class="b21-s215-header">
+            <div class="b21-s215-header-lbl">Block Header (80 bytes) being hashed:</div>
+            <div class="b21-s215-header-fields">
+              <div class="b21-s215-hf"><div class="b21-s215-hf-name">version</div><div class="b21-s215-hf-val">0x20000000</div></div>
+              <div class="b21-s215-hf"><div class="b21-s215-hf-name">prev_hash</div><div class="b21-s215-hf-val">00000000...a3b8</div></div>
+              <div class="b21-s215-hf"><div class="b21-s215-hf-name">merkle_root</div><div class="b21-s215-hf-val">c4b8e2f1...d8c1</div></div>
+              <div class="b21-s215-hf"><div class="b21-s215-hf-name">timestamp</div><div class="b21-s215-hf-val">0x65FF8A47</div></div>
+              <div class="b21-s215-hf"><div class="b21-s215-hf-name">bits</div><div class="b21-s215-hf-val">0x17034219</div></div>
+              <div class="b21-s215-hf"><div class="b21-s215-hf-name">nonce</div><div class="b21-s215-hf-val b21-s215-nonce-yellow" id="b21-s215-nonce-field">0x00000000</div></div>
+            </div>
+            <div class="b21-s215-header-raw" id="b21-s215-header-raw">20000000 00000000...a3b8 c4b8e2f1...d8c1 65FF8A47 17034219 <span class="b21-s215-nonce-yellow">00000000</span></div>
+          </div>
+
+          <div class="b21-s215-hash-section">
+            <div class="b21-s215-hash-lbl">Current block hash (double SHA256 of the header):</div>
+            <div class="b21-s215-hash-box">
+              <div class="b21-s215-hash-val" id="b21-s215-hash-display">—</div>
+              <div class="b21-s215-hash-meta">
+                <div class="b21-s215-target-lbl">Target:</div>
+                <div class="b21-s215-target-val" id="b21-s215-target-display">00ffffffffffffff...</div>
+              </div>
+              <div class="b21-s215-target-note" id="b21-s215-target-note">Hash must start with at least 2 "0" characters</div>
+            </div>
+          </div>
+
+          <div class="b21-s215-ctrl">
+            <button class="b21-s215-btn s215-primary" id="b21-s215-mine-btn">⛏ Mine</button>
+            <button class="b21-s215-btn s215-secondary" id="b21-s215-reset-btn">Reset</button>
+            <div class="b21-s215-timer-wrap">
+              <div class="b21-s215-timer-lbl">Mining time</div>
+              <div class="b21-s215-timer-val" id="b21-s215-timer">0.00s</div>
+            </div>
+          </div>
+
+          <div class="b21-s215-result s215-idle" id="b21-s215-result">Press Mine to start searching for a valid nonce.</div>
+
+          <div class="b21-s215-explainer">
+            <div class="b21-s215-exp-row"><div class="b21-s215-exp-num">1</div><div class="b21-s215-exp-text"><strong>The miner changes the nonce</strong> in the block header (4 bytes, 0 to ~4 billion). Each nonce change produces a completely different hash.</div></div>
+            <div class="b21-s215-exp-row"><div class="b21-s215-exp-num">2</div><div class="b21-s215-exp-text"><strong>The double SHA256 of the 80-byte header</strong> is computed. The result is 32 bytes (64 hex characters). It can’t be predicted; the only way is to try.</div></div>
+            <div class="b21-s215-exp-row"><div class="b21-s215-exp-num">3</div><div class="b21-s215-exp-text"><strong>The hash is compared with the target.</strong> If the hash is smaller than the target (enough leading zeros), the block is valid and the miner gets the reward.</div></div>
+            <div class="b21-s215-exp-row"><div class="b21-s215-exp-num">4</div><div class="b21-s215-exp-text"><strong>Real Bitcoin difficulty</strong> requires 19+ leading zeros, with a probability of 1 in 2^76. The entire network tries trillions of hashes per second to reach this every 10 minutes on average.</div></div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-21-4" data-sb="sb-21-4">
+            ← 21.4 — Block Explorer
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-21-6" data-sb="sb-21-6">
+            21.6 — Mempool Simulator →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 21.5 -->
+
+      <!-- ==============================
+           SECTION 21.6 · Mempool Simulator
+      ============================== -->
+      <div class="p-section" id="section-21-6">
+        <div class="p-eyebrow">Laboratory · Flows 6</div>
+        <div class="p-heading">The mempool is the queue of transactions waiting to enter a block — the miner picks the most profitable ones, and the minimum fee rate rises when the queue is full</div>
+        <div class="p-title">Mempool Simulator — Fee Market & Transaction Selection</div>
+        <div class="p-divider"></div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Mempool Live Simulator</div>
+          <div class="b21-s216-desc">
+            Add transactions with various fee rates, see how the mempool fills up, mine a block to see which transactions the miner picks, and observe how the minimum relay fee changes when the mempool is full or empty.
+          </div>
+
+          <div class="b21-s216-stats">
+            <div class="b21-s216-stat s216-ms-count">
+              <div class="b21-s216-stat-lbl">Tx in Mempool</div>
+              <div class="b21-s216-stat-val" id="b21-s216-tx-count">0</div>
+              <div class="b21-s216-stat-sub">pending</div>
+            </div>
+            <div class="b21-s216-stat s216-ms-size">
+              <div class="b21-s216-stat-lbl">Mempool Size</div>
+              <div class="b21-s216-stat-val" id="b21-s216-size">0</div>
+              <div class="b21-s216-stat-sub">vByte</div>
+            </div>
+            <div class="b21-s216-stat s216-ms-min">
+              <div class="b21-s216-stat-lbl">Fee Min Relay</div>
+              <div class="b21-s216-stat-val" id="b21-s216-min-fee">1</div>
+              <div class="b21-s216-stat-sub">sat/vByte</div>
+            </div>
+            <div class="b21-s216-stat s216-ms-next">
+              <div class="b21-s216-stat-lbl">Fee Next Block</div>
+              <div class="b21-s216-stat-val" id="b21-s216-next-fee">—</div>
+              <div class="b21-s216-stat-sub">sat/vByte (est.)</div>
+            </div>
+          </div>
+
+          <div class="b21-s216-ctrl">
+            <button class="b21-s216-btn s216-primary" id="b21-s216-add-btn">+ Add TX</button>
+            <button class="b21-s216-btn s216-primary" id="b21-s216-add5-btn">+ Add 5 TX</button>
+            <div class="b21-s216-fee-input">
+              <span class="b21-s216-fee-lbl">fee rate:</span>
+              <select class="b21-s216-fee-sel" id="b21-s216-fee-sel">
+                <option value="120">120 sat/vB (high priority)</option>
+                <option value="50">50 sat/vB (medium)</option>
+                <option value="10">10 sat/vB (low)</option>
+                <option value="2">2 sat/vB (very low)</option>
+                <option value="0">random</option>
+              </select>
+            </div>
+            <button class="b21-s216-btn s216-secondary" id="b21-s216-mine-btn">⛏ Mine Block</button>
+            <button class="b21-s216-btn s216-danger" id="b21-s216-clear-btn">Clear</button>
+          </div>
+
+          <div class="b21-s216-layout">
+            <div>
+              <div class="b21-s216-pool-lbl">Mempool — sorted by fee rate:</div>
+              <div class="b21-s216-pool-header">
+                <div class="b21-s216-pool-hcell">txid</div>
+                <div class="b21-s216-pool-hcell">fee rate</div>
+                <div class="b21-s216-pool-hcell">size</div>
+                <div class="b21-s216-pool-hcell">type</div>
+              </div>
+              <div class="b21-s216-pool-rows" id="b21-s216-pool-rows"></div>
+
+              <div style="margin-top:8px;">
+                <div class="b21-s216-chart-lbl">Fee rate distribution:</div>
+                <div id="b21-s216-chart"></div>
+              </div>
+
+              <div id="b21-s216-detail-wrap" style="display:none;margin-top:8px;">
+                <div class="b21-s216-detail" id="b21-s216-detail"></div>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div>
+                <div class="b21-s216-side-lbl">Last mined block:</div>
+                <div class="b21-s216-block-box" id="b21-s216-block-box">
+                  <div class="b21-s216-block-empty">No block mined yet</div>
+                </div>
+              </div>
+              <div>
+                <div class="b21-s216-side-lbl">Activity log:</div>
+                <div class="b21-s216-log" id="b21-s216-log"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-21-5" data-sb="sb-21-5">
+            ← 21.5 — Mining Nonce Hunt
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-21-7" data-sb="sb-21-7">
+            21.7 — HD Wallet & Derivation Tree →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 21.6 -->
+
+      <!-- ==============================
+           SECTION 21.7 · HD Wallet & Derivation Tree
+      ============================== -->
+      <div class="p-section" id="section-21-7">
+        <div class="p-eyebrow">Laboratory · Flows 7</div>
+        <div class="p-heading">One seed phrase produces the entire key tree deterministically — infinite addresses from a single source of entropy</div>
+        <div class="p-title">HD Wallet & Derivation Tree — BIP32, BIP39, BIP44/49/84/86</div>
+        <div class="p-divider"></div>
+
+        <div class="p-simulation">
+          <div class="sim-label">HD Wallet Derivation Simulator (all values simulated)</div>
+          <div class="b21-s217-desc">
+            Choose a BIP standard, click a path segment for an explanation, and see how each level of the tree is derived from the seed. All values are a simulation — not real cryptography.
+          </div>
+
+          <div class="b21-s217-sim-warning">⚠ SIMULATION — all values below are fake data for educational purposes. Don’t use as a real wallet.</div>
+
+          <div class="b21-s217-seed-box">
+            <div class="b21-s217-seed-phrase" id="b21-s217-seed-phrase">SIMULATION: alpha bravo charlie delta echo foxtrot golf hotel india juliet kilo lima</div>
+            <div class="b21-s217-seed-sub">12 words × ~11 bits = 128-bit entropy (simulation — not valid BIP39 words)</div>
+            <div class="b21-s217-seed-hex" id="b21-s217-seed-hex">seed (512-bit, PBKDF2-HMAC-SHA512): [SIMULATION] a1b2c3d4...f0e1d2c3</div>
+          </div>
+          <button class="b21-s217-gen-btn" id="b21-s217-gen-btn">Regenerate (simulation)</button>
+
+          <div class="b21-s217-sec-lbl" style="margin-top:4px;">Choose a derivation standard:</div>
+          <div class="b21-s217-std-btns" id="b21-s217-std-btns"></div>
+
+          <div class="b21-s217-path-wrap">
+            <div class="b21-s217-sec-lbl">Derivation path — click a segment for an explanation:</div>
+            <div class="b21-s217-path-display" id="b21-s217-path-display"></div>
+            <div id="b21-s217-path-detail" style="display:none;"></div>
+          </div>
+
+          <div class="b21-s217-sec-lbl">Derivation tree (all values simulated):</div>
+          <div id="b21-s217-tree"></div>
+
+          <div class="b21-s217-sec-lbl" style="margin-top:4px;">Generated addresses — index 0 to 4 (simulation):</div>
+          <div class="b21-s217-addr-header">
+            <div class="b21-s217-addr-hcell">Path</div>
+            <div class="b21-s217-addr-hcell">Address (simulation)</div>
+            <div class="b21-s217-addr-hcell">Format</div>
+          </div>
+          <div id="b21-s217-addr-rows"></div>
+        
+          <div class="lab-back">This demo uses illustrative values to show the shape of the tree. The real HMAC-SHA512 computation, and a demonstration of why hardened derivation must exist, is dissected in C4 under Cryptographic Primitives.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-21-6" data-sb="sb-21-6">
+            ← 21.6 — Mempool Simulator
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-21-8" data-sb="sb-21-8">
+            21.8 — Schnorr vs ECDSA →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 21.7 -->
+
+      <!-- ==============================
+           SECTION 21.8 · Schnorr vs ECDSA
+      ============================== -->
+      <div class="p-section" id="section-21-8">
+        <div class="p-eyebrow">Laboratory · Flows 8</div>
+        <div class="p-heading">Schnorr and ECDSA both run on secp256k1 — but Schnorr’s linearity enables signature aggregation that changes how multisig works in Bitcoin</div>
+        <div class="p-title">Schnorr vs ECDSA — Signing, Verification & Key Aggregation</div>
+        <div class="p-divider"></div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Schnorr vs ECDSA — Flow Visualizer</div>
+          <div class="b21-s218-desc">
+            Three tabs: (1) the step-by-step signing process of both schemes running side by side, (2) the verification process with the difference in the number of operations required, (3) a simulation of 3 transactions showing why Schnorr aggregation changes everything.
+          </div>
+
+          <div class="b21-s218-tabs">
+            <button class="b21-s218-tab s218-act" id="b21-s218-t1">Signing Flow</button>
+            <button class="b21-s218-tab" id="b21-s218-t2">Verification Flow</button>
+            <button class="b21-s218-tab" id="b21-s218-t3">3-TX Aggregation</button>
+          </div>
+
+          <!-- PANE 1 & 2: SIGNING / VERIFY FLOW -->
+          <div class="b21-s218-pane show" id="b21-s218-p1">
+            <div class="b21-s218-flow-hint" id="b21-s218-flow-hint">The ECDSA and Schnorr signing processes run side by side. A red badge = an ECDSA weakness, a green badge = a Schnorr advantage. Simulated hex values flow at each step.</div>
+            <div class="b21-s218-ctrl">
+              <button class="b21-s218-btn s218-primary" id="b21-s218-step-btn">▶ Step</button>
+              <button class="b21-s218-btn s218-primary" id="b21-s218-auto-btn">⚡ Auto</button>
+              <button class="b21-s218-btn s218-secondary" id="b21-s218-reset-btn">Reset</button>
+              <span class="b21-s218-step-info" id="b21-s218-step-info">Press Step or Auto to begin</span>
+            </div>
+            <div class="b21-s218-dual">
+              <div class="b21-s218-col">
+                <div class="b21-s218-col-hdr s218-ec">ECDSA <span class="b21-s218-col-hdr-sub">— since 2009</span></div>
+                <div class="b21-s218-steps" id="b21-s218-ec-steps"></div>
+              </div>
+              <div class="b21-s218-col">
+                <div class="b21-s218-col-hdr s218-sc">Schnorr <span class="b21-s218-col-hdr-sub">— since Taproot 2021</span></div>
+                <div class="b21-s218-steps" id="b21-s218-sc-steps"></div>
+              </div>
+            </div>
+            <div id="b21-s218-outputs" style="display:none;">
+              <div class="b21-s218-out-lbl">Final signature output:</div>
+              <div class="b21-s218-out-grid">
+                <div class="b21-s218-out-box s218-ec-out" id="b21-s218-ec-out"></div>
+                <div class="b21-s218-out-box s218-sc-out" id="b21-s218-sc-out"></div>
+              </div>
+              <div class="b21-s218-result-row" id="b21-s218-result-row"></div>
+            </div>
+          </div>
+
+          <div class="b21-s218-pane" id="b21-s218-p2">
+            <!-- Same structure, reused via JS mode switching -->
+          </div>
+
+          <!-- PANE 3: 3-TX AGGREGATION -->
+          <div class="b21-s218-pane" id="b21-s218-p3">
+            <div class="b21-s218-flow-hint">3 transactions, 3 different senders. ECDSA needs 3 separate signatures. Schnorr + MuSig2 aggregates the three into 1 single signature that looks identical to a single-sig.</div>
+            <div class="b21-s218-ctrl">
+              <button class="b21-s218-btn s218-primary" id="b21-s218-ag-step">▶ Step</button>
+              <button class="b21-s218-btn s218-primary" id="b21-s218-ag-auto">⚡ Auto</button>
+              <button class="b21-s218-btn s218-secondary" id="b21-s218-ag-reset">Reset</button>
+              <span class="b21-s218-step-info" id="b21-s218-ag-info">Press Step or Auto to begin</span>
+            </div>
+            <div class="b21-s218-txs">
+              <div class="b21-s218-tx" id="b21-s218-tx-0"><div class="b21-s218-tx-num">TX 1</div><div class="b21-s218-tx-info"><div class="b21-s218-tx-title">Alice → Bob · 0.05 BTC</div><div class="b21-s218-tx-hash" id="b21-s218-hash-0">txhash: —</div></div></div>
+              <div class="b21-s218-tx" id="b21-s218-tx-1"><div class="b21-s218-tx-num">TX 2</div><div class="b21-s218-tx-info"><div class="b21-s218-tx-title">Carol → Dave · 0.12 BTC</div><div class="b21-s218-tx-hash" id="b21-s218-hash-1">txhash: —</div></div></div>
+              <div class="b21-s218-tx" id="b21-s218-tx-2"><div class="b21-s218-tx-num">TX 3</div><div class="b21-s218-tx-info"><div class="b21-s218-tx-title">Eve → Frank · 0.08 BTC</div><div class="b21-s218-tx-hash" id="b21-s218-hash-2">txhash: —</div></div></div>
+            </div>
+            <div class="b21-s218-ag-dual">
+              <div class="b21-s218-ag-col">
+                <div class="b21-s218-ag-hdr s218-ec">ECDSA — 3 separate signatures</div>
+                <div class="b21-s218-ag-boxes">
+                  <div class="b21-s218-ag-box s218-ec-box s218-pending" id="b21-s218-ec-box-0"><div class="b21-s218-ag-box-top"><div class="b21-s218-ag-box-lbl">Signature TX 1 (Alice)</div><div class="b21-s218-ag-box-sz">71-72 bytes</div></div><div class="b21-s218-ag-box-val" id="b21-s218-ec-val-0">waiting...</div></div>
+                  <div class="b21-s218-ag-box s218-ec-box s218-pending" id="b21-s218-ec-box-1"><div class="b21-s218-ag-box-top"><div class="b21-s218-ag-box-lbl">Signature TX 2 (Carol)</div><div class="b21-s218-ag-box-sz">71-72 bytes</div></div><div class="b21-s218-ag-box-val" id="b21-s218-ec-val-1">waiting...</div></div>
+                  <div class="b21-s218-ag-box s218-ec-box s218-pending" id="b21-s218-ec-box-2"><div class="b21-s218-ag-box-top"><div class="b21-s218-ag-box-lbl">Signature TX 3 (Eve)</div><div class="b21-s218-ag-box-sz">71-72 bytes</div></div><div class="b21-s218-ag-box-val" id="b21-s218-ec-val-2">waiting...</div></div>
+                </div>
+              </div>
+              <div class="b21-s218-ag-col">
+                <div class="b21-s218-ag-hdr s218-sc">Schnorr + MuSig2 — aggregated into 1</div>
+                <div class="b21-s218-ag-boxes">
+                  <div class="b21-s218-ag-box s218-sc-box s218-pending" id="b21-s218-sc-box-0"><div class="b21-s218-ag-box-top"><div class="b21-s218-ag-box-lbl">Partial sig TX 1 (Alice)</div><div class="b21-s218-ag-box-sz">64 bytes</div></div><div class="b21-s218-ag-box-val" id="b21-s218-sc-val-0">waiting...</div></div>
+                  <div class="b21-s218-ag-box s218-sc-box s218-pending" id="b21-s218-sc-box-1"><div class="b21-s218-ag-box-top"><div class="b21-s218-ag-box-lbl">Partial sig TX 2 (Carol)</div><div class="b21-s218-ag-box-sz">64 bytes</div></div><div class="b21-s218-ag-box-val" id="b21-s218-sc-val-1">waiting...</div></div>
+                  <div class="b21-s218-ag-box s218-sc-box s218-pending" id="b21-s218-sc-box-2"><div class="b21-s218-ag-box-top"><div class="b21-s218-ag-box-lbl">Partial sig TX 3 (Eve)</div><div class="b21-s218-ag-box-sz">64 bytes</div></div><div class="b21-s218-ag-box-val" id="b21-s218-sc-val-2">waiting...</div></div>
+                </div>
+                <div id="b21-s218-agg-wrap" style="display:none;">
+                  <div class="b21-s218-agg-arrow">↓ agregasi MuSig2</div>
+                  <div class="b21-s218-agg-final" id="b21-s218-agg-final">
+                    <div class="b21-s218-agg-lbl">Aggregated Signature</div>
+                    <div class="b21-s218-agg-val" id="b21-s218-agg-val">—</div>
+                    <div class="b21-s218-agg-note">s_agg = s1 + s2 + s3 mod n · 1 signature 64 bytes · identical to single-sig</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="b21-s218-ag-totals" style="display:none;">
+              <div class="b21-s218-totals-grid">
+                <div class="b21-s218-total s218-ec-total"><div class="b21-s218-total-lbl">Total ECDSA — 3 TX</div><div class="b21-s218-total-val">213–216 bytes</div><div class="b21-s218-total-note">3 × 71-72 bytes + 3 × 33 bytes pubKey + 3 separate verifications. The observer knows there are 3 senders.</div></div>
+                <div class="b21-s218-total s218-sc-total"><div class="b21-s218-total-lbl">Total Schnorr MuSig2 — 3 TX</div><div class="b21-s218-total-val">64 bytes <span style="color:#0F6E56;font-size:11px;">~70% smaller</span></div><div class="b21-s218-total-note">1 × 64 bytes + 1 × 32 bytes pubKey + 1 verification. The observer can’t tell how many parties are involved.</div></div>
+              </div>
+            </div>
+            <div class="b21-s218-privacy" id="b21-s218-privacy">
+              <div class="b21-s218-privacy-lbl">What the observer sees on the blockchain:</div>
+              <div class="b21-s218-obs-ec" id="b21-s218-obs-ec">ECDSA: —</div>
+              <div class="b21-s218-obs-sc" id="b21-s218-obs-sc">Schnorr: —</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-21-7" data-sb="sb-21-7">
+            ← 21.7 — HD Wallet & Derivation Tree
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-21-9" data-sb="sb-21-9">
+            21.9 — Lightning TX Flow →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 21.8 -->
+
+      <!-- ==============================
+           SECTION 21.9 · Lightning Network TX Flow
+      ============================== -->
+      <div class="p-section" id="section-21-9">
+        <div class="p-eyebrow">Laboratory · Flows 9</div>
+        <div class="p-heading">Lightning pays without an on-chain transaction — a two-way channel updated off-chain, secured by an HTLC smart contract on Bitcoin</div>
+        <div class="p-title">Lightning Network — Channel, HTLC & Payment Flow</div>
+        <div class="p-divider"></div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Lightning TX Flow Simulator</div>
+          <div class="b21-s219-desc">
+            Choose a scenario, press Step or Auto, and follow the flow of a Lightning payment from invoice to settlement. Each hop shows the HTLC locked and unlocked, the change in channel balance, and what happens if there isn’t enough liquidity.
+          </div>
+
+          <div class="b21-s219-mode-btns" id="b21-s219-mode-btns"></div>
+
+          <div class="b21-s219-ctrl">
+            <button class="b21-s219-btn s219-primary" id="b21-s219-step-btn">&#9654; Step</button>
+            <button class="b21-s219-btn s219-primary" id="b21-s219-auto-btn">&#9889; Auto</button>
+            <button class="b21-s219-btn s219-secondary" id="b21-s219-reset-btn">Reset</button>
+            <span class="b21-s219-step-info" id="b21-s219-step-info">Press Step or Auto to begin</span>
+          </div>
+
+          <div class="b21-s219-network" id="b21-s219-network">
+            <svg id="b21-s219-svg" viewBox="0 0 640 180" xmlns="http://www.w3.org/2000/svg"></svg>
+          </div>
+
+          <div>
+            <div class="b21-s219-sec-lbl">Channel balance (blue = local, green = remote):</div>
+            <div id="b21-s219-channels"></div>
+          </div>
+
+          <div class="b21-s219-htlc-wrap">
+            <div class="b21-s219-sec-lbl">Active HTLC per hop:</div>
+            <div class="b21-s219-htlc-header">
+              <div class="b21-s219-htlc-hcell">Hop</div>
+              <div class="b21-s219-htlc-hcell">Amount</div>
+              <div class="b21-s219-htlc-hcell">Payment hash</div>
+              <div class="b21-s219-htlc-hcell">Status</div>
+            </div>
+            <div id="b21-s219-htlc-stack"></div>
+          </div>
+
+          <div id="b21-s219-steps-wrap"></div>
+
+          <div class="b21-s219-result" id="b21-s219-result"></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-21-8" data-sb="sb-21-8">
+            ← 21.8 — Schnorr vs ECDSA
+          </button>
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+        </div>
+      </div>
+
+      <div class="p-section" id="section-lab-c1">
+        <div class="p-body">
+          <div class="p-eyebrow">Laboratory · Primitive C1</div>
+          <div class="p-title">SHA-256, dissected from the inside</div>
+          <div class="p-divider"></div>
+          <p>Most SHA-256 tools take text and spit out a hash. That teaches nothing. Here we open the pot: how your message gets wrapped, split into 64 words, then stirred 64 times until no trace of the original remains.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Step 1 · Your message gets wrapped first</div>
+          <div class="sh-wrap">
+            <p class="sh-note">SHA-256 can only work on chunks of exactly 512 bits. A message whose length is not a multiple of that has to be wrapped first, and the wrapping is not simply padding with zeros.</p>
+            <input class="sh-in" id="lab-c1-msg" type="text" value="satoshi" aria-label="Message">
+            <div class="sh-sub" id="lab-c1-padinfo"></div>
+            <div class="sh-bytes" id="lab-c1-bytes"></div>
+            <div class="sh-legend">
+              <span><b style="background:#EEEDFE"></b>message</span>
+              <span><b style="background:#FAEEDA"></b>bit 1 (80)</span>
+              <span><b style="background:#F4F4F0"></b>padding</span>
+              <span><b style="background:#EAF3DE"></b>length</span>
+            </div>
+            <p class="sh-note">Three parts, and the order is mandatory. First the original message. Then a single 1 bit as a boundary marker, which appears as <b>80</b> in bytes. Then as many zeros as needed. Then the <b>final eight bytes</b> hold the original message length in bits. Those last eight bytes are what guarantee that two messages of different lengths can never produce the same block, even if their contents are similar.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Step 2 · 16 words bred into 64</div>
+          <div class="sh-wrap">
+            <p class="sh-note">One 512-bit block is read as 16 words of 32 bits each. But there are 64 stirring rounds, so those 16 words must first be multiplied into 64.</p>
+            <div class="sh-words" id="lab-c1-words"></div>
+            <div class="sh-sub" id="lab-c1-wordval"></div>
+            <p class="sh-note">Word 16 onward is not taken from the message. It is computed from <b>four earlier words</b>, two of which are rotated and shifted first. The effect compounds: word 63 already carries traces of nearly every word before it. This is the first reason a single flipped bit in the message can spread everywhere.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Step 3 · 64 rounds, but only two things change</div>
+          <div class="sh-wrap">
+            <p class="sh-note">This is the part where people usually give up. Eight registers named a through h, stirred 64 times. It looks complicated until you notice one thing.</p>
+            <div class="sh-ctl">
+              <span class="sh-round" id="lab-c1-rnum"></span>
+              <input class="sh-slider" id="lab-c1-slider" type="range" min="0" max="64" value="0">
+              <button class="sh-btn pri" id="lab-c1-play">Run</button>
+              <button class="sh-btn" id="lab-c1-next">Next round</button>
+              <button class="sh-btn" id="lab-c1-reset">Reset</button>
+            </div>
+            <div class="sh-regs" id="lab-c1-regs"></div>
+            <p class="sh-note">Watch the column as you step. <b>Six of the eight registers merely shift down</b>: b becomes c, c becomes d, and so on. Nothing is computed for them, they simply queue. The only ones genuinely computed are <b>a</b> and <b>e</b>. So SHA-256 is not 64 complicated operations, it is one simple operation repeated 64 times over a queue that keeps moving.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Step 4 · Why one bit brings it all down</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Now the part most often claimed and rarely shown. Two messages differing by a single bit, run side by side, counting how many bits differ at each round.</p>
+            <div class="sh-sub" id="lab-c1-avnum"></div>
+            <div class="sh-meter" id="lab-c1-av"></div>
+            <p class="sh-note">At round zero the number is zero, and that is not a miscount: the stirring has not begun, so all eight registers are still identical for both messages. What differs so far is <b>a single bit in the message</b>. Now advance the rounds. Within three rounds the difference has already passed a quarter, and around round twelve it reaches <b>half</b> and stays there to the end. Half is exactly the number we want, because it means the output is indistinguishable from random. That one bit did not spread gradually. It detonated.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Where do the magic numbers come from?</div>
+          <div class="sh-wrap">
+            <div class="sh-sub">Final result</div>
+            <div class="sh-hash" id="lab-c1-hash"></div>
+            <div class="sh-ok" id="lab-c1-ok"></div>
+            <p class="sh-note">SHA-256 uses eight initial values and 64 constants. Those numbers were not chosen by anyone. The eight initial values are the fractional parts of the <b>square roots of the first eight primes</b>, and the 64 constants come from the <b>cube roots of the first 64 primes</b>. This is called nothing up my sleeve: anyone can recompute them and confirm no back door is hidden inside the numbers.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section" id="section-lab-c2">
+        <div class="p-body">
+          <div class="p-eyebrow">Laboratory · Primitive C2</div>
+          <div class="p-title">secp256k1, dissected from zero</div>
+          <div class="p-divider"></div>
+          <p>The formula is one line: P = k × G. But inside it sit clock arithmetic, a curve with finitely many points, and an addition that is not ordinary addition. We take it apart in order, and every number here can be checked on a calculator.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Step 1 · Before anything: what mod means</div>
+          <div class="sh-wrap">
+            <p class="sh-note">All arithmetic on Bitcoin’s curve wraps modulo a prime. If that term is unfamiliar, everything after it will feel like magic. So we start here.</p>
+            <div class="sh-ctl">
+              <span class="sh-round">Number</span>
+              <input class="sh-slider" id="lab-c2-num" type="range" min="0" max="60" value="36">
+            </div>
+            <div class="ec-clock" id="lab-c2-clock"></div>
+            <dl class="ec-kv" id="lab-c2-modout"></dl>
+            <p class="sh-note">Mod is the remainder, nothing more. Picture a clock with only 17 numbers, 0 through 16. Count to 17 and you are back at 0. Count to 36 and you go round twice, stopping at <b>2</b>. That is what 36 mod 17 = 2 means. The whole Bitcoin curve rests on an idea this simple, except its clock has about 10⁷⁷ numbers on it.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Step 2 · Check for yourself whether a point is on the curve</div>
+          <div class="sh-wrap">
+            <p class="sh-note">The curve has one equation: y² = x³ + 7. A point lies on it when both sides come out equal after wrapping mod 17. Do not take my word for it, compute it.</p>
+            <div class="ec-two">
+              <label><span class="sh-sub">x coordinate</span>
+                <input class="sh-slider" id="lab-c2-tx" type="range" min="0" max="16" value="6"></label>
+              <label><span class="sh-sub">y coordinate</span>
+                <input class="sh-slider" id="lab-c2-ty" type="range" min="0" max="16" value="6"></label>
+            </div>
+            <div class="ec-eq" id="lab-c2-check"></div>
+            <div class="ec-verdict" id="lab-c2-cverdict"></div>
+            <div class="ec-grid" id="lab-c2-grid"></div>
+            <p class="sh-note">Move to a point that is <b>not</b> a member and watch the two sides disagree. This is the only membership condition. There is no secret list and no authority deciding: a point is on the curve if and only if the equation holds. Out of 289 possible coordinate pairs, only <b>17</b> pass.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Step 3 · The ladder: this is what k × G means</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Now the heart of it. P = k × G is <b>not ordinary multiplication</b>. It means adding the point G to itself k times. Climb rung by rung, with the addition formula shown using the numbers currently in play.</p>
+            <div class="sh-ctl">
+              <span class="sh-round" id="lab-c2-rung"></span>
+              <button class="sh-btn pri" id="lab-c2-step">Step +1</button>
+              <button class="sh-btn" id="lab-c2-auto">Run on its own</button>
+              <button class="sh-btn" id="lab-c2-back">Back to G</button>
+            </div>
+            <div class="ec-eq" id="lab-c2-eq"></div>
+            <div class="sh-sub" id="lab-c2-wrap"></div>
+            <p class="sh-note">Notice that point addition has its own formula, and it differs depending on whether the two points are the same. What gets computed first is always the <b>slope of the line</b>, λ. Once λ is known, the resulting coordinates follow from the last two lines. These are the exact formulas secp256k1 uses, only the numbers here are small. Notice too that the result <b>always lands back on the curve</b>, never outside it.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Step 4 · That ladder is too slow</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Climbing rung by rung is fine for k = 17. For a k the size of Bitcoin’s, that ladder needs more steps than there are atoms in the universe. So a shortcut is used.</p>
+            <div class="sh-ctl">
+              <span class="sh-round" id="lab-c2-kval"></span>
+              <input class="sh-slider" id="lab-c2-k" type="range" min="1" max="17" value="5">
+            </div>
+            <div class="sh-sub">k in binary</div>
+            <div class="ec-bits" id="lab-c2-bits"></div>
+            <div class="ec-trace" id="lab-c2-trace"></div>
+            <dl class="ec-kv" id="lab-c2-fastout"></dl>
+            <p class="sh-note">The trick reads k in binary. Each bit means one <b>doubling</b>, and every bit set to 1 means one extra <b>addition</b>. The answer is identical to climbing the ladder, but the step count is not k, it is roughly twice the number of bits. For a 256-bit k that is about 384 steps, done in a fraction of a second.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Step 5 · So why is this called a key?</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Every ingredient is on the table. The chain now reads as a single sentence.</p>
+            <dl class="ec-kv" id="lab-c2-key"></dl>
+            <div class="ec-fmt" id="lab-c2-fmt"></div>
+            <p class="sh-note" id="lab-c2-parity"></p>
+            <div class="sh-sub">Finding k from P by testing one at a time</div>
+            <div class="ec-cmp" id="lab-c2-brute"></div>
+            <p class="sh-note">It goes like this. <b>k is your private key</b>, one number only you know. <b>P is the public key</b>, the result of climbing the ladder k rungs, and anyone may see it. Computing forward from k to P is easy, and you just did it. Computing backward from P to k demands trying one at a time. On this toy curve, 17 attempts, which is exactly why this curve secures nothing. On secp256k1 the figure runs to <b>78 digits</b>. Out of that asymmetry comes the ability to prove you know k without ever saying it, which is what C3 dissects.</p>
+            <div class="sh-sub">The real secp256k1 numbers</div>
+            <dl class="ec-kv">
+              <dt>p</dt><dd>2^256 - 2^32 - 977</dd>
+              <dt>a, b</dt><dd>0, 7</dd>
+              <dt>Gx</dt><dd>79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798</dd>
+              <dt>n</dt><dd>fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141</dd>
+            </dl>
+            <p class="sh-note">Everything you just did applies identically here. Only the size of the numbers changes, and that alone is why what you just reversed with ease becomes impossible to reverse.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section" id="section-lab-c3">
+        <div class="p-body">
+          <div class="p-eyebrow">Laboratory · Primitive C3</div>
+          <div class="p-title">Signatures, dissected from the inside</div>
+          <div class="p-divider"></div>
+          <p>In 4.3 you signed and verified. But what is actually inside a signature? Two numbers, r and s. Here we compute both by hand on the same toy curve from C2, then use them to pull a private key out of its owner. The curve is slightly larger than in C2 (modulo 43 rather than 17) because ECDSA requires the number of points to be prime.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Step 1 · Two numbers, and where they come from</div>
+          <div class="sh-wrap">
+            <p class="sh-note">An ECDSA signature is not a mysterious object. It is a pair of numbers. The first, r, comes from a random point on the curve. The second, s, binds that random point to your message and your private key.</p>
+            <div class="sg-form">
+              <div class="sg-f"><label>Private key d</label>
+                <input id="lab-c3-d" type="number" min="1" max="30" value="7"></div>
+              <div class="sg-f"><label>Nonce k</label>
+                <input id="lab-c3-k" type="number" min="1" max="30" value="5"></div>
+              <div class="sg-f" style="grid-column:1/-1"><label>First message</label>
+                <input id="lab-c3-msg" type="text" value="bayar alice"></div>
+            </div>
+            <div class="sg-steps" id="lab-c3-sign"></div>
+            <p class="sh-note">Notice that <b>k is never sent</b>. It is used and discarded. The public key is not inside the signature either. All that travels is two numbers, and from those two numbers anyone can verify without ever learning the private key.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Step 2 · Verification, and why it lines up</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Verification does not reverse the computation above. It takes a different route that, if every number is right, ends at the same point.</p>
+            <div class="sg-steps" id="lab-c3-verify"></div>
+            <div class="sg-verdict" id="lab-c3-verdict"></div>
+            <p class="sh-note">What gets compared is the <b>x coordinate of the resulting point</b> against the r that was sent. If they match, the signature holds. No step requires the private key, and no step leaks it. This is the asymmetry underneath all Bitcoin ownership: creating demands the secret, checking does not.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Step 3 · Reuse k, and it all falls apart</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Now the part 4.3 could only warn about. We sign two different messages with the same k, then compute the private key from those two signatures. Not guessed. Computed.</p>
+            <div class="sg-form">
+              <div class="sg-f"><label>Private key d</label>
+                <input id="lab-c3-ad" type="number" min="1" max="30" value="11"></div>
+              <div class="sg-f"><label>Nonce k</label>
+                <input id="lab-c3-ak" type="number" min="1" max="30" value="4"></div>
+              <div class="sg-f"><label>First message</label>
+                <input id="lab-c3-m1" type="text" value="bayar alice"></div>
+              <div class="sg-f"><label>Second message</label>
+                <input id="lab-c3-m2" type="text" value="bayar mallory"></div>
+              <div class="sg-f" style="grid-column:1/-1">
+                <label><input id="lab-c3-reuse" type="checkbox" checked style="width:auto;margin-right:7px">Reuse k for both messages</label></div>
+            </div>
+            <div class="sg-steps" id="lab-c3-attack"></div>
+            <div class="sg-verdict" id="lab-c3-averdict"></div>
+            <p class="sh-note">Follow the chain. Because k is the same, <b>r is the same too</b>, and that is the tell anyone can spot on the blockchain. From there k is recovered through the difference, and once k is known the private key is one algebraic step away. No guessing anywhere. This is why modern wallets no longer randomise k but derive it deterministically from the private key and the message, as noted in 4.3.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Step 4 · Schnorr, and why it is tidier</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Schnorr uses the same ingredients arranged differently. The change looks trivial in the formula, but its consequence is large.</p>
+            <div class="sg-cmp">
+              <div class="sg-col"><h5>ECDSA</h5>
+                <code>R = k×G</code>
+                <code>r = x(R)</code>
+                <code>s = (z + r·d) <em>/ k</em></code>
+              </div>
+              <div class="sg-col"><h5>Schnorr</h5>
+                <code>R = k×G</code>
+                <code>e = hash(R, Q, z)</code>
+                <code>s = k <b>+</b> e·d</code>
+              </div>
+            </div>
+            <p class="sh-note">In ECDSA, s contains a <b>division</b> by k. That division is what makes the formula non-linear, and that non-linearity is what blocks combining signatures. Schnorr replaces it with plain addition. Because everything is linear, two Schnorr signatures can be added into one that is still valid. That is the basis of the key aggregation you saw in 4.4, and the reason lives in this single operation.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section" id="section-lab-c4">
+        <div class="p-body">
+          <div class="p-eyebrow">Laboratory · Primitive C4</div>
+          <div class="p-title">BIP32: one seed, millions of keys</div>
+          <div class="p-divider"></div>
+          <p>Modern wallets do not store thousands of private keys. They store one seed and derive the rest on demand. Here the whole chain is computed for real and checked against the official BIP32 test vectors. At the end sits a demonstration of why that little apostrophe in a derivation path is not decoration.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 1 · From seed to master key</div>
+          <div class="sh-wrap">
+            <p class="sh-note">The seed from BIP39 goes into HMAC-SHA512, and the 64-byte result is split exactly down the middle.</p>
+            <div class="hd-flow" id="c4-master"></div>
+            <p class="sh-note">Note the split. The left half becomes the <b>master private key</b>, the right half the <b>chain code</b>. A chain code is not a key and cannot spend anything, but it is required to derive children. Which is why leaking a chain code together with one public key is already dangerous, as part four will show.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 2 · Deriving a single child</div>
+          <div class="sh-wrap">
+            <p class="sh-note">A child is derived by feeding the chain code, the parent key, and an index back into HMAC-SHA512. Move the index and watch what changes.</p>
+            <div class="sh-ctl">
+              <span class="sh-round" id="c4-idxv"></span>
+              <input class="sh-slider" id="c4-idx" type="range" min="0" max="9" value="0">
+            </div>
+            <div class="hd-flow" id="c4-child"></div>
+            <p class="sh-note">The crux is the last line: <b>the child key equals IL plus the parent key</b>, added modulo n. That addition is what makes the whole system work, and it is also the weakness. Note too that each child gets its own chain code, so derivation can continue to grandchildren and beyond without limit.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 3 · Hardened: one small difference in the input</div>
+          <div class="sh-wrap">
+            <p class="sh-note">There are two ways to derive a child, and the difference is only in what goes into the HMAC. Compare the input rows in the two columns.</p>
+            <div class="hd-two">
+              <div class="hd-col"><h6>Ordinary (non-hardened)</h6>
+                <dl><dt>What goes into the HMAC</dt><dd>public key induk ‖ nomor</dd>
+                <dt>Derivable from an xpub?</dt><dd class="yes">Yes</dd></dl></div>
+              <div class="hd-col h"><h6>Hardened (index ≥ 2³¹)</h6>
+                <dl><dt>What goes into the HMAC</dt><dd>0x00 ‖ private key induk ‖ nomor</dd>
+                <dt>Derivable from an xpub?</dt><dd class="no">No</dd></dl></div>
+            </div>
+            <p class="sh-note">The ordinary form feeds in the <b>parent public key</b>, while the hardened form feeds in the <b>parent private key</b>. The consequence is large. Because the hardened form needs the private key, it <b>cannot be derived from an xpub</b>. That sounds like a limitation, but it is precisely the point, and the next part shows why.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 4 · Why hardened has to exist</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Now the demonstration. Suppose someone holds your xpub, perhaps because you gave it to an accountant so they could watch the balance. Then one non-hardened child private key leaks. Press the button.</p>
+            <div class="sh-ctl"><button class="sh-btn pri" id="c4-leak"></button></div>
+            <div class="hd-atk" id="c4-atk"></div>
+            <div class="hd-verd" id="c4-verd"></div>
+            <p class="sh-note">Look at what just happened. Because the child key equals IL plus the parent key, and <b>IL can be computed by anyone holding the xpub</b>, the parent key is simply a subtraction away: <b>parent = child minus IL</b>. One leaked child key brings down the entire wallet, including every other branch that never leaked. Against hardened derivation this attack is impossible, because its IL requires the very parent private key being hunted. That is why a path like m/84h/0h/0h uses apostrophes on its first three levels.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Reading a derivation path</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Now a path like <b>m/84h/0h/0h/0/0</b> can be read. <b>m</b> is the master key from the seed. <b>84h</b> marks the address standard in use, here bc1q as in 6.4. The next <b>0h</b> marks Bitcoin rather than another coin. The third <b>0h</b> is the account number. All three of those are hardened, and now you know why. The last two carry no apostrophe: <b>0</b> means the receiving branch, and the final number is the address index. Both are deliberately non-hardened so that a single xpub can watch balances without being able to spend, as discussed in 2.3.</p>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="p-section" id="section-lab-c5">
+        <div class="p-body">
+          <div class="p-eyebrow">Laboratory · Primitive C5</div>
+          <div class="p-title">BIP39: from random bits to twelve words</div>
+          <div class="p-divider"></div>
+          <p>A seed phrase looks like a list of English words picked at random. In fact no word is picked at all. Every one of them comes from re-reading a string of bits, eleven bits per word, and one of those bit groups is not randomness but a checksum. Everything on this page is computed for real.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 1 · It all starts from random bits</div>
+          <div class="sh-wrap">
+            <p class="sh-note">What a wallet produces first is not words but a run of random bits. For a 12-word seed phrase, that run is 128 bits long.</p>
+            <div class="sh-ctl">
+              <button class="sh-btn pri" id="c5-gen">Regenerate</button>
+              <select class="dc-in" id="c5-size" style="width:auto">
+                <option value="16">12 words (128 bits)</option>
+                <option value="32">24 words (256 bits)</option>
+              </select>
+            </div>
+            <dl class="dc-kv" id="c5-ent"></dl>
+            <div class="b9-bits" id="c5-bits"></div>
+            <p class="sh-note">Notice these 128 bits are <b>not the result of any computation</b>. They are pure randomness, exactly as covered in 2.4. Everything that follows only changes how they are read; nothing new is added.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 2 · The checksum: four bits from SHA-256</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Before being cut into words, the bit string gets a checksum appended. Its source is the hash function you already dissected in C1.</p>
+            <dl class="dc-kv" id="c5-chk"></dl>
+            <p class="sh-note">The rule is simple: <b>the checksum length equals the entropy length divided by 32</b>. For 128 bits of entropy that means 4 checksum bits; for 256 bits, 8. Those bits are taken from the <b>very front</b> of the SHA-256 output and the rest discarded. Once appended the total becomes 132 bits, and that number matters: 132 divides evenly by 11.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 3 · Cut eleven bits, get a word</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Now those 132 bits are cut into twelve groups of eleven bits each. Each group is read as a number, and that number is an index into the official word list.</p>
+            <div class="dc-scroll">
+              <table class="b9-tab">
+                <thead><tr><th>Index</th><th>Eleven bits</th>
+                  <th>#</th><th>Word</th></tr></thead>
+                <tbody id="c5-tab"></tbody>
+              </table>
+            </div>
+            <p class="sh-note">Why eleven bits? Because <b>two to the eleventh is 2048</b>, and the BIP39 word list holds exactly 2048 words. Not a coincidence; it was designed that way. Note the final group too: some of its bits come from the entropy and some from the checksum. So the last word is <b>not fully random</b>, and that is what makes typos catchable.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 4 · Change one word and see what happens</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Because the last word carries the checksum, altering any word usually makes the whole phrase invalid. Try it.</p>
+            <div class="b9-words" id="c5-words"></div>
+            <div class="sh-ctl">
+              <span class="sh-sub">Word number</span>
+              <select class="dc-in" id="c5-pos" style="width:auto"></select>
+              <button class="sh-btn pri" id="c5-swap">Changed to</button>
+              <button class="sh-btn" id="c5-restore">Regenerate</button>
+            </div>
+            <div class="ec-verdict" id="c5-verd"></div>
+            <p class="sh-note">The chance that a random change happens to remain valid is only about <b>one in sixteen</b> for a 12-word seed, because its checksum is four bits. Small, but not zero, so the BIP39 checksum is a safety net against typos, <b>not</b> an absolute guarantee. For a 24-word seed the checksum is eight bits, dropping the odds to one in 256. And a small useful detail: <b>the first four letters of every word on the list are unique</b>, so typing four letters is actually enough.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">One thing worth correcting</div>
+          <div class="sh-wrap">
+            <p class="sh-note">A seed phrase is often described as a "translation" of the private key. That is backwards. What comes first is the <b>entropy</b>, and from it both the seed phrase and the private key are derived, as already corrected in 2.4. Nor are the words an encryption of a secret: anyone who knows those twelve words can recompute your entire wallet, because the word list is public and so are the rules. The words are not a locked key. They are simply a way of writing bits down that a human can copy without error.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section" id="section-lab-c6">
+        <div class="p-body">
+          <div class="p-eyebrow">Laboratory · Primitive C6</div>
+          <div class="p-title">The Taproot tweak: binding rules into a point</div>
+          <div class="p-divider"></div>
+          <p>Chapter 6.6 explains that Taproot has two spending paths but never shows how both can live inside the same point. The answer is a single addition, and one algebraic identity that makes it all work. The curve is the same as in C2, so every number is checkable.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 1 · The internal key, before anything is done to it</div>
+          <div class="sh-wrap">
+            <p class="sh-note">It all starts from an ordinary key pair, exactly as in C2. There is no Taproot here yet.</p>
+            <div class="sh-ctl">
+              <span class="sh-round" id="c6-dval"></span>
+              <input class="sh-slider" id="c6-d" type="range" min="1" max="17" value="7">
+            </div>
+            <div class="tw-flow" id="c6-int"></div>
+            <p class="sh-note">This point P is called the <b>internal key</b>. If we stopped here it would just be a normal public key. What makes it Taproot is the next step.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 2 · The tweak: attaching a script tree</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Now the backup spending rules, in the form of a merkle root over a script tree, are attached to that key. Not stored beside it, but fused into it.</p>
+            <div class="sh-ctl">
+              <select class="dc-in" id="c6-root" style="width:auto">
+                <option value="aabb">merkle root: aabb</option>
+                <option value="1234cd">merkle root: 1234cd</option>
+                <option value="">(no script tree)</option>
+              </select>
+            </div>
+            <div class="tw-flow" id="c6-tw"></div>
+            <p class="sh-note">Note the order. The number <b>t</b> is computed by hashing P together with the merkle root, so it is bound to both at once: change the script and t changes; change the key and t changes too. Then <b>Q = P + t×G</b>, and Q is what appears on the blockchain as a bc1p address. Note too that the merkle root is <b>nowhere visible</b> in Q. All that is recorded is a single point, and from that point nobody can guess what rules sit behind it, or even whether any rules exist at all.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 3 · The identity that makes it all work</div>
+          <div class="sh-wrap">
+            <p class="sh-note">There is one property, easy to miss, that carries the entire Taproot design. We compute two different routes and compare the results.</p>
+            <div class="tw-two" id="c6-two"></div>
+            <div class="sh-sub" id="c6-dt"></div>
+            <div class="tw-eq" id="c6-eq"></div>
+            <p class="sh-note">Both routes always end at the same point, and that is no accident. Since P equals d×G, it follows that <b>P + t×G equals (d+t)×G</b>. Which means the key owner needs no special treatment at all: they simply sign using <b>d + t</b> as their new private key, and the signature will be valid against Q. No script is executed, no tree is opened, no proof is attached. This is the key path spend.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 4 · Two paths, one point</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Now the comparison that 6.6 describes in words, shown here through what the transaction actually contains.</p>
+            <div class="tw-path">
+              <div class="tw-card k"><h6>Key path</h6>
+                <p>Signature only</p><div class="sz">~64 byte</div>
+                <p style="margin-top:6px">Looks like an ordinary payment</p></div>
+              <div class="tw-card s"><h6>Script path</h6>
+                <p>Script + merkle proof + signature</p><div class="sz">ratusan byte</div>
+                <p style="margin-top:6px">The rule used becomes publicly visible</p></div>
+            </div>
+            <p class="sh-note">The size difference is not merely a cost saving. Because a key path spend contains only one signature, it looks <b>exactly like</b> an ordinary payment from any Taproot address. An observer cannot tell whether a script tree holding multisig or timelocks sits behind that key, or nothing at all. The complex rules still exist and remain usable, but as long as everyone cooperates they never touch the blockchain. This is why Taproot is called a privacy gain, not just a size one.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">An honest note about this toy curve</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Everything on this page uses modulo 17 with order 18 so the numbers stay followable. Two things differ on real secp256k1. First, <b>t is computed with a tagged hash</b>, a SHA-256 prefixed twice with the marker "TapTweak", so that hashes for different purposes can never be confused. Second, its order is an enormous prime, making the d+t equals zero case that occasionally appears here practically impossible. Otherwise the formulas and the flow are identical.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section" id="section-lab-c7">
+        <div class="p-body">
+          <div class="p-eyebrow">Laboratory · Primitive C7</div>
+          <div class="p-title">Merkle: the odd rule and the flaw it produced</div>
+          <div class="p-divider"></div>
+          <p>This book already has two Merkle demonstrations, in 4.5 and 17.2. What neither has ever mentioned: what happens when a level turns out to hold an odd number of nodes. The answer is one simple rule, and that rule once produced a real flaw that came close to halting the network.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 1 · When the count is odd</div>
+          <div class="sh-wrap">
+            <p class="sh-note">A Merkle tree pairs nodes two at a time. But the number of transactions in a block is not always even. Move the count and watch the odd levels.</p>
+            <div class="sh-ctl">
+              <span class="sh-round" id="c7-nv"></span>
+              <input class="sh-slider" id="c7-n" type="range" min="2" max="11" value="3">
+            </div>
+            <div class="mk-tree" id="c7-tree"></div>
+            <p class="sh-note">The rule: when a level holds an odd count, the <b>last node is duplicated</b> and paired with itself. Not padded with zeros, not carried up alone. Duplicated. It is a design decision that looks reasonable and harmless, and for three years it was.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 2 · The flaw that rule produced</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Look carefully. If the last node is duplicated, then a list of three items is treated exactly like a list of four whose final two are twins.</p>
+            <div class="mk-two" id="c7-cve"></div>
+            <div class="mk-verd" id="c7-verd"></div>
+            <p class="sh-note">Two <b>different</b> transaction lists produce an <b>identical</b> merkle root. This is not a hash collision; SHA-256 is not broken in the slightest. What is flawed is the tree construction rule. It is catalogued as <b>CVE-2012-2459</b>, and its consequence was dangerous: an attacker could take a valid block, duplicate its final transaction, and broadcast that forgery. A node receiving it would reject it, because duplicated transactions are plainly invalid, but since the merkle root matched the real one, the node would <b>mark the genuine block as permanently invalid</b> and refuse the correct version. The network could split without a single hash being broken.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 3 · How it was patched</div>
+          <div class="sh-wrap">
+            <div class="mk-fix">
+              <div class="a"><h6>Before the patch</h6><p>A block with duplicated transactions is accepted, then rejected for invalid contents</p></div>
+              <div class="b"><h6>After the patch</h6><p>A block with duplicated transactions is rejected first, before the root is computed</p></div>
+            </div>
+            <p class="sh-note">The patch did not change how the tree is built, because that would have been a hard fork invalidating every old block. What was done is simpler: nodes now <b>reject any block containing exactly duplicated transactions</b>, before the merkle root is ever computed. The flaw still sits inside the tree design, but the road to it is closed. This is the same pattern as CVE-2018-17144 in 14.1: when a consensus rule cannot be changed, what changes is what gets accepted before that rule runs. And as with that incident, the lesson is not about the cryptography but about <b>assumptions nobody wrote down</b>. Nobody ever wrote that two different lists must yield different roots. It was simply taken for granted.</p>
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <div class="p-section" id="section-lab-d1">
+        <div class="p-body">
+          <div class="p-eyebrow">Laboratory · Calculator D1</div>
+          <div class="p-title">Halving and DCA, worked out yourself</div>
+          <div class="p-divider"></div>
+          <p>The previous three groups answer how Bitcoin works. This one answers a different question: what it means for someone holding it. Everything on this page is pure arithmetic, no price data is fetched from anywhere, and nothing here forecasts.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 1 · Thinking in satoshis</div>
+          <div class="sh-wrap">
+            <p class="sh-note">One bitcoin splits into 100 million satoshis. That number feels large until you set it beside the number of people.</p>
+            <div class="dc-row">
+              <label><span>Amount (BTC)</span>
+                <input class="dc-in" id="d1-amt" type="number" step="0.001" min="0" value="0.01"></label>
+              <label><span>World population (billions)</span>
+                <input class="dc-in" id="d1-pop" type="number" step="0.1" min="0.1" value="8"></label>
+            </div>
+            <dl class="dc-kv" id="d1-sats"></dl>
+            <p class="sh-note">Look at the last figure. If all 21 million bitcoin were split evenly among everyone on earth, each person would get roughly <b>262 thousand satoshis</b>, or 0.0026 BTC. That is the ceiling, and it assumes none were ever lost. Millions already are, as covered in 11.2. Thinking in satoshis turns the question from "how many bitcoin can I own" into "what share of what will ever exist".</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 2 · Issuance rate, and what each halving changes</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Roughly every four years, the new bitcoin per block is cut in half. What people rarely work out is the effect on the daily rate.</p>
+            <div class="dc-scroll">
+              <table class="dc-tab">
+                <thead><tr>
+                  <th>Halving era</th><th class="num">Reward per block</th>
+                  <th class="num">New bitcoin per day</th><th class="num">Approximate year</th>
+                  <th class="num">Total in circulation</th><th class="num">Left to be mined</th>
+                </tr></thead>
+                <tbody id="d1-halv"></tbody>
+              </table>
+            </div>
+            <div class="sh-sub">144 blocks per day, on average</div>
+            <p class="sh-note">That daily figure is the one seldom mentioned. At every halving, the amount of new bitcoin entering the world each day is halved, and it happens in a single block, not gradually. Look at the last column too: as time passes, less and less remains to be mined. This whole schedule was fixed in 2009 and depends on nothing, price included.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 3 · The mechanics of DCA, not its promise</div>
+          <div class="sh-wrap">
+            <p class="sh-note">DCA means buying the same amount of money regularly, whatever the price. What is interesting is not the outcome but the mechanism, and that can be worked out without knowing any future price.</p>
+            <div class="dc-row">
+              <label><span>Buy each period</span>
+                <input class="dc-in" id="d1-buy" type="number" step="10" min="1" value="100"></label>
+              <label><span>Price pattern</span>
+                <div class="dc-seg" id="d1-seg">
+                  <button data-p="rise">Rising</button>
+                  <button data-p="fall">Falling</button>
+                  <button data-p="vol" class="on">Volatile</button>
+                  <button data-p="flat">Flat</button>
+                </div></label>
+            </div>
+            <div class="dc-bars" id="d1-bars"></div>
+            <div class="dc-scroll">
+              <table class="dc-tab">
+                <thead><tr><th>Period</th><th class="num">Price</th>
+                  <th class="num">Satoshis received</th></tr></thead>
+                <tbody id="d1-dca"></tbody>
+              </table>
+            </div>
+            <div class="dc-cmp" id="d1-dcaout"></div>
+            <p class="sh-note">This is the entire mechanism: because the money amount is fixed, a lower price automatically buys more satoshis. So your average purchase price is always <b>lower than or equal to</b> the average price over the period, never higher. That is a mathematical property, not a forecast. What nobody promises: whether the price rises at all. DCA reduces the risk of bad timing; it does not remove price risk.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 4 · Why your average is always lower</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Part 3 showed the numbers. This part shows why it is not a coincidence, and why it holds for any price pattern.</p>
+            <dl class="dc-kv" id="d1-mean"></dl>
+            <div class="sh-sub" id="d1-meannote"></div>
+            <p class="sh-note">Your average purchase price is total money divided by total satoshis, which is the <b>harmonic mean</b>. The market average is the ordinary mean of each period’s price. In mathematics, the harmonic mean is <b>never greater</b> than the ordinary mean, and the two are equal only when every price is identical. That is why the difference column above is never negative, whatever pattern you choose. Try the flat pattern and watch it drop to zero.</p>
+            <div class="dc-disc">This page is a calculator, not financial advice. It does not forecast prices, does not recommend buying, and knows nothing about market conditions. Every number here comes from what you enter.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section" id="section-lab-d2">
+        <div class="p-body">
+          <div class="p-eyebrow">Laboratory · Calculator D2</div>
+          <div class="p-title">Address type distribution, and two contradictory stories</div>
+          <div class="p-divider"></div>
+          <p>Chapter 6 taught five address types and how they work. What it never answered: which ones the world actually uses. The answer turns out to depend on how you count, and the two ways of counting lead to opposite conclusions.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 1 · Counting by UTXO</div>
+          <div class="sh-wrap">
+            <p class="sh-note">The usual way to measure the distribution is to count how many UTXOs exist of each type. Here is the result.</p>
+            <div class="sh-sub">Share of UTXO count</div>
+            <div class="ad-bars" id="d2-bars"></div>
+            <div class="ad-snap">Snapshot from the mempool.space UTXO set report at block 892,385, plus observations of 2026 transaction activity. These figures move. They are placed here as a dated portrait, not live data.</div>
+            <p class="sh-note">First surprise: <b>Taproot leads</b>, despite being the newest and only active since 2021. P2PKH, present since the genesis block, sits second. And P2PK, the earliest format, the one Satoshi himself used, has practically vanished at 0.03 percent. But hold off on concluding anything, because this way of counting hides something.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 2 · Counting by value, the order reverses</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Now count differently: how much bitcoin actually sits in each type. Two figures below are enough to demolish the conclusion above.</p>
+            <div class="dc-scroll">
+              <table class="ad-tab">
+                <thead><tr><th>Type</th><th class="num">Count share</th>
+                  <th class="num">Value share</th><th class="num">Value per UTXO, relative</th></tr></thead>
+                <tbody>
+                  <tr class="hi"><td>P2TR</td><td class="num">34,2%</td>
+                    <td class="num">0,75%</td><td class="num">1&times;</td></tr>
+                  <tr class="warn"><td>P2PK</td><td class="num">0,03%</td>
+                    <td class="num">8,7%</td><td class="num">≈ 13.200&times;</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="sh-note">Look at those two rows carefully. <b>Taproot holds a third of all UTXOs but under one percent of the value.</b> And <b>P2PK holds three ten-thousandths of the UTXOs but nearly a tenth of all value.</b> Divide it out: one average P2PK UTXO carries roughly <b>13 thousand times</b> more bitcoin than one Taproot UTXO. Both anomalies have their own cause, and both are interesting.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 3 · Why Taproot is numerous yet nearly empty</div>
+          <div class="sh-wrap">
+            <p class="sh-note">The answer is not about wallet adoption. It is about what is being stored there.</p>
+            <div class="ad-stat">
+              <div class="ad-card"><div class="ad-card-t">Inscription-related UTXOs</div>
+                <div class="ad-card-v">51,2 juta</div></div>
+              <div class="ad-card"><div class="ad-card-t">Of the entire UTXO set</div>
+                <div class="ad-card-v">29,6%</div></div>
+              <div class="ad-card warn"><div class="ad-card-t">Their total value</div>
+                <div class="ad-card-v">415 BTC</div></div>
+            </div>
+            <div class="sh-sub">Average per UTXO: 811 satoshi</div>
+            <p class="sh-note">Nearly <b>30 percent of all Bitcoin UTXOs</b> relate to inscriptions, most of them using Taproot. Yet all 51 million of those UTXOs together hold only about <b>415 BTC</b>, averaging 811 satoshis each. That is dust. So the 34 percent figure is not a sign that Taproot won as a payment format, but a sign that it is being used for something else. Whether that is legitimate use we present both sides of in 9.6. What is not disputed: the UTXO set grew considerably because of it, and every node must store it, as discussed in 10.1.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 4 · Why P2PK is scarce yet heavy</div>
+          <div class="sh-wrap">
+            <p class="sh-note">This one runs the other way: very few of them, holding an enormous amount of value.</p>
+            <p class="sh-note">P2PK is the earliest format, used for mining rewards in the first years, including Satoshi’s own. Almost all of them have <b>never been spent since creation</b>, and most are presumed lost forever, as covered in 11.2. But something else makes them significant, and it connects to 4.6: P2PK places the <b>raw public key directly in the output</b>, never hidden behind a hash. Which means all of that value has been exposed since day one, and nobody can move it if the keys really are gone.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 5 · Why the old formats will not go away</div>
+          <div class="sh-wrap">
+            <div class="dc-scroll">
+              <table class="ad-tab">
+                <thead><tr><th>Type</th><th class="num">Count share</th>
+                  <th class="num">Introduced</th></tr></thead>
+                <tbody><tr><td>P2TR</td><td class="num">34.2%</td><td class="num">Introduced 2021</td></tr><tr><td>P2PKH</td><td class="num">28.8%</td><td class="num">Introduced 2009</td></tr><tr><td>P2WPKH</td><td class="num">26.5%</td><td class="num">Introduced 2017</td></tr><tr><td>P2SH + P2WSH + dll</td><td class="num">10.5%</td><td class="num">Introduced 2012</td></tr><tr><td>P2PK</td><td class="num">0.03%</td><td class="num">Introduced 2009</td></tr></tbody>
+              </table>
+            </div>
+            <p class="sh-note">A fair question: if newer formats are cheaper and more private, why does P2PKH from 2009 still hold nearly a third of all UTXOs? Three reasons. First, <b>old UTXOs do not migrate on their own</b>: they only change type when their owner spends them, and many have never moved. Second, some older services have not upgraded. Third, sending to a newer format requires the <b>counterparty</b> to support it too, and that is a change needing both sides. So the chart above is not a photograph of what people choose today. It is sediment from fifteen years of decisions piling on each other.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section" id="section-lab-f1">
+        <div class="p-body">
+          <div class="p-eyebrow">Laboratory · Format F1</div>
+          <div class="p-title">Transaction serialization, byte by byte</div>
+          <div class="p-divider"></div>
+          <p>A Bitcoin transaction travelling the network is not an object, not JSON, and not a table. It is a sequence of bytes in a fixed order. Here we dissect one whole transaction, then use it to answer something the book has only alluded to: why SegWit put an end to malleability.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 1 · Reading the byte sequence</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Click any coloured chunk to see what it holds. The field order is fixed, and there are no name tags anywhere: a parser knows what it is reading purely because it knows the order.</p>
+            <div class="tx-hex" id="f1-hex"></div>
+            <div class="tx-desc" id="f1-desc"></div>
+            <p class="sh-note">Notice the two things that confuse people most. First, the <b>input txid is written backwards</b>. The first byte on screen is the last byte of the txid you see in a block explorer. Second, the <b>00 marker and 01 flag</b> in third position. In an old-style transaction that position holds the input count, and an input count can never be zero. That very impossibility is what SegWit uses as its signal: old parsers read it as a transaction with no inputs and stop, new parsers recognise a flag.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 2 · Varint, the thing that trips people up</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Numbers inside a transaction are not fixed width. Small numbers compress into one byte, larger ones get a prefix marker. This is what makes people miscount when reading raw hex.</p>
+            <div class="dc-row">
+              <label><span>Number</span>
+                <input class="dc-in" id="f1-vi" type="number" min="0" value="252"></label>
+            </div>
+            <dl class="dc-kv" id="f1-viout"></dl>
+            <div class="dc-scroll">
+              <table class="tx-tab">
+                <thead><tr><th>Number</th><th>Encoded as</th><th>Size</th></tr></thead>
+                <tbody id="f1-vitab"></tbody>
+              </table>
+            </div>
+            <p class="sh-note">The rule is only four lines, but a parser must know it cold: below 253, one plain byte. From 253 up, the first byte becomes a <b>length marker</b>, not a value. So <code>fd</code> means "the next two bytes are the number", not the number 253. Misread a single varint and the entire rest of the transaction is misread too, because every position shifts.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 3 · txid and wtxid, and where they part ways</div>
+          <div class="sh-wrap">
+            <p class="sh-note">One SegWit transaction has two identities. Both are double SHA-256 hashes, but over different stretches of bytes.</p>
+            <div class="tx-id" id="f1-ids"></div>
+            <p class="sh-note">Here is the split. <b>txid</b> is computed from the serialization <b>without</b> marker, flag, and witness. <b>wtxid</b> is computed from the complete serialization. Which means the entire signature sits outside the reach of txid. Press the button below and see the consequence yourself.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 4 · Malleability, demonstrated rather than described</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Sections 6.4 and 13.4 name malleability as the problem SegWit solved, but never show it. Now we flip a single bit of the signature in both formats and compare.</p>
+            <div class="sh-ctl"><button class="sh-btn pri" id="f1-flip"></button></div>
+            <div class="tx-cmp" id="f1-mall"></div>
+            <p class="sh-note">The result speaks for itself. In the old format the signature lives inside scriptSig, and scriptSig counts toward the txid. So anyone relaying your transaction could alter the signature encoding without invalidating it, and the <b>txid changes</b>. Any transaction waiting on that txid is left dangling. Under SegWit the signature moved into the witness, outside the txid, so the <b>txid does not budge</b>. This is not a patch; it is the direct consequence of moving one piece of data out of the hash’s reach. Lightning in Chapter 7 depends entirely on txids that cannot be shifted like this.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section" id="section-lab-f2">
+        <div class="p-body">
+          <div class="p-eyebrow">Laboratory · Format F2</div>
+          <div class="p-title">Address checksums, computed in front of you</div>
+          <div class="p-divider"></div>
+          <p>A Bitcoin address is not simply a polished hash. It is wrapped in a checksum so that typos are caught before funds are sent. Two formats use two entirely different methods, and the difference is not about which is stricter but about what each can prove.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 1 · base58check: using SHA-256 twice</div>
+          <div class="sh-wrap">
+            <p class="sh-note">The older format builds its checksum from the hash function you already dissected in C1. Four steps, all of which you can follow.</p>
+            <div class="ck-flow" id="f2-b58"></div>
+            <p class="sh-note">Notice the checksum is <b>only the first four bytes</b> of the double hash. The rest is discarded. Four bytes means 32 bits, so the chance that a typo happens to produce the same checksum is roughly one in four billion. Small, but that is a <b>probability</b>, not a guarantee. Notice the alphabet too: base58 deliberately drops the digit 0, the letter O, the letter I, and the letter l, because all four are easily confused by a human reader.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 2 · bech32: no hashing at all</div>
+          <div class="sh-wrap">
+            <p class="sh-note">The newer format does not use SHA-256. It uses an error-correcting code, from the same branch of mathematics behind CDs and QR codes.</p>
+            <div class="ck-flow" id="f2-bc"></div>
+            <p class="sh-note">Those last six characters are the checksum, and they come from a polynomial computation rather than a hash. That is why it can <b>prove</b> something a hash cannot: as long as no more than four characters are wrong, detection is guaranteed. Not almost certain, but certain. Notice the <b>bc</b> at the front too: that is the network marker, and it is fed into the checksum, so a mainnet address can never pass as a testnet one.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 3 · Break one character</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Change a single character in either address and see whether it is caught. Try a few different positions.</p>
+            <div class="ck-pair">
+              <div class="ck-col"><h5>base58check</h5>
+                <div class="ck-addr" id="f2-t58"></div>
+                <div class="ck-verd" id="f2-t58-v" style="margin-top:9px"></div></div>
+              <div class="ck-col"><h5>bech32</h5>
+                <div class="ck-addr" id="f2-tbc"></div>
+                <div class="ck-verd" id="f2-tbc-v" style="margin-top:9px"></div></div>
+            </div>
+            <p class="sh-note">You will find that <b>both catch single-character errors</b>, and that is genuinely true. I tested four thousand random alterations on each, and not one slipped through. So anyone claiming bech32 is more typo-resistant is not right for the single-character case. The difference lies elsewhere: base58check <b>almost certainly</b> catches it because collisions are so unlikely, while bech32 is <b>mathematically guaranteed</b> to catch it as long as four or fewer characters are wrong. One rests on probability, the other on proof.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 4 · When the standard itself turned out to be flawed</div>
+          <div class="sh-wrap">
+            <p class="sh-note">There is a part of this story rarely told, and it fits the spirit of Chapter 14.</p>
+            <div class="dc-scroll">
+              <table class="ck-tab">
+                <thead><tr><th>Format</th><th>Final constant</th><th>Used for</th></tr></thead>
+                <tbody>
+                  <tr><td>bech32</td><td>1</td><td>SegWit v0 (bc1q)</td></tr>
+                  <tr><td>bech32m</td><td>0x2bc830a3</td><td>SegWit v1 and up (bc1p, Taproot)</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="sh-note">Bech32 shipped in 2017 and saw wide use. In 2020 it emerged that the constant at the end of its computation had a flaw: under certain conditions, <b>adding or removing a character at the end was not always detected</b>. For SegWit version zero addresses the consequence was harmless, because their length is fixed. But for later versions, Taproot included, it mattered. The answer was <b>bech32m</b>, identical in every respect except one constant on the final line. That is why bc1q and bc1p addresses look alike yet are validated against different constants, and why a wallet that has not updated can reject a perfectly valid Taproot address.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-section" id="section-lab-f3">
+        <div class="p-body">
+          <div class="p-eyebrow">Laboratory · Format F3</div>
+          <div class="p-title">nBits: four bytes holding a 256-bit number</div>
+          <div class="p-divider"></div>
+          <p>Chapter 5.4 covers difficulty adjustment at length but never shows where the target is actually stored. The answer is four bytes inside the block header, and the way four bytes hold a 256-bit number is both simpler and more misleading than most people assume.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 1 · Take the four bytes apart</div>
+          <div class="sh-wrap">
+            <p class="sh-note">The first byte is called the exponent, the other three the mantissa. Move the values and watch the resulting target.</p>
+            <div class="nb-word" id="f3-word"></div>
+            <div class="nb-lbl"><span>exponent</span><span>&nbsp;mantissa&nbsp;</span></div>
+            <div class="ec-two">
+              <label><span class="sh-sub" id="f3-expv"></span>
+                <input class="sh-slider" id="f3-exp" type="range" min="3" max="32" value="29"></label>
+              <label><span class="sh-sub" id="f3-manv"></span>
+                <input class="sh-slider" id="f3-man" type="range" min="1" max="8388607" value="65535"></label>
+            </div>
+            <dl class="dc-kv" id="f3-out"></dl>
+            <div class="sh-sub">Target (32 bytes)</div>
+            <div class="nb-target" id="f3-target"></div>
+            <p class="sh-note">Here is the trap people fall into most often: <b>the exponent is not a power of two</b>. It is the <b>length of the target in bytes</b>. So an exponent of 29 means the target is 29 bytes long, with the mantissa placed in the three leading bytes of those 29. The rest are all zero. That is why targets always have the same shape: a few meaningful digits up front, then a long run of zeros.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 2 · Its history in five numbers</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Real nBits values from various eras. Watch how the exponent shrinks over time.</p>
+            <div class="dc-scroll">
+              <table class="nb-tab">
+                <thead><tr><th>Era</th><th>nBits</th>
+                  <th class="num">Exp</th><th class="num">Difficulty</th></tr></thead>
+                <tbody id="f3-hist"></tbody>
+              </table>
+            </div>
+            <p class="sh-note">An exponent shrinking from 29 to 23 means the target grows shorter, and a shorter target means fewer hashes satisfy it. That is rising difficulty, seen from the storage side. And note the scale of the jump: from difficulty 1 at genesis to tens of trillions, purely by changing four bytes.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 3 · Why compress it at all</div>
+          <div class="sh-wrap">
+            <div class="nb-cmp" id="f3-why"></div>
+            <p class="sh-note">A fair question: why not simply store the full 32-byte target? Because the block header is fixed at exactly <b>80 bytes</b>, and every byte in it is hashed millions of times per second by every miner on earth. Storing the full target would make the header 108 bytes, a 35 percent increase, for information that is almost entirely zeros. This compression has a price too: because the mantissa is only three bytes, <b>not every 256-bit number can be expressed</b>. The real target is always rounded to the nearest representable form. Precision is sacrificed, and that is fine, because what is needed is a threshold, not an exact figure.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Part 4 · Try it in reverse: target to nBits</div>
+          <div class="sh-wrap">
+            <p class="sh-note">Now the other direction. Enter how many leading zeros you want, and see the nBits that represents it.</p>
+            <div class="sh-ctl">
+              <span class="sh-round" id="f3-zerov"></span>
+              <input class="sh-slider" id="f3-zero" type="range" min="1" max="20" value="8">
+            </div>
+            <dl class="dc-kv" id="f3-rev"></dl>
+            <div class="nb-target" id="f3-revt"></div>
+            <p class="sh-note">Notice that adding one leading zero shrinks the target <b>sixteenfold</b>, because a single hex digit is worth four bits. So every extra zero you see at the front of a block hash represents sixteen times more work. This is the numerical account of something explained only in words in 5.2 and 5.4.</p>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+      <!-- END SECTION 21.9 -->
+
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 24 · BAB 21 -->
+
+

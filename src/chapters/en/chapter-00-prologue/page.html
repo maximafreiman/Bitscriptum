@@ -1,0 +1,764 @@
+<!-- ============================================================
+     PAGE 3 · PROLOGUE
+     |-- P.1 · Apa itu uang, sebenarnya? [DONE]
+     |-- P.2 · Sejarah manipulasi uang [LOCKED]
+     |-- P.3 · Austrian Economics & sound money [LOCKED]
+     |-- P.4 · The double-spend problem [LOCKED]
+     |-- P.5 · Revolusi public-key cryptography [LOCKED]
+     |-- P.6 · Gerakan cypherpunk [LOCKED]
+     |-- P.7 · Genesis block & pesan Satoshi [LOCKED]
+     |-- P.8 · Sistem tanpa kepercayaan [LOCKED]
+============================================================ -->
+<div class="page" id="page-prologue">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-pr">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-pr">← Chapter List</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-heading">Prologue</div>
+      <div class="sidebar-title">Why Bitcoin?</div>
+
+      <!-- P.1 · DONE -->
+      <div class="sidebar-item active" id="sb-p1">
+        <div class="sb-num">P.1</div>
+        <div class="sb-label">What is money, really?</div>
+      </div>
+      <!-- P.2 · DONE -->
+      <div class="sidebar-item" id="sb-p2">
+        <div class="sb-num">P.2</div>
+        <div class="sb-label">A history of money manipulation</div>
+      </div>
+      <!-- P.3 · DONE -->
+      <div class="sidebar-item" id="sb-p3">
+        <div class="sb-num">P.3</div>
+        <div class="sb-label">Austrian Economics & sound money</div>
+      </div>
+      <!-- P.4 · DONE -->
+      <div class="sidebar-item" id="sb-p4">
+        <div class="sb-num">P.4</div>
+        <div class="sb-label">The double-spend problem</div>
+      </div>
+      <!-- P.5 · DONE -->
+      <div class="sidebar-item" id="sb-p5">
+        <div class="sb-num">P.5</div>
+        <div class="sb-label">The public-key cryptography revolution</div>
+      </div>
+      <!-- P.6 · DONE -->
+      <div class="sidebar-item" id="sb-p6">
+        <div class="sb-num">P.6</div>
+        <div class="sb-label">The cypherpunk movement</div>
+      </div>
+      <!-- P.7 · DONE -->
+      <div class="sidebar-item" id="sb-p7">
+        <div class="sb-num">P.7</div>
+        <div class="sb-label">The genesis block &amp; Satoshi’s message</div>
+      </div>
+      <!-- P.8 · DONE -->
+      <div class="sidebar-item" id="sb-p8">
+        <div class="sb-num">P.8</div>
+        <div class="sb-label">A trustless system</div>
+      </div>
+    </div>
+    <!-- END SIDEBAR -->
+
+    <!-- CONTENT AREA -->
+    <div class="prologue-content" id="prologue-content">
+
+      <!-- ==============================
+           SECTION P.1 · Apa itu uang?
+      ============================== -->
+      <div class="p-section active" id="section-p1">
+        <div class="p-eyebrow">Prologue · P.1</div>
+        <div class="p-heading">The most fundamental question</div>
+        <div class="p-title">What is money, really?</div>
+        <div class="p-divider"></div>
+        <div class="p-body">
+          <p>We all use money every day. But asked <strong>"what is money?"</strong> most people pause for a moment. The answers that come up are usually: the paper in your wallet, the number in your banking app, or the coins in your desk drawer. All of it is true. But all of it is also only the <em>form</em>, not the essence.</p>
+          <p>Money, at its core, is a <strong>social technology</strong>. Not a physical object, not a precious metal, not a digital number. Money is an <em>agreement</em>, a collective belief that something has value and can be exchanged.</p>
+          <div class="p-callout">
+            <p>A Rp 100.000 note has no value because of its paper. It has value because millions of people agree that it has value. If that agreement collapses, the money is nothing more than paper.</p>
+          </div>
+          <p>To understand why this agreement arises, we need to go far back to a time before money existed at all.</p>
+          <p><strong>Imagine a small village.</strong> The farmer has rice. The fisherman has fish. The carpenter has chairs. They need one another, and the only way to get what they need is barter: trading goods for goods directly.</p>
+          <p>The problem is simple but fatal: what if the fisherman needs rice, but the farmer doesn’t need fish and instead needs a chair? The transaction can’t happen. Economists call this the <em>coincidence of wants</em>, a coincidence of needs that must meet in both directions at once. Barter only works in very small communities.</p>
+          <p>The solution is to find something <strong>everyone is willing to accept</strong>, not because they need that object directly, but because they know others will accept it too. This is the origin of money.</p>
+          <p>Throughout history, humans have used shells, salt, giant stones on the Yap Islands, animal furs, copper, silver, and gold. Not just because those objects are pretty or rare, but because the community agreed to trust them as a medium of exchange.</p>
+          <p>From this long experiment, economists formulated three main functions of good money:</p>
+          <p><strong>Medium of exchange.</strong> Money must be usable to buy and sell. It removes the need for a coincidence of wants.</p>
+          <p><strong>Store of value.</strong> Money must be storable and stay valuable into the future. Fresh fish can’t be good money because it rots.</p>
+          <p><strong>Unit of account.</strong> Money must serve as a unit for measuring value. How much is a cow worth? Thirty sacks of rice, or one number everyone agrees on?</p>
+          <p>Gold lasted thousands of years as the best money that ever existed. Naturally scarce, durable, divisible, and hard to counterfeit. But gold has one big weakness: it is heavy and hard to move.</p>
+          <p>So humans created paper, proof of ownership of gold stored in a vault. More practical, easier to carry. And this is where the story begins to change. Because paper is far easier to print than gold is to mine.</p>
+          <div class="p-callout">
+            <p>Money isn’t about the object you hold. Money is about the <em>trust</em> that you and others agree on, and who holds control over that agreement.</p>
+          </div>
+          <p>This last question is the one we will chase throughout this Prologue, and the one that ultimately gave birth to Bitcoin.</p>
+        </div>
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active" data-target="section-p2" data-sb="sb-p2">
+            P.2 — A History of Money Manipulation →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION P.1 -->
+
+      <!-- ==============================
+           SECTION P.2 · Sejarah manipulasi uang
+      ============================== -->
+      <div class="p-section" id="section-p2">
+        <div class="p-eyebrow">Prologue · P.2</div>
+        <div class="p-heading">Money that changes quietly</div>
+        <div class="p-title">A History of Money Manipulation</div>
+        <div class="p-divider"></div>
+        <div class="p-body">
+          <p>Have you ever asked your parents or grandparents how much a pack of instant noodles used to cost? Or how much they paid for gasoline the first time? The answer is sure to make you shake your head. Not because the noodles changed. Not because the gasoline changed. But because the money changed.</p>
+          <p>This is no coincidence. And this is not fate.</p>
+          <p><strong>From gold to paper</strong></p>
+          <p>For thousands of years, money had an anchor. That anchor was called gold. Every paper note in circulation had a gold equivalent stored in the government’s vault. This system was called the <em>gold standard</em>. It meant no one could carelessly print more money than the gold they held.</p>
+          <p>This kept money honest. Its value was stable. The government couldn’t do whatever it pleased.</p>
+          <p>But that anchor was cut.</p>
+          <p><strong>August 15, 1971</strong></p>
+          <p>U.S. President Richard Nixon stood before the television cameras and announced something that changed the world’s financial system forever. The United States would no longer tie the dollar to gold. This decision is known as the <em>Nixon Shock</em>.</p>
+          <p>The reasoning at the time sounded sensible: the economy was struggling, the Vietnam War was draining the budget, and America’s gold reserves were thinning as other countries began exchanging their dollars for real gold.</p>
+          <p>So Nixon cut the rope. The dollar was no longer guaranteed by gold. And because nearly every currency in the world was tied to the dollar at the time, that one decision changed the entire global financial system all at once.</p>
+          <div class="p-callout">
+            <p>From that day on, the money you hold is backed by nothing. Its value rests on one thing: the belief that the government will manage it responsibly.</p>
+          </div>
+          <p><strong>When the printing press turns on</strong></p>
+          <p>The problem is, that trust is often betrayed.</p>
+          <p>Without a gold anchor, governments and central banks gained a new ability: to print as much money as they want. And the temptation is enormous, especially in a crisis.</p>
+          <p>When the economy collapsed in 2008, big American banks nearly fell apart. The government’s response? Print money. Trillions of dollars were pumped into the financial system in a program called <em>quantitative easing</em>.</p>
+          <p>When the Covid-19 pandemic struck in 2020, the same thing happened again, on a far larger scale. America printed more than 40% of all the dollars that had ever existed in history, in just two years.</p>
+          <p>The result? Inflation exploded. Prices rose. The purchasing power of the money you keep in savings fell, without you doing anything, without anyone asking your permission.</p>
+          <p><strong>Who is hurt the most?</strong></p>
+          <p>Not the wealthy. The wealthy keep their wealth in the form of assets, stocks, property, gold, things whose value rises along with the money being printed.</p>
+          <p>The ones hurt the most are ordinary people. Those who keep their money in a savings account. Whose salaries don’t rise as fast as prices. Who work hard saving for years, only to watch the purchasing power of their savings slowly erode.</p>
+          <div class="p-callout">
+            <p>Inflation is a tax that is never collected in the open. There is no notice. There is no vote. It works quietly, every day, and is almost never questioned.</p>
+          </div>
+          <p><strong>The question that begins to surface</strong></p>
+          <p>If money can be printed at any time by whoever holds power, can it still be called honest? If the value of your savings can be eroded by decisions made without your knowledge, do you truly own that money?</p>
+          <p>These are the very questions that began to make some people think: there has to be another way.</p>
+        </div>
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-p1" data-sb="sb-p1">
+            ← P.1 — What is money?
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-p3" data-sb="sb-p3">
+            P.3 — Austrian Economics →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION P.2 -->
+
+      <!-- ==============================
+           SECTION P.3 · Austrian Economics & sound money
+      ============================== -->
+      <div class="p-section" id="section-p3">
+        <div class="p-eyebrow">Prologue · P.3</div>
+        <div class="p-heading">What does healthy money look like?</div>
+        <div class="p-title">Austrian Economics & sound money</div>
+        <div class="p-divider"></div>
+        <div class="p-body">
+          <p>Have you ever felt like this: you’ve worked hard, you’ve been frugal, you’ve saved, yet somehow it never feels like enough? Prices keep rising, but your savings sit still. Something is wrong. But where is the fault?</p>
+          <p>Some economists have had an answer for more than a hundred years. They weren’t from Wall Street. Not from Washington. They were from Vienna, Austria.</p>
+
+          <p><strong>What is Austrian Economics?</strong></p>
+          <p>Austrian Economics, or the Vienna School, is a tradition of economic thought born in the late 19th century. Its figures include Carl Menger, Ludwig von Mises, and Friedrich Hayek. The last even won the Nobel Prize in Economics in 1974.</p>
+          <p>But set those names aside for now. What matters is one core idea they fought for: <em>good money is honest money.</em></p>
+          <p>Honest in the sense that its value can’t be manipulated at the whim of those in power. Its quantity can’t be increased arbitrarily. It reflects real hard work, not numbers printed on paper.</p>
+
+          <p><strong>Cantillon Effect: who wins, who loses</strong></p>
+          <p>When new money is printed, it doesn’t spread evenly to everyone at once. It flows from the top down. The central bank receives it first, then the big banks, then business owners, and only then does it reach workers and retirees.</p>
+          <p>The problem is, prices have already risen before the money reaches the bottom. So whoever gets the money first can buy at the old prices. Whoever gets it last is already too late.</p>
+          <p>Economists call this the <em>Cantillon Effect</em>, named after the economist Richard Cantillon who first described it in the 18th century. Try simulating it yourself below.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Interactive simulation — Cantillon Effect</div>
+
+          <div class="sim-stats-row">
+            <div class="sim-stat">
+              <div class="sim-stat-label">Total money supply</div>
+              <div class="sim-stat-value" id="prl-s03-total">Rp 1.000</div>
+            </div>
+            <div class="sim-stat">
+              <div class="sim-stat-label">Price index (inflation)</div>
+              <div class="sim-stat-value" id="prl-s03-price-idx">100</div>
+            </div>
+          </div>
+
+          <div class="sim-chars" id="prl-s03-chars"></div>
+
+          <div class="sim-prices-label">Prices of goods — rising each time money is printed</div>
+          <div class="sim-prices" id="prl-s03-prices"></div>
+
+          <div class="sim-alert" id="prl-s03-alert">
+            <div class="sim-alert-icon">⚠️</div>
+            <div>
+              <div class="sim-alert-title" id="prl-s03-alert-title">PURCHASING POWER FALLING!</div>
+              <div class="sim-alert-sub" id="prl-s03-alert-sub"></div>
+            </div>
+          </div>
+
+          <div class="sim-controls">
+            <button class="sim-btn-print" id="prl-s03-print">Print Money ↗</button>
+            <button class="sim-btn-reset" id="prl-s03-reset">Reset</button>
+          </div>
+
+          <div class="sim-log-label">Event log</div>
+          <div class="sim-log" id="prl-s03-log"></div>
+        </div>
+
+        <div class="p-body" style="margin-top:2rem">
+          <p><strong>Sound money: healthy money</strong></p>
+          <p>The opposite of money that can be manipulated is what’s called <em>sound money</em>, healthy money. Its criteria are simple:</p>
+          <p><strong>Scarce.</strong> Its quantity is limited and can’t be increased arbitrarily. Gold is the classic example, because to obtain new gold someone has to mine it, requiring real time, effort, and cost.</p>
+          <p><strong>Durable.</strong> Its value doesn’t rot, doesn’t decay, and can be stored over the long term.</p>
+          <p><strong>Cannot be manipulated.</strong> No single party can change the rules of the game midway.</p>
+
+          <div class="p-callout">
+            <p>Sound money isn’t about gold or precious metals. It is about a principle: money should function as an honest store of value, not a tool the powerful can use to quietly transfer wealth.</p>
+          </div>
+
+          <p><strong>Why does this matter for Bitcoin?</strong></p>
+          <p>Satoshi Nakamoto, the creator of Bitcoin, did not appear out of a vacuum. He emerged from a tradition of thought that had long questioned the existing monetary system.</p>
+          <p>Bitcoin was designed with sound money principles as its foundation. The amount of Bitcoin is capped at just 21 million coins, forever. There is no Bitcoin central bank. No one can print more because they feel the need.</p>
+          <p>For the first time in history, humans have a choice: digital money that is scarce, open, and cannot be manipulated by anyone.</p>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-p2" data-sb="sb-p2">
+            ← P.2 — A History of Money Manipulation
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-p4" data-sb="sb-p4">
+            P.4 — The Double-Spend Problem →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION P.3 -->
+
+      <!-- ==============================
+           SECTION P.4 · The double-spend problem
+      ============================== -->
+      <div class="p-section" id="section-p4">
+        <div class="p-eyebrow">Prologue · P.4</div>
+        <div class="p-heading">The biggest problem of digital money</div>
+        <div class="p-title">The Double-Spend Problem</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Imagine you have a photo file. You can send it to one person, then send it again to another, then to a thousand people at once. The original file remains. Everyone gets a copy.</p>
+          <p>Now imagine digital money worked the same way. You have Rp 100.000 in the form of a digital file. You send it to Store A. Then you send the same file to Store B. The same money, used twice. This is what’s called the <em>double-spend problem</em>.</p>
+          <p>In the physical world, this problem doesn’t exist. If you hand a Rp 100.000 note to someone, you no longer have that money. The transfer is real and can’t be repeated. But in the digital world, everything is a copy. There is no such thing as an original.</p>
+
+          <p><strong>The old solution: trust the bank</strong></p>
+          <p>The solution all along has been to place a third party in the middle. The bank makes sure the money is actually deducted from your balance before it reaches the recipient. No one can double-spend because the bank controls the records.</p>
+          <p>But this comes at a price: you have to trust that the bank is honest, won’t go bankrupt, and won’t freeze your account. History proves that hope is not always met.</p>
+
+          <p><strong>Attempts before Bitcoin</strong></p>
+          <p>DigiCash, b-money, Bit Gold, all tried to build digital money without a bank. All failed at the same point: how to ensure no one spends the same money twice, without trusting anyone in the middle?</p>
+          <p>What was needed was a ledger open to all, owned by no one, and impossible to manipulate. That is what Satoshi created in 2008. Its name: <em>blockchain</em>.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Interactive simulation — Double-Spend Problem</div>
+
+          <div class="ds-tabs">
+            <button class="ds-tab active-cash" id="prl-s04-tab-cash">💵 Cash</button>
+            <button class="ds-tab" id="prl-s04-tab-no">💻 Digital without protection</button>
+            <button class="ds-tab" id="prl-s04-tab-btc">₿ With Bitcoin</button>
+          </div>
+
+          <div class="ds-desc cash" id="prl-s04-desc">
+            Cash moves physically. Once handed to Store A, that money is no longer in your hands. To pay Store B, you need money again. This is what makes cash naturally safe.
+          </div>
+
+          <div class="ds-stage">
+            <div class="ds-actor neutral" id="prl-s04-actor-pengirim">
+              <div class="ds-actor-icon" id="prl-s04-icon-pengirim">🧑</div>
+              <div class="ds-actor-name" id="prl-s04-name-pengirim">Buyer</div>
+              <div class="ds-actor-bal" id="prl-s04-bal-pengirim">Balance: Rp 100.000</div>
+              <div class="ds-actor-status" id="prl-s04-st-pengirim"></div>
+            </div>
+            <div class="ds-arrow">
+              <div class="ds-arrow-line" id="prl-s04-arrow-a"></div>
+              <div class="ds-arrow-label" id="prl-s04-lbl-a">Tx #1</div>
+            </div>
+            <div class="ds-actor neutral" id="prl-s04-actor-tokoa">
+              <div class="ds-actor-icon">🏪</div>
+              <div class="ds-actor-name">Store A</div>
+              <div class="ds-actor-bal" id="prl-s04-bal-tokoa">Waiting...</div>
+              <div class="ds-actor-status" id="prl-s04-st-tokoa"></div>
+            </div>
+            <div class="ds-arrow">
+              <div class="ds-arrow-line" id="prl-s04-arrow-b"></div>
+              <div class="ds-arrow-label" id="prl-s04-lbl-b">Tx #2</div>
+            </div>
+            <div class="ds-actor neutral" id="prl-s04-actor-tokob">
+              <div class="ds-actor-icon">🏬</div>
+              <div class="ds-actor-name">Store B</div>
+              <div class="ds-actor-bal" id="prl-s04-bal-tokob">Waiting...</div>
+              <div class="ds-actor-status" id="prl-s04-st-tokob"></div>
+            </div>
+          </div>
+
+          <div class="ds-result" id="prl-s04-result"></div>
+
+          <div class="ds-controls">
+            <button class="ds-btn ds-btn-tx1" id="prl-s04-btn-tx1">Pay Store A ↗</button>
+            <button class="ds-btn ds-btn-tx2" id="prl-s04-btn-tx2" disabled>Pay Store B ↗</button>
+            <button class="ds-btn ds-btn-reset" id="prl-s04-btn-ds-reset">Reset</button>
+          </div>
+
+          <div class="ds-log">
+            <div class="ds-log-title">Transaction log</div>
+            <div class="ds-log-entries" id="prl-s04-log"></div>
+          </div>
+        </div>
+
+        <div class="p-body" style="margin-top:2rem">
+          <div class="p-callout">
+            <p>Bitcoin solves the double-spend problem without a bank, without a third party. It makes digital money behave like cash: when you send it, it truly moves. You no longer have it.</p>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-p3" data-sb="sb-p3">
+            ← P.3 — Austrian Economics
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-p5" data-sb="sb-p5">
+            P.5 — The Public-Key Cryptography Revolution →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION P.4 -->
+
+      <!-- ==============================
+           SECTION P.5 · Revolusi public-key cryptography
+      ============================== -->
+      <div class="p-section" id="section-p5">
+        <div class="p-eyebrow">Prologue · P.5</div>
+        <div class="p-heading">Ownership without identity</div>
+        <div class="p-title">The Public-Key Cryptography Revolution</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Cash solves double-spend physically. But it cannot prove ownership in the digital world. If you have cash and someone steals it, there is no mathematical way to prove that money is yours.</p>
+          <p>Bitcoin solves both at once. Resistant to double-spend like cash, while also able to prove ownership digitally. The secret lies in an invention from the 1970s that changed the world: <em>public-key cryptography</em>.</p>
+
+          <p><strong>Two keys, one identity</strong></p>
+          <p>Imagine you have a padlock and a key. You can hand out the padlock to anyone. Anyone can use it to lock a message for you. But only you have the key. Only you can open it.</p>
+          <p>That is how public-key cryptography works. The <em>public key</em> is your padlock, free to share with anyone. In Bitcoin, this is like your account address. The <em>private key</em> is your key, which no one may know. It proves that you are the rightful owner of that public key.</p>
+          <p>When you send Bitcoin, you sign the transaction with your private key. The network can verify that signature using your public key, without needing to know who you really are.</p>
+
+          <div class="p-callout">
+            <p>For the first time, someone could prove ownership of something digitally, without giving a name, without an ID card, without a bank to verify it. Mathematics proves it. Not an institution.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Interactive simulation — Public-Key Cryptography</div>
+
+          <div class="pk-steps">
+
+            <!-- STEP 1 · Generate Key Pair -->
+            <div class="pk-step active" id="prl-s05-step1">
+              <div class="pk-step-header">
+                <div class="pk-step-num" id="prl-s05-stepnum1">1</div>
+                <div class="pk-step-title">Generate Key Pair</div>
+                <div class="pk-step-sub" id="prl-s05-step1-sub">Not generated yet</div>
+              </div>
+              <div class="pk-step-body">
+                <div class="pk-desc">Every Bitcoin user has a pair of keys. The public key may be shared with anyone. The private key must be kept to yourself and known by no one.</div>
+                <div class="pk-key-row" id="prl-s05-key-display" style="display:none">
+                  <div class="pk-key-box">
+                    <div class="pk-key-label pub">Public Key (shareable)</div>
+                    <div class="pk-key-value" id="prl-s05-pub-key"></div>
+                    <div class="pk-key-note">Like an account number, anyone can send here.</div>
+                  </div>
+                  <div class="pk-key-box">
+                    <div class="pk-key-label priv">Private Key (secret!)</div>
+                    <div class="pk-key-value" id="prl-s05-priv-key"></div>
+                    <div class="pk-key-note">Like a PIN, anyone who knows it can control your account.</div>
+                  </div>
+                </div>
+                <button class="pk-btn" id="prl-s05-btn-generate">Generate Key Pair ↗</button>
+              </div>
+            </div>
+
+            <!-- STEP 2 · Sign Message -->
+            <div class="pk-step" id="prl-s05-step2">
+              <div class="pk-step-header">
+                <div class="pk-step-num" id="prl-s05-stepnum2">2</div>
+                <div class="pk-step-title">Sign the Message</div>
+                <div class="pk-step-sub" id="prl-s05-step2-sub">Wait for step 1</div>
+              </div>
+              <div class="pk-step-body">
+                <div class="pk-desc">When you send Bitcoin, you sign the transaction with your private key. This signature is unique to this message and cannot be forged by anyone who doesn’t have your private key.</div>
+                <div class="pk-input-row">
+                  <textarea class="pk-input" id="prl-s05-msg-input" rows="2" placeholder='Example: "Send 1 BTC to Store A"' disabled></textarea>
+                </div>
+                <div class="pk-sig-box" id="prl-s05-sig-box" style="display:none">
+                  <div class="pk-sig-label">Digital Signature</div>
+                  <div class="pk-sig-value" id="prl-s05-sig-value"></div>
+                </div>
+                <button class="pk-btn" id="prl-s05-btn-sign" disabled>Sign with Private Key ↗</button>
+              </div>
+            </div>
+
+            <!-- STEP 3 · Verify -->
+            <div class="pk-step" id="prl-s05-step3">
+              <div class="pk-step-header">
+                <div class="pk-step-num" id="prl-s05-stepnum3">3</div>
+                <div class="pk-step-title">Verification by the Network</div>
+                <div class="pk-step-sub" id="prl-s05-step3-sub">Wait for step 2</div>
+              </div>
+              <div class="pk-step-body">
+                <div class="pk-desc">The Bitcoin network checks three things: the original message, the sender’s public key, and the signature. If they match, the transaction is valid. Try changing the message slightly then verify again to see what happens.</div>
+                <div class="pk-verify-row">
+                  <div class="pk-verify-item">
+                    <div class="pk-verify-item-label">Message</div>
+                    <div class="pk-verify-item-val" id="prl-s05-v-msg"></div>
+                  </div>
+                  <div class="pk-verify-item">
+                    <div class="pk-verify-item-label">Public Key</div>
+                    <div class="pk-verify-item-val" id="prl-s05-v-pub"></div>
+                  </div>
+                  <div class="pk-verify-item">
+                    <div class="pk-verify-item-label">Signature</div>
+                    <div class="pk-verify-item-val" id="prl-s05-v-sig"></div>
+                  </div>
+                </div>
+                <div class="pk-input-row">
+                  <textarea class="pk-input" id="prl-s05-verify-msg-input" rows="2" placeholder="The message will appear here..." disabled></textarea>
+                </div>
+                <div class="pk-result" id="prl-s05-verify-result"></div>
+                <button class="pk-btn" id="prl-s05-btn-verify" disabled>Verify ↗</button>
+                <div class="pk-tamper-note" id="prl-s05-tamper-note" style="display:none">
+                  Try changing the message above then click Verify again — the signature won’t match.
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="p-body" style="margin-top:2rem">
+          <div class="p-callout">
+            <p>The entire Bitcoin system stands on this principle. Your private key is your identity. Whoever holds the private key holds the Bitcoin. Not a name in a ledger, not an ID card, not a signature on paper.</p>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-p4" data-sb="sb-p4">
+            ← P.4 — The Double-Spend Problem
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-p6" data-sb="sb-p6">
+            P.6 — The Cypherpunk Movement →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION P.5 -->
+
+      <!-- ==============================
+           SECTION P.6 · Gerakan cypherpunk
+      ============================== -->
+      <div class="p-section" id="section-p6">
+        <div class="p-eyebrow">Prologue · P.6</div>
+        <div class="p-heading">Resistance written in code</div>
+        <div class="p-title">The Cypherpunk Movement</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Some realized it earlier.</p>
+          <p>Not by taking to the streets. Not with speeches. They sat in front of their screens, writing code, slowly building something that couldn’t be censored, couldn’t be stopped, and needed no one’s permission to run.</p>
+          <p>They called themselves <strong>Cypherpunks</strong>.</p>
+
+          <p><strong>The internet was built too wide open</strong></p>
+          <p>When the internet was born in the ARPANET era in 1969, it was designed to connect academic and military institutions that trusted one another. No one thought about privacy, because all of its users really were a small community who knew each other.</p>
+          <p>But the internet grew. The public came in. And its foundation did not change with it.</p>
+          <p>Data moves in the open, unencrypted. Anyone on the path of your connection can read what you send, exactly like reading a postcard rather than a letter in a sealed envelope. Governments can monitor. Corporations can collect. No one needs permission to peek.</p>
+
+          <div class="p-callout">
+            <p>The internet isn’t broken. It was simply never designed to protect you.</p>
+          </div>
+
+          <p><strong>Where did they come from?</strong></p>
+          <p>The year 1992. Three people met in San Francisco: Eric Hughes, Timothy C. May, and John Gilmore. They began gathering like-minded people into a mailing list. At its peak, more than 700 people were active in it, including several names who would later reshape the world’s technology landscape.</p>
+          <p>They were mathematicians, programmers, and cryptographers. Not street activists. But they held a sharp conviction: privacy is a right, not a privilege granted by the state.</p>
+
+          <p><strong>The Cypherpunk Manifesto</strong></p>
+          <p>In 1993, Eric Hughes wrote a manifesto. Calm, but firm to the bone:</p>
+          <p><em>"Privacy is necessary for an open society in the electronic age."</em></p>
+          <p>Privacy is not about hiding something. It is about the ability to choose, what you reveal, to whom, and when. And their solution was not to ask. Their solution was to build.</p>
+
+          <p><strong>An invisible legacy</strong></p>
+          <p>Many of the technologies you use every day grew from seeds planted by this movement. The HTTPS that secures your browsing. End-to-end encryption in chat apps. Networks that make communication without surveillance possible.</p>
+          <p>And the most impactful of all: on October 31, 2008, someone under the pseudonym Satoshi Nakamoto sent a paper to a cryptography mailing list. Its title was simple. Its impact was not.</p>
+          <p><em>"Bitcoin: A Peer-to-Peer Electronic Cash System."</em></p>
+          <p>Satoshi did not appear out of a vacuum. He was the end of a long thread woven over decades by people who didn’t wait for the world to change, but chose to change it themselves, one line of code at a time.</p>
+
+          <div class="p-callout">
+            <p>Cypherpunks write code. Not petitions. Not lobbying. They believed real change doesn’t come from permission granted by those in power, but from technology that is already up and running.</p>
+
+          <p><strong>Bitcoin was not the first attempt</strong></p>
+          <p>If cypherpunks really do write code, it is fair to ask: what code did they write before Bitcoin? In the Double-Spend Problem section we mentioned DigiCash, b-money, and bit gold in a single line as attempts that failed. Now we stop there for longer, because what is interesting is not that they failed but <strong>how close they had already come</strong>.</p>
+          <p>The earliest attempt came from <strong>David Chaum</strong>, who founded DigiCash in 1989. His money was genuinely private, using cryptography that stopped the bank from seeing who spent what. Technically it worked. But DigiCash was still a company, and its money was still issued by a single party. When the company went bankrupt in 1998, the money went with it. The lesson was harsh: privacy alone is not enough while a single point of failure remains.</p>
+          <p>In 1997 <strong>Adam Back</strong> built <strong>Hashcash</strong>, which we return to in 5.2. The idea was simple: before sending an email, your computer had to complete a small piece of work that took a little time. For an ordinary person that is imperceptible; for someone sending millions of spam messages it becomes expensive. For the first time there was a way to make something in the digital world <strong>genuinely costly</strong>. But Hashcash proofs could not be handed on. Each was spent once, could not be given to anyone else, and there was no total supply. It was a postage stamp, not money.</p>
+          <p>A year later, in 1998, two proposals arrived almost together. <strong>Wei Dai</strong> wrote <strong>b-money</strong>, which proposed that every participant keep a copy of the record of who owns what, with new money born from computational work. <strong>Nick Szabo</strong> wrote <strong>bit gold</strong>, which chained the results of that work together so their order could be proven.</p>
+          <p>Read those two sentences again and something strange emerges: both sound <strong>almost exactly like Bitcoin</strong>. A record everyone keeps, money born from work, a chain that proves the order. It was all on paper a decade before Satoshi.</p>
+          <p>So what was missing? One thing, and it was the hardest. If everyone keeps their own record, <strong>what happens when those records disagree?</strong> Who gets to decide which version is true? Both b-money and bit gold saw the problem and offered answers, but every answer ended at some set of chosen parties who had to be trusted. Precisely the problem they had set out to escape. It is the same double-spend problem from the earlier section, seen from another angle.</p>
+          <p><strong>What Satoshi actually added</strong></p>
+          <p>Here is the leap, and it is both smaller and larger than people usually imagine. Satoshi did not invent proof of work, did not invent digital signatures, did not invent hash chains. All of it already existed.</p>
+          <p>What he did was realise that proof of work could carry <strong>two jobs at once</strong>. His predecessors used it only to make something expensive to produce. Satoshi also used it to <strong>decide whose record counts</strong>: the version with the most accumulated work behind it wins. There is no need to choose who has authority, because authority is replaced by something that cannot be faked, namely energy that has already been burned.</p>
+          <p>That is why the question "why 2009, when the ingredients existed in 1998" has an answer that is both disappointing and reassuring. What was missing for those ten years was not a component, not a new mathematical discovery, and not a faster computer. What was missing was <strong>a way of looking</strong> at components that were already lying in plain sight.</p>
+          <p>This history also explains something you will meet again and again in this book. Bitcoin rarely adds anything new. It almost always rearranges what already exists, very carefully, because every part added is a part that can fail.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Timeline — From ARPANET to Bitcoin</div>
+          <div class="tl-items" id="prl-s06-items"></div>
+          <div class="tl-hint">Click each moment to read its details.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-p5" data-sb="sb-p5">
+            ← P.5 — The Public-Key Cryptography Revolution
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-p7" data-sb="sb-p7">
+            P.7 — The Genesis Block &amp; Satoshi’s Message →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION P.6 -->
+
+      <!-- ==============================
+           SECTION P.7 · Genesis block & pesan Satoshi
+      ============================== -->
+      <div class="p-section" id="section-p7">
+        <div class="p-eyebrow">Prologue · P.7</div>
+        <div class="p-heading">The day it all began</div>
+        <div class="p-title">The Genesis Block &amp; Satoshi’s Message</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>January 3, 2009.</p>
+          <p>The world had just emerged from one of the worst financial crises in modern history. Giant banks in America and Europe nearly collapsed. Governments poured trillions of dollars of taxpayer money to rescue the very institutions that caused the crisis itself.</p>
+          <p>Somewhere unknown to anyone, someone switched on a network.</p>
+
+          <p><strong>The first block</strong></p>
+          <p>In the Bitcoin system, all transactions are recorded in units called <em>blocks</em>. Each block links to the previous block, forming a chain that cannot be manipulated. This chain is called the <em>blockchain</em>.</p>
+          <p>The first block that ever existed is called the <strong>Genesis Block</strong>. Block #0. The beginning of everything. And inside it, Satoshi left a message written forever:</p>
+          <p><em>"The Times 03/Jan/2009 Chancellor on brink of second bailout for banks"</em></p>
+          <p>This is the front-page headline of The Times newspaper on that day. The day Bitcoin was born.</p>
+
+          <p><strong>Why that message matters</strong></p>
+          <p>The message is no coincidence. Not merely a timestamp. On one hand, it serves as proof that the Genesis Block was truly created on that date. On the other, it is a statement. A calm but sharp critique of the financial system being rescued by the people’s money on that very same day.</p>
+
+          <p><strong>Who is Satoshi?</strong></p>
+          <p>No one knows. Satoshi Nakamoto communicated through email and forums for two years after Bitcoin was born. Then, in April 2011, he sent his final message to a developer: <em>"I’ve moved on to other things."</em> And vanished.</p>
+          <p>His identity was never confirmed. All that remains is his code. His whitepaper. And the Genesis Block that still stands to this day, with the same message, unchanged, impossible to change.</p>
+
+          <div class="p-callout">
+            <p>Bitcoin is the only financial system in the world whose creator chose to disappear. No CEO. No founder holding control. No one to contact to change its rules. This is not a weakness. It is the most important feature of all.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Reconstruction — Block #0 · Genesis Block</div>
+
+          <div class="gb-block">
+            <div class="gb-header">
+              <div class="gb-header-left">
+                <div class="gb-badge">Genesis Block</div>
+                <div class="gb-block-num">Block #0</div>
+              </div>
+              <div class="gb-hash-short">000000000019d6...</div>
+            </div>
+            <div class="gb-rows">
+              <div class="gb-row">
+                <div class="gb-key">Hash</div>
+                <div class="gb-val">000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f</div>
+              </div>
+              <div class="gb-row">
+                <div class="gb-key">Previous Hash</div>
+                <div class="gb-val">0000000000000000000000000000000000000000000000000000000000000000</div>
+              </div>
+              <div class="gb-row">
+                <div class="gb-key">Timestamp</div>
+                <div class="gb-val">2009-01-03 18:15:05 UTC</div>
+              </div>
+              <div class="gb-row">
+                <div class="gb-key">Difficulty</div>
+                <div class="gb-val">1 (minimum — the network had just been born)</div>
+              </div>
+              <div class="gb-row">
+                <div class="gb-key">Nonce</div>
+                <div class="gb-val">2083236893</div>
+              </div>
+              <div class="gb-row">
+                <div class="gb-key">Reward</div>
+                <div class="gb-val">50 BTC (can never be spent)</div>
+              </div>
+              <div class="gb-row gb-highlight">
+                <div class="gb-key">Coinbase Message</div>
+                <div class="gb-val">The Times 03/Jan/2009 Chancellor on brink of second bailout for banks</div>
+              </div>
+            </div>
+            <div class="gb-satoshi-msg">
+              <div class="gb-msg-label">Satoshi’s message — written forever in the first block</div>
+              <div class="gb-msg-text">The Times 03/Jan/2009 Chancellor on brink of second bailout for banks</div>
+            </div>
+          </div>
+
+          <div class="sim-label" style="margin-top:1.5rem">Those who understood the protocol</div>
+          <div class="qt-list">
+
+            <div class="qt-card">
+              <div class="qt-quote">A purely peer-to-peer version of electronic cash would allow online payments to be sent directly from one party to another without going through a financial institution.</div>
+              <div class="qt-footer">
+                <div class="qt-avatar">SN</div>
+                <div>
+                  <div class="qt-name">Satoshi Nakamoto</div>
+                  <div class="qt-role">Creator of Bitcoin — Bitcoin Whitepaper</div>
+                </div>
+                <div class="qt-year">2008</div>
+              </div>
+            </div>
+
+            <div class="qt-card">
+              <div class="qt-quote">Bitcoin seems to be a very promising idea. I like the idea of basing security on the assumption that the CPU power of honest participants outweighs that of the attacker.</div>
+              <div class="qt-footer">
+                <div class="qt-avatar">HF</div>
+                <div>
+                  <div class="qt-name">Hal Finney</div>
+                  <div class="qt-role">Cryptographer — first recipient of Bitcoin</div>
+                </div>
+                <div class="qt-year">2009</div>
+              </div>
+            </div>
+
+            <div class="qt-card">
+              <div class="qt-quote">Bitcoin is not a currency. Bitcoin is the internet of money. Currency is just the first application.</div>
+              <div class="qt-footer">
+                <div class="qt-avatar">AA</div>
+                <div>
+                  <div class="qt-name">Andreas Antonopoulos</div>
+                  <div class="qt-role">Author — Mastering Bitcoin</div>
+                </div>
+                <div class="qt-year">2014</div>
+              </div>
+            </div>
+
+            <div class="qt-card">
+              <div class="qt-quote">Bitcoin is a distributed system — it's not under any one entity's control. That's a feature, not a bug.</div>
+              <div class="qt-footer">
+                <div class="qt-avatar">AB</div>
+                <div>
+                  <div class="qt-name">Adam Back</div>
+                  <div class="qt-role">Cryptographer — creator of Hashcash</div>
+                </div>
+                <div class="qt-year">2013</div>
+              </div>
+            </div>
+
+            <div class="qt-card">
+              <div class="qt-quote">What blockchain solves is the problem of two parties who don't trust each other agreeing on a shared fact.</div>
+              <div class="qt-footer">
+                <div class="qt-avatar">NS</div>
+                <div>
+                  <div class="qt-name">Nick Szabo</div>
+                  <div class="qt-role">Cryptographer — creator of Bit Gold</div>
+                </div>
+                <div class="qt-year">2016</div>
+              </div>
+            </div>
+
+            <div class="qt-card">
+              <div class="qt-quote">Cypherpunks write code. We know that someone has to write software to defend privacy, and we're going to write it.</div>
+              <div class="qt-footer">
+                <div class="qt-avatar">EH</div>
+                <div>
+                  <div class="qt-name">Eric Hughes</div>
+                  <div class="qt-role">Co-founder — Cypherpunk Movement</div>
+                </div>
+                <div class="qt-year">1993</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-p6" data-sb="sb-p6">
+            ← P.6 — The Cypherpunk Movement
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-p8" data-sb="sb-p8">
+            P.8 — A Trustless System →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION P.7 -->
+
+      <!-- ==============================
+           SECTION P.8 · Sistem tanpa kepercayaan
+      ============================== -->
+      <div class="p-section" id="section-p8">
+        <div class="p-eyebrow">Prologue · P.8</div>
+        <div class="p-heading">Closing the Prologue</div>
+        <div class="p-title">A Trustless System</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>The entire financial system that exists today stands on trust.</p>
+          <p>You trust that your bank won’t go bankrupt. You trust that the government won’t freeze your account. You trust that the transfer company won’t withhold your money. That trust has no guarantee; it depends only on the good intentions of the institutions in control.</p>
+          <p>History proves that good intentions are not always enough.</p>
+
+          <p><strong>Trustless doesn’t mean there is no trust</strong></p>
+          <p>The word <em>trustless</em> is often misunderstood. It does not mean you don’t need to trust anyone at all. It means you don’t need to trust any particular person or institution, because what you trust is mathematics and code that anyone can verify.</p>
+          <p>In Bitcoin, there is no director who can change the rules. No board meeting decides monetary policy. No headquarters can be lobbied or pressured. Its rules are written in code, open to all, and apply equally to everyone in the world.</p>
+
+          <p><strong>Decentralized trust</strong></p>
+          <p>If you send Bitcoin to someone, that transaction is verified not by one bank, but by thousands of computers around the world at the same time. None of them holds more authority than the rest. To manipulate the system, someone would have to control more than half of the entire network at once, a task that is practically impossible.</p>
+          <p>This is what makes Bitcoin different from every financial system before it. Not because it is digital. Not because it is new. But because, for the first time, trust no longer depends on human subjectivity that can be wrong, can be bribed, and can change its mind.</p>
+
+          <div class="p-callout">
+            <p>Bitcoin doesn’t ask you to trust Satoshi. It doesn’t ask you to trust its developers. It doesn’t ask you to trust anyone. It only asks you to verify for yourself. And that is what makes everything different.</p>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-p7" data-sb="sb-p7">
+            ← P.7 — The Genesis Block &amp; Satoshi’s Message
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION P.8 -->
+
+    </div>
+    <!-- END CONTENT AREA -->
+
+  </div>
+
+</div>
+<!-- END PAGE 3 · PROLOGUE -->
+
+

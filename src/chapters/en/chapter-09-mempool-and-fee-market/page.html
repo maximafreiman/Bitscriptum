@@ -1,0 +1,670 @@
+<!-- ============================================================
+     PAGE 12 · BAB 9 · Mempool dan Fee Market
+     |-- 9.1 · Apa itu Mempool? [DONE]
+     |-- 9.2 · Fee Rate dan Prioritas [LOCKED]
+     |-- 9.3 · RBF dan CPFP [LOCKED]
+     |-- 9.4 · Mempool saat Jaringan Ramai [LOCKED]
+     |-- 9.5 · Fee Estimation [LOCKED]
+     |-- 9.6 · Masa Depan Fee Market [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab9">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b9">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b9">← Chapter List</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab9">
+      <div class="sidebar-heading">Chapter 9</div>
+      <div class="sidebar-title">Mempool and Fee Market</div>
+
+      <div class="sidebar-item active" id="sb-9-1">
+        <div class="sb-num">9.1</div>
+        <div class="sb-label">What is the Mempool?</div>
+      </div>
+      <div class="sidebar-item" id="sb-9-2">
+        <div class="sb-num">9.2</div>
+        <div class="sb-label">Fee Rate and Priority</div>
+      </div>
+      <div class="sidebar-item" id="sb-9-3">
+        <div class="sb-num">9.3</div>
+        <div class="sb-label">RBF and CPFP</div>
+      </div>
+      <div class="sidebar-item" id="sb-9-4">
+        <div class="sb-num">9.4</div>
+        <div class="sb-label">The Mempool When the Network is Busy</div>
+      </div>
+      <div class="sidebar-item" id="sb-9-5">
+        <div class="sb-num">9.5</div>
+        <div class="sb-label">Fee Estimation</div>
+      </div>
+      <div class="sidebar-item" id="sb-9-6">
+        <div class="sb-num">9.6</div>
+        <div class="sb-label">The Future of the Fee Market</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab9-content">
+
+      <!-- ==============================
+           SECTION 9.1 · Apa itu Mempool?
+      ============================== -->
+      <div class="p-section active" id="section-9-1">
+        <div class="p-eyebrow">Chapter 9 · 9.1</div>
+        <div class="p-heading">A waiting room with no center</div>
+        <div class="p-title">What is the Mempool?</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>We met the mempool in 3.5 as one stage in a transaction’s journey. Now we stop there for longer, because the mempool is more than a waiting room: it is where the price of a transaction gets decided.</p>
+          <p>Every Bitcoin transaction that has been sent but not yet confirmed lives in a waiting room. This waiting room is called the mempool, short for memory pool. Every node has its own mempool, and there is no single "global mempool".</p>
+
+          <p><strong>A waiting room with no center</strong></p>
+          <p>Because every node manages its own mempool, two different nodes can have slightly different mempool contents. Node A might have received a transaction that hasn’t reached Node B yet. Node C might have already removed a transaction that’s still in Node D because of memory limits. This is normal and intentional. The mempool isn’t a synchronized global database, it’s a collection of transactions waiting for confirmation at each node independently.</p>
+
+          <p><strong>What gets into the mempool?</strong></p>
+          <p>Not all transactions are automatically accepted into the mempool. Every node has its own rules called mempool policy. Common rules that apply at most nodes: the transaction must be cryptographically valid, the UTXOs used must exist and be unspent, the fee must meet a minimum threshold, and the transaction size must be within a reasonable limit. If a transaction doesn’t meet the requirements, it’s rejected and doesn’t enter that node’s mempool.</p>
+
+          <p><strong>How long can a transaction stay in the mempool?</strong></p>
+          <p>A transaction that isn’t confirmed within a certain time is removed from the mempool. Most nodes remove transactions that are more than two weeks old. If a transaction is removed from the mempool before being confirmed, the funds aren’t lost. The UTXOs used return to their original state and the transaction can be rebroadcast.</p>
+
+          <p><strong>The mempool and the fee market</strong></p>
+          <p>The mempool is where the fee market forms naturally. Space in every block is limited. Miners choose which transactions to include in a block, and they have an economic incentive to choose the transactions with the highest fees. When the mempool is busy, users who want fast confirmation have to compete with higher fees.</p>
+
+          <div class="p-callout">
+            <p>The mempool is one of the most frequently misunderstood components of Bitcoin. Many people panic when they see their transaction stuck in the mempool. But as long as the transaction is valid and its fee is reasonable, it will be confirmed, whether now or later when the network is quieter.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulation — Mempool and transaction selection</div>
+          <div class="b09-s91-desc">
+            Step 1: add transactions to the mempool. Step 2: mine a block to see how miners pick transactions based on the highest fee rate.
+          </div>
+
+          <div class="b09-s91-top">
+            <span class="b09-s91-step-label">1.</span>
+            <button class="b09-s91-btn-add" id="b09-s91-add">+ Add Transaction</button>
+            <span class="b09-s91-step-label">2.</span>
+            <button class="b09-s91-btn-mine" id="b09-s91-mine">Mine Block</button>
+            <button class="b09-s91-btn-reset" id="b09-s91-reset">Reset</button>
+            <div class="b09-s91-stat" id="b09-s91-stat">Mempool: 0 tx</div>
+          </div>
+
+          <div class="b09-s91-legend">
+            <div class="b09-s91-leg"><div class="b09-s91-leg-dot" style="background:#0F6E56;"></div>High fee (prioritized)</div>
+            <div class="b09-s91-leg"><div class="b09-s91-leg-dot" style="background:#534AB7;"></div>Medium fee</div>
+            <div class="b09-s91-leg"><div class="b09-s91-leg-dot" style="background:#854F0B;"></div>Low fee (waiting)</div>
+          </div>
+
+          <div class="b09-s91-body">
+            <div class="b09-s91-col">
+              <div class="b09-s91-col-head">Mempool</div>
+              <div class="b09-s91-col-sub">Transactions waiting for confirmation</div>
+              <div class="b09-s91-pool" id="b09-s91-pool"><div class="b09-s91-empty">No transactions yet</div></div>
+              <div class="b09-s91-cap">
+                <div class="b09-s91-cap-label">Mempool capacity: <span id="b09-s91-cap-pct">0%</span></div>
+                <div class="b09-s91-cap-track"><div class="b09-s91-cap-fill" id="b09-s91-cap-fill" style="width:0%"></div></div>
+              </div>
+            </div>
+            <div class="b09-s91-col">
+              <div class="b09-s91-col-head">Current block</div>
+              <div class="b09-s91-col-sub">Selected by the miner based on the highest fee</div>
+              <div class="b09-s91-block" id="b09-s91-block"><div class="b09-s91-empty">No transactions selected yet</div></div>
+              <div class="b09-s91-cap">
+                <div class="b09-s91-cap-label">Block capacity: <span id="b09-s91-blk-pct">0%</span></div>
+                <div class="b09-s91-cap-track"><div class="b09-s91-cap-fill" id="b09-s91-blk-fill" style="width:0%"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b09-s91-note idle-note" id="b09-s91-note">Start with step 1: add transactions to the mempool, then step 2: mine a block to see how the miner picks transactions based on the highest fee.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-9-2" data-sb="sb-9-2">
+            9.2 — Fee Rate and Priority →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 9.1 -->
+
+      <!-- ==============================
+           SECTION 9.2 · Fee Rate dan Prioritas
+      ============================== -->
+      <div class="p-section" id="section-9-2">
+        <div class="p-eyebrow">Chapter 9 · 9.2</div>
+        <div class="p-heading">It’s not the biggest fee that wins, but the highest fee rate</div>
+        <div class="p-title">Fee Rate and Priority</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>In the mempool, all transactions compete to get into the next block. But it’s not the transaction with the largest total fee that’s prioritized. What’s prioritized is the transaction with the highest fee rate.</p>
+
+          <p><strong>What is fee rate?</strong></p>
+          <p>Fee rate is the fee divided by the transaction size. Its unit is satoshi per virtual byte, written sat/vB. A transaction with a 1,000 satoshi fee and a size of 200 vbytes has a fee rate of 5 sat/vB. Another transaction with a 500 satoshi fee but a size of 50 vbytes has a fee rate of 10 sat/vB and will be prioritized higher, even though its total fee is smaller. This is logical from the miner’s point of view: a block has limited capacity in weight/vbytes, not in number of transactions. The miner wants to maximize revenue per unit of available space.</p>
+
+          <p><strong>Virtual byte vs byte</strong></p>
+          <p>Since SegWit was introduced, transaction size is measured in virtual bytes (vbytes) rather than ordinary bytes. Witness data (signatures) gets a 75% discount: every 4 bytes of witness counts as 1 vbyte. This is an incentive for users to use SegWit addresses because their transactions are lighter and their fee rate is more competitive for the same fee.</p>
+
+          <p><strong>How do miners choose transactions?</strong></p>
+          <p>Miners sort all transactions in the mempool by fee rate, from highest to lowest, then fill the block from the top until capacity runs out. In practice it’s more complex because there are dependencies between transactions: transaction B that uses the output of transaction A must come after A. But the basic principle holds: the highest fee rate means the highest priority.</p>
+
+          <p><strong>What’s the right fee rate?</strong></p>
+          <p>There’s no exact number. The right fee rate depends on how busy the mempool is at the time and how fast the transaction needs to be confirmed. When the mempool is quiet, even 1 sat/vB can be confirmed in the next block. When the mempool is very busy, fee rate can reach hundreds of sat/vB. Tools like mempool.space help you see the mempool conditions in real time.</p>
+
+          <div class="p-callout">
+            <p>Understanding fee rate is a basic skill every Bitcoin user needs. Too low and the transaction can be stuck for weeks. Too high and you pay more than you need to.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulation — Fee rate calculator and Legacy vs SegWit comparison</div>
+          <div class="b09-s92-desc">
+            First tab: calculate the fee rate from the fee and transaction size. Second tab: compare the efficiency of Legacy vs SegWit with the same fee.
+          </div>
+
+          <div class="b09-s92-tabs">
+            <button class="b09-s92-tab s92-act" id="b09-s92-t1">Fee rate calculator</button>
+            <button class="b09-s92-tab" id="b09-s92-t2">Legacy vs SegWit</button>
+          </div>
+
+          <!-- PANE 1: KALKULATOR -->
+          <div class="b09-s92-pane show" id="b09-s92-p1">
+            <div class="b09-s92-inputs">
+              <div class="b09-s92-field">
+                <div class="b09-s92-label">Total fee <span class="b09-s92-label-sub">in satoshi</span></div>
+                <input class="b09-s92-input" id="b09-s92-fee" type="number" value="2100" min="1" max="1000000">
+              </div>
+              <div class="b09-s92-field">
+                <div class="b09-s92-label">Transaction size <span class="b09-s92-label-sub">in vbytes</span></div>
+                <input class="b09-s92-input" id="b09-s92-size" type="number" value="140" min="1" max="10000">
+              </div>
+            </div>
+            <div class="b09-s92-result">
+              <div class="b09-s92-result-head">
+                <div class="b09-s92-result-val" id="b09-s92-rate">15.0</div>
+                <div class="b09-s92-result-unit">sat/vB</div>
+              </div>
+              <div class="b09-s92-result-body">
+                <div class="b09-s92-zone-wrap">
+                  <div class="b09-s92-zone-bar">
+                    <div class="b09-s92-zone-low"></div>
+                    <div class="b09-s92-zone-med"></div>
+                    <div class="b09-s92-zone-high"></div>
+                    <div class="b09-s92-zone-marker" id="b09-s92-marker" style="left:40%"></div>
+                  </div>
+                  <div class="b09-s92-zone-labels">
+                    <span>1 sat/vB</span><span>10</span><span>30</span><span>100+</span>
+                  </div>
+                  <div class="b09-s92-zone-legend">
+                    <div class="b09-s92-zone-leg"><div class="b09-s92-zone-dot" style="background:#854F0B;"></div>Low</div>
+                    <div class="b09-s92-zone-leg"><div class="b09-s92-zone-dot" style="background:#534AB7;"></div>Medium</div>
+                    <div class="b09-s92-zone-leg"><div class="b09-s92-zone-dot" style="background:#0F6E56;"></div>High</div>
+                  </div>
+                </div>
+                <div class="b09-s92-row"><div class="b09-s92-row-label">Estimated confirmation</div><div class="b09-s92-row-val" id="b09-s92-eta">2-3 blocks</div></div>
+                <div class="b09-s92-row"><div class="b09-s92-row-label">Total fee</div><div class="b09-s92-row-val" id="b09-s92-total-sat">2,100 sat</div></div>
+                <div class="b09-s92-row"><div class="b09-s92-row-label">Priority in mempool</div><div class="b09-s92-row-val" id="b09-s92-priority">Medium</div></div>
+              </div>
+            </div>
+            <div class="b09-s92-note" id="b09-s92-note1">A fee rate of 15 sat/vB counts as medium.</div>
+          </div>
+
+          <!-- PANE 2: LEGACY VS SEGWIT -->
+          <div class="b09-s92-pane" id="b09-s92-p2">
+            <div class="b09-s92-inputs">
+              <div class="b09-s92-field">
+                <div class="b09-s92-label">Fee paid <span class="b09-s92-label-sub">same for both (satoshi)</span></div>
+                <input class="b09-s92-input" id="b09-s92-fee2" type="number" value="3000" min="1" max="1000000">
+              </div>
+            </div>
+            <div class="b09-s92-compare">
+              <div class="b09-s92-cmp-card">
+                <div class="b09-s92-cmp-head s92-legacy">Legacy (P2PKH)</div>
+                <div class="b09-s92-cmp-body">
+                  <div class="b09-s92-cmp-row"><div class="b09-s92-cmp-label">Size</div><div class="b09-s92-cmp-val s92-warn" id="b09-s92-leg-size">226 vbyte</div></div>
+                  <div class="b09-s92-cmp-row"><div class="b09-s92-cmp-label">Fee rate</div><div class="b09-s92-cmp-val s92-warn" id="b09-s92-leg-rate">13.3 sat/vB</div></div>
+                  <div class="b09-s92-cmp-row"><div class="b09-s92-cmp-label">Priority</div><div class="b09-s92-cmp-val s92-warn" id="b09-s92-leg-pri">Medium</div></div>
+                  <div class="b09-s92-cmp-row"><div class="b09-s92-cmp-label">Est. confirmation</div><div class="b09-s92-cmp-val" id="b09-s92-leg-eta">2-3 blocks</div></div>
+                </div>
+              </div>
+              <div class="b09-s92-cmp-card">
+                <div class="b09-s92-cmp-head s92-segwit">SegWit (P2WPKH)</div>
+                <div class="b09-s92-cmp-body">
+                  <div class="b09-s92-cmp-row"><div class="b09-s92-cmp-label">Size</div><div class="b09-s92-cmp-val s92-good" id="b09-s92-sw-size">140 vbyte</div></div>
+                  <div class="b09-s92-cmp-row"><div class="b09-s92-cmp-label">Fee rate</div><div class="b09-s92-cmp-val s92-good" id="b09-s92-sw-rate">21.4 sat/vB</div></div>
+                  <div class="b09-s92-cmp-row"><div class="b09-s92-cmp-label">Priority</div><div class="b09-s92-cmp-val s92-good" id="b09-s92-sw-pri">High</div></div>
+                  <div class="b09-s92-cmp-row"><div class="b09-s92-cmp-label">Est. confirmation</div><div class="b09-s92-cmp-val s92-good" id="b09-s92-sw-eta">Next block</div></div>
+                </div>
+              </div>
+            </div>
+            <div class="b09-s92-note s92-note-info" id="b09-s92-note2">With the same fee, a SegWit transaction has a higher fee rate because its size is smaller.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-9-1" data-sb="sb-9-1">
+            ← 9.1 — What is the Mempool?
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-9-3" data-sb="sb-9-3">
+            9.3 — RBF and CPFP →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 9.2 -->
+
+      <!-- ==============================
+           SECTION 9.3 · RBF dan CPFP
+      ============================== -->
+      <div class="p-section" id="section-9-3">
+        <div class="p-eyebrow">Chapter 9 · 9.3</div>
+        <div class="p-heading">Transaction stuck? There are two ways to fix it</div>
+        <div class="p-title">RBF and CPFP</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>The transaction has been sent but its fee is too low and it’s stuck in the mempool. What can be done? There are two mechanisms that let a user speed up a transaction that’s already been sent: RBF and CPFP.</p>
+
+          <p><strong>RBF: Replace-By-Fee</strong></p>
+          <p>RBF lets the sender replace an unconfirmed transaction with a new version that has a higher fee. The new transaction uses the same UTXOs but pays a larger fee, so miners are more interested in including it in a block. To be replaceable, the original transaction must mark itself as replaceable by setting the sequence number to a certain value. This is called opt-in RBF. A node that receives the replacement transaction discards the old one and replaces it with the new, as long as the new transaction meets the requirements: a higher fee and a higher fee rate than the original.</p>
+
+          <p><strong>Full RBF</strong></p>
+          <p>There’s also full RBF, where a node accepts a transaction replacement even if the original transaction didn’t mark itself as replaceable. This is controversial because it touches the assumption that an unconfirmed transaction can be considered safe for small payments.</p>
+
+          <p><strong>CPFP: Child Pays for Parent</strong></p>
+          <p>CPFP is a different mechanism. If the original transaction (parent) is stuck because of a low fee, the recipient can create a new transaction (child) that uses the output of the parent transaction, with a very high fee. A miner who wants to take the fee from the child transaction has to include the parent transaction first because the child depends on the parent. Effectively, the high fee from the child subsidizes the confirmation of the low-fee parent. The miner calculates the combined fee rate of the parent+child package and compares it with other transactions in the mempool.</p>
+
+          <p><strong>When to use RBF vs CPFP?</strong></p>
+          <p>RBF is used by a sender who wants to replace their own transaction. CPFP can be used by a recipient, who can’t change a transaction that’s already been sent to them but can create a new transaction that pulls the parent into a block.</p>
+
+          <div class="p-callout">
+            <p>RBF and CPFP are proof that Bitcoin can be very flexible when it comes to fee management. Two different mechanisms to solve the same problem, with different trade-offs and assumptions. Understanding both makes users far more confident in managing their transactions.</p>
+
+          <p><strong>The other side of that flexibility</strong></p>
+          <p>Flexibility always has another side. The same rules that let you speed up your own transaction can be turned around to <strong>hold someone else’s in place</strong>. It is called <em>transaction pinning</em>.</p>
+          <p>The key is something we already covered in 9.1: the mempool is not part of consensus. It is simply each node’s policy about what it is willing to keep and relay. That policy has practical limits, such as how many descendant transactions may hang off a single unconfirmed one. Those limits exist to protect nodes from being flooded. But the same limits can be used to trap.</p>
+          <p>The shape of the attack is roughly this. The attacker creates a very large, very low-fee child transaction attached to the one they want to obstruct. The combination is too unattractive to mine, yet it has already filled the mempool policy quota. As a result the victim can no longer replace or accelerate their transaction, because the replacement is rejected by a policy that is already full. The transaction is not cancelled, it is simply <strong>pinned in place</strong>, stuck with no way to push it forward.</p>
+          <p>For an ordinary payment this is annoying. For Lightning it is dangerous. Recall from 7.2 that the penalty against cheating only works if the penalty transaction can reach the blockchain <strong>before the timelock expires</strong>. If an attacker can pin that transaction in the mempool until the deadline passes, the punishment mechanism that looked so solid in the simulation becomes powerless. The cryptography was not broken. The road to the blockchain was blocked.</p>
+          <p>This is a good illustration of two different layers of security. Chapter 4 dealt with security resting on mathematics, and mathematics does not negotiate. But at the mempool layer what governs is not mathematics but <strong>policy</strong>, and policy can always be exploited by someone who reads it more carefully than the people who wrote it.</p>
+          <p>So the fixes live at the policy layer too, not in consensus. One is <em>package relay</em>, which has nodes evaluate a transaction together with its descendants as a single package rather than one at a time, so that a low-fee transaction accompanied by a high-fee child is no longer turned away at the gate. Another is restricting the shape of transactions used by protocols like Lightning, so that the room an attacker has to attach a giant descendant becomes much narrower.</p>
+          <p>It is worth noting that fixes of this kind need no soft fork, because no consensus rule changes. Nodes simply update their policy. That makes them easier to deploy, but it also means the protection depends on how many nodes actually update.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulation — RBF and CPFP</div>
+          <div class="b09-s93-desc">
+            RBF tab: see how a stuck transaction is replaced with a new version that has a higher fee. CPFP tab: create a child transaction to pull a stuck parent into a block.
+          </div>
+
+          <div class="b09-s93-tabs">
+            <button class="b09-s93-tab s93-act" id="b09-s93-t1">RBF — Replace-By-Fee</button>
+            <button class="b09-s93-tab" id="b09-s93-t2">CPFP — Child Pays for Parent</button>
+          </div>
+
+          <!-- RBF PANE -->
+          <div class="b09-s93-pane show" id="b09-s93-p1">
+            <div class="b09-s93-hint">The mempool queue is sorted by fee rate. Your transaction (red, bottom position) is too low. Click "Replace with RBF" to send a new version with a higher fee.</div>
+            <div class="b09-s93-queue" id="b09-s93-rbf-queue"></div>
+            <div class="b09-s93-detail">
+              <div class="b09-s93-detail-head" id="b09-s93-rbf-dhead">Your transaction (stuck)</div>
+              <div class="b09-s93-detail-body">
+                <div class="b09-s93-drow"><div class="b09-s93-dk">TX ID</div><div class="b09-s93-dv">tx_a1b2c3d4</div></div>
+                <div class="b09-s93-drow"><div class="b09-s93-dk">Current fee rate</div><div class="b09-s93-dv s93-bad">2.0 sat/vB</div></div>
+                <div class="b09-s93-drow"><div class="b09-s93-dk">New fee rate (RBF)</div><div class="b09-s93-dv s93-good">35.0 sat/vB</div></div>
+                <div class="b09-s93-drow"><div class="b09-s93-dk">Additional fee</div><div class="b09-s93-dv s93-warn">+4,620 sat</div></div>
+                <div class="b09-s93-drow"><div class="b09-s93-dk">Status</div><div class="b09-s93-dv s93-bad" id="b09-s93-rbf-status">Stuck in mempool</div></div>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="b09-s93-btn-primary" id="b09-s93-rbf-btn">Replace with RBF</button>
+              <button class="b09-s93-btn-sec" id="b09-s93-rbf-reset">Reset</button>
+            </div>
+            <div class="b09-s93-note s93-note-info" id="b09-s93-rbf-note">A transaction with a fee rate of 2 sat/vB will wait a very long time. RBF lets you resend the same transaction with a higher fee, replacing the old one in the mempool.</div>
+          </div>
+
+          <!-- CPFP PANE -->
+          <div class="b09-s93-pane" id="b09-s93-p2">
+            <div class="b09-s93-hint">You receive a payment (parent tx) but the transaction is stuck because of a low fee. Create a child tx with a high fee to pull the parent into a block.</div>
+            <div class="b09-s93-queue" id="b09-s93-cpfp-queue"></div>
+            <div class="b09-s93-detail">
+              <div class="b09-s93-detail-head">CPFP package (Parent + Child)</div>
+              <div class="b09-s93-detail-body">
+                <div class="b09-s93-drow"><div class="b09-s93-dk">Parent fee rate</div><div class="b09-s93-dv s93-bad">2.0 sat/vB</div></div>
+                <div class="b09-s93-drow"><div class="b09-s93-dk">Child fee rate</div><div class="b09-s93-dv s93-purp" id="b09-s93-cpfp-cr">not created yet</div></div>
+                <div class="b09-s93-drow"><div class="b09-s93-dk">Combined fee rate</div><div class="b09-s93-dv s93-warn" id="b09-s93-cpfp-pkg">waiting for child...</div></div>
+                <div class="b09-s93-drow"><div class="b09-s93-dk">Package status</div><div class="b09-s93-dv s93-warn" id="b09-s93-cpfp-status">No child tx yet</div></div>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="b09-s93-btn-primary" id="b09-s93-cpfp-btn">Create Child Transaction</button>
+              <button class="b09-s93-btn-sec" id="b09-s93-cpfp-reset">Reset</button>
+            </div>
+            <div class="b09-s93-note s93-note-info" id="b09-s93-cpfp-note">The parent tx’s fee is too low (2 sat/vB). Because you’ve already received its output, you can create a child tx with a high fee. A miner who wants to take the child’s fee MUST include the parent first.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-9-2" data-sb="sb-9-2">
+            ← 9.2 — Fee Rate and Priority
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-9-4" data-sb="sb-9-4">
+            9.4 — The Mempool When the Network is Busy →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 9.3 -->
+
+      <!-- ==============================
+           SECTION 9.4 · Mempool saat Jaringan Ramai
+      ============================== -->
+      <div class="p-section" id="section-9-4">
+        <div class="p-eyebrow">Chapter 9 · 9.4</div>
+        <div class="p-heading">Why fees suddenly spike and what can be done</div>
+        <div class="p-title">The Mempool When the Network is Busy</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>There are certain times when the Bitcoin mempool becomes very busy. Thousands of transactions pile up, fee rate spikes, and users paying low fees have to wait hours or even days. Understanding when and why this happens lets you anticipate and make better decisions.</p>
+
+          <p><strong>What causes the mempool to get busy?</strong></p>
+          <p>A busy mempool happens when the rate of incoming transactions exceeds the block capacity that can be confirmed. Every block has a capacity of about 4 million weight units. A weight unit is the formal unit of block capacity, and its relationship to the vbyte we used in 9.2 is simple: 1 vbyte equals 4 weight units. So 4 million weight units is the same as 1 million vbytes. Because witness data counts as a quarter, a single block can hold more raw bytes than that figure suggests, typically around 1.5 to 2.5 MB in practice. With an average block time of 10 minutes, the network generally processes about 3 to 7 transactions per second, depending on which transaction types dominate at the time. Some events that historically caused mempool spikes: the launch of Ordinals and Inscriptions in 2023, a bull market driving high trading activity, halving events that triggered massive speculation, and spam attacks that deliberately flooded the network with low-cost transactions.</p>
+
+          <p><strong>What happens to low-fee transactions?</strong></p>
+          <p>When the mempool is busy, miners can easily fill an entire block with only high-fee transactions. Low-fee transactions are pushed to the bottom of the queue and might not be confirmed for days. Some nodes will even drop low-fee transactions from their mempool to save memory, even though the transactions are valid.</p>
+
+          <p><strong>How do you read mempool conditions?</strong></p>
+          <p>There are several metrics that can be monitored. The mempool size in MB or the number of transactions shows how busy the queue is right now. The fee rate for confirmation within 1 block, 3 blocks, and 6 blocks shows how much you need to pay for different speeds. Tools like mempool.space display these visualizations in real time and are very helpful.</p>
+
+          <p><strong>Strategies for dealing with a busy mempool</strong></p>
+          <p>If it’s not urgent, wait until the mempool is quiet. Usually weekends or the middle of the night in Asia are quieter than peak hours. If you’ve already sent with a low fee, use RBF or CPFP. If you want to send a new transaction, monitor the mempool conditions first and use an accurate fee estimator.</p>
+
+          <div class="p-callout">
+            <p>A busy mempool isn’t a sign that Bitcoin is broken. It’s actually a sign that Bitcoin works exactly as designed: a free market that determines the price of block space based on demand. What you need to do is understand how it works and use it wisely.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualization — Quiet vs busy mempool</div>
+          <div class="b09-s94-desc">
+            Toggle between the two conditions to see the difference in mempool size, fee rate, and the right strategy for each condition.
+          </div>
+
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
+            <div class="b09-s94-toggle">
+              <button class="b09-s94-tog quiet-tog" id="b09-s94-quiet">Quiet Mempool</button>
+              <button class="b09-s94-tog" id="b09-s94-busy">Busy Mempool</button>
+            </div>
+            <div class="b09-s94-subtitle" id="b09-s94-subtitle">Normal conditions — transactions flow smoothly</div>
+          </div>
+
+          <div class="b09-s94-grid">
+            <div class="b09-s94-card">
+              <div class="b09-s94-card-head quiet-head" id="b09-s94-head1">Mempool size</div>
+              <div class="b09-s94-card-body">
+                <canvas class="b09-s94-cv" id="b09-s94-cv1" height="120"></canvas>
+                <div class="b09-s94-metric">
+                  <div class="b09-s94-metric-label">Total transactions waiting</div>
+                  <div class="b09-s94-metric-val s94-good" id="b09-s94-tx-count">~2,400 tx</div>
+                </div>
+                <div class="b09-s94-metric">
+                  <div class="b09-s94-metric-label">Mempool size</div>
+                  <div class="b09-s94-metric-val s94-good" id="b09-s94-mp-size">~4 MB</div>
+                </div>
+              </div>
+            </div>
+            <div class="b09-s94-card">
+              <div class="b09-s94-card-head quiet-head" id="b09-s94-head2">Fee rate for confirmation</div>
+              <div class="b09-s94-card-body">
+                <div class="b09-s94-fee-table" id="b09-s94-fee-table"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b09-s94-strategy">
+            <div class="b09-s94-strategy-head" id="b09-s94-strat-head">Quiet conditions: what should you do?</div>
+            <div class="b09-s94-strategy-body" id="b09-s94-strat-body"></div>
+          </div>
+
+          <div class="b09-s94-note quiet-note" id="b09-s94-note">The mempool is quiet. A low fee is enough for fast confirmation. This is the best time to send a non-urgent transaction.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-9-3" data-sb="sb-9-3">
+            ← 9.3 — RBF and CPFP
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-9-5" data-sb="sb-9-5">
+            9.5 — Fee Estimation →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 9.4 -->
+
+      <!-- ==============================
+           SECTION 9.5 · Fee Estimation
+      ============================== -->
+      <div class="p-section" id="section-9-5">
+        <div class="p-eyebrow">Chapter 9 · 9.5</div>
+        <div class="p-heading">What’s the right fee for this situation?</div>
+        <div class="p-title">Fee Estimation</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Determining the right fee for a Bitcoin transaction isn’t an exact science. Too low and the transaction can be stuck. Too high and you waste money. Fee estimation is the process of estimating the minimum fee rate needed for a transaction to be confirmed within a certain target time.</p>
+
+          <p><strong>How does a fee estimator work?</strong></p>
+          <p>A good fee estimator analyzes the current mempool conditions and historical confirmation data to predict what fee rate is needed. There are two main approaches. The first is mempool-based: looking at the distribution of fee rates in the current mempool and estimating how many blocks are needed to clear the queue down to a certain fee level. The second is history-based: analyzing historical confirmation data to build a prediction model based on similar mempool conditions.</p>
+
+          <p><strong>Confirmation target</strong></p>
+          <p>Users can usually choose a confirmation target: next block (fastest, most expensive), 3 blocks (about 30 minutes), 6 blocks (about 1 hour), or even 1-2 days for non-urgent ones. The fee estimator gives the recommended fee rate for each target.</p>
+
+          <p><strong>Limitations of fee estimators</strong></p>
+          <p>Fee estimators have some important weaknesses. First, the mempool can change very fast so an accurate estimate from 5 minutes ago can already be irrelevant. Second, an estimator can’t predict a block that happens to be empty due to mining luck. Third, some wallets use a fee estimator that’s outdated or too conservative, so they always recommend a fee that’s too high.</p>
+
+          <p><strong>Fee sniping</strong></p>
+          <p>There’s also an interesting phenomenon called fee sniping: a situation where a miner might be more interested in re-mining a previous block that had high fees than mining a new block. This is addressed with a time-lock on transactions to ensure a transaction is only valid at a certain block height or higher.</p>
+
+          <div class="p-callout">
+            <p>Good fee estimation is a combination of real-time data and an understanding of how the mempool works. Tools like mempool.space provide the data needed, but it still takes human judgment to read the situation correctly, especially when mempool conditions are changing fast.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulation — Interactive fee estimator</div>
+          <div class="b09-s95-desc">
+            Choose a mempool condition and a confirmation target to see the recommended fee rate, the time estimate, and an explanation of how that number was reached.
+          </div>
+
+          <div class="b09-s95-row">
+            <div class="b09-s95-group">
+              <div class="b09-s95-group-label">Current mempool condition</div>
+              <div class="b09-s95-group-sub">How busy is the transaction queue?</div>
+              <div class="b09-s95-opts">
+                <div class="b09-s95-opt sel" data-group="mp" data-val="quiet"><div class="b09-s95-radio"><div class="b09-s95-radio-dot"></div></div><div class="b09-s95-opt-label">Quiet</div><div class="b09-s95-opt-val">~4 MB</div></div>
+                <div class="b09-s95-opt" data-group="mp" data-val="normal"><div class="b09-s95-radio"></div><div class="b09-s95-opt-label">Normal</div><div class="b09-s95-opt-val">~50 MB</div></div>
+                <div class="b09-s95-opt" data-group="mp" data-val="busy"><div class="b09-s95-radio"></div><div class="b09-s95-opt-label">Busy</div><div class="b09-s95-opt-val">~200 MB</div></div>
+                <div class="b09-s95-opt" data-group="mp" data-val="vbusy"><div class="b09-s95-radio"></div><div class="b09-s95-opt-label">Very busy</div><div class="b09-s95-opt-val">>350 MB</div></div>
+              </div>
+            </div>
+            <div class="b09-s95-group">
+              <div class="b09-s95-group-label">Confirmation target</div>
+              <div class="b09-s95-group-sub">How fast does the transaction need to be confirmed?</div>
+              <div class="b09-s95-opts">
+                <div class="b09-s95-opt sel" data-group="tgt" data-val="next"><div class="b09-s95-radio"><div class="b09-s95-radio-dot"></div></div><div class="b09-s95-opt-label">Next block</div><div class="b09-s95-opt-val">~10 minutes</div></div>
+                <div class="b09-s95-opt" data-group="tgt" data-val="3blk"><div class="b09-s95-radio"></div><div class="b09-s95-opt-label">3 blocks</div><div class="b09-s95-opt-val">~30 minutes</div></div>
+                <div class="b09-s95-opt" data-group="tgt" data-val="6blk"><div class="b09-s95-radio"></div><div class="b09-s95-opt-label">6 blocks</div><div class="b09-s95-opt-val">~1 hour</div></div>
+                <div class="b09-s95-opt" data-group="tgt" data-val="1day"><div class="b09-s95-radio"></div><div class="b09-s95-opt-label">Not urgent</div><div class="b09-s95-opt-val">~1 day</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b09-s95-result">
+            <div class="b09-s95-result-head">
+              <div class="b09-s95-result-label">Recommended fee rate</div>
+              <div class="b09-s95-result-val" id="b09-s95-rate">2</div>
+              <div class="b09-s95-result-unit">sat/vB</div>
+            </div>
+            <div class="b09-s95-result-body">
+              <div class="b09-s95-result-row"><div class="b09-s95-result-key">Estimated confirmation</div><div class="b09-s95-result-v s95-good" id="b09-s95-eta">Next block (~10 minutes)</div></div>
+              <div class="b09-s95-result-row"><div class="b09-s95-result-key">Fee for a 140 vbyte tx</div><div class="b09-s95-result-v" id="b09-s95-total">280 sat (~$0.02)</div></div>
+              <div class="b09-s95-result-row"><div class="b09-s95-result-key">Confidence level</div><div class="b09-s95-result-v s95-good" id="b09-s95-conf">High</div></div>
+              <div class="b09-s95-queue">
+                <div class="b09-s95-queue-label">Position in the queue (each box = 1 block):</div>
+                <div class="b09-s95-queue-track" id="b09-s95-blocks"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b09-s95-explain s95-good" id="b09-s95-explain">The mempool is quiet. Almost all transactions are confirmed in the next block even with a very low fee.</div>
+
+          <div class="b09-lab">
+            <div class="b09-lab-ctrl">
+              <label>Shape of your transaction</label>
+              <input type="range" id="b09-s95-size" min="1" max="10" step="1" value="1">
+              <span class="b09-lab-ctrl-val" id="b09-s95-size-val">1 input</span>
+            </div>
+            <div class="b09-lab-note" id="b09-s95-size-note"></div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-9-4" data-sb="sb-9-4">
+            ← 9.4 — The Mempool When the Network is Busy
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-9-6" data-sb="sb-9-6">
+            9.6 — The Future of the Fee Market →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 9.5 -->
+
+      <!-- ==============================
+           SECTION 9.6 · Masa Depan Fee Market
+      ============================== -->
+      <div class="p-section" id="section-9-6">
+        <div class="p-eyebrow">Chapter 9 · 9.6</div>
+        <div class="p-heading">When the block reward runs out, who pays the miners?</div>
+        <div class="p-title">The Future of the Fee Market</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Bitcoin is designed so that the block reward keeps decreasing with every halving. Eventually, around the year 2140, all 21 million bitcoin will have been mined and the block reward becomes zero. The only compensation for miners is transaction fees. This is one of the most fundamental questions about Bitcoin’s long-term sustainability.</p>
+
+          <p><strong>Are fees enough to replace the block reward?</strong></p>
+          <p>This is an open question with no definite answer yet. The optimistic camp argues that as Bitcoin adoption spreads, transaction volume will keep increasing. More transactions means more competition for block space, which means a higher fee rate. The Lightning Network and other layers don’t eliminate on-chain fees: every channel opening and closing still needs an on-chain transaction. The skeptical camp argues that the pressure for efficiency is always there. Transaction batching, SegWit, Taproot, and other technologies keep reducing transaction size. If fees are too low, miners will go out of business, hash rate drops, and network security is threatened.</p>
+
+          <p><strong>Fee market and security</strong></p>
+          <p>There’s a direct relationship between the fee market and network security that’s often misunderstood. Many people think: if miners leave, the difficulty adjustment will adjust, so the network stays secure. This is partly true, but misses the more important point.</p>
+          <p>The difficulty adjustment does ensure the network keeps functioning. If hash rate drops 50%, difficulty drops 50%, and block time returns to 10 minutes. Transactions keep being confirmed, the network doesn’t stop. What the difficulty adjustment doesn’t do is make an attack more expensive. Quite the opposite: if hash rate drops because miners aren’t profitable, the cost of launching a 51% attack drops proportionally too.</p>
+          <p>The analogy is simple: imagine a building’s security system. If half the guards are fired because the budget ran out, the building stays open and people can still enter. But that building is far easier to rob. The difficulty adjustment is a mechanism that ensures the building stays open, not a mechanism that maintains the number of guards. This is why a healthy fee market isn’t just about user convenience. It’s the foundation of long-term network security.</p>
+
+          <p><strong>Not all fees last equally long</strong></p>
+          <p>Not all demand for block space is equal in value over the long term. The healthiest demand comes from organic, widespread Bitcoin adoption: the more people transact, the more Lightning channels are opened and closed, the more institutions do on-chain settlement. High fees from these sources are a sign of a healthily growing ecosystem, and this is exactly the desired scenario: millions of ordinary users whose transaction needs create natural competition for block space.</p>
+          <p>Other sources are seasonal. The Ordinals and Inscriptions wave of 2023 we mentioned in 9.4 is the clearest example: fees spiked for months, then receded. For a security budget that has to hold for decades, spikes like that are hard to lean on, because nobody can guarantee the next wave will arrive.</p>
+          <p>This is where one of the most heated debates in recent Bitcoin history lives, and you deserve to hear both sides. One side argues that a transaction is a transaction: the Bitcoin protocol has never distinguished by purpose, whoever pays the fee has earned the block space, and miners get paid whether the data is a payment or a picture. The other side argues that block space is finite, and when it fills with things that do not need Bitcoin’s particular properties, people who do need to send money get pushed out by the fee spike.</p>
+          <p>This book will not decide for you. What you can hold onto as an analytical tool: what determines long-term security is not how high fees are today, but how reliably those fees come back next year and ten years from now. Every time you read news about a fee spike, the useful question is whether this is a wave or a rising tide.</p>
+
+          <p><strong>Block space as a commodity</strong></p>
+          <p>Bitcoin’s block space is a scarce commodity. There’s demand from various legitimate sources: financial transactions, Lightning channel management, layer-two protocols, and applications that provide real value. As long as meaningful demand exceeds capacity, the fee market will stay active organically.</p>
+
+          <div class="p-callout">
+            <p>The sustainability of Bitcoin’s fee market is one of the biggest economic experiments that has ever existed. What you can do is understand the incentives involved, distinguish healthy demand from unhealthy, and observe how the market responds over time.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualization — Long-term fee market projection</div>
+          <div class="b09-s96-desc">
+            A conceptual illustration, not a prediction. The first tab shows the block reward vs fee trend. The second tab compares two adoption scenarios.
+          </div>
+
+          <div class="b09-s96-tabs">
+            <button class="b09-s96-tab s96-act" id="b09-s96-t1">Block reward vs Fee</button>
+            <button class="b09-s96-tab" id="b09-s96-t2">Two scenarios</button>
+          </div>
+
+          <div class="b09-s96-pane show" id="b09-s96-p1">
+            <canvas class="b09-s96-cv" id="b09-s96-cv1" height="260"></canvas>
+            <div class="b09-s96-legend">
+              <div class="b09-s96-leg"><div class="b09-s96-leg-line" style="background:#534AB7;"></div>Block reward</div>
+              <div class="b09-s96-leg"><div class="b09-s96-leg-line" style="background:#0F6E56;"></div>Fee revenue (projection)</div>
+              <div class="b09-s96-leg"><div class="b09-s96-leg-line" style="background:#F0A050;border-top:1.5px dashed #F0A050;height:0;"></div>Total miner revenue</div>
+            </div>
+            <div class="b09-s96-halvings">
+              <div class="b09-s96-halvings-label">Halving events:</div>
+              <div class="b09-s96-halving-row">
+                <div class="b09-s96-chip past">2009 — 50 BTC</div>
+                <div class="b09-s96-chip past">2012 — 25 BTC</div>
+                <div class="b09-s96-chip past">2016 — 12.5 BTC</div>
+                <div class="b09-s96-chip past">2020 — 6.25 BTC</div>
+                <div class="b09-s96-chip past">2024 — 3.125 BTC</div>
+                <div class="b09-s96-chip next">2028 — 1.5625 BTC</div>
+                <div class="b09-s96-chip">2032 — 0.78 BTC</div>
+                <div class="b09-s96-chip">2036+ — ...</div>
+              </div>
+            </div>
+            <div class="b09-s96-note s96-neutral">This is a conceptual illustration, not a prediction. What matters is the trend: the block reward keeps falling, and fees must grow to offset it so that network security is maintained.</div>
+          </div>
+
+          <div class="b09-s96-pane" id="b09-s96-p2">
+            <div class="b09-s96-scenarios">
+              <div class="b09-s96-sc-card">
+                <div class="b09-s96-sc-head s96-opt">Optimistic scenario</div>
+                <div class="b09-s96-sc-body">
+                  <div><b>Assumption:</b> Bitcoin adoption keeps growing organically</div>
+                  <div>Billions of Lightning users open and close channels regularly</div>
+                  <div>Institutions and nations do large-scale on-chain settlement</div>
+                  <div>Organic demand exceeds capacity, the fee market stays competitive</div>
+                  <div>Miners stay profitable without the block reward</div>
+                </div>
+              </div>
+              <div class="b09-s96-sc-card">
+                <div class="b09-s96-sc-head s96-pess">Pessimistic scenario</div>
+                <div class="b09-s96-sc-body">
+                  <div><b>Assumption:</b> efficiency grows faster than adoption</div>
+                  <div>Batching, SegWit, Taproot, and future protocols keep reducing the need for block space</div>
+                  <div>Layer 2 is too efficient, rarely needing on-chain settlement</div>
+                  <div>Fees aren’t enough to maintain a secure hash rate</div>
+                  <div>Pressure on long-term network security</div>
+                </div>
+              </div>
+            </div>
+            <canvas class="b09-s96-cv" id="b09-s96-cv2" height="200"></canvas>
+            <div class="b09-s96-legend">
+              <div class="b09-s96-leg"><div class="b09-s96-leg-line" style="background:#0F6E56;"></div>Optimistic scenario</div>
+              <div class="b09-s96-leg"><div class="b09-s96-leg-line" style="background:#A32D2D;"></div>Pessimistic scenario</div>
+              <div class="b09-s96-leg"><div class="b09-s96-leg-line" style="background:#534AB7;"></div>Block reward (reference)</div>
+            </div>
+            <div class="b09-s96-note s96-neutral">Both of these scenarios are conceptual illustrations. Reality is likely somewhere in between. A healthy fee market must come from real adoption, not artificial activity.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-9-5" data-sb="sb-9-5">
+            ← 9.5 — Fee Estimation
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 9.6 -->
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 12 · BAB 9 -->
+
+

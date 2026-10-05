@@ -1,0 +1,672 @@
+<!-- ============================================================
+     PAGE 8 · BAB 5 · Mining dan Proof of Work
+     |-- 5.1 · Konsensus [DONE]
+     |-- 5.2 · Proof of Work [LOCKED]
+     |-- 5.3 · Mining [LOCKED]
+     |-- 5.4 · Difficulty Adjustment [LOCKED]
+     |-- 5.5 · Block Reward dan Halving [LOCKED]
+     |-- 5.6 · Serangan 51% [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab5">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b5">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b5">← Chapter List</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab5">
+      <div class="sidebar-heading">Chapter 5</div>
+      <div class="sidebar-title">Mining and Proof of Work</div>
+
+      <!-- 5.1 · DONE -->
+      <div class="sidebar-item active" id="sb-5-1">
+        <div class="sb-num">5.1</div>
+        <div class="sb-label">Consensus</div>
+      </div>
+
+      <!-- 5.2 · DONE -->
+      <div class="sidebar-item" id="sb-5-2">
+        <div class="sb-num">5.2</div>
+        <div class="sb-label">Proof of Work</div>
+      </div>
+
+      <!-- 5.3 · DONE -->
+      <div class="sidebar-item" id="sb-5-3">
+        <div class="sb-num">5.3</div>
+        <div class="sb-label">Mining</div>
+      </div>
+
+      <!-- 5.4 · DONE -->
+      <div class="sidebar-item" id="sb-5-4">
+        <div class="sb-num">5.4</div>
+        <div class="sb-label">Difficulty Adjustment</div>
+      </div>
+
+      <!-- 5.5 · DONE -->
+      <div class="sidebar-item" id="sb-5-5">
+        <div class="sb-num">5.5</div>
+        <div class="sb-label">Block Reward & Halving</div>
+      </div>
+
+      <!-- 5.6 · DONE -->
+      <div class="sidebar-item" id="sb-5-6">
+        <div class="sb-num">5.6</div>
+        <div class="sb-label">51% Attack</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab5-content">
+
+      <!-- ==============================
+           SECTION 5.1 · Konsensus
+      ============================== -->
+      <div class="p-section active" id="section-5-1">
+        <div class="p-eyebrow">Chapter 5 · 5.1</div>
+        <div class="p-heading">How can thousands of parties who don’t know each other agree?</div>
+        <div class="p-title">Consensus</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Every morning, billions of people around the world wake up and agree on one thing without ever discussing it: what time it is. No one decides this. No meeting, no vote. But everyone in the same time zone sees the same clock and agrees that it’s seven in the morning. This is consensus.</p>
+
+          <p><strong>Consensus is everywhere</strong></p>
+          <p>Consensus is the process by which a group of parties reaches a shared agreement about something. It can happen formally or informally, with a central authority or without. In parliament, consensus is reached through voting. In the stock market, consensus about a stock’s price is reached through continuous buying and selling. On the internet, the TCP/IP protocol is a consensus about how data should be sent between computers. In society, language is a consensus about what a word means.</p>
+
+          <p><strong>Easy consensus and hard consensus</strong></p>
+          <p>Most of the consensus we know has one thing in common: there’s a central authority that serves as the anchor. The central bank sets the value of the currency. The government sets the laws. This authority makes consensus relatively easy. But what if there’s no referee? What if all parties are equal, none has more authority, and some of them might not even be honest? This is hard consensus. And this is exactly the problem Bitcoin faces.</p>
+
+          <p><strong>Two consequences of not following consensus</strong></p>
+          <p>In any consensus-based system, a party that doesn’t follow the shared agreement faces two choices. First, return to consensus. They realize their version differs from the majority, adjust, and continue together. Second, form their own faction. They keep their version, separate from the majority, and form a parallel system. In the Bitcoin world, this is called a fork.</p>
+
+          <p><strong>Bitcoin’s consensus problem</strong></p>
+          <p>Bitcoin has no central authority. What exists is thousands of nodes spread around the world, each keeping its own copy of the blockchain. The question: if two nodes get different information about the same block, who is right? How can thousands of computers that don’t know each other agree on one and the same version of history? Bitcoin’s solution to this problem is Proof of Work, which we’ll cover in 5.2.</p>
+
+          <div class="p-callout">
+            <p>Satoshi wasn’t the first to think about the problem of consensus without a central authority. Computer scientists had been wrestling with this since 1982 in what’s called the Byzantine Generals Problem. What Satoshi did was find the first practical solution that could work in an open system, without permission, and without prior trust between parties.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Interactive simulation — Network consensus</div>
+          <div class="b05-s51-desc">
+            Choose a scenario to see what happens when nodes don’t agree on the correct chain.
+          </div>
+
+          <div class="cs-tabs">
+            <button class="cs-tab active" id="b05-s51-t1">All agree</button>
+            <button class="cs-tab cs-fork" id="b05-s51-t2">1 refuses</button>
+            <button class="cs-tab cs-fork" id="b05-s51-t3">2 fork off</button>
+          </div>
+
+          <canvas id="b05-s51-canvas" height="300"></canvas>
+          <div class="cs-result" id="b05-s51-result"></div>
+        </div>
+
+        <div class="p-body" style="margin-top:1.5rem;">
+          <p><strong>Soft fork dan hard fork</strong></p>
+          <p>When a change to the rules is proposed in Bitcoin, the way it’s changed determines whether the network stays united or splits permanently.</p>
+
+          <p><strong>A soft fork</strong> is a rule change that is backward compatible. Old nodes can still communicate with new nodes, but new nodes have stricter rules. The key is this: the new rules are a subset of the old ones, so a block that is valid under the new rules is automatically valid under the old rules too. Old nodes do not reject it. And because the majority of hashrate enforces the new rules, it is their chain that grows longer. Thanks to the longest chain rule, old nodes eventually follow the longer chain, even without having to update their software. SegWit, activated in 2017, is an example of a soft fork.</p>
+
+          <p><strong>A hard fork</strong> is a rule change that is not backward compatible. Old nodes can’t recognize blocks from new nodes, and vice versa. The split that occurs is permanent. Two chains grow side by side forever, forming two different networks and two different currencies. There’s no longest chain that can reconcile them because they’re already speaking different languages. Bitcoin Cash, which split off from Bitcoin in 2017, is an example of a hard fork.</p>
+
+          <div class="p-callout">
+            <p>The key difference: in a soft fork, old nodes don’t need to know there are new rules. In a hard fork, old and new nodes can no longer live on the same network.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation" style="margin-top:1.5rem;">
+          <div class="sim-label">Visualization — Soft fork vs Hard fork</div>
+          <div class="b05-s51-fork-desc">
+            Both start from the same split, but end very differently.
+          </div>
+
+          <div class="b05-s51-fork-grid">
+            <div class="b05-s51-fork-col">
+              <div class="b05-s51-fork-head soft-head">Soft fork</div>
+              <canvas class="b05-s51-fork-c" id="b05-s51-fk-soft" height="220"></canvas>
+              <div class="b05-s51-fork-note soft-note">Temporary split — the longer chain wins, old nodes follow without realizing.</div>
+            </div>
+            <div class="b05-s51-fork-col">
+              <div class="b05-s51-fork-head hard-head">Hard fork</div>
+              <canvas class="b05-s51-fork-c" id="b05-s51-fk-hard" height="220"></canvas>
+              <div class="b05-s51-fork-note hard-note">Permanent split — two different networks, two different currencies forever.</div>
+            </div>
+          </div>
+
+          <div class="b05-s51-fork-legend">
+            <div class="b05-s51-leg"><div class="b05-s51-dot" style="background:#534AB7;"></div><span>New nodes</span></div>
+            <div class="b05-s51-leg"><div class="b05-s51-dot" style="background:#52524C;"></div><span>Old nodes</span></div>
+            <div class="b05-s51-leg"><div class="b05-s51-dot" style="background:#A32D2D;"></div><span>Abandoned chain / permanent fork</span></div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-5-2" data-sb="sb-5-2">
+            5.2 — Proof of Work →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 5.1 -->
+
+      <!-- ==============================
+           SECTION 5.2 · Proof of Work
+      ============================== -->
+      <div class="p-section" id="section-5-2">
+        <div class="p-eyebrow">Chapter 5 · 5.2</div>
+        <div class="p-heading">Very hard to create, very easy to verify</div>
+        <div class="p-title">Proof of Work</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Bitcoin’s consensus requires a way to prove that someone has done real work before they can propose a new block. That way is called Proof of Work.</p>
+
+          <p><strong>An asymmetric puzzle</strong></p>
+          <p>Proof of Work is a mathematical puzzle with a very specific property: very hard to solve, but very easy to verify. Find a number that, when combined with the block data and hashed with SHA-256d, produces a hash starting with a certain number of zeros. The number being sought is called the nonce. There’s no clever way to find it. The only way is to try one by one, billions of times per second, until a hash that meets the requirement is found.</p>
+
+          <p><strong>Target and leading zeros</strong></p>
+          <p>The Bitcoin network sets a target: the hash of the block header must be smaller than a certain number. In practice, this means the hash must start with a certain number of leading zeros. The more zeros required, the harder the puzzle. Currently, a valid Bitcoin block hash must start with around 19 to 20 zeros.</p>
+
+          <p><strong>Why is this effective?</strong></p>
+          <p>Because of the property of hash functions we learned in Chapter 4: the output can’t be predicted. There’s no way to know in advance which nonce will produce a valid hash. Each attempt is independent, the result of the previous attempt doesn’t help at all. This means the only advantage someone can have is computational speed.</p>
+
+          <p><strong>A verifiable proof</strong></p>
+          <p>Once a nonce is found, verifying it takes just a single hash computation. Other nodes simply take the block header, compute SHA-256d, and check whether the result meets the target. One second, done. This is the asymmetry: it takes trillions of attempts to find, but only one attempt to verify.</p>
+
+          <div class="p-callout">
+            <p>Proof of Work wasn’t Satoshi’s invention. The concept was first proposed by Cynthia Dwork and Moni Naor in 1993, and popularized by Adam Back in the Hashcash system in 1997 to fight email spam. Satoshi adapted it as a consensus mechanism for Bitcoin, a use that far exceeds its original purpose.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Interactive simulation — Mining Playground</div>
+          <div class="b05-s52-desc">
+            Set the difficulty then click "Start mining". The browser will try nonces one by one until it finds a hash that starts with the number of zeros matching the target. The hash is computed using real SHA-256d via the Web Crypto API.
+          </div>
+
+          <div class="pw-row">
+            <span class="pw-label">Difficulty</span>
+            <input class="pw-input" type="range" id="b05-s52-diff" min="1" max="5" value="2" step="1">
+            <span class="pw-val" id="b05-s52-diff-val">2 zeros</span>
+          </div>
+
+          <div class="pw-block">
+            <div class="pw-block-head">
+              <span>Block header</span>
+              <span id="b05-s52-status">ready</span>
+            </div>
+            <div class="pw-block-body">
+              <div class="pw-field">
+                <span class="pw-field-key">data</span>
+                <span class="pw-field-val">Block #882419 | prev: 000000000000 | tx: 3a7b2c...</span>
+              </div>
+              <div class="pw-field">
+                <span class="pw-field-key">nonce</span>
+                <span class="pw-field-val pw-nonce" id="b05-s52-nonce">0</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="pw-hash-label">SHA-256d (double SHA-256) of the block header:</div>
+            <div class="pw-hash" id="b05-s52-hash">—</div>
+          </div>
+
+          <div class="pw-stats">
+            <div class="pw-stat"><div class="pw-stat-label">Attempts</div><div class="pw-stat-val" id="b05-s52-attempts">0</div></div>
+            <div class="pw-stat"><div class="pw-stat-label">Target</div><div class="pw-stat-val" id="b05-s52-target">00...</div></div>
+            <div class="pw-stat"><div class="pw-stat-label">Speed</div><div class="pw-stat-val" id="b05-s52-speed">—</div></div>
+          </div>
+
+          <div class="pw-btns">
+            <button class="kp-btn kp-btn-gen" id="b05-s52-start">Start mining ↗</button>
+            <button class="kp-btn kp-btn-reset" id="b05-s52-reset">Reset</button>
+          </div>
+
+          <div class="pw-result" id="b05-s52-result"></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-5-1" data-sb="sb-5-1">
+            ← 5.1 — Consensus
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-5-3" data-sb="sb-5-3">
+            5.3 — Mining →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 5.2 -->
+
+      <!-- ==============================
+           SECTION 5.3 · Mining
+      ============================== -->
+      <div class="p-section" id="section-5-3">
+        <div class="p-eyebrow">Chapter 5 · 5.3</div>
+        <div class="p-heading">From transaction to block — the complete process</div>
+        <div class="p-title">Mining</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>We already know that a miner has to find a nonce that makes the block header hash meet the target. But what’s actually inside that block header? And how does the mining process work from start to finish?</p>
+
+          <p><strong>The anatomy of a block</strong></p>
+          <p>Every Bitcoin block consists of two parts: the header and the body. The body contains the list of transactions collected from the mempool. The header contains 6 fields with a total size of exactly 80 bytes, and this is what the miner hashes trillions of times per second.</p>
+
+          <p><strong>The mining process from start to finish</strong></p>
+          <p>First, the miner collects transactions from the mempool and chooses those paying the highest fees. Second, the miner assembles the block candidate: computing the Merkle Root of all chosen transactions and filling in all header fields except the nonce. Third, the miner starts trying nonces from 0, 1, 2, and so on. If the entire nonce space is exhausted without a result, the miner changes the timestamp or the order of transactions, which changes the Merkle Root, then starts again from nonce 0. Fourth, once a valid hash is found, the miner immediately broadcasts the block to the entire network.</p>
+
+          <p><strong>Coinbase transaction</strong></p>
+          <p>Every block always contains one special transaction in the first position: the coinbase transaction. It has no input from any UTXO. It creates new bitcoin from nothing as a reward for the miner who successfully finds the block. The coinbase transaction also contains a free field called the coinbase data. Satoshi filled this field with a famous message in the genesis block: "The Times 03/Jan/2009 Chancellor on brink of second bailout for banks."</p>
+
+          <div class="p-callout">
+            <p>80 bytes. That is the size of a Bitcoin block header. No more, no less. The entire security of the network depends on hashing these 80 bytes trillions of times per second, around the world, every ten minutes.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Interactive simulation — Anatomy of a Bitcoin block</div>
+          <div class="b05-s53-desc">
+            Click each field in the header to see an example value and its explanation. Click "Previous block hash" to see how the chain of blocks is formed.
+          </div>
+
+          <div class="ba-block">
+            <div class="ba-section-head-sim header-sim">
+              <span>Block header</span>
+              <span class="ba-badge-sim">80 bytes total</span>
+            </div>
+            <div class="ba-fields-sim" id="b05-s53-fields"></div>
+          </div>
+
+          <div class="ba-block" style="margin-top:10px;">
+            <div class="ba-section-head-sim body-sim">
+              <span>Block body</span>
+              <span style="font-size:10px;color:#52524C;">4 transactions</span>
+            </div>
+            <div class="ba-tx-sim">
+              <div class="ba-tx-item-sim coinbase-sim">
+                <span class="ba-tx-badge-sim cb-sim">coinbase</span>
+                <span class="ba-tx-hash-sim">The first transaction — creates new bitcoin for the miner. Has no UTXO input.</span>
+                <span class="ba-tx-fee-sim" style="color:#534AB7;">3.125 BTC</span>
+              </div>
+              <div class="ba-tx-item-sim">
+                <span class="ba-tx-badge-sim tx-sim">tx</span>
+                <span class="ba-tx-hash-sim">3a7b2cf4e8d1a09b5c6e7f8a2d4b1c3e5f7a9b0c2d4e6f...</span>
+                <span class="ba-tx-fee-sim">142 sat/vB</span>
+              </div>
+              <div class="ba-tx-item-sim">
+                <span class="ba-tx-badge-sim tx-sim">tx</span>
+                <span class="ba-tx-hash-sim">8f3c1a2b4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d...</span>
+                <span class="ba-tx-fee-sim">87 sat/vB</span>
+              </div>
+              <div class="ba-tx-item-sim">
+                <span class="ba-tx-badge-sim tx-sim">tx</span>
+                <span class="ba-tx-hash-sim">1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b...</span>
+                <span class="ba-tx-fee-sim">34 sat/vB</span>
+              </div>
+            </div>
+            <div class="ba-total-sim">
+              <span>Total block size</span>
+              <span>1.23 MB</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-5-2" data-sb="sb-5-2">
+            ← 5.2 — Proof of Work
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-5-4" data-sb="sb-5-4">
+            5.4 — Difficulty Adjustment →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 5.3 -->
+
+      <!-- ==============================
+           SECTION 5.4 · Difficulty Adjustment
+      ============================== -->
+      <div class="p-section" id="section-5-4">
+        <div class="p-eyebrow">Chapter 5 · 5.4</div>
+        <div class="p-heading">However many miners come or go, always 10 minutes</div>
+        <div class="p-title">Difficulty Adjustment</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Bitcoin is designed to produce one block every ten minutes. But how can the network maintain this rhythm when the number of miners keeps changing?</p>
+
+          <p><strong>The problem to be solved</strong></p>
+          <p>If more miners join, the network hashrate rises, and blocks are found faster than ten minutes. If miners leave, the hashrate drops, and blocks are found slower. Without an adjustment mechanism, the interval between blocks would be chaotic.</p>
+
+          <p><strong>How difficulty adjustment works</strong></p>
+          <p>Every 2016 blocks, Bitcoin automatically adjusts the difficulty. The number 2016 isn’t arbitrary: with a target of 10 minutes per block, 2016 blocks should take exactly 2 weeks. The formula is simple: compare the actual time it took to mine the last 2016 blocks with the ideal time. If it was faster, difficulty rises. If it was slower, difficulty falls.</p>
+
+          <p><strong>Adjustment limits</strong></p>
+          <p>To prevent overly extreme changes, Bitcoin limits the adjustment to a maximum of 4× up or 4× down in one period. This protects the network from very sudden surges or drops in hashrate.</p>
+
+          <p><strong>Who decides?</strong></p>
+          <p>No one decides. Each node computes this adjustment independently using the same rules, and the result is always identical. This is another example of consensus without a central authority.</p>
+
+          <p><strong>Why ten minutes?</strong></p>
+          <p>Satoshi chose ten minutes as a compromise. Fast enough that transactions don’t wait too long, but slow enough that a block can spread across the entire network before another miner finds the next block.</p>
+
+          <div class="p-callout">
+            <p>Difficulty adjustment is one of the most elegant mechanisms in Bitcoin. It ensures that no matter how much computation is thrown at the network, one block still appears every ten minutes. Bitcoin can’t be spammed with hashrate.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Interactive simulation — Difficulty adjustment</div>
+          <div class="b05-s54-desc">
+            Every 2016 blocks (~2 weeks), the network compares the actual time with the target and adjusts the difficulty. The result is always the same: ~10 minutes per block.
+          </div>
+
+          <div class="b05-s54-svg-wrap">
+            <svg width="100%" viewBox="0 0 680 380" role="img" style="display:block;">
+              <title>Bitcoin difficulty adjustment timeline</title>
+              <desc>Three consecutive periods showing how difficulty adjusts to changes in hashrate</desc>
+              <defs>
+                <marker id="b05-s54-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </marker>
+              </defs>
+
+              <!-- PERIODE 1 -->
+              <g class="c-gray"><rect x="40" y="48" width="160" height="180" rx="10" stroke-width="0.5"/></g>
+              <text class="th" x="120" y="76" text-anchor="middle" dominant-baseline="central">Period 1</text>
+              <text class="ts" x="120" y="96" text-anchor="middle" dominant-baseline="central">Baseline</text>
+              <rect x="60" y="112" width="80" height="80" rx="4" fill="#F4F4F0" opacity="0.5"/>
+              <rect x="60" y="152" width="80" height="40" rx="4" fill="#534AB7" opacity="0.7"/>
+              <text class="ts" x="100" y="210" text-anchor="middle" dominant-baseline="central" opacity="0.6">hashrate</text>
+              <rect x="155" y="112" width="36" height="24" rx="4" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+              <text class="ts" x="173" y="124" text-anchor="middle" dominant-baseline="central" fill="#534AB7">1×</text>
+              <text class="ts" x="173" y="143" text-anchor="middle" dominant-baseline="central" opacity="0.5">diff</text>
+              <rect x="56" y="230" width="128" height="32" rx="6" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+              <text class="th" x="120" y="246" text-anchor="middle" dominant-baseline="central" fill="#3B6D11">~10 min/block</text>
+              <text class="ts" x="120" y="286" text-anchor="middle" dominant-baseline="central" opacity="0.5">2016 blocks completed</text>
+              <text class="ts" x="120" y="302" text-anchor="middle" dominant-baseline="central" opacity="0.5">in 2 weeks</text>
+
+              <!-- ARROW 1→2 -->
+              <line x1="206" y1="138" x2="258" y2="138" stroke="#C4771A" stroke-width="1.5" marker-end="url(#b05-s54-arr)"/>
+              <rect x="202" y="116" width="60" height="16" rx="4" fill="#FAEEDA"/>
+              <text class="ts" x="232" y="124" text-anchor="middle" dominant-baseline="central" fill="#854F0B">hashrate</text>
+              <rect x="202" y="134" width="60" height="16" rx="4" fill="#FAEEDA"/>
+              <text class="ts" x="232" y="142" text-anchor="middle" dominant-baseline="central" fill="#854F0B">up 2×</text>
+              <text class="ts" x="232" y="162" text-anchor="middle" dominant-baseline="central" fill="#A32D2D">diff up</text>
+
+              <!-- PERIODE 2 -->
+              <g class="c-gray"><rect x="260" y="48" width="160" height="180" rx="10" stroke-width="0.5"/></g>
+              <text class="th" x="340" y="76" text-anchor="middle" dominant-baseline="central">Period 2</text>
+              <text class="ts" x="340" y="96" text-anchor="middle" dominant-baseline="central">Hashrate up 2×</text>
+              <rect x="280" y="112" width="80" height="80" rx="4" fill="#F4F4F0" opacity="0.5"/>
+              <rect x="280" y="116" width="80" height="76" rx="4" fill="#534AB7" opacity="0.7"/>
+              <text class="ts" x="320" y="210" text-anchor="middle" dominant-baseline="central" opacity="0.6">hashrate</text>
+              <rect x="375" y="112" width="36" height="24" rx="4" fill="#FCEBEB" stroke="#A32D2D" stroke-width="0.5"/>
+              <text class="ts" x="393" y="124" text-anchor="middle" dominant-baseline="central" fill="#A32D2D">2×</text>
+              <text class="ts" x="393" y="143" text-anchor="middle" dominant-baseline="central" opacity="0.5">diff</text>
+              <rect x="276" y="230" width="128" height="32" rx="6" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+              <text class="th" x="340" y="246" text-anchor="middle" dominant-baseline="central" fill="#3B6D11">~10 min/block</text>
+              <text class="ts" x="340" y="286" text-anchor="middle" dominant-baseline="central" opacity="0.5">2016 blocks completed</text>
+              <text class="ts" x="340" y="302" text-anchor="middle" dominant-baseline="central" opacity="0.5">in 2 weeks</text>
+
+              <!-- ARROW 2→3 -->
+              <line x1="426" y1="138" x2="478" y2="138" stroke="#C4771A" stroke-width="1.5" marker-end="url(#b05-s54-arr)"/>
+              <rect x="422" y="116" width="60" height="16" rx="4" fill="#FAEEDA"/>
+              <text class="ts" x="452" y="124" text-anchor="middle" dominant-baseline="central" fill="#854F0B">hashrate</text>
+              <rect x="422" y="134" width="60" height="16" rx="4" fill="#FAEEDA"/>
+              <text class="ts" x="452" y="142" text-anchor="middle" dominant-baseline="central" fill="#854F0B">down 3×</text>
+              <text class="ts" x="452" y="162" text-anchor="middle" dominant-baseline="central" fill="#3B6D11">diff down</text>
+
+              <!-- PERIODE 3 -->
+              <g class="c-gray"><rect x="480" y="48" width="160" height="180" rx="10" stroke-width="0.5"/></g>
+              <text class="th" x="560" y="76" text-anchor="middle" dominant-baseline="central">Period 3</text>
+              <text class="ts" x="560" y="96" text-anchor="middle" dominant-baseline="central">Hashrate down 3×</text>
+              <rect x="500" y="112" width="80" height="80" rx="4" fill="#F4F4F0" opacity="0.5"/>
+              <rect x="500" y="166" width="80" height="26" rx="4" fill="#534AB7" opacity="0.7"/>
+              <text class="ts" x="540" y="210" text-anchor="middle" dominant-baseline="central" opacity="0.6">hashrate</text>
+              <rect x="595" y="112" width="36" height="24" rx="4" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+              <text class="ts" x="613" y="124" text-anchor="middle" dominant-baseline="central" fill="#3B6D11">0.7×</text>
+              <text class="ts" x="613" y="143" text-anchor="middle" dominant-baseline="central" opacity="0.5">diff</text>
+              <rect x="496" y="230" width="128" height="32" rx="6" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+              <text class="th" x="560" y="246" text-anchor="middle" dominant-baseline="central" fill="#3B6D11">~10 min/block</text>
+              <text class="ts" x="560" y="286" text-anchor="middle" dominant-baseline="central" opacity="0.5">2016 blocks completed</text>
+              <text class="ts" x="560" y="302" text-anchor="middle" dominant-baseline="central" opacity="0.5">in 2 weeks</text>
+
+              <!-- NOTE BAWAH -->
+              <rect x="40" y="326" width="600" height="36" rx="8" fill="#F4F4F0" opacity="0.8"/>
+              <text class="ts" x="340" y="341" text-anchor="middle" dominant-baseline="central" opacity="0.8">However much hashrate comes or goes, Bitcoin always finds equilibrium at ~10 minutes per block.</text>
+              <text class="ts" x="340" y="357" text-anchor="middle" dominant-baseline="central" opacity="0.5">The adjustment happens automatically every 2016 blocks (~2 weeks) — no one is in control.</text>
+            </svg>
+          </div>
+
+          <div class="b05-lab">
+            <div class="b05-lab-head">Try it: what happens when hashrate changes?</div>
+            <div class="b05-lab-body">
+              <div class="b05-lab-ctrl">
+                <label>Hashrate becomes</label>
+                <input type="range" id="b05-s54-hr" min="2" max="80" step="1" value="10">
+                <span class="b05-lab-ctrl-val" id="b05-s54-hr-val">1.0x</span>
+              </div>
+              <div class="b05-lab-grid">
+                <div class="b05-lab-cell"><div class="b05-lab-k">Average time per block</div><div class="b05-lab-v" id="b05-s54-bt">10.0 min</div></div>
+                <div class="b05-lab-cell"><div class="b05-lab-k">2016-block period finishes in</div><div class="b05-lab-v" id="b05-s54-dur">14.0 days</div></div>
+                <div class="b05-lab-cell hi"><div class="b05-lab-k">Difficulty adjusts by</div><div class="b05-lab-v purp" id="b05-s54-adj">no change</div></div>
+                <div class="b05-lab-cell" id="b05-s54-after-cell"><div class="b05-lab-k">After the adjustment</div><div class="b05-lab-v green" id="b05-s54-after">10.0 min</div></div>
+              </div>
+              <div class="b05-lab-note" id="b05-s54-note"></div>
+            </div>
+          </div>
+        
+          <div class="lab-link"><span class="kode">F3</span><span class="isi"><span class="hd">Continue in the Laboratory</span>The target discussed above is stored in just four bytes of the block header. How four bytes hold a 256-bit number is in Laboratory F3.</span></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-5-3" data-sb="sb-5-3">
+            ← 5.3 — Mining
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-5-5" data-sb="sb-5-5">
+            5.5 — Block Reward & Halving →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 5.4 -->
+
+      <!-- ==============================
+           SECTION 5.5 · Block Reward dan Halving
+      ============================== -->
+      <div class="p-section" id="section-5-5">
+        <div class="p-eyebrow">Chapter 5 · 5.5</div>
+        <div class="p-heading">The only way new bitcoin enters the world</div>
+        <div class="p-title">Block Reward and Halving</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Every time a miner successfully finds a valid block, they receive two types of income: the block reward and transaction fees. But there’s one part of the block reward that’s unique to Bitcoin: it halves once every four years.</p>
+
+          <p><strong>Block reward</strong></p>
+          <p>The block reward is new bitcoin created from nothing through the coinbase transaction. This is the only way new bitcoin enters circulation. There is no other way. When Satoshi mined the genesis block in January 2009, the block reward was 50 BTC. Every new block added 50 BTC to the circulation.</p>
+
+          <p><strong>Halving</strong></p>
+          <p>Every 210.000 blocks, the block reward is cut in half. With an average of 10 minutes per block, 210.000 blocks take about 4 years. The first halving happened in November 2012: the reward dropped from 50 to 25 BTC. The second halving in July 2016: down to 12,5 BTC. The third halving in May 2020: down to 6,25 BTC. The fourth halving in April 2024: down to 3,125 BTC. This process will continue until around the year 2140.</p>
+
+          <p><strong>Why 21 million?</strong></p>
+          <p>In 1.5 we said there is no definitive explanation for why Satoshi picked 21 million. That still holds, and it does not contradict what follows. What Satoshi never explained is why he picked 50 BTC per block and an interval of 210,000 blocks. Once those two numbers were fixed, 21 million stopped being a choice and became a consequence that follows on its own. If you sum all the eras from 50 BTC, 25 BTC, 12,5 BTC, and so on to infinity, the result approaches exactly 21 million BTC. This is a convergent geometric series.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Formula — Bitcoin total supply</div>
+          <div class="b05-s55-formula-wrap">
+            <svg width="100%" viewBox="0 0 680 130" role="img" style="display:block;">
+              <title>Geometric series formula for Bitcoin total supply</title>
+              <desc>Sigma from n=0 to 32 of 210.000 times 50 divided by 2 to the power n equals 21 million BTC</desc>
+              <rect x="40" y="16" width="600" height="98" rx="10" fill="#F4F4F0" stroke="rgba(124,58,237,0.15)" stroke-width="0.5"/>
+              <text x="340" y="40" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#3A3A35">Total supply Bitcoin</text>
+              <text x="120" y="88" text-anchor="middle" font-family="Georgia, serif" font-size="42" fill="#534AB7">Σ</text>
+              <text x="120" y="105" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#3A3A35">n = 0</text>
+              <text x="120" y="58" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#3A3A35">32</text>
+              <text x="200" y="88" text-anchor="middle" font-family="Georgia, serif" font-size="22" fill="#1A1A18">210.000 × 50</text>
+              <line x1="155" y1="94" x2="247" y2="94" stroke="#1A1A18" stroke-width="1"/>
+              <text x="200" y="112" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#1A1A18">2</text>
+              <text x="215" y="106" text-anchor="middle" font-family="Georgia, serif" font-size="11" fill="#1A1A18">n</text>
+              <text x="270" y="90" text-anchor="middle" font-family="Georgia, serif" font-size="28" fill="#3A3A35">≈</text>
+              <text x="370" y="90" text-anchor="middle" font-family="Georgia, serif" font-size="26" font-weight="500" fill="#534AB7">21.000.000</text>
+              <text x="470" y="90" text-anchor="middle" font-family="Georgia, serif" font-size="20" fill="#1A1A18">BTC</text>
+              <text x="340" y="118" text-anchor="middle" font-family="'Sora', sans-serif" font-size="11" fill="#3A3A35">A convergent geometric series — 33 halving eras, initial reward 50 BTC, cut in half every 210.000 blocks</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="p-body">
+          <p><strong>After the reward reaches zero</strong></p>
+          <p>If the block reward is zero, what motivates miners? Transaction fees. As the reward falls, fees are expected to rise because demand for block space increases. This is a gradual transition over more than 100 years from subsidy to a pure fee economy.</p>
+
+          <div class="p-callout">
+            <p>Halving is a disinflation mechanism that’s been programmed from the start. The term is worth getting right: Bitcoin’s supply still grows with every block, only the rate keeps slowing toward zero. What shrinks is the speed of issuance, not the amount in circulation. Unlike a central bank that can print money anytime, Bitcoin’s emission schedule can’t be changed by anyone. Every node verifies that the coinbase transaction doesn’t exceed the allowed reward.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Interactive simulation — Bitcoin halving schedule and emission</div>
+          <div class="b05-s55-chart-desc">
+            The purple bars show the reward per block in each era. The green line shows the total circulating supply, approaching 21 million BTC asymptotically.
+          </div>
+          <div style="position:relative;width:100%;height:320px;">
+            <canvas id="b05-s55-chart" role="img" aria-label="Bitcoin emission curve chart from 2009 to 2140">Bitcoin emission curve: the block reward halves every ~4 years, total supply approaches 21 million BTC by the year 2140.</canvas>
+          </div>
+          <div class="b05-s55-legend">
+            <span class="b05-s55-leg"><span class="b05-s55-dot" style="background:#534AB7;border-radius:2px;"></span>Block reward per block</span>
+            <span class="b05-s55-leg"><span style="width:16px;height:2px;border-top:2px dashed #3B6D11;display:inline-block;"></span>Total circulating supply</span>
+          </div>
+
+          <div class="b05-lab">
+            <div class="b05-lab-head">Try it: the road to 21 million, and what happens after</div>
+            <div class="b05-lab-body">
+              <div class="b05-lab-ctrl">
+                <label>Halving era</label>
+                <input type="range" id="b05-s55-era" min="0" max="33" step="1" value="4">
+                <span class="b05-lab-ctrl-val" id="b05-s55-era-val">era 4</span>
+              </div>
+              <div class="b05-lab-grid">
+                <div class="b05-lab-cell"><div class="b05-lab-k">Era begins around</div><div class="b05-lab-v" id="b05-s55-year">2024</div></div>
+                <div class="b05-lab-cell hi"><div class="b05-lab-k">Reward per block</div><div class="b05-lab-v purp" id="b05-s55-reward">3.125 BTC</div></div>
+                <div class="b05-lab-cell"><div class="b05-lab-k">Total issued by end of era</div><div class="b05-lab-v" id="b05-s55-supply">19,687,500 BTC</div></div>
+                <div class="b05-lab-cell"><div class="b05-lab-k">Percent of 21 million</div><div class="b05-lab-v green" id="b05-s55-pct">93.75%</div></div>
+              </div>
+              <div class="b05-lab-track"><div class="b05-lab-fill" id="b05-s55-bar" style="width:0%"></div></div>
+              <div class="b05-lab-note" id="b05-s55-note"></div>
+            </div>
+          </div>
+        
+          <div class="lab-link"><span class="kode">D1</span><span class="isi"><span class="hd">Continue in the Laboratory</span>The halving schedule out to 2140, including how much new bitcoin is born each day in each era, can be explored in Laboratory D1.</span></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-5-4" data-sb="sb-5-4">
+            ← 5.4 — Difficulty Adjustment
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-5-6" data-sb="sb-5-6">
+            5.6 — 51% Attack →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 5.5 -->
+
+      <!-- ==============================
+           SECTION 5.6 · Serangan 51%
+      ============================== -->
+      <div class="p-section" id="section-5-6">
+        <div class="p-eyebrow">Chapter 5 · 5.6</div>
+        <div class="p-heading">When an attacker controls the majority of the hashrate</div>
+        <div class="p-title">51% Attack</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Proof of Work ensures that to change the transaction history, someone would have to repeat all the computational work already done. But there’s one scenario that’s often discussed: what if someone controls more than half of the network’s hashrate?</p>
+
+          <p><strong>What can an attacker do?</strong></p>
+          <p>With more than 50% of the hashrate, an attacker can perform a double-spend. Here’s how: send bitcoin to another party, wait for confirmation, while secretly mining an alternative chain. Because they have more hashrate, the alternative chain grows faster. After receiving the goods, broadcast the alternative chain. Based on the longest chain rule, the network adopts the new chain, and the original payment transaction disappears. The attacker can also censor certain transactions, refusing to include transactions from certain addresses in a block.</p>
+
+          <p><strong>What can an attacker not do?</strong></p>
+          <p>Many people misunderstand this. The attacker can’t steal bitcoin from someone else’s wallet. Can’t forge cryptographic signatures. Can’t print new bitcoin outside the halving schedule. Can’t change the consensus rules. The cryptography underlying Bitcoin is untouched by this attack.</p>
+
+          <p><strong>Why does this attack not make economic sense?</strong></p>
+          <p>To control 51% of Bitcoin’s current hashrate, an attacker would have to operate more ASICs than all the honest miners in the world, with hardware, electricity, and infrastructure costs reaching billions of dollars. If the attack succeeds and is detected, trust in Bitcoin collapses, the price falls, and all the attacker’s hardware loses its value. The attacker destroys their own investment.</p>
+
+          <p><strong>What if the motivation isn’t profit, but destruction?</strong></p>
+          <p>This is a more serious question. Imagine a state-level actor willing to pour almost unlimited resources just to damage Bitcoin, without caring about economic losses. Can Bitcoin survive?</p>
+          <p>The answer: yes, but it requires an active response from the community. A sustained 51% attack would be detected very quickly. Thousands of nodes around the world would see an unnaturally large reorg. The developer community could propose changing the hashing algorithm through a hard fork. If the algorithm is changed, all the ASIC hardware used by the attacker instantly becomes useless. The attacker would have to buy new hardware all over again, while the community only needs to update software.</p>
+          <p>This is a deeply asymmetric war: defending is far cheaper than attacking. Every new attack requires a massive new hardware investment. Every response only requires a code update.</p>
+
+          <p><strong>The 51% attack and decentralization</strong></p>
+          <p>This is why decentralized mining isn’t just idealism, but a real defense. The more spread out the hashrate is around the world among thousands of independent operators, the more expensive and harder it is for one party to control the majority. There’s no single point that can be attacked, bribed, or forced to surrender.</p>
+
+          <div class="p-callout">
+            <p>Bitcoin’s resilience against a 51% attack isn’t just about cost. It’s also about incentives, decentralization, and the community’s ability to adapt. A network that can change its hashing algorithm within days is a network that’s very hard to destroy permanently, even by an actor with almost unlimited resources.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Interactive simulation — Race Attack</div>
+          <div class="b05-s56-desc">
+            Set the attacker’s hashrate then click Start. Below 50%, the honest chain always wins. Above 50%, the attacker will catch up and eventually succeed. If the attack succeeds, click "Community response" and see what happens.
+          </div>
+
+          <div class="at-ctrl-sim">
+            <span class="at-label-sim">Attacker hashrate</span>
+            <input type="range" min="10" max="65" step="5" value="30" id="b05-s56-slider" style="flex:1;min-width:0;">
+            <span class="at-val-sim" id="b05-s56-pct">30%</span>
+          </div>
+
+          <div class="at-chains-sim">
+            <div class="at-chain-row-sim">
+              <span class="at-chain-label-sim honest-sim">Honest</span>
+              <div class="at-blocks-sim" id="b05-s56-honest-blocks"></div>
+              <span class="at-chain-len-sim honest-sim" id="b05-s56-honest-len">3 block</span>
+            </div>
+            <div class="at-chain-row-sim">
+              <span class="at-chain-label-sim attack-sim">Attacker</span>
+              <div class="at-blocks-sim" id="b05-s56-attack-blocks"></div>
+              <span class="at-chain-len-sim attack-sim" id="b05-s56-attack-len">0 block</span>
+            </div>
+          </div>
+
+          <div class="at-status-sim safe-sim" id="b05-s56-status">Set the attacker hashrate and click Start to see the race attack.</div>
+
+          <div class="at-btns-sim">
+            <button class="kp-btn kp-btn-gen" id="b05-s56-start">Start race ↗</button>
+            <button class="kp-btn kp-btn-gen" id="b05-s56-fork" style="background:#3B6D11;border-color:#3B6D11;display:none;">Community response: change algorithm ↗</button>
+            <button class="kp-btn kp-btn-reset" id="b05-s56-reset">Reset</button>
+          </div>
+
+          <div class="at-note-sim">
+            Below 50%: the honest chain is always longer in the long run. Above 50%: the attacker’s chain will catch up and eventually win. On community response, the algorithm is changed and the attacker’s entire chain becomes invalid.
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-5-5" data-sb="sb-5-5">
+            ← 5.5 — Block Reward & Halving
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 5.6 -->
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 8 · BAB 5 -->
+
+

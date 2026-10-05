@@ -1,0 +1,256 @@
+/* ============================================================
+   PAGE 3 · PROLOGUE · LAYOUT
+============================================================ */
+#page-prologue { flex-direction:column; height:100vh; }
+.prologue-body { display:flex; flex:1; overflow:hidden; }
+
+/* ============================================================
+   PAGE 3 · PROLOGUE · SIDEBAR
+============================================================ */
+.sidebar { width:260px; flex-shrink:0; border-right:0.5px solid rgba(124,58,237,0.15); padding:32px 0; display:flex; flex-direction:column; }
+.sidebar-heading { font-family:'Courier Prime',monospace; font-size:9px; letter-spacing:0.3em; color:#C4B5FD; text-transform:uppercase; padding:0 28px; margin-bottom:6px; }
+.sidebar-title { font-weight:300; font-size:16px; color:#0D0D0D; padding:0 28px; margin-bottom:28px; letter-spacing:-0.01em; }
+.sidebar-item { display:flex; align-items:flex-start; gap:12px; padding:12px 28px; cursor:pointer; transition:background 0.15s; border-left:2px solid transparent; }
+.sidebar-item:hover { background:rgba(124,58,237,0.04); }
+.sidebar-item.active { border-left:2px solid #7C3AED; background:rgba(124,58,237,0.06); }
+.sidebar-item.locked { cursor:not-allowed; opacity:0.35; }
+.sb-num { font-family:'Courier Prime',monospace; font-size:9px; letter-spacing:0.15em; color:#A78BFA; min-width:24px; padding-top:2px; }
+.sb-label { font-family:'Courier Prime',monospace; font-size:11px; color:#4C1D95; line-height:1.5; }
+.sidebar-item.active .sb-label { color:#7C3AED; font-weight:700; }
+.sidebar-item.locked .sb-label { color:#52524C; }
+
+
+
+/* ============================================================
+   PAGE 3 · PROLOGUE · CONTENT AREA
+============================================================ */
+.prologue-content { flex:1; overflow-y:auto; padding:48px 60px 80px; max-width:720px; }
+.p-eyebrow { font-family:'Courier Prime',monospace; font-size:9px; letter-spacing:0.3em; color:#8B5CF6; text-transform:uppercase; margin-bottom:1rem; }
+.p-heading { font-weight:100; font-size:13px; letter-spacing:0.08em; color:#A0A098; margin-bottom:6px; }
+.p-title { font-weight:400; font-size:clamp(28px,4vw,48px); letter-spacing:-0.02em; color:#0D0D0D; line-height:1.1; margin-bottom:2.5rem; }
+.p-divider { width:40px; height:1px; background:#7C3AED; margin-bottom:2.5rem; }
+.p-body { font-family:'Courier Prime',monospace; font-size:15px; line-height:1.95; color:#2A2A28; max-width:600px; }
+.p-body p { margin-bottom:1.5rem; }
+.p-body p:last-child { margin-bottom:0; }
+.p-body strong { font-weight:700; color:#0D0D0D; }
+.p-body em { color:#7C3AED; font-style:normal; }
+.p-callout { border-left:2px solid #7C3AED; padding:16px 20px; margin:2rem 0; background:rgba(124,58,237,0.04); }
+.p-callout p { margin:0; color:#4C1D95; }
+.p-nav { display:flex; justify-content:space-between; align-items:center; margin-top:3rem; padding-top:2rem; border-top:0.5px solid rgba(124,58,237,0.12); gap:12px; }
+.p-nav-btn { font-family:'Sora',sans-serif; font-weight:300; font-size:11px; letter-spacing:0.2em; text-transform:uppercase; background-color:#1A1A18; color:#FAFAF8; border:none; outline:none; padding:12px 28px; cursor:not-allowed; opacity:0.3; }
+.p-nav-prev { direction:ltr; }
+.p-nav-btn.p-nav-active { cursor:pointer; opacity:1; }
+.p-nav-btn.p-nav-active:hover { background-color:#7C3AED; }
+.p-section { display:none; }
+.p-section.active { display:block; }
+
+/* ============================================================
+   PAGE 3 · PROLOGUE · P.3 SIMULATION (Cantillon Effect)
+============================================================ */
+.sim-label { font-family:'Courier Prime',monospace; font-size:9px; letter-spacing:0.3em; color:#8B5CF6; text-transform:uppercase; margin-bottom:1rem; }
+.sim-stats-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:1rem; }
+.sim-stat { background:#FAFAF8; border-radius:var(--border-radius-md); padding:0.6rem 0.9rem; border:0.5px solid rgba(124,58,237,0.1); }
+.sim-stat-label { font-size:11px; color:#52524C; margin-bottom:3px; }
+.sim-stat-value { font-size:16px; font-weight:400; color:#0D0D0D; }
+.sim-chars { display:grid; grid-template-columns:repeat(5,1fr); gap:6px; margin-bottom:1rem; }
+.sim-char { background:#FAFAF8; border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-md); padding:0.6rem 0.4rem; text-align:center; transition:border-color 0.3s; }
+.sim-char.receiving { border-color:#3B6D11; }
+.sim-char.losing { border-color:#A32D2D; }
+.sim-char-icon { font-size:18px; margin-bottom:3px; }
+.sim-char-name { font-size:10px; font-weight:500; color:#1A1A18; margin-bottom:2px; }
+.sim-char-role { font-size:9px; color:#52524C; margin-bottom:5px; line-height:1.3; }
+.sim-char-money { font-size:11px; font-weight:500; color:#1A1A18; margin-bottom:2px; }
+.sim-char-powerlabel { font-size:9px; color:#52524C; }
+.sim-char-powerlabel span { font-weight:500; }
+.sim-bar-bg { height:3px; background:rgba(124,58,237,0.15); border-radius:2px; margin-top:4px; }
+.sim-bar { height:3px; border-radius:2px; background:#534AB7; transition:width 0.5s ease, background 0.4s; }
+.sim-bar.danger { background:#A32D2D; }
+.sim-flow { font-size:9px; padding:1px 5px; border-radius:99px; display:inline-block; margin-top:3px; font-weight:500; opacity:0; transition:opacity 0.3s; }
+.sim-flow.show { opacity:1; }
+.sim-flow.pos { background:#EAF3DE; color:#3B6D11; }
+.sim-flow.neg { background:#FCEBEB; color:#A32D2D; }
+.sim-prices-label { font-size:11px; color:#52524C; margin-bottom:6px; }
+.sim-prices { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:1rem; }
+.sim-price-item { background:#FAFAF8; border-radius:var(--border-radius-md); padding:0.5rem 0.6rem; border:0.5px solid rgba(124,58,237,0.1); }
+.sim-price-name { font-size:10px; color:#52524C; }
+.sim-price-val { font-size:12px; font-weight:500; color:#1A1A18; transition:color 0.3s; }
+.sim-price-val.rising { color:#A32D2D; }
+.sim-alert { display:none; background:#FCEBEB; border:0.5px solid #F09595; border-radius:var(--border-radius-md); padding:8px 12px; margin-bottom:1rem; font-size:12px; color:#791F1F; gap:8px; align-items:flex-start; }
+.sim-alert.show { display:flex; }
+.sim-alert-icon { font-size:16px; flex-shrink:0; }
+.sim-alert-title { font-weight:500; margin-bottom:2px; }
+.sim-alert-sub { font-size:11px; color:#A32D2D; }
+.sim-controls { display:flex; gap:8px; margin-bottom:1rem; }
+.sim-btn-print { background:#1A1A18; color:#FAFAF8; border:none; padding:8px 20px; font-size:12px; font-family:'Sora',sans-serif; cursor:pointer; border-radius:var(--border-radius-md); transition:background 0.2s; }
+.sim-btn-print:hover { background:#534AB7; }
+.sim-btn-print:disabled { opacity:0.4; cursor:not-allowed; background:#1A1A18; }
+.sim-btn-reset { background:transparent; border:0.5px solid rgba(124,58,237,0.3); color:#6D28D9; padding:8px 16px; font-size:12px; font-family:'Sora',sans-serif; cursor:pointer; border-radius:var(--border-radius-md); transition:background 0.2s; }
+.sim-btn-reset:hover { background:rgba(124,58,237,0.06); }
+.sim-log-label { font-size:10px; color:#52524C; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:5px; }
+.sim-log { display:flex; flex-direction:column; gap:3px; max-height:100px; overflow-y:auto; }
+.sim-log-entry { font-size:11px; padding:4px 8px; border-radius:var(--border-radius-md); border:0.5px solid rgba(124,58,237,0.1); color:#3A3A35; line-height:1.5; background:#FAFAF8; }
+.sim-log-entry.warn { border-color:#F09595; background:#FCEBEB; color:#791F1F; }
+.sim-log-entry strong { color:#1A1A18; }
+
+/* ============================================================
+   PAGE 3 · PROLOGUE · P.4 SIMULATION (Double-Spend Problem)
+============================================================ */
+.ds-tabs { display:flex; gap:6px; margin-bottom:1.25rem; }
+.ds-tab { flex:1; padding:9px 8px; font-size:11px; font-family:'Sora',sans-serif; border:0.5px solid rgba(124,58,237,0.2); background:transparent; color:#52524C; cursor:pointer; border-radius:var(--border-radius-md); transition:all 0.2s; font-weight:400; text-align:center; line-height:1.4; }
+.ds-tab.active-cash { background:#3B6D11; color:#fff; border-color:#3B6D11; }
+.ds-tab.active-no   { background:#A32D2D; color:#fff; border-color:#A32D2D; }
+.ds-tab.active-btc  { background:#534AB7; color:#fff; border-color:#534AB7; }
+.ds-desc { font-size:12px; color:#3A3A35; line-height:1.6; margin-bottom:1.25rem; padding:10px 14px; background:#FAFAF8; border-radius:var(--border-radius-md); border-left:2px solid #D4D4C8; }
+.ds-desc.cash { border-left-color:#3B6D11; }
+.ds-desc.no   { border-left-color:#A32D2D; }
+.ds-desc.btc  { border-left-color:#534AB7; }
+.ds-stage { display:grid; grid-template-columns:1fr 72px 1fr 72px 1fr; align-items:center; margin-bottom:1.25rem; }
+.ds-actor { background:#FAFAF8; border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-lg); padding:0.9rem 0.6rem; text-align:center; transition:border-color 0.4s, background 0.4s; }
+.ds-actor.success { border-color:#3B6D11; background:#EAF3DE; }
+.ds-actor.danger  { border-color:#A32D2D; background:#FCEBEB; }
+.ds-actor.blocked { border-color:#534AB7; background:#EEEDFE; }
+.ds-actor.neutral { border-color:rgba(124,58,237,0.12); background:#FAFAF8; }
+.ds-actor-icon   { font-size:24px; margin-bottom:5px; }
+.ds-actor-name   { font-size:11px; font-weight:500; color:#1A1A18; margin-bottom:3px; }
+.ds-actor-bal    { font-size:10px; color:#52524C; font-family:'Courier Prime',monospace; margin-bottom:3px; min-height:14px; }
+.ds-actor-status { font-size:9px; padding:2px 7px; border-radius:99px; display:inline-block; font-weight:500; opacity:0; transition:opacity 0.3s; min-height:18px; }
+.ds-actor-status.show { opacity:1; }
+.ds-actor-status.ok   { background:#EAF3DE; color:#3B6D11; }
+.ds-actor-status.bad  { background:#FCEBEB; color:#A32D2D; }
+.ds-actor-status.info { background:#EEEDFE; color:#534AB7; }
+.ds-arrow { display:flex; flex-direction:column; align-items:center; gap:4px; }
+.ds-arrow-line { width:100%; height:2px; background:rgba(124,58,237,0.15); position:relative; transition:background 0.4s; }
+.ds-arrow-line::after { content:''; position:absolute; right:-1px; top:-4px; border:5px solid transparent; border-left-color:rgba(124,58,237,0.15); border-left-width:8px; transition:border-left-color 0.4s; }
+.ds-arrow-line.sent    { background:#3B6D11; }
+.ds-arrow-line.sent::after    { border-left-color:#3B6D11; }
+.ds-arrow-line.blocked { background:#A32D2D; }
+.ds-arrow-line.blocked::after { border-left-color:#A32D2D; }
+.ds-arrow-label { font-size:9px; font-family:'Courier Prime',monospace; color:#52524C; text-align:center; transition:color 0.3s; white-space:nowrap; }
+.ds-arrow-label.sent    { color:#3B6D11; font-weight:700; }
+.ds-arrow-label.blocked { color:#A32D2D; font-weight:700; }
+.ds-result { border-radius:var(--border-radius-md); padding:10px 14px; font-size:12px; line-height:1.6; margin-bottom:1.25rem; display:none; border:0.5px solid; }
+.ds-result.show    { display:block; }
+.ds-result.danger  { background:#FCEBEB; border-color:#F09595; color:#791F1F; }
+.ds-result.safe    { background:#EAF3DE; border-color:#97C459; color:#27500A; }
+.ds-result.neutral { background:#EAF3DE; border-color:#97C459; color:#27500A; }
+.ds-controls { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:0; }
+.ds-btn { padding:8px 18px; font-size:12px; font-family:'Sora',sans-serif; cursor:pointer; border-radius:var(--border-radius-md); font-weight:500; transition:all 0.2s; border:none; }
+.ds-btn-tx1, .ds-btn-tx2 { background:#1A1A18; color:#FAFAF8; }
+.ds-btn-tx1:hover, .ds-btn-tx2:hover { background:#534AB7; }
+.ds-btn-tx1:disabled, .ds-btn-tx2:disabled { opacity:0.35; cursor:not-allowed; background:#1A1A18; }
+.ds-btn-reset { background:transparent; border:0.5px solid rgba(124,58,237,0.2); color:#6D28D9; cursor:pointer; }
+.ds-btn-reset:hover { background:rgba(124,58,237,0.06); }
+.ds-log { margin-top:1rem; }
+.ds-log-title { font-size:10px; color:#52524C; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:5px; }
+.ds-log-entries { display:flex; flex-direction:column; gap:3px; max-height:100px; overflow-y:auto; }
+.ds-log-entry { font-size:11px; padding:4px 8px; border-radius:var(--border-radius-md); border:0.5px solid rgba(124,58,237,0.1); color:#3A3A35; line-height:1.5; background:#FAFAF8; }
+.ds-log-entry.ok   { border-color:#97C459; background:#EAF3DE; color:#27500A; }
+.ds-log-entry.bad  { border-color:#F09595; background:#FCEBEB; color:#791F1F; }
+.ds-log-entry.info { border-color:#AFA9EC; background:#EEEDFE; color:#3C3489; }
+.p-simulation { margin:2rem 0; padding:1.5rem; background:var(--color-background-secondary); border-radius:var(--border-radius-lg); border:0.5px solid rgba(124,58,237,0.12); font-weight:300; }
+
+/* ============================================================
+   PAGE 3 · PROLOGUE · P.5 SIMULATION (Public-Key Cryptography)
+============================================================ */
+.pk-steps { display:flex; flex-direction:column; gap:1rem; }
+.pk-step { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-lg); overflow:hidden; transition:border-color 0.3s; }
+.pk-step.active  { border-color:#534AB7; }
+.pk-step.done    { border-color:#3B6D11; }
+.pk-step.invalid { border-color:#A32D2D; }
+.pk-step-header { display:flex; align-items:center; gap:12px; padding:12px 16px; background:#F4F4F0; border-bottom:0.5px solid rgba(124,58,237,0.1); }
+.pk-step.active .pk-step-header  { background:#EEEDFE; border-bottom-color:#AFA9EC; }
+.pk-step.done .pk-step-header    { background:#EAF3DE; border-bottom-color:#97C459; }
+.pk-step.invalid .pk-step-header { background:#FCEBEB; border-bottom-color:#F09595; }
+.pk-step-num { width:24px; height:24px; border-radius:50%; background:#D4D4C8; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:500; color:#3A3A35; flex-shrink:0; transition:all 0.3s; }
+.pk-step.active .pk-step-num  { background:#534AB7; color:#fff; }
+.pk-step.done .pk-step-num    { background:#3B6D11; color:#fff; }
+.pk-step.invalid .pk-step-num { background:#A32D2D; color:#fff; }
+.pk-step-title { font-size:13px; font-weight:500; color:#1A1A18; }
+.pk-step-sub   { font-size:11px; color:#52524C; margin-left:auto; }
+.pk-step-body  { padding:16px; background:#FAFAF8; }
+.pk-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:14px; }
+.pk-key-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+.pk-key-box { background:#F4F4F0; border-radius:var(--border-radius-md); padding:10px 12px; }
+.pk-key-label { font-size:10px; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:6px; font-weight:500; }
+.pk-key-label.pub  { color:#534AB7; }
+.pk-key-label.priv { color:#A32D2D; }
+.pk-key-value { font-size:10px; font-family:'Courier Prime',monospace; color:#1A1A18; word-break:break-all; line-height:1.6; min-height:32px; }
+.pk-key-note  { font-size:10px; color:#52524C; margin-top:5px; line-height:1.5; }
+.pk-input-row { display:flex; gap:8px; margin-bottom:10px; align-items:flex-start; }
+.pk-input { flex:1; padding:8px 10px; font-size:12px; font-family:'Courier Prime',monospace; border:0.5px solid rgba(124,58,237,0.2); border-radius:var(--border-radius-md); background:#FAFAF8; color:#1A1A18; resize:none; line-height:1.5; }
+.pk-input:focus { outline:none; border-color:#534AB7; }
+.pk-input:disabled { opacity:0.5; }
+.pk-sig-box { background:#F4F4F0; border-radius:var(--border-radius-md); padding:10px 12px; margin-bottom:10px; }
+.pk-sig-label { font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:#534AB7; font-weight:500; margin-bottom:6px; }
+.pk-sig-value { font-size:10px; font-family:'Courier Prime',monospace; color:#1A1A18; word-break:break-all; line-height:1.6; min-height:20px; }
+.pk-verify-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:12px; }
+.pk-verify-item { background:#F4F4F0; border-radius:var(--border-radius-md); padding:8px 10px; }
+.pk-verify-item-label { font-size:9px; text-transform:uppercase; letter-spacing:0.1em; color:#52524C; margin-bottom:5px; }
+.pk-verify-item-val { font-size:10px; font-family:'Courier Prime',monospace; color:#1A1A18; word-break:break-all; line-height:1.5; min-height:28px; }
+.pk-result { border-radius:var(--border-radius-md); padding:10px 14px; font-size:12px; font-weight:500; line-height:1.6; display:none; border:0.5px solid; margin-bottom:10px; }
+.pk-result.show    { display:block; }
+.pk-result.valid   { background:#EAF3DE; border-color:#97C459; color:#27500A; }
+.pk-result.invalid { background:#FCEBEB; border-color:#F09595; color:#791F1F; }
+.pk-result-sub { font-size:11px; font-weight:400; margin-top:4px; }
+.pk-btn { padding:8px 20px; font-size:12px; font-family:'Sora',sans-serif; cursor:pointer; border-radius:var(--border-radius-md); font-weight:500; transition:all 0.2s; border:none; background:#1A1A18; color:#FAFAF8; }
+.pk-btn:hover    { background:#534AB7; }
+.pk-btn:disabled { opacity:0.35; cursor:not-allowed; background:#1A1A18; }
+.pk-tamper-note { font-size:11px; color:#3A3A35; margin-top:8px; line-height:1.5; padding:8px 10px; background:#F4F4F0; border-radius:var(--border-radius-md); }
+
+/* ============================================================
+   PAGE 3 · PROLOGUE · P.6 TIMELINE (Cypherpunk)
+============================================================ */
+.tl-items { display:flex; flex-direction:column; gap:0; position:relative; }
+.tl-items::before { content:''; position:absolute; left:72px; top:0; bottom:0; width:1px; background:rgba(124,58,237,0.15); }
+.tl-item { display:grid; grid-template-columns:72px 1fr; gap:0; cursor:pointer; transition:background 0.15s; border-radius:var(--border-radius-md); padding:2px 0; }
+.tl-item:hover { background:rgba(124,58,237,0.04); }
+.tl-item.tl-active { background:rgba(124,58,237,0.04); }
+.tl-left { display:flex; flex-direction:column; align-items:flex-end; padding-right:20px; padding-top:14px; position:relative; z-index:1; }
+.tl-year { font-size:11px; font-weight:500; color:#52524C; white-space:nowrap; }
+.tl-dot { width:8px; height:8px; border-radius:50%; background:#D4D4C8; margin-top:6px; transition:all 0.2s; border:1.5px solid #FAFAF8; outline:1px solid #D4D4C8; }
+.tl-item:hover .tl-dot, .tl-item.tl-active .tl-dot { background:#534AB7; outline-color:#534AB7; }
+.tl-item.tl-milestone .tl-dot { background:#534AB7; outline-color:#534AB7; width:10px; height:10px; }
+.tl-item.tl-bitcoin .tl-dot { background:#1A1A18; outline-color:#1A1A18; width:12px; height:12px; }
+.tl-right { padding:12px 16px 12px 20px; }
+.tl-tag { font-size:9px; letter-spacing:0.15em; text-transform:uppercase; font-weight:500; margin-bottom:4px; color:#C4B5FD; }
+.tl-item.tl-milestone .tl-tag { color:#7C3AED; }
+.tl-item.tl-bitcoin .tl-tag   { color:#1A1A18; }
+.tl-title { font-size:13px; font-weight:500; color:#1A1A18; margin-bottom:4px; }
+.tl-detail { font-size:12px; color:#3A3A35; line-height:1.6; display:none; margin-top:6px; padding-top:6px; border-top:0.5px solid rgba(124,58,237,0.12); }
+.tl-item.tl-active .tl-detail { display:block; }
+.tl-hint { font-size:11px; color:#C4B5FD; text-align:center; margin-top:1rem; }
+
+/* ============================================================
+   PAGE 3 · PROLOGUE · P.7 GENESIS BLOCK & QUOTES
+============================================================ */
+.gb-block { border:0.5px solid rgba(124,58,237,0.2); border-radius:12px; overflow:hidden; margin-bottom:1rem; }
+.gb-header { background:#1A1A18; padding:10px 16px; display:flex; align-items:center; justify-content:space-between; }
+.gb-header-left { display:flex; align-items:center; gap:10px; }
+.gb-badge { font-size:9px; letter-spacing:0.15em; text-transform:uppercase; background:#534AB7; color:#fff; padding:3px 8px; border-radius:4px; font-family:'Sora',sans-serif; }
+.gb-block-num { font-size:12px; color:#C4B5FD; font-family:'Courier Prime',monospace; }
+.gb-hash-short { font-size:10px; color:#3A3A35; font-family:'Courier Prime',monospace; }
+.gb-rows { display:flex; flex-direction:column; }
+.gb-row { display:grid; grid-template-columns:140px 1fr; border-bottom:0.5px solid rgba(124,58,237,0.08); transition:background 0.15s; }
+.gb-row:last-child { border-bottom:none; }
+.gb-row:hover { background:rgba(124,58,237,0.03); }
+.gb-row.gb-highlight { background:rgba(124,58,237,0.06); }
+.gb-row.gb-highlight:hover { background:rgba(124,58,237,0.09); }
+.gb-key { font-family:'Courier Prime',monospace; font-size:10px; color:#52524C; padding:10px 16px; border-right:0.5px solid rgba(124,58,237,0.08); display:flex; align-items:flex-start; padding-top:12px; }
+.gb-val { font-family:'Courier Prime',monospace; font-size:11px; color:#2A2A28; padding:10px 16px; line-height:1.6; word-break:break-all; }
+.gb-row.gb-highlight .gb-key { color:#7C3AED; }
+.gb-row.gb-highlight .gb-val { color:#1A1A18; font-weight:700; }
+.gb-satoshi-msg { background:#EEEDFE; border:0.5px solid #AFA9EC; border-radius:8px; padding:12px 16px; margin:0 16px 16px; }
+.gb-msg-label { font-family:'Sora',sans-serif; font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:#7C3AED; margin-bottom:6px; }
+.gb-msg-text { font-family:'Courier Prime',monospace; font-style:italic; font-size:13px; color:#26215C; line-height:1.6; }
+.qt-list { display:flex; flex-direction:column; gap:10px; }
+.qt-card { border:0.5px solid rgba(124,58,237,0.12); border-radius:12px; padding:14px 16px; background:#FAFAF8; border-left:3px solid rgba(124,58,237,0.15); transition:border-left-color 0.2s; }
+.qt-card:hover { border-left-color:#7C3AED; }
+.qt-quote { font-family:'Courier Prime',monospace; font-size:12px; color:#1A1A18; line-height:1.8; font-style:italic; margin-bottom:10px; }
+.qt-quote::before { content:'"'; color:#C4B5FD; font-size:18px; line-height:0; vertical-align:-5px; margin-right:2px; }
+.qt-quote::after  { content:'"'; color:#C4B5FD; font-size:18px; line-height:0; vertical-align:-5px; margin-left:2px; }
+.qt-footer { display:flex; align-items:center; gap:10px; }
+.qt-avatar { width:28px; height:28px; border-radius:50%; background:#EEEDFE; display:flex; align-items:center; justify-content:center; font-family:'Sora',sans-serif; font-size:9px; font-weight:500; color:#534AB7; flex-shrink:0; }
+.qt-name { font-family:'Sora',sans-serif; font-size:11px; font-weight:500; color:#1A1A18; }
+.qt-role { font-family:'Sora',sans-serif; font-size:10px; color:#52524C; }
+.qt-year { font-family:'Courier Prime',monospace; font-size:10px; color:#C4B5FD; margin-left:auto; }
+

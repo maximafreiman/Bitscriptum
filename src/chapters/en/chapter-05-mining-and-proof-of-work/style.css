@@ -1,0 +1,192 @@
+/* ============================================================
+   PAGE 8 · BAB 5 · Mining dan Proof of Work
+============================================================ */
+
+/* ============================================================
+   PAGE 8 · BAB 5 · 5.1 SIMULATION (Konsensus)
+============================================================ */
+.b05-s51-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1.25rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b05-s51-desc.fork { border-left-color:rgba(163,45,45,0.5); }
+.cs-tabs { display:flex; gap:8px; margin-bottom:1.25rem; flex-wrap:wrap; }
+.cs-tab { padding:7px 16px; font-size:11px; font-weight:500; border-radius:99px; border:0.5px solid rgba(124,58,237,0.2); background:transparent; color:#3A3A35; cursor:pointer; transition:all 0.2s; font-family:'Sora',sans-serif; }
+.cs-tab:hover { border-color:#534AB7; color:#534AB7; }
+.cs-tab.active { background:#534AB7; color:#fff; border-color:#534AB7; }
+.cs-tab.cs-fork { border-color:rgba(163,45,45,0.3); color:#A32D2D; }
+.cs-tab.cs-fork.active { background:#A32D2D; color:#fff; border-color:#A32D2D; }
+.cs-desc { font-size:12px; color:#3A3A35; line-height:1.7; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); margin-bottom:1.25rem; border-left:2px solid rgba(124,58,237,0.3); font-family:'Sora',sans-serif; }
+.cs-desc.fork { border-left-color:rgba(163,45,45,0.5); }
+#b05-s51-canvas { width:100%; display:block; border-radius:var(--border-radius-lg); background:#F4F4F0; margin-bottom:1.25rem; cursor:default; }
+.cs-result { padding:10px 14px; border-radius:var(--border-radius-md); font-size:12px; line-height:1.6; font-family:'Sora',sans-serif; }
+.cs-result.ok { background:#EAF3DE; color:#27500A; border:0.5px solid rgba(59,109,17,0.2); }
+.cs-result.fork { background:#FCEBEB; color:#791F1F; border:0.5px solid rgba(163,45,45,0.2); }
+
+/* ============================================================
+   PAGE 8 · BAB 5 · 5.1 FORK SIMULATION (Soft fork vs Hard fork)
+============================================================ */
+.b05-s51-fork-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b05-s51-fork-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:10px; }
+.b05-s51-fork-col  { display:flex; flex-direction:column; gap:8px; }
+.b05-s51-fork-head { padding:7px 12px; border-radius:var(--border-radius-md); font-size:12px; font-weight:500; font-family:'Sora',sans-serif; }
+.b05-s51-fork-head.soft-head { background:#EEEDFE; color:#3C3489; }
+.b05-s51-fork-head.hard-head { background:#FCEBEB; color:#791F1F; }
+.b05-s51-fork-c    { width:100%; display:block; border-radius:var(--border-radius-md); }
+.b05-s51-fork-note { padding:8px 12px; border-radius:var(--border-radius-md); font-size:11px; line-height:1.6; font-family:'Sora',sans-serif; }
+.b05-s51-fork-note.soft-note { background:#EEEDFE; color:#3C3489; }
+.b05-s51-fork-note.hard-note { background:#FCEBEB; color:#791F1F; }
+.b05-s51-fork-legend { display:flex; gap:14px; flex-wrap:wrap; font-size:11px; color:#3A3A35; font-family:'Sora',sans-serif; }
+.b05-s51-leg { display:flex; align-items:center; gap:6px; }
+.b05-s51-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+
+/* ============================================================
+   PAGE 8 · BAB 5 · 5.2 SIMULATION (Proof of Work)
+============================================================ */
+.b05-s52-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1.25rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.pw-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:1rem; }
+.pw-label { font-size:12px; color:#3A3A35; min-width:80px; font-family:'Sora',sans-serif; }
+.pw-val { font-size:13px; font-weight:500; color:#1A1A18; min-width:60px; font-family:'Sora',sans-serif; }
+.pw-input { flex:1; min-width:0; }
+.pw-block { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-lg); overflow:hidden; margin-bottom:1rem; }
+.pw-block-head { padding:8px 14px; background:#F4F4F0; font-size:10px; color:#52524C; text-transform:uppercase; letter-spacing:0.08em; display:flex; justify-content:space-between; font-family:'Sora',sans-serif; }
+.pw-block-body { padding:12px 14px; display:flex; flex-direction:column; gap:8px; background:#FAFAF8; }
+.pw-field { display:flex; gap:8px; align-items:flex-start; }
+.pw-field-key { font-size:11px; color:#52524C; min-width:72px; padding-top:2px; font-family:'Sora',sans-serif; }
+.pw-field-val { font-size:11px; font-family:'Courier Prime',monospace; color:#1A1A18; word-break:break-all; flex:1; }
+.pw-nonce { color:#534AB7; font-weight:700; }
+.pw-hash-label { font-size:11px; color:#52524C; margin-bottom:6px; font-family:'Sora',sans-serif; }
+.pw-hash { font-size:11px; font-family:'Courier Prime',monospace; word-break:break-all; line-height:1.6; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); margin-bottom:1rem; }
+.pw-hash .pw-zero { color:#534AB7; font-weight:700; }
+.pw-hash .pw-rest { color:#3A3A35; }
+.pw-hash.found .pw-zero { color:#3B6D11; }
+.pw-hash.found .pw-rest { color:#1A1A18; }
+.pw-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:1rem; }
+.pw-stat { background:#F4F4F0; border-radius:var(--border-radius-md); padding:10px 12px; }
+.pw-stat-label { font-size:11px; color:#52524C; margin-bottom:4px; font-family:'Sora',sans-serif; }
+.pw-stat-val { font-size:16px; font-weight:500; color:#1A1A18; font-family:'Sora',sans-serif; }
+.pw-btns { display:flex; gap:8px; margin-bottom:1rem; }
+.pw-result { padding:10px 14px; border-radius:var(--border-radius-md); font-size:12px; line-height:1.6; display:none; font-family:'Sora',sans-serif; }
+.pw-result.show { display:block; }
+.pw-result.ok { background:#EAF3DE; color:#27500A; border:0.5px solid rgba(59,109,17,0.2); }
+.pw-result.running { background:#EEEDFE; color:#3C3489; border:0.5px solid rgba(83,74,183,0.2); }
+
+/* ============================================================
+   PAGE 8 · BAB 5 · 5.3 SIMULATION (Mining — Block Anatomy)
+============================================================ */
+.b05-s53-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1.25rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.ba-block { border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-lg); overflow:hidden; }
+.ba-section-head-sim { padding:7px 14px; font-size:10px; text-transform:uppercase; letter-spacing:0.1em; font-weight:500; display:flex; justify-content:space-between; align-items:center; font-family:'Sora',sans-serif; }
+.ba-section-head-sim.header-sim { background:#1A1A18; color:#C4B5FD; }
+.ba-section-head-sim.body-sim { background:#F4F4F0; color:#52524C; }
+.ba-badge-sim { font-size:9px; padding:2px 8px; border-radius:99px; background:rgba(124,92,252,0.15); color:#7C5CFC; font-family:'Sora',sans-serif; }
+.ba-fields-sim { display:flex; flex-direction:column; }
+.ba-field-sim { display:flex; align-items:center; border-bottom:0.5px solid rgba(124,58,237,0.08); cursor:pointer; transition:background 0.15s; }
+.ba-field-sim:last-child { border-bottom:none; }
+.ba-field-sim:hover { background:#F4F4F0; }
+.ba-field-sim.active { background:#EEEDFE; }
+.ba-field-sim.nonce-sim .ba-field-name-sim { color:#534AB7; }
+.ba-field-sim.nonce-sim .ba-field-bytes-sim { color:#534AB7; }
+.ba-field-bytes-sim { width:52px; flex-shrink:0; padding:10px 12px; font-size:10px; font-family:'Courier Prime',monospace; color:#52524C; text-align:center; border-right:0.5px solid rgba(124,58,237,0.08); }
+.ba-field-name-sim { flex:1; padding:10px 14px; font-size:12px; font-weight:500; color:#1A1A18; font-family:'Sora',sans-serif; }
+.ba-field-note-sim { font-size:10px; font-weight:400; color:#52524C; display:block; margin-top:2px; }
+.ba-field-arrow-sim { padding:10px 12px; color:#52524C; font-size:12px; transition:transform 0.2s; }
+.ba-field-sim.active .ba-field-arrow-sim { transform:rotate(90deg); color:#534AB7; }
+.ba-field-sim.active .ba-field-name-sim { color:#534AB7; }
+.ba-detail-sim { background:#F4F4F0; border-bottom:0.5px solid rgba(124,58,237,0.08); padding:12px 14px 14px; display:none; flex-direction:column; gap:8px; }
+.ba-detail-sim.show { display:flex; }
+.ba-detail-val-sim { font-size:11px; font-family:'Courier Prime',monospace; color:#534AB7; word-break:break-all; padding:8px 10px; background:#FAFAF8; border-radius:var(--border-radius-md); border:0.5px solid rgba(124,58,237,0.15); }
+.ba-detail-desc-sim { font-size:12px; color:#3A3A35; line-height:1.6; font-family:'Sora',sans-serif; }
+.ba-chain-sim { display:flex; align-items:stretch; gap:0; margin-top:6px; }
+.ba-chain-block-sim { flex:1; border:0.5px solid rgba(124,58,237,0.12); border-radius:var(--border-radius-md); overflow:hidden; min-width:0; }
+.ba-chain-block-sim.current-sim { border-color:rgba(124,58,237,0.4); }
+.ba-chain-head-sim { padding:4px 8px; font-size:9px; font-weight:500; text-align:center; font-family:'Sora',sans-serif; }
+.ba-chain-head-sim.prev-sim { background:#F4F4F0; color:#52524C; }
+.ba-chain-head-sim.curr-sim { background:#EEEDFE; color:#534AB7; }
+.ba-chain-row-sim { padding:4px 8px; font-size:9px; font-family:'Courier Prime',monospace; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; border-top:0.5px solid rgba(124,58,237,0.08); }
+.ba-chain-row-sim.hash-sim { color:#3B6D11; }
+.ba-chain-row-sim.match-sim { background:#EAF3DE; color:#27500A; font-weight:500; }
+.ba-chain-arrow-sim { display:flex; align-items:center; padding:0 8px; color:#52524C; font-size:14px; flex-shrink:0; }
+.ba-chain-note-sim { font-size:10px; color:#52524C; text-align:center; margin-top:6px; line-height:1.5; font-family:'Sora',sans-serif; }
+.ba-tx-sim { display:flex; flex-direction:column; }
+.ba-tx-item-sim { display:flex; align-items:center; gap:10px; padding:9px 14px; border-bottom:0.5px solid rgba(124,58,237,0.08); font-size:11px; }
+.ba-tx-item-sim:last-child { border-bottom:none; }
+.ba-tx-item-sim.coinbase-sim { background:#EEEDFE; }
+.ba-tx-badge-sim { font-size:9px; padding:2px 8px; border-radius:99px; flex-shrink:0; font-family:'Sora',sans-serif; }
+.ba-tx-badge-sim.cb-sim { background:#534AB7; color:#fff; }
+.ba-tx-badge-sim.tx-sim { background:#F4F4F0; color:#52524C; border:0.5px solid rgba(124,58,237,0.1); }
+.ba-tx-hash-sim { font-family:'Courier Prime',monospace; color:#3A3A35; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:11px; }
+.ba-tx-fee-sim { font-size:10px; color:#52524C; flex-shrink:0; font-family:'Sora',sans-serif; }
+.ba-total-sim { padding:8px 14px; font-size:11px; color:#52524C; background:#F4F4F0; display:flex; justify-content:space-between; font-family:'Sora',sans-serif; }
+
+/* ============================================================
+   PAGE 8 · BAB 5 · 5.4 SIMULATION (Difficulty Adjustment)
+============================================================ */
+.b05-lab { margin-top:1.25rem; border:0.5px solid rgba(124,58,237,0.18); border-radius:var(--border-radius-lg); overflow:hidden; }
+.b05-lab-head { padding:8px 14px; font-size:11px; font-weight:500; background:#534AB7; color:#fff; font-family:'Sora',sans-serif; }
+.b05-lab-body { padding:12px 14px; background:#FAFAF8; display:flex; flex-direction:column; gap:11px; }
+.b05-lab-ctrl { display:flex; align-items:center; gap:12px; }
+.b05-lab-ctrl label { font-size:12px; color:#3A3A35; white-space:nowrap; font-family:'Sora',sans-serif; }
+.b05-lab-ctrl input[type=range] { flex:1; accent-color:#534AB7; }
+.b05-lab-ctrl-val { font-size:14px; font-weight:500; color:#534AB7; min-width:96px; text-align:right; font-family:'Courier Prime',monospace; }
+.b05-lab-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.b05-lab-cell { padding:9px 11px; border-radius:var(--border-radius-md); background:#F4F4F0; }
+.b05-lab-cell.hi { background:#EEEDFE; border:0.5px solid rgba(83,74,183,0.2); }
+.b05-lab-cell.warn { background:#FAEEDA; border:0.5px solid rgba(133,79,11,0.2); }
+.b05-lab-k { font-size:10px; color:#52524C; font-family:'Sora',sans-serif; margin-bottom:2px; }
+.b05-lab-v { font-size:15px; font-weight:600; color:#1A1A18; font-family:'Courier Prime',monospace; }
+.b05-lab-v.purp { color:#534AB7; }
+.b05-lab-v.amber { color:#854F0B; }
+.b05-lab-v.green { color:#0F6E56; }
+.b05-lab-note { font-size:11px; line-height:1.7; color:#3A3A35; font-family:'Sora',sans-serif; padding-top:9px; border-top:0.5px solid rgba(124,58,237,0.1); }
+.b05-lab-note b { color:#534AB7; font-weight:600; }
+.b05-lab-note.warn b { color:#854F0B; }
+.b05-lab-track { height:9px; border-radius:99px; background:#F0F0EC; overflow:hidden; }
+.b05-lab-fill { height:100%; border-radius:99px; background:#534AB7; transition:width 0.3s ease; }
+@media (max-width:640px){
+  .b05-lab-grid { grid-template-columns:1fr; }
+  .b05-lab-ctrl { flex-wrap:wrap; }
+  .b05-lab-ctrl input[type=range] { flex-basis:100%; order:3; }
+}
+.b05-s54-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1.25rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b05-s54-svg-wrap { width:100%; overflow-x:auto; }
+.c-gray { fill:#F4F4F0; stroke:rgba(124,58,237,0.15); }
+.th { font-family:'Sora',sans-serif; font-size:11px; font-weight:500; fill:#1A1A18; }
+.ts { font-family:'Sora',sans-serif; font-size:10px; fill:#3A3A35; }
+
+/* ============================================================
+   PAGE 8 · BAB 5 · 5.5 SIMULATION (Block Reward & Halving)
+============================================================ */
+.b05-s55-formula-wrap { width:100%; margin-bottom:1rem; }
+.b05-s55-chart-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.b05-s55-legend { display:flex; gap:16px; font-size:11px; color:#3A3A35; margin-top:8px; flex-wrap:wrap; font-family:'Sora',sans-serif; }
+.b05-s55-leg { display:flex; align-items:center; gap:6px; }
+.b05-s55-dot { width:12px; height:12px; display:inline-block; flex-shrink:0; }
+
+/* ============================================================
+   PAGE 8 · BAB 5 · 5.6 SIMULATION (Serangan 51%)
+============================================================ */
+.b05-s56-desc { font-size:12px; color:#3A3A35; line-height:1.7; margin-bottom:1.25rem; padding:10px 14px; background:#F4F4F0; border-radius:var(--border-radius-md); border-left:2px solid rgba(124,58,237,0.3); }
+.at-ctrl-sim { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:1rem; }
+.at-label-sim { font-size:12px; color:#3A3A35; min-width:130px; font-family:'Sora',sans-serif; }
+.at-val-sim { font-size:13px; font-weight:500; min-width:36px; color:#1A1A18; font-family:'Sora',sans-serif; }
+.at-chains-sim { display:flex; flex-direction:column; gap:8px; margin-bottom:1rem; }
+.at-chain-row-sim { display:flex; align-items:center; gap:10px; }
+.at-chain-label-sim { font-size:11px; min-width:80px; font-weight:500; font-family:'Sora',sans-serif; }
+.at-chain-label-sim.honest-sim { color:#534AB7; }
+.at-chain-label-sim.attack-sim { color:#A32D2D; }
+.at-blocks-sim { display:flex; gap:3px; flex-wrap:nowrap; overflow:hidden; align-items:center; min-height:28px; flex:1; }
+.at-block-sim { width:22px; height:22px; border-radius:4px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:8px; font-family:'Courier Prime',monospace; transition:opacity 0.15s,transform 0.15s; }
+.at-block-sim.honest-blk { background:#EEEDFE; border:0.5px solid #534AB7; color:#534AB7; }
+.at-block-sim.attack-blk { background:#FCEBEB; border:0.5px solid #A32D2D; color:#A32D2D; }
+.at-block-sim.shared-blk { background:#F4F4F0; border:0.5px solid #52524C; color:#52524C; }
+.at-block-sim.fork-pt { border-width:1.5px; }
+.at-block-sim.dying { opacity:0; transform:scale(0.5); }
+.at-chain-len-sim { font-size:11px; font-family:'Courier Prime',monospace; min-width:52px; }
+.at-chain-len-sim.honest-sim { color:#534AB7; }
+.at-chain-len-sim.attack-sim { color:#A32D2D; }
+.at-status-sim { padding:10px 14px; border-radius:var(--border-radius-md); font-size:12px; line-height:1.6; margin-bottom:1rem; font-family:'Sora',sans-serif; }
+.at-status-sim.safe-sim { background:#EAF3DE; color:#27500A; border:0.5px solid rgba(59,109,17,0.2); }
+.at-status-sim.danger-sim { background:#FAEEDA; color:#633806; border:0.5px solid rgba(133,79,11,0.2); }
+.at-status-sim.attacking-sim { background:#FCEBEB; color:#791F1F; border:0.5px solid rgba(163,45,45,0.2); }
+.at-status-sim.forked-sim { background:#EAF3DE; color:#27500A; border:0.5px solid rgba(59,109,17,0.2); }
+.at-btns-sim { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:1rem; }
+.at-note-sim { font-size:11px; color:#3A3A35; line-height:1.6; padding:8px 12px; background:#F4F4F0; border-radius:var(--border-radius-md); font-family:'Sora',sans-serif; }
+

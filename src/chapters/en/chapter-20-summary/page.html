@@ -1,0 +1,291 @@
+<!-- ============================================================
+     PAGE 23 · BAB 20 · Rangkuman — Seluruh Protokol Bitcoin
+     |-- 20.1 · Fondasi: Kriptografi & Identitas
+     |-- 20.2 · Transaksi & Script
+     |-- 20.3 · Konsensus & Mining
+     |-- 20.4 · Jaringan & Node
+     |-- 20.5 · Layer 2 & Privacy
+     |-- 20.6 · Governance & Masa Depan
+============================================================ -->
+<div class="page" id="page-bab20">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b20">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b20">← Chapter List</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab20">
+      <div class="sidebar-heading">Chapter 20</div>
+      <div class="sidebar-title">Summary — The Entire Bitcoin Protocol</div>
+
+      <div class="sidebar-item active" id="sb-20-1">
+        <div class="sb-num">20.1</div>
+        <div class="sb-label">Foundations: Cryptography & Identity</div>
+      </div>
+      <div class="sidebar-item" id="sb-20-2">
+        <div class="sb-num">20.2</div>
+        <div class="sb-label">Transactions & Script</div>
+      </div>
+      <div class="sidebar-item" id="sb-20-3">
+        <div class="sb-num">20.3</div>
+        <div class="sb-label">Consensus & Mining</div>
+      </div>
+      <div class="sidebar-item" id="sb-20-4">
+        <div class="sb-num">20.4</div>
+        <div class="sb-label">Network & Nodes</div>
+      </div>
+      <div class="sidebar-item" id="sb-20-5">
+        <div class="sb-num">20.5</div>
+        <div class="sb-label">Layer 2 & Privacy</div>
+      </div>
+      <div class="sidebar-item" id="sb-20-6">
+        <div class="sb-num">20.6</div>
+        <div class="sb-label">Governance & The Future</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab20-content">
+
+      <!-- ==============================
+           SECTION 20.1 · Fondasi: Kriptografi & Identitas
+      ============================== -->
+      <div class="p-section active" id="section-20-1">
+        <div class="p-eyebrow">Chapter 20 · 20.1</div>
+        <div class="p-heading">All of Bitcoin stands on mathematics that can’t be manipulated — the two structures that form its foundation are the hash function and elliptic curve cryptography</div>
+        <div class="p-title">Foundations: Cryptography & Identity</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p><strong>Hash functions</strong></p>
+          <p>A hash function takes input of any size and produces a fixed-size output that’s unpredictable and irreversible. Bitcoin uses SHA256 extensively: for mining (the double SHA256 of the block header), for addresses (SHA256 then RIPEMD160), and for the Merkle tree (the double SHA256 of each pair of hashes). The most important properties of a hash for Bitcoin are collision resistance (no two different inputs produce the same hash within a reasonable time) and the avalanche effect (one changed input bit produces a completely different hash).</p>
+
+          <p><strong>Elliptic curve cryptography</strong></p>
+          <p>Bitcoin uses the secp256k1 curve. A private key is a random 256-bit number. A public key is a point on the curve produced by multiplying the private key with the generator point G. This operation is one-way: from private key to public key is easy, the reverse is computationally impossible. A Bitcoin address is a hash of the public key, not the public key itself, adding an extra layer of protection.</p>
+
+          <p><strong>ECDSA and Schnorr</strong></p>
+          <p>ECDSA is the signature scheme Bitcoin has used from the start. It proves that the sender owns the private key matching the public key in the UTXO being spent, without revealing the private key itself. Schnorr signatures, activated together with Taproot in 2021, are more efficient and elegant: the signatures are linear so they can be aggregated. MuSig enables n-of-n multisig that looks identical to a single signature on chain, improving privacy and efficiency at the same time.</p>
+
+          <p><strong>From key to address</strong></p>
+          <p>A private key produces a public key via ECC. The public key is hashed to produce an address. Each address generation uses a different format: P2PKH (legacy, starts with 1), P2SH (starts with 3), P2WPKH (bech32, starts with bc1q), P2TR (bech32m, starts with bc1p). The format isn’t just aesthetics, but determines the Script that locks the UTXO and how that UTXO can be spent.</p>
+
+          <p><strong>HD wallets and seed phrases</strong></p>
+          <p>BIP32 defines a deterministic hierarchy: one seed produces the entire key tree deterministically. BIP39 defines the representation of the seed as 12 or 24 words. BIP44 defines the standard derivation path. The result: one seed phrase can recover the entire wallet in any wallet software that follows these standards.</p>
+
+          <div class="p-callout">
+            <p>Key numbers: a 256-bit private key with about 10^77 possibilities. SHA256 produces a 32-byte output, RIPEMD160 produces 20 bytes for legacy addresses. A Schnorr signature is only 64 bytes vs ECDSA’s 71-72 bytes. BIP39 seed phrase: 12 words equal 128-bit entropy, 24 words equal 256-bit entropy.</p>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-20-2" data-sb="sb-20-2">
+            20.2 — Transactions & Script →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 20.1 -->
+
+      <!-- ==============================
+           SECTION 20.2 · Transaksi & Script
+      ============================== -->
+      <div class="p-section" id="section-20-2">
+        <div class="p-eyebrow">Chapter 20 · 20.2</div>
+        <div class="p-heading">The UTXO is the basic unit of Bitcoin ownership, and Script is the language that determines its spending conditions</div>
+        <div class="p-title">Transactions & Script</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p><strong>UTXO and transactions</strong></p>
+          <p>The UTXO (Unspent Transaction Output) is the basic unit of Bitcoin ownership. Every transaction consumes old UTXOs as inputs and creates new UTXOs as outputs. There’s no balance stored in one place, but rather the balance is the sum of all UTXOs that can be unlocked with the keys you own. Each UTXO is locked by a scriptPubKey and unlocked by the scriptSig or witness of the transaction that spends it.</p>
+
+          <p><strong>Fee and timelock</strong></p>
+          <p>The fee isn’t written explicitly: it’s the difference between total input and total output. The miner who includes the transaction in a block claims this difference. The fee rate is measured in satoshi per virtual byte because transactions differ in size. Timelocks enable transactions that can only be executed in the future. nLocktime works at the transaction level (absolute time), nSequence works at the input level (relative time). OP_CLTV and OP_CSV move these conditions into the Script itself so they apply to anyone trying to spend.</p>
+
+          <p><strong>Bitcoin Script</strong></p>
+          <p>Script is a stack-based language that determines the spending conditions of a UTXO. P2PKH asks for a signature and public key. P2SH hides the actual script behind a hash. P2WPKH moves the signature data to the witness field. P2TR enables key path spending that looks like an ordinary signature, or script path spending that reveals one of many hidden conditions via MAST. Tapscript runs inside the Taproot path with OP_CHECKSIGADD for more efficient multisig and OP_SUCCESS for future upgrades. Miniscript is a structured language on top of Script that enables automated analysis and safe script composition.</p>
+
+          <p><strong>PSBT</strong></p>
+          <p>PSBT (BIP 174) separates the role of transaction composer and signer, enabling safer multisig and hardware wallet workflows. The wallet software composes the transaction and exports it as a PSBT file. The hardware wallet reads, verifies, signs, and returns it. After all signatures are collected, the PSBT is finalized and broadcast.</p>
+
+          <div class="p-callout">
+            <p>Key numbers: 1 sat/vByte is the default minimum relay fee. SegWit gives a discount: witness data counts as 1/4 weight. P2PKH is about 148 vBytes per input, P2WPKH about 68 vBytes, P2TR key path about 57.5 vBytes (the most efficient). The OP_RETURN data limit is per-node relay policy, not a consensus rule (long-standing convention: 80 bytes).</p>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-20-1" data-sb="sb-20-1">
+            ← 20.1 — Cryptography & Identity
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-20-3" data-sb="sb-20-3">
+            20.3 — Consensus & Mining →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 20.2 -->
+
+      <!-- ==============================
+           SECTION 20.3 · Konsensus & Mining
+      ============================== -->
+      <div class="p-section" id="section-20-3">
+        <div class="p-eyebrow">Chapter 20 · 20.3</div>
+        <div class="p-heading">Proof of Work makes writing transaction history computationally expensive and cheap to verify</div>
+        <div class="p-title">Consensus & Mining</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p><strong>Proof of Work</strong></p>
+          <p>A miner repeatedly changes the nonce in the block header until the block hash meets the difficulty target. Because the hash can’t be predicted, there’s no shortcut. The entire network can verify that this work was done with just one hash operation, while the miner has to try billions of possibilities to find it.</p>
+
+          <p><strong>Difficulty adjustment</strong></p>
+          <p>Every 2,016 blocks, the network computes how long the last blocks took, compares it with the target of 20,160 minutes, then adjusts proportionally. The 4× per-epoch change limit prevents destabilization from extreme hashrate surges. Every node computes the adjustment independently and deterministically, with no coordination.</p>
+
+          <p><strong>Halving and security budget</strong></p>
+          <p>The halving happens every 210,000 blocks, the block reward shrinking by exactly half. This schedule produces a maximum total supply of 21 million BTC as a geometric series. The block reward is currently 3.125 BTC after the fourth halving in April 2024. The security budget is the total miner revenue, which determines how expensive an attack is. Open question: are fees alone enough when the block reward approaches zero around the year 2140?</p>
+
+          <p><strong>Mining pools and selfish mining</strong></p>
+          <p>A pool combines the hashrate of many miners to reduce income variance. PPS pays per valid share regardless of whether the pool finds a block. PPLNS pays based on shares in the last window, with the miner sharing the variance. FPPS is like PPS but includes an estimate of transaction fees. Selfish mining is a strategy of hiding a found block to gain a chain lead, profitable above a threshold of about 33% hashrate, limited by fast propagation, detection, and reputation risk.</p>
+
+          <div class="p-callout">
+            <p>Key numbers: target block time 10 minutes. A difficulty epoch is every 2,016 blocks, about 2 weeks. The maximum adjustment limit is 4× per epoch. Total supply 21,000,000 BTC. Halving every 210,000 blocks, about 4 years. Selfish mining threshold about 33% of network hashrate.</p>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-20-2" data-sb="sb-20-2">
+            ← 20.2 — Transactions & Script
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-20-4" data-sb="sb-20-4">
+            20.4 — Network & Nodes →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 20.3 -->
+
+      <!-- ==============================
+           SECTION 20.4 · Jaringan & Node
+      ============================== -->
+      <div class="p-section" id="section-20-4">
+        <div class="p-eyebrow">Chapter 20 · 20.4</div>
+        <div class="p-heading">The Bitcoin network is P2P with no central server — information flows through thousands of interconnected nodes</div>
+        <div class="p-title">Network & Nodes</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p><strong>P2P and peer discovery</strong></p>
+          <p>The Bitcoin network is P2P with no central server. Each node connects to a number of peers and forwards transactions and blocks to other peers. Peer discovery starts from hardcoded DNS seeds, then grows through addr and addrv2 messages. Default connections: 8 outbound, up to 125 total. The handshake between two nodes starts with the version and verack messages.</p>
+
+          <p><strong>Efficient propagation</strong></p>
+          <p>Compact blocks (BIP 152) reduce block propagation bandwidth by sending only transaction shortIDs, so a node that already has the transactions in its mempool doesn’t need to re-download. Erlay (BIP 330) uses set reconciliation for more efficient transaction propagation, reducing bandwidth by up to 40%. Dandelion (BIP 156) improves propagation privacy with a stem phase (a single path) before the fluff phase (normal broadcast).</p>
+
+          <p><strong>Full nodes and sync</strong></p>
+          <p>A full node downloads and verifies the entire blockchain from genesis. IBD uses headers-first: download all headers first, validate the chain of work, then download blocks. assumevalid skips script verification for old blocks already known to be valid. assumeUTXO lets a node sync from a verified UTXO set snapshot, without sacrificing the long-term security model.</p>
+
+          <p><strong>SPV and light clients</strong></p>
+          <p>SPV stores only block headers and verifies transactions via a Merkle proof. The bloom filter (BIP 37) is the old way that leaks privacy to the server. The compact block filter (BIP 157/158) is the modern solution: a per-block filter downloaded and checked locally without telling the server which transactions are being searched for.</p>
+
+          <div class="p-callout">
+            <p>Key numbers: block header 80 bytes. The entire header chain is currently about 70 MB. Outbound connections are usually 8 full-relay; modern implementations add dedicated block-relay connections. A BIP 158 compact block filter is typically tens of KB for a full modern block — still far lighter than downloading whole blocks. Erlay saves about 40% bandwidth vs ordinary flooding. Coinbase maturity 100 blocks before it can be spent.</p>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-20-3" data-sb="sb-20-3">
+            ← 20.3 — Consensus & Mining
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-20-5" data-sb="sb-20-5">
+            20.5 — Layer 2 & Privacy →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 20.4 -->
+
+      <!-- ==============================
+           SECTION 20.5 · Layer 2 & Privacy
+      ============================== -->
+      <div class="p-section" id="section-20-5">
+        <div class="p-eyebrow">Chapter 20 · 20.5</div>
+        <div class="p-heading">The Lightning Network enables instant off-chain payments, while privacy techniques make it harder to trace on-chain transactions</div>
+        <div class="p-title">Layer 2 & Privacy</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p><strong>Lightning Network</strong></p>
+          <p>The Lightning Network is a network of payment channels on top of Bitcoin. Two parties lock funds in an on-chain multisig (the funding transaction), then exchange off-chain commitment transactions that update the balance without broadcasting to the network. A channel can be closed cooperatively (immediately final) or unilaterally (requiring a wait for the CSV timelock to give the other party time to respond if there’s cheating).</p>
+
+          <p><strong>HTLC and routing</strong></p>
+          <p>An HTLC (Hash Time Locked Contract) enables multi-hop payments: each hop only forwards the payment if it can reveal the preimage of a particular hash, and if it isn’t claimed within a certain time the funds return. Routing in Lightning is source routing with onion encryption: the sender determines the entire path, each hop only knows its predecessor and successor.</p>
+
+          <p><strong>On-chain privacy</strong></p>
+          <p>Privacy in Bitcoin is hard because the blockchain is public and transparent. CoinJoin combines inputs from many users in one large transaction with equal-sized outputs, breaking the link between input and output without trust. Payjoin includes an input from the recipient so chain analysis can’t easily identify who the sender is and how much was sent. Silent Payments (BIP 352) enable a static address that produces a unique address for each payment without coordination, eliminating address reuse.</p>
+
+          <div class="p-callout">
+            <p>Key numbers: a Lightning channel is a 2-of-2 multisig on-chain. HTLC timeout is usually 40-144 blocks per hop. Onion routing has a maximum of 20 hops. CoinJoin outputs are all equal-sized for an effective anonymity set. Silent Payments: one static address produces infinite unique addresses per payer.</p>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-20-4" data-sb="sb-20-4">
+            ← 20.4 — Network & Nodes
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-20-6" data-sb="sb-20-6">
+            20.6 — Governance & The Future →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 20.5 -->
+
+      <!-- ==============================
+           SECTION 20.6 · Governance & Masa Depan
+      ============================== -->
+      <div class="p-section" id="section-20-6">
+        <div class="p-eyebrow">Chapter 20 · 20.6</div>
+        <div class="p-heading">Bitcoin has no CEO — protocol changes happen through a process involving many parties with a de facto veto at every layer</div>
+        <div class="p-title">Governance & The Future</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p><strong>BIPs and the change process</strong></p>
+          <p>A BIP (Bitcoin Improvement Proposal) is a formal document describing a proposed change. Anyone can submit a BIP, but no one can force it to be implemented. A change that doesn’t get broad support from users, developers, miners, and businesses won’t be successfully activated. This is a feature, not a bug.</p>
+
+          <p><strong>Soft fork and hard fork</strong></p>
+          <p>A soft fork is a change that tightens the consensus rules, where old nodes still accept new blocks as valid. A hard fork loosens the rules, so old nodes will reject new blocks and the network splits. Bitcoin has only ever successfully done soft forks since 2013. SegWit was activated in 2017 after a long process via UASF. Taproot was activated in 2021 with Speedy Trial, more smoothly because there was broad consensus from the start.</p>
+
+          <p><strong>Open questions</strong></p>
+          <p>Are fees alone enough for the long-term security budget when the block reward approaches zero? No one can answer this with certainty; it depends on adoption, price, transaction volume, and the structure of the ecosystem in the future. Active proposals under discussion: OP_CTV for simple covenants, OP_VAULT for safer self-custody, ANYPREVOUT for eltoo as a simpler Lightning alternative. None of these are activated yet.</p>
+
+          <p><strong>What doesn’t change</strong></p>
+          <p>Amid all the debate about the future, some things are already settled: the total supply of 21 million BTC can’t be changed without a hard fork that won’t get support. Proof of Work is the consensus mechanism that’s maintained. Network decentralization is a value guarded together. Changes must be backward-compatible or they won’t happen.</p>
+
+          <div class="p-callout">
+            <p>Key numbers: the first BIP is BIP 1 by Amir Taaki (2011). SegWit active at block #481,824 (August 2017). Taproot active at block #709,632 (November 2021). The block reward reaches zero around the year 2140 as a mathematical consequence of the halving schedule fixed since the genesis block.</p>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-20-5" data-sb="sb-20-5">
+            ← 20.5 — Layer 2 & Privacy
+          </button>
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+        </div>
+      </div>
+      <!-- END SECTION 20.6 -->
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 23 · BAB 20 -->
+
+

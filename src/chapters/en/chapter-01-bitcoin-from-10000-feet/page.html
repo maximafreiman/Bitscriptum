@@ -1,0 +1,526 @@
+<!-- ============================================================
+     PAGE 4 · BAB 1 · Bitcoin dari 10.000 Kaki
+     |-- 1.1 · Apa itu Bitcoin sebenarnya? [DONE]
+     |-- 1.2 · Bagaimana transaksi terjadi? [DONE]
+     |-- 1.3 · Siapa yang menjalankan jaringannya? [DONE]
+     |-- 1.4 · Apa itu blockchain? [LOCKED]
+     |-- 1.5 · Kenapa 21 juta? [LOCKED]
+     |-- 1.6 · Bitcoin vs uang biasa [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab1">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b1">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b1">← Chapter List</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-heading">Chapter 1</div>
+      <div class="sidebar-title">Bitcoin from 10,000 Feet</div>
+
+      <!-- 1.1 · DONE -->
+      <div class="sidebar-item active" id="sb-1-1">
+        <div class="sb-num">1.1</div>
+        <div class="sb-label">What is Bitcoin, really?</div>
+      </div>
+      <!-- 1.2 · DONE -->
+      <div class="sidebar-item" id="sb-1-2">
+        <div class="sb-num">1.2</div>
+        <div class="sb-label">How do transactions happen?</div>
+      </div>
+      <!-- 1.3 · DONE -->
+      <div class="sidebar-item" id="sb-1-3">
+        <div class="sb-num">1.3</div>
+        <div class="sb-label">Who runs the network?</div>
+      </div>
+      <!-- 1.4 · DONE -->
+      <div class="sidebar-item" id="sb-1-4">
+        <div class="sb-num">1.4</div>
+        <div class="sb-label">What is a blockchain?</div>
+      </div>
+      <!-- 1.5 · DONE -->
+      <div class="sidebar-item" id="sb-1-5">
+        <div class="sb-num">1.5</div>
+        <div class="sb-label">Why 21 million?</div>
+      </div>
+      <!-- 1.6 · DONE -->
+      <div class="sidebar-item" id="sb-1-6">
+        <div class="sb-num">1.6</div>
+        <div class="sb-label">Bitcoin vs ordinary money</div>
+      </div>
+    </div>
+    <!-- END SIDEBAR -->
+
+    <!-- CONTENT AREA -->
+    <div class="prologue-content" id="bab1-content">
+
+      <!-- ==============================
+           SECTION 1.1 · Apa itu Bitcoin sebenarnya?
+      ============================== -->
+      <div class="p-section active" id="section-1-1">
+        <div class="p-eyebrow">Chapter 1 · 1.1</div>
+        <div class="p-heading">Setting straight a common misconception</div>
+        <div class="p-title">What is Bitcoin, really?</div>
+        <div class="p-divider"></div>
+        <div class="p-body">
+          <p>Ask ten people about Bitcoin and you’ll get ten different answers.</p>
+          <p>Some say Bitcoin is an investment. Some say speculation. Some say a scam. Some say the future. All of those answers talk about price, not about what Bitcoin really is.</p>
+
+          <p><strong>Bitcoin is a cryptocurrency, but it is not part of the "crypto" industry.</strong></p>
+          <p>This is important to understand from the start. Bitcoin is technically a cryptocurrency because it uses cryptography as the foundation of its technology. But the term "crypto" you hear every day is something different.</p>
+          <p>"Crypto" is a label born from <b>where a thing is traded</b>, not from how it works. Exchanges and financial media group Bitcoin with thousands of other tokens because they all change hands on the same venues, sit in similar wallets, and get reported in the same news column. As a commercial grouping, that makes sense and there is nothing wrong with it.</p>
+          <p>The trouble starts when that commercial grouping is read as a <b>technical statement</b>. Because technically, the contents of that basket differ enormously from one another. Some tokens have a CEO. Some have a whitepaper that can be rewritten at any time. Some were built to be sold to the public rather than to solve a real problem. Putting them all under one word makes the differences that matter most invisible.</p>
+          <p>Bitcoin has no CEO. No marketing team. No early investors waiting to exit. No rules that anyone can change unilaterally.</p>
+          <p>Bitcoin is a protocol. Just as HTTP is a protocol for the web, or TCP/IP is a protocol for the internet. A protocol is owned by no one, can be shut down by no one, and needs no one’s permission to be used.</p>
+          <p>That Bitcoin uses cryptography in how it works makes it technically fit the definition of a cryptocurrency. But calling it part of the "crypto" industry is like calling email part of the spam industry just because both use the same protocol.</p>
+
+          <p><strong>Bitcoin is three things at once</strong></p>
+          <p><strong>A network.</strong> Bitcoin is a network of computers spread around the world, running without a central server, without a head office, and without anyone who can shut it down. Anyone can join, anyone can leave. The network keeps running as long as even a single node is alive.</p>
+          <p><strong>A protocol.</strong> Bitcoin is a set of rules agreed upon by all network participants. Rules about how transactions are created, verified, and recorded. Rules about how much Bitcoin can ever exist. Rules that cannot be changed unilaterally by any single party.</p>
+          <p><strong>A currency.</strong> Bitcoin is a unit of value that can be sent from one person to another, anywhere in the world, without an intermediary, without permission, and without operating hours.</p>
+
+          <div class="p-callout">
+            <p>If the internet is a protocol for moving information, Bitcoin is a protocol for moving value. Both are open, both are owned by no one, and both change how the world works. And like the internet, Bitcoin doesn’t care who misunderstands it. It just keeps running.</p>
+          </div>
+        </div>
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-1-2" data-sb="sb-1-2" data-content="bab1-content">
+            1.2 — How Do Transactions Happen? →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 1.1 -->
+
+      <!-- ==============================
+           SECTION 1.2 · Bagaimana transaksi terjadi?
+      ============================== -->
+      <div class="p-section" id="section-1-2">
+        <div class="p-eyebrow">Chapter 1 · 1.2</div>
+        <div class="p-heading">From click to confirmation</div>
+        <div class="p-title">How Do Transactions Happen?</div>
+        <div class="p-divider"></div>
+        <div class="p-body">
+          <p>Imagine you want to send money to a friend who lives in another city.</p>
+          <p>The usual way: you open your banking app, type the account number, type the amount, click send. Behind the scenes, your bank contacts your friend’s bank, both update their respective records, and after a process involving several intermediary institutions, the money "arrives" in anywhere from minutes to days. You don’t know exactly what happens in between. You simply trust that the system works.</p>
+          <p>In Bitcoin, there is no one in the middle.</p>
+
+          <p><strong>What actually happens</strong></p>
+          <p>When you send Bitcoin, you create a digital message containing three things: how much you’re sending, to which address, and a digital signature from your private key as proof that you are the rightful owner of that Bitcoin.</p>
+          <p>This message is broadcast to the entire Bitcoin network. Thousands of nodes around the world receive it, verify it, and pass it on to other nodes. Within seconds, your transaction is known to the whole network.</p>
+          <p>But it’s not done yet.</p>
+
+          <p><strong>Getting into a block</strong></p>
+          <p>Your transaction then waits to be included in a block by miners. Miners are computers competing to solve a very hard mathematical puzzle. The first to succeed earns the right to write the next block, and also receives a reward in the form of new Bitcoin.</p>
+          <p>Once your transaction is included in a block, it is recorded permanently on the blockchain. It can’t be deleted, can’t be changed, can’t be reversed.</p>
+
+          <p><strong>How long does it take?</strong></p>
+          <p>A Bitcoin block appears on average every 10 minutes. For a transaction considered final and safe, people generally wait for 6 confirmations, meaning 6 consecutive blocks after the block containing your transaction. About one hour.</p>
+          <p>Compared to a cross-border bank transfer that can take 3 to 5 business days, one hour is a significant improvement. And no one can block, delay, or cancel it along the way.</p>
+
+          <div class="p-callout">
+            <p>In Bitcoin, there is no one you need to contact if something goes wrong with your transaction. No customer service. No "cancel" button. A confirmed transaction is a finished transaction, forever.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Interactive simulation — The Journey of a Transaction</div>
+
+          <div class="tx-tabs">
+            <button class="tx-tab active-bank" id="b01-s12-tab-bank">🏦 Bank Transfer / SWIFT</button>
+            <button class="tx-tab" id="b01-s12-tab-btc">₿ Bitcoin</button>
+          </div>
+
+          <div class="tx-desc bank" id="b01-s12-desc">
+            Money moves through a chain of institutions. Each intermediary has operating hours, rules, and the authority to hold or block a transaction at any time.
+          </div>
+
+          <div class="tx-stats">
+            <div class="tx-stat">
+              <div class="tx-stat-label">Estimated time</div>
+              <div class="tx-stat-value bad" id="b01-s12-stat-time">1-5 business days</div>
+            </div>
+            <div class="tx-stat">
+              <div class="tx-stat-label">Number of intermediaries</div>
+              <div class="tx-stat-value bad" id="b01-s12-stat-hops">3-5 institutions</div>
+            </div>
+            <div class="tx-stat">
+              <div class="tx-stat-label">Can it be blocked?</div>
+              <div class="tx-stat-value bad" id="b01-s12-stat-block">Yes, at every point</div>
+            </div>
+          </div>
+
+          <div class="tx-scenario show" id="b01-s12-scenario">
+            <button class="tx-scenario-btn active-normal"  id="b01-s12-sc-normal">Normal Scenario</button>
+            <button class="tx-scenario-btn" id="b01-s12-sc-blocked">Blocked Scenario</button>
+            <button class="tx-scenario-btn" id="b01-s12-sc-btcblock" style="display:none">1 Malicious Node</button>
+          </div>
+
+          <div class="tx-flow" id="b01-s12-flow"></div>
+
+          <div class="node-grid-wrap" id="b01-s12-node-grid-wrap">
+            <div class="node-grid-label" id="b01-s12-node-grid-label">The network is verifying the transaction...</div>
+            <div class="node-grid" id="b01-s12-node-grid"></div>
+            <div class="node-consensus" id="b01-s12-node-consensus"></div>
+          </div>
+
+          <div class="tx-confirm" id="b01-s12-confirm">
+            <div class="tx-confirm-label">Block confirmations (6 confirmations = final, cannot be blocked)</div>
+            <div class="tx-confirm-track">
+              <div class="tx-confirm-block" id="b01-s12-cb-1"></div>
+              <div class="tx-confirm-block" id="b01-s12-cb-2"></div>
+              <div class="tx-confirm-block" id="b01-s12-cb-3"></div>
+              <div class="tx-confirm-block" id="b01-s12-cb-4"></div>
+              <div class="tx-confirm-block" id="b01-s12-cb-5"></div>
+              <div class="tx-confirm-block" id="b01-s12-cb-6"></div>
+            </div>
+            <div class="tx-confirm-count" id="b01-s12-confirm-count">0 / 6 confirmations</div>
+          </div>
+
+          <div class="tx-result" id="b01-s12-result"></div>
+
+          <div class="tx-controls">
+            <button class="tx-btn tx-btn-start" id="b01-s12-btn-start">Start Simulation ↗</button>
+            <button class="tx-btn tx-btn-reset" id="b01-s12-btn-reset">Reset</button>
+          </div>
+
+          <div class="tx-compare">
+            <div class="tx-compare-header">
+              <div>Aspect</div><div>Bank / SWIFT</div><div>Bitcoin</div>
+            </div>
+            <div class="tx-compare-row">
+              <div>Time</div>
+              <div class="bad">1-5 business days</div>
+              <div class="good">~1 hour (6 confirmations)</div>
+            </div>
+            <div class="tx-compare-row">
+              <div>Intermediaries</div>
+              <div class="bad">3-5 institutions</div>
+              <div class="good">None</div>
+            </div>
+            <div class="tx-compare-row">
+              <div>Operating hours</div>
+              <div class="bad">Mon-Fri, closed at night</div>
+              <div class="good">24/7, 365 days</div>
+            </div>
+            <div class="tx-compare-row">
+              <div>Can it be blocked?</div>
+              <div class="bad">Yes, at every intermediary point</div>
+              <div class="good">Requires controlling more than 50% of the network</div>
+            </div>
+            <div class="tx-compare-row">
+              <div>Permission needed?</div>
+              <div class="bad">Yes, KYC and bank approval</div>
+              <div class="good">Not required</div>
+            </div>
+          </div>
+        </div>
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active" data-target="section-1-1" data-sb="sb-1-1" data-content="bab1-content">
+            ← 1.1 — What is Bitcoin?
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-1-3" data-sb="sb-1-3" data-content="bab1-content">
+            1.3 — Who Runs the Network? →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 1.2 -->
+
+      <!-- ==============================
+           SECTION 1.3 · Siapa yang menjalankan jaringannya?
+      ============================== -->
+      <div class="p-section" id="section-1-3">
+        <div class="p-eyebrow">Chapter 1 · 1.3</div>
+        <div class="p-heading">No boss, no central server</div>
+        <div class="p-title">Who Runs the Network?</div>
+        <div class="p-divider"></div>
+        <div class="p-body">
+          <p>No one runs it. And that is exactly what makes it run.</p>
+          <p>This sounds like a paradox. Every system we know has someone behind it. Servers have administrators. Banks have boards of directors. Apps have developers who can update or shut them down at any time. But Bitcoin has none of that.</p>
+          <p>What runs Bitcoin is the network itself, made up of three kinds of participants:</p>
+
+          <p><strong>Node</strong></p>
+          <p>A node is a computer that stores a complete copy of the entire Bitcoin blockchain and verifies every incoming transaction. Anyone can run a node, with relatively affordable hardware. Nodes are not paid. They run because they want to participate in the network and verify for themselves that Bitcoin’s rules are being followed correctly.</p>
+          <p>Nodes are the guardians of the rules. If a transaction is invalid, the node rejects it. If a miner tries to cheat, the node rejects its block. There is no central authority to contact.</p>
+
+          <p><strong>Miner</strong></p>
+          <p>A miner is a computer competing to solve a mathematical puzzle to earn the right to write the next block. They invest real hardware and electricity. In return, the miner who succeeds receives new Bitcoin, called the block reward, plus the transaction fees from the transactions they include in the block.</p>
+          <p>Mining is the process that makes the blockchain secure. To forge a single old transaction, someone would have to redo the entire proof of work from that block until now, faster than the whole network that is currently running. Practically impossible.</p>
+
+          <p><strong>Users</strong></p>
+          <p>Users are anyone who holds or sends Bitcoin. They don’t need to run a node or a miner. Just having a wallet and a Bitcoin address is enough.</p>
+
+          <p><strong>Why can’t it be shut down?</strong></p>
+          <p>Because there is no single point that, if removed, would make everything stop. Nodes are spread across hundreds of countries. Miners operate in various jurisdictions. There’s no central server to attack, no CEO to arrest, no office to shut down.</p>
+
+          <div class="p-callout">
+            <p>Bitcoin runs because thousands of people around the world choose to run it, not because some single entity forces it to run. And as long as even one node is still alive somewhere on this earth, Bitcoin still exists.</p>
+          </div>
+        </div>
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active" data-target="section-1-2" data-sb="sb-1-2" data-content="bab1-content">
+            ← 1.2 — How Do Transactions Happen?
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-1-4" data-sb="sb-1-4" data-content="bab1-content">
+            1.4 — What is a Blockchain? →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 1.3 -->
+
+      <!-- ==============================
+           SECTION 1.4 · Apa itu blockchain?
+      ============================== -->
+      <div class="p-section" id="section-1-4">
+        <div class="p-eyebrow">Chapter 1 · 1.4</div>
+        <div class="p-heading">A ledger that cannot be manipulated</div>
+        <div class="p-title">What is a Blockchain?</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Before getting into how it works, there’s one thing we need to clear up first.</p>
+          <p>The word "blockchain" has suffered the same fate as the word "crypto". The industry took it, used it to sell everything, and its meaning grew blurry. "Blockchain for supply chains." "Blockchain for voting." "Blockchain for healthcare." Almost none of those need a blockchain at all, and could be solved more efficiently with an ordinary database.</p>
+          <p>So before learning how it works, it’s important to know: not everything called a blockchain is a blockchain.</p>
+
+          <p><strong>Bitcoin’s blockchain vs the industry’s "blockchain"</strong></p>
+          <p>Bitcoin’s blockchain is a genuinely decentralized system. No one controls who may write or read. There’s no admin who can change the rules. There’s no company behind it. There’s no off button. Its security comes from proof of work and the consensus of thousands of independent nodes around the world.</p>
+          <p>Most of the "blockchains" sold by the crypto industry are centralized databases with a blockchain look. There’s a company that controls them. There’s a team that can change their rules at any time. There are servers that can be shut down. This isn’t a blockchain in the sense Satoshi meant. This is marketing.</p>
+          <p>Not everything called a blockchain is necessarily a blockchain. But Bitcoin’s blockchain is the real thing.</p>
+
+          <p><strong>What is a block?</strong></p>
+          <p>Imagine a large ledger of transaction records. Each page contains a list of transactions that occurred in one period of time. Each new page refers back to the previous page, forming a chain that can’t be broken. That’s a blockchain. But no one owns it, and everyone can see it.</p>
+          <p>Each block contains three main things:</p>
+          <p><strong>Transaction data.</strong> A list of all the transactions that occurred in that period. Who sent how much to whom.</p>
+          <p><strong>This block’s hash.</strong> A kind of digital fingerprint of the entire block’s contents. If even one character changes, the hash changes completely.</p>
+          <p><strong>The previous block’s hash.</strong> This is what forms the chain. Each block is bound to the previous block through its hash.</p>
+
+          <p><strong>Why can’t it be manipulated?</strong></p>
+          <p>Imagine someone wants to forge a transaction in block #500. They have to change that block&#39;s contents. But the moment its contents change, the hash of block #500 changes. That means block #501, which stores the hash of #500, is now invalid. Block #502 is invalid too. And so on, up to the latest block.</p>
+          <p>To forge a single old transaction, someone would have to recompute the entire chain from that block until now, faster than the whole network that is adding a new block every 10 minutes. Practically impossible.</p>
+
+          <p><strong>Who stores it?</strong></p>
+          <p>Everyone who runs a Bitcoin node stores a complete copy of the entire blockchain. Not on one server, but on thousands of computers around the world. There’s no single point that can be attacked to delete or change the record.</p>
+
+          <div class="p-callout">
+            <p>A blockchain isn’t magic technology. It’s a simple combination of cryptography, consensus, and economic incentives working together to create something that never existed before: an honest record, with no guardian who needs to be trusted.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Interactive simulation — Blockchain Structure</div>
+
+          <div class="bc-desc">
+            Each block is linked to the previous one through its hash. Try changing the transaction data in Block #1 and see what happens to the blocks that follow.
+          </div>
+
+          <div class="bc-chain" id="b01-s14a-chain"></div>
+
+          <div class="bc-result" id="b01-s14a-result"></div>
+
+          <div class="bc-controls">
+            <button class="bc-btn bc-btn-reset" id="b01-s14a-reset">Reset Blockchain</button>
+          </div>
+
+          <div class="bc-hint" id="b01-s14a-hint">
+            Try changing the "Transaction Data" in Block #1 above. Its hash will change instantly, and Block #2 and #3 will become invalid because they store the old hash.
+          </div>
+        </div>
+
+        <div class="p-simulation" style="margin-top:1.5rem">
+          <div class="sim-label">Interactive simulation — Attack on the Blockchain</div>
+
+          <div class="atk-desc">
+            You are the attacker. You want to change a transaction in one of the blocks to steal Bitcoin. Choose the block you want to manipulate.
+          </div>
+
+          <div class="atk-chain" id="b01-s14b-chain"></div>
+
+          <div class="atk-panel" id="b01-s14b-panel">
+            <div class="atk-panel-head" id="b01-s14b-panel-head">Manipulating Block #?</div>
+            <div class="atk-panel-body">
+              <div>
+                <div class="atk-panel-label">Original transaction (will be deleted)</div>
+                <div class="atk-panel-orig" id="b01-s14b-orig"></div>
+              </div>
+              <div>
+                <div class="atk-panel-label">Fake transaction (the one you write)</div>
+                <textarea class="atk-panel-input" id="b01-s14b-input" rows="2" placeholder="Write the fake transaction..."></textarea>
+              </div>
+              <button class="atk-panel-btn" id="b01-s14b-commit">Insert Fake Transaction ↗</button>
+            </div>
+          </div>
+
+          <div class="atk-race" id="b01-s14b-race">
+            <div class="atk-race-label" id="b01-s14b-race-label">Recomputing the broken hashes...</div>
+            <div class="atk-race-row">
+              <div class="atk-bar-wrap">
+                <div class="atk-bar-name">You (attacker)</div>
+                <div class="atk-bar-track"><div class="atk-bar-fill attacker" id="b01-s14b-bar-attacker"></div></div>
+                <div class="atk-bar-pct" id="b01-s14b-pct-attacker">0%</div>
+              </div>
+              <div class="atk-bar-wrap">
+                <div class="atk-bar-name">Bitcoin Network</div>
+                <div class="atk-bar-track"><div class="atk-bar-fill network" id="b01-s14b-bar-network"></div></div>
+                <div class="atk-bar-pct" id="b01-s14b-pct-network">0%</div>
+              </div>
+            </div>
+            <div class="atk-race-status fail" id="b01-s14b-race-status"></div>
+          </div>
+
+          <div class="atk-result" id="b01-s14b-result"></div>
+
+          <div class="atk-controls">
+            <button class="atk-btn atk-btn-reset" id="b01-s14b-reset">Reset</button>
+          </div>
+
+          <div class="atk-hint" id="b01-s14b-hint">
+            Choose one of the blocks above to start attacking.
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active" data-target="section-1-3" data-sb="sb-1-3" data-content="bab1-content">
+            ← 1.3 — Who Runs the Network?
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-1-5" data-sb="sb-1-5" data-content="bab1-content">
+            1.5 — Why 21 Million? →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 1.4 -->
+
+      <!-- ==============================
+           SECTION 1.5 · Kenapa 21 juta?
+      ============================== -->
+      <div class="p-section" id="section-1-5">
+        <div class="p-eyebrow">Chapter 1 · 1.5</div>
+        <div class="p-heading">Scarcity that cannot be faked</div>
+        <div class="p-title">Why 21 Million?</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>When Satoshi designed Bitcoin, he made one unusual decision: the amount of Bitcoin that will ever exist in this world is capped. Exactly 21 million. No more, no less, forever.</p>
+          <p>Not a policy that can be changed in a meeting. Not a regulation that can be amended. It is written directly into the code, and changing it would require the agreement of the entire network, something that is practically impossible.</p>
+
+          <p><strong>Why 21 million?</strong></p>
+          <p>There is no definitive mathematical answer for this number. Satoshi never explained it specifically. What’s clear is the principle behind it: Bitcoin must be scarce. Scarcity that can be verified, not scarcity that is merely promised.</p>
+          <p>This is fundamentally different from fiat money. No one knows how many dollars, rupiah, or euros will be in circulation tomorrow. The figure can change anytime a political or economic decision calls for it. Bitcoin can’t.</p>
+
+          <p><strong>How is new Bitcoin born?</strong></p>
+          <p>New Bitcoin isn’t printed by a central bank. It is born through the mining process. Each time a miner successfully finds a new block, they receive an amount of Bitcoin as a reward. This is the only way new Bitcoin enters circulation.</p>
+          <p>But this reward isn’t fixed forever.</p>
+
+          <p><strong>Halving</strong></p>
+          <p>Every 210,000 blocks, roughly every four years, the mining reward is cut in half. This process is called the halving.</p>
+          <p>When Bitcoin was first born in 2009, the reward per block was 50 BTC. After the first halving in 2012, it became 25 BTC. Then 12.5 BTC. Then 6.25 BTC. And so on, halved again and again, until around the year 2140 when the reward approaches zero and all 21 million Bitcoin are in circulation.</p>
+          <p>This mechanism is what ensures Bitcoin’s supply can’t be manipulated. No one can speed up this schedule. No one can change its rules midway.</p>
+
+          <div class="p-callout">
+            <p>Gold is scarce because it’s hard to mine. Bitcoin is scarce because its mathematics doesn’t allow more than 21 million. One depends on nature, one depends on code. Neither can be faked.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Bitcoin Halving Table</div>
+
+          <div class="hv-progress-wrap">
+            <div class="hv-progress-label">
+              <div class="hv-progress-title">Total Bitcoin already in circulation</div>
+              <div class="hv-progress-num">97.92%</div>
+            </div>
+            <div class="hv-progress-track">
+              <div class="hv-progress-fill" style="width:97.92%"></div>
+            </div>
+            <div class="hv-progress-sub">~19.863.000 of 21.000.000 BTC</div>
+          </div>
+
+          <div class="hv-table-wrap">
+            <table class="hv-table">
+              <thead class="hv-thead">
+                <tr>
+                  <th>Era</th>
+                  <th>Year</th>
+                  <th>Block</th>
+                  <th>Reward</th>
+                  <th>Total Supply</th>
+                  <th>% of 21 Million</th>
+                </tr>
+              </thead>
+              <tbody class="hv-tbody" id="b01-s15-tbody"></tbody>
+            </table>
+          </div>
+
+          <div class="hv-detail" id="b01-s15-detail">
+            <div class="hv-detail-head" id="b01-s15-detail-head"></div>
+            <div class="hv-detail-body" id="b01-s15-detail-body"></div>
+          </div>
+
+          <div class="hv-hint">Click each row to see details. Lighter rows are eras that have already passed or have not yet occurred.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active" data-target="section-1-4" data-sb="sb-1-4" data-content="bab1-content">
+            ← 1.4 — What is a Blockchain?
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-1-6" data-sb="sb-1-6" data-content="bab1-content">
+            1.6 — Bitcoin vs Ordinary Money →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 1.5 -->
+
+      <!-- ==============================
+           SECTION 1.6 · Bitcoin vs uang biasa
+      ============================== -->
+      <div class="p-section" id="section-1-6">
+        <div class="p-eyebrow">Chapter 1 · 1.6</div>
+        <div class="p-heading">Money that cannot be deceived</div>
+        <div class="p-title">Bitcoin vs Ordinary Money</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Good money should be impossible to deceive.</p>
+          <p>It can’t be printed in secret. It can’t be frozen arbitrarily. It can’t be censored for political reasons. Its value can’t be diluted by the decisions of a handful of people in a closed room.</p>
+          <p>For thousands of years, humans searched for a form of money that met all of that. Gold came close, but it could be seized. Paper money is practical, but it can be printed. Digital money is more efficient, but it’s controlled by institutions.</p>
+          <p>Bitcoin is the first experiment that successfully answered all of that at once. Not because it generates profit. Not because its price goes up. But because, for the first time in history, there is a form of money whose rules can’t be manipulated by anyone.</p>
+          <p>That is what is meant by honest money.</p>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Exploration — Bitcoin vs Ordinary Money</div>
+
+          <div class="cmp-pills" id="b01-s16-pills"></div>
+          <div id="b01-s16-cards"></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active" data-target="section-1-5" data-sb="sb-1-5" data-content="bab1-content">
+            ← 1.5 — Why 21 Million?
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 1.6 -->
+
+    </div>
+    <!-- END CONTENT AREA -->
+
+  </div>
+
+</div>
+<!-- END PAGE 4 · BAB 1 -->
+
+

@@ -1,0 +1,24 @@
+/* ============================================================
+   PAGE 1 · WELCOME
+============================================================ */
+#page-welcome { align-items:center; justify-content:center; position:relative; overflow:hidden; }
+#hash-canvas { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; }
+.scan-line { position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(to right,transparent,rgba(124,58,237,0.2),transparent); animation:scanDown 6s linear infinite; pointer-events:none; z-index:5; }
+.welcome-scene { position:relative; z-index:10; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:2rem; width:100%; }
+.eyebrow { font-family:'Courier Prime',monospace; font-size:10px; letter-spacing:0.35em; color:#8B5CF6; text-transform:uppercase; margin-bottom:2.5rem; opacity:0; animation:fadeSlideUp 1s 0.3s forwards; }
+.logo-mark { margin-bottom:2.5rem; opacity:0; animation:fadeSlideUp 1s 0.5s forwards; }
+.main-title { text-align:center; width:100%; }
+.title-welcome { display:block; font-weight:300; font-size:clamp(22px,4vw,42px); letter-spacing:0.06em; color:#1A1A18; line-height:1.3; opacity:0; animation:fadeSlideUp 1.1s 0.7s cubic-bezier(0.16,1,0.3,1) forwards; }
+.title-brand { display:block; font-weight:400; font-size:clamp(52px,10vw,108px); letter-spacing:-0.02em; color:#0D0D0D; line-height:1; opacity:0; animation:fadeSlideUp 1.1s 1.0s cubic-bezier(0.16,1,0.3,1) forwards; }
+.btn-wrapper { margin-top:1.6rem; display:flex; justify-content:center; opacity:0; animation:fadeSlideUp 1s 1.2s forwards; }
+.divider-line { width:1px; height:0; background:linear-gradient(to bottom,transparent,#7C3AED,transparent); margin:2rem auto; animation:growLine 1.2s 1.5s forwards; }
+.subtitle { font-family:'Courier Prime',monospace; font-size:13px; letter-spacing:0.12em; color:#4C1D95; text-align:center; line-height:1.9; max-width:460px; opacity:0; animation:fadeSlideUp 1s 1.7s forwards; }
+.hash-ticker { margin-top:2.5rem; display:flex; flex-direction:column; align-items:center; gap:6px; opacity:0; animation:fadeSlideUp 1s 1.95s forwards; }
+.ticker-label { font-family:'Courier Prime',monospace; font-size:9px; letter-spacing:0.3em; color:#7C3AED; text-transform:uppercase; }
+.ticker-value { font-family:'Courier Prime',monospace; font-size:11px; color:#6D28D9; letter-spacing:0.08em; transition:color 0.1s; }
+.ticker-value.flash { color:#4C1D95; }
+.corner-deco { position:absolute; font-family:'Courier Prime',monospace; font-size:9px; color:#C4B5FD; letter-spacing:0.15em; line-height:1.8; opacity:0; animation:fadeIn 1s 2.5s forwards; }
+.corner-deco.tl{top:24px;left:28px} .corner-deco.tr{top:24px;right:28px;text-align:right}
+.corner-deco.bl{bottom:24px;left:28px} .corner-deco.br{bottom:24px;right:28px;text-align:right}
+.corner-accent { color:#7C3AED; }
+

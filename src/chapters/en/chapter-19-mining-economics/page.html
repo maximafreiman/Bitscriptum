@@ -1,0 +1,898 @@
+<!-- ============================================================
+     PAGE 22 · BAB 19 · Mining Economics & Incentive Design
+     |-- 19.1 · Anatomi Revenue Miner [DONE]
+     |-- 19.2 · [LOCKED]
+     |-- 19.3 · [LOCKED]
+     |-- 19.4 · [LOCKED]
+     |-- 19.5 · [LOCKED]
+     |-- 19.6 · [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab19">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b19">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b19">← Chapter List</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab19">
+      <div class="sidebar-heading">Chapter 19</div>
+      <div class="sidebar-title">Mining Economics & Incentive Design</div>
+
+      <div class="sidebar-item active" id="sb-19-1">
+        <div class="sb-num">19.1</div>
+        <div class="sb-label">Anatomy of Miner Revenue</div>
+      </div>
+      <div class="sidebar-item" id="sb-19-2">
+        <div class="sb-num">19.2</div>
+        <div class="sb-label">Difficulty Adjustment — How Bitcoin Maintains 10 Minutes</div>
+      </div>
+      <div class="sidebar-item" id="sb-19-3">
+        <div class="sb-num">19.3</div>
+        <div class="sb-label">Halving & Security Budget</div>
+      </div>
+      <div class="sidebar-item" id="sb-19-4">
+        <div class="sb-num">19.4</div>
+        <div class="sb-label">Mining Pool Economics</div>
+      </div>
+      <div class="sidebar-item" id="sb-19-5">
+        <div class="sb-num">19.5</div>
+        <div class="sb-label">Selfish Mining & Miner Behavior</div>
+      </div>
+      <div class="sidebar-item" id="sb-19-6">
+        <div class="sb-num">19.6</div>
+        <div class="sb-label">The Mining Ecosystem — Hardware, Energy, and Protocol</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab19-content">
+
+      <!-- ==============================
+           SECTION 19.1 · Anatomi Revenue Miner
+      ============================== -->
+      <div class="p-section active" id="section-19-1">
+        <div class="p-eyebrow">Chapter 19 · 19.1</div>
+        <div class="p-heading">A miner is paid by two sources with very different characters — and the proportion will change drastically over time</div>
+        <div class="p-title">Anatomy of Miner Revenue — Block Reward, Fee, and Coinbase Transaction</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Before talking about mining economics, we first need to understand where a miner’s money actually comes from. The answer is simple but often misunderstood: a miner gets two sources of income with very different characters.</p>
+
+          <p><strong>Block reward: bitcoin minted by the protocol</strong></p>
+          <p>The block reward is new bitcoin created in each block according to a schedule fixed since the genesis block. This isn’t money taken from anyone, but genuinely newly minted by the protocol. Currently the block reward is 3.125 BTC per block. This amount is halved every 210,000 blocks (about 4 years) in a process called the halving.</p>
+
+          <p><strong>Transaction fees: a fluctuating open market</strong></p>
+          <p>The second source of income is transaction fees from all the transactions included in a block. A fee is the difference between the total input and total output of a transaction, and what "disappears" from the UTXO set automatically becomes the property of the miner who includes that transaction in a block. Unlike the block reward, which is fixed and predictable, fees are very fluctuating. Transaction senders compete to get into the next block by offering a fee high enough to attract a miner’s interest.</p>
+
+          <p><strong>Coinbase transaction: the only way new bitcoin is created</strong></p>
+          <p>The block reward is claimed by the miner through the coinbase transaction, the first transaction in every block that has no input from any UTXO. This is the only transaction that can create new bitcoin, and it’s valid under the consensus rules. The coinbase output can’t be spent for the next 100 blocks, known as the coinbase maturity rule, to protect the ecosystem from a situation where a block is orphaned after the miner has already spent the reward.</p>
+
+          <p><strong>A proportion that changes over time</strong></p>
+          <p>Currently the block reward dominates miner income, about 95-99% of total revenue. This will change with the next halvings. Eventually, according to the schedule fixed since the genesis block, the block reward will reach zero around the year 2140 and miners will depend entirely on fees. Whether fees alone are enough to secure the network is one of the most important open questions in Bitcoin economics.</p>
+
+          <p><strong>Why this matters for network security</strong></p>
+          <p>Miner revenue is what pays for hashrate. High hashrate means a 51% attack becomes very expensive. If miner revenue drops because the Bitcoin price falls or the block reward shrinks without a sufficient rise in fees, hashrate can drop and the network becomes more vulnerable. Understanding where a miner’s money comes from is the foundation for understanding Bitcoin’s economic security.</p>
+
+          <div class="p-callout">
+            <p>These two sources of miner revenue aren’t a coincidence, but a deliberate design. The block reward ensures miners have a strong incentive early on when transactions are still few. Fees ensure the incentive remains after the block reward runs out. The big question is whether the transition from block reward to fees as the main source can go smoothly without sacrificing network security.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Miner Revenue — Proportion per Era & Anatomy of the Coinbase Transaction</div>
+          <div class="b19-s191-desc">
+            First tab: choose a Bitcoin era to see the composition of block reward vs fee and how the proportion changes from 2009 to the protocol endpoint in 2140. Second tab: the structure of the coinbase transaction that creates new bitcoin in every block.
+          </div>
+
+          <div class="b19-s191-tabs">
+            <button class="b19-s191-tab s191-act" id="b19-s191-t1">Revenue Proportion per Era</button>
+            <button class="b19-s191-tab" id="b19-s191-t2">Anatomy of the Coinbase Transaction</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b19-s191-pane show" id="b19-s191-p1">
+            <div class="b19-s191-hint">A miner gets the block reward (new bitcoin minted by the protocol) and transaction fees. The proportion changes drastically with each halving. Choose an era to see the numbers.</div>
+            <div class="b19-s191-era-label">Choose a Bitcoin era:</div>
+            <div class="b19-s191-eras" id="b19-s191-eras"></div>
+            <div class="b19-s191-cards">
+              <div class="b19-s191-card s191-c-reward">
+                <div class="b19-s191-card-label">Block Reward</div>
+                <div class="b19-s191-card-val" id="b19-s191-reward-val">3,125 BTC</div>
+                <div class="b19-s191-card-sub">per block, ~every 10 minutes</div>
+              </div>
+              <div class="b19-s191-card s191-c-fee">
+                <div class="b19-s191-card-label">Average Fee per Block</div>
+                <div class="b19-s191-card-val" id="b19-s191-fee-val">~0.15 BTC</div>
+                <div class="b19-s191-card-sub">fluctuating, depends on demand</div>
+              </div>
+              <div class="b19-s191-card s191-c-total">
+                <div class="b19-s191-card-label">Fee as a Proportion of Total</div>
+                <div class="b19-s191-card-val" id="b19-s191-pct-val">~4.6%</div>
+                <div class="b19-s191-card-sub" id="b19-s191-pct-sub">the rest from the block reward</div>
+              </div>
+            </div>
+            <div class="b19-s191-bar-label">Revenue composition per block:</div>
+            <div class="b19-s191-bar-track">
+              <div class="b19-s191-bar-reward" id="b19-s191-bar-r"><span class="b19-s191-bar-txt" id="b19-s191-bar-r-txt">Block Reward</span></div>
+              <div class="b19-s191-bar-fee" id="b19-s191-bar-f"><span class="b19-s191-bar-txt" id="b19-s191-bar-f-txt"></span></div>
+            </div>
+            <div class="b19-s191-tl-label">Fee as a proportion of total revenue — all eras:</div>
+            <div id="b19-s191-tl-rows"></div>
+            <div class="b19-s191-note" id="b19-s191-note"></div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b19-s191-pane" id="b19-s191-p2">
+            <div class="b19-s191-hint">The coinbase transaction is the first transaction in every block and the only way new bitcoin can be created according to the protocol schedule.</div>
+            <div class="b19-s191-cb-label">Structure of the coinbase transaction:</div>
+            <div class="b19-s191-cb-rows">
+              <div class="b19-s191-cb-row s191-r-header">
+                <div class="b19-s191-cb-name">Position in the block</div>
+                <div class="b19-s191-cb-val">Index 0 (first)</div>
+                <div class="b19-s191-cb-desc">Always the first transaction in every block. A node automatically knows this is the coinbase because of its position.<div class="b19-s191-cb-analogy">Like the first page of a book that always contains the title and the publisher’s name.</div></div>
+              </div>
+              <div class="b19-s191-cb-row s191-r-input">
+                <div class="b19-s191-cb-name">Input (coinbase input)</div>
+                <div class="b19-s191-cb-val">No UTXO</div>
+                <div class="b19-s191-cb-desc">It references no UTXO at all. The only valid transaction without an input from the existing UTXO set.<div class="b19-s191-cb-analogy">Like a birth certificate issued by the state — not a copy of a prior document, but a newly created one.</div></div>
+              </div>
+              <div class="b19-s191-cb-row s191-r-reward">
+                <div class="b19-s191-cb-name">Output 1 — Block Reward</div>
+                <div class="b19-s191-cb-val" id="b19-s191-cb-reward">3,125 BTC</div>
+                <div class="b19-s191-cb-desc">New bitcoin minted according to the consensus schedule. It can’t exceed the amount set by the protocol — other nodes will reject a block that violates this.<div class="b19-s191-cb-analogy">Like an official salary set in a contract — it can’t exceed the figure written down.</div></div>
+              </div>
+              <div class="b19-s191-cb-row s191-r-fee">
+                <div class="b19-s191-cb-name">Output 2 — Transaction Fees</div>
+                <div class="b19-s191-cb-val">Σ (input − output) of all tx</div>
+                <div class="b19-s191-cb-desc">The total difference between the inputs and outputs of all transactions in the block. Collected automatically by the protocol.<div class="b19-s191-cb-analogy">Like tips that automatically go into the cash drawer at the end of each day — no need to ask for them one by one.</div></div>
+              </div>
+              <div class="b19-s191-cb-row s191-r-mature">
+                <div class="b19-s191-cb-name">Coinbase Maturity</div>
+                <div class="b19-s191-cb-val">100 blocks (~16.7 hours)</div>
+                <div class="b19-s191-cb-desc">The coinbase output can’t be spent until 100 blocks later. Protects the ecosystem from a situation where a block is orphaned after the miner has already spent the reward.<div class="b19-s191-cb-analogy">Like a check that can only be cashed after 100 days — ensuring the check isn’t pulled back before it can be used.</div></div>
+              </div>
+            </div>
+            <div class="b19-s191-verify-card">
+              <div class="b19-s191-verify-label">Why is the coinbase output amount verified strictly?</div>
+              <div class="b19-s191-verify-text">Every full node verifies that the total output of the coinbase transaction doesn’t exceed the allowed block reward plus the total fees from all transactions in the block. If a miner tries to create more than allowed, the block is immediately rejected by the entire network. This is one of the most fundamental consensus rules — there’s no way to mint bitcoin beyond the schedule fixed since the genesis block.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-19-2" data-sb="sb-19-2">
+            19.2 — Difficulty Adjustment →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 19.1 -->
+
+      <!-- ==============================
+           SECTION 19.2 · Difficulty Adjustment
+      ============================== -->
+      <div class="p-section" id="section-19-2">
+        <div class="p-eyebrow">Chapter 19 · 19.2</div>
+        <div class="p-heading">No matter how many or how few miners are active, Bitcoin always finds one block every 10 minutes — how does this happen?</div>
+        <div class="p-title">Difficulty Adjustment — How Bitcoin Maintains 10 Minutes</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>We covered how difficulty adjustment works back in 5.4. There the question was technical: what the mechanism does. Here the question is economic: what it does to a miner’s money, and why this is the mechanism that keeps mining from ever truly dying out.</p>
+          <p>One of the most elegant mechanisms in Bitcoin is difficulty adjustment: a system that automatically adjusts how hard it is to find a new block, so that on average one block is found every 10 minutes, no matter how many or how few miners are active.</p>
+
+          <p><strong>Why 10 minutes?</strong></p>
+          <p>Ten minutes is a deliberate trade-off. Too fast means a new block is found before the previous block has had time to spread across the network, increasing the risk of accidental forks and giving an advantage to miners with the fastest connections. Too slow means the first confirmation of a transaction takes too long. Ten minutes gives enough time for block propagation across the network while still providing reasonably fast confirmation.</p>
+
+          <p><strong>The difficulty adjustment mechanism</strong></p>
+          <p>Every 2,016 blocks (about 2 weeks if the average stays at 10 minutes), the entire network automatically recalculates the difficulty target. The method: compute how long the last 2,016 blocks took, compare it with the target of 20,160 minutes (the ideal 2 weeks), then adjust proportionally.</p>
+
+          <p>If the last 2,016 blocks were completed in 7 days because hashrate rose, difficulty is raised so blocks again take 10 minutes on average. If they were completed in 28 days because hashrate fell, difficulty is lowered. There’s an important limit: difficulty can’t rise or fall more than 4x in a single adjustment, to prevent extreme changes that could destabilize the network.</p>
+
+          <p><strong>The difficulty target as a number</strong></p>
+          <p>The difficulty target is a 256-bit number that must be greater than the hash of a valid block. The smaller the target number, the harder it is to find a valid hash because the miner has to try more combinations before finding a hash small enough. There’s no central server computing the difficulty, because every node computes it itself from the same blockchain data and, because the process is deterministic, all nodes get an identical number.</p>
+
+          <p><strong>Economic implications</strong></p>
+          <p>Difficulty adjustment makes Bitcoin self-regulating on the production side. If the Bitcoin price rises and more miners join, difficulty rises and the cost per block rises too until profitability returns to equilibrium. If the price falls and miners leave, difficulty falls so mining becomes economical again for the remaining miners. This is also what makes Bitcoin’s emission schedule predictable: even if hashrate changes drastically, the halving still occurs every ~210,000 blocks because difficulty adjustment maintains 10 minutes per block.</p>
+
+          <div class="p-callout">
+            <p>Difficulty adjustment is one of Satoshi’s most important innovations that often doesn’t get enough attention. Without it, Bitcoin couldn’t function as a predictable system: the emission schedule could be chaotic, block propagation could be inconsistent, and the entire consensus mechanism could break. The simplicity of its formula hides how fundamental the role it plays is.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Difficulty Adjustment Visualizer</div>
+          <div class="b19-s192-desc">
+            First tab: choose a hashrate change scenario and see how difficulty adjustment works step by step, plus a 5-epoch simulation toward equilibrium. Second tab: the actual formula used and an explanation of the 4× limit.
+          </div>
+
+          <div class="b19-s192-tabs">
+            <button class="b19-s192-tab s192-act" id="b19-s192-t1">Adjustment Simulator</button>
+            <button class="b19-s192-tab" id="b19-s192-t2">Adjustment Formula & Limit</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b19-s192-pane show" id="b19-s192-p1">
+            <div class="b19-s192-hint">Every 2,016 blocks, the network recalculates difficulty. Choose a scenario to see how the adjustment works and how changing hashrate is compensated by the protocol.</div>
+            <div class="b19-s192-scenarios" id="b19-s192-scenarios">
+              <div class="b19-s192-scenario s192-act s192-sc-up" data-sc="up2x">
+                <div class="b19-s192-sc-icon">📈</div>
+                <div class="b19-s192-sc-body">
+                  <div class="b19-s192-sc-title">Hashrate rises 2× — blocks too fast</div>
+                  <div class="b19-s192-sc-desc">Many new miners join. 2,016 blocks completed in 7 days, faster than the 14-day target.</div>
+                </div>
+              </div>
+              <div class="b19-s192-scenario s192-sc-down" data-sc="down50">
+                <div class="b19-s192-sc-icon">📉</div>
+                <div class="b19-s192-sc-body">
+                  <div class="b19-s192-sc-title">Hashrate falls 50% — blocks too slow</div>
+                  <div class="b19-s192-sc-desc">Many miners leave. 2,016 blocks completed in 28 days, slower than the 14-day target.</div>
+                </div>
+              </div>
+              <div class="b19-s192-scenario s192-sc-same" data-sc="same">
+                <div class="b19-s192-sc-icon">➡️</div>
+                <div class="b19-s192-sc-body">
+                  <div class="b19-s192-sc-title">Hashrate stable — no adjustment</div>
+                  <div class="b19-s192-sc-desc">2,016 blocks completed in exactly 14 days. Difficulty doesn’t change.</div>
+                </div>
+              </div>
+              <div class="b19-s192-scenario s192-sc-up" data-sc="up5x">
+                <div class="b19-s192-sc-icon">🚀</div>
+                <div class="b19-s192-sc-body">
+                  <div class="b19-s192-sc-title">Hashrate rises 5× — hits the maximum limit</div>
+                  <div class="b19-s192-sc-desc">An extreme hashrate surge. The adjustment is capped at a maximum of 4× by the protocol.</div>
+                </div>
+              </div>
+            </div>
+            <div class="b19-s192-results">
+              <div class="b19-s192-result s192-r-before">
+                <div class="b19-s192-result-label">Actual time for 2,016 blocks</div>
+                <div class="b19-s192-result-val" id="b19-s192-actual-time">7 days</div>
+                <div class="b19-s192-result-sub">target: 14 days</div>
+              </div>
+              <div class="b19-s192-result s192-r-adjust">
+                <div class="b19-s192-result-label">Difficulty adjustment</div>
+                <div class="b19-s192-result-val" id="b19-s192-adjust">+100% (2×)</div>
+                <div class="b19-s192-result-sub" id="b19-s192-adjust-sub">up: blocks harder</div>
+              </div>
+              <div class="b19-s192-result s192-r-after">
+                <div class="b19-s192-result-label">Block time after adjustment</div>
+                <div class="b19-s192-result-val" id="b19-s192-after">~10 minutes</div>
+                <div class="b19-s192-result-sub">back to target</div>
+              </div>
+            </div>
+            <div class="b19-s192-calc-label">Calculation steps:</div>
+            <div id="b19-s192-calc-steps"></div>
+            <div class="b19-s192-chart-label">5-epoch simulation — stabilizing toward equilibrium:</div>
+            <div id="b19-s192-chart-rows"></div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b19-s192-pane" id="b19-s192-p2">
+            <div class="b19-s192-hint">Bitcoin’s difficulty adjustment formula is simple but powerful. There’s one important restriction: the change can’t be more than 4× in a single epoch.</div>
+            <div class="b19-s192-formula">
+              <div class="b19-s192-f-comment">// Difficulty Adjustment Formula</div>
+              <div class="b19-s192-f-comment">// Run every 2,016 blocks by every node independently</div>
+              <br>
+              <div><span class="b19-s192-f-var">target_time</span> <span class="b19-s192-f-op">=</span> <span class="b19-s192-f-num">2016</span> <span class="b19-s192-f-op">×</span> <span class="b19-s192-f-num">10</span> <span class="b19-s192-f-comment">// 20,160 minutes = ~14 days</span></div>
+              <div><span class="b19-s192-f-var">actual_time</span> <span class="b19-s192-f-op">=</span> timestamp[<span class="b19-s192-f-num">2016</span>] <span class="b19-s192-f-op">-</span> timestamp[<span class="b19-s192-f-num">0</span>] <span class="b19-s192-f-comment">// in minutes</span></div>
+              <br>
+              <div><span class="b19-s192-f-var">ratio</span> <span class="b19-s192-f-op">=</span> <span class="b19-s192-f-var">actual_time</span> <span class="b19-s192-f-op">/</span> <span class="b19-s192-f-var">target_time</span></div>
+              <br>
+              <div class="b19-s192-f-cap">// Limit: the ratio can’t be more than 4× or less than 1/4×</div>
+              <div><span class="b19-s192-f-var">ratio</span> <span class="b19-s192-f-op">=</span> max(<span class="b19-s192-f-num">0.25</span>, min(<span class="b19-s192-f-num">4.0</span>, <span class="b19-s192-f-var">ratio</span>))</div>
+              <br>
+              <div><span class="b19-s192-f-result">new_target</span> <span class="b19-s192-f-op">=</span> <span class="b19-s192-f-var">old_target</span> <span class="b19-s192-f-op">×</span> <span class="b19-s192-f-var">ratio</span></div>
+              <div class="b19-s192-f-comment">// Larger target = easier difficulty</div>
+              <div class="b19-s192-f-comment">// Smaller target = harder difficulty</div>
+            </div>
+            <div class="b19-s192-info-cards">
+              <div class="b19-s192-info-card s192-ic-green">
+                <div class="b19-s192-ic-label">Why does the 4× limit matter?</div>
+                <div class="b19-s192-ic-text">Without a limit, a very large hashrate surge could make difficulty rise too drastically in one epoch. The 4× limit ensures gradual stabilization — at most a few epochs to return to equilibrium even with a very extreme hashrate change.</div>
+              </div>
+              <div class="b19-s192-info-card s192-ic-purple">
+                <div class="b19-s192-ic-label">Decentralized calculation</div>
+                <div class="b19-s192-ic-text">There’s no central server computing the difficulty. Every node computes it itself from the same blockchain data and, because it’s deterministic, all nodes get an identical number. A block with the wrong difficulty is rejected by all nodes.</div>
+              </div>
+              <div class="b19-s192-info-card s192-ic-amber">
+                <div class="b19-s192-ic-label">Implementation detail: off-by-one</div>
+                <div class="b19-s192-ic-text">The timestamps compared are between the first and last block of each epoch, not the genesis block. The genesis block (#0) has a hardcoded timestamp so the first epoch causes no problem. This is an example of how real implementations often have details not present in the high-level description.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-19-1" data-sb="sb-19-1">
+            ← 19.1 — Anatomy of Miner Revenue
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-19-3" data-sb="sb-19-3">
+            19.3 — Halving & Security Budget →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 19.2 -->
+
+      <!-- ==============================
+           SECTION 19.3 · Halving & Security Budget
+      ============================== -->
+      <div class="p-section" id="section-19-3">
+        <div class="p-eyebrow">Chapter 19 · 19.3</div>
+        <div class="p-heading">Every 210,000 blocks, the block reward is cut in half — and this brings the most important open question in long-term Bitcoin economics</div>
+        <div class="p-title">Halving & Security Budget — What Happens When the Block Reward Approaches Zero?</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>The halving is one of the most fundamental mechanisms in Bitcoin: every 210,000 blocks, the block reward is cut exactly in half. This isn’t a decision made by anyone, but happens automatically according to rules embedded in the protocol since the genesis block.</p>
+
+          <p><strong>The halving schedule is already certain</strong></p>
+          <p>First halving at block #210,000 (November 2012): the block reward dropped from 50 BTC to 25 BTC. Second halving at block #420,000 (July 2016): dropped to 12.5 BTC. Third halving at block #630,000 (May 2020): dropped to 6.25 BTC. Fourth halving at block #840,000 (April 2024): dropped to 3.125 BTC. The total bitcoin that can ever exist is 21 million, the result of summing a geometric series: 210,000 blocks × 50 BTC × (1 + 0.5 + 0.25 + ...) = 21 million BTC.</p>
+
+          <p><strong>Security budget: the key concept</strong></p>
+          <p>The security budget is the total miner revenue in a given time period. It’s an economic measure of how expensive an attack on the network is: the higher the security budget, the more hashrate miners can buy, and the more expensive it is for an attacker to gather enough hashrate for a 51% attack. The security budget consists of the block reward in BTC multiplied by the BTC price at the time, plus the total fees collected. Currently the block reward dominates about 95-99% of the total security budget.</p>
+
+          <p><strong>The open question: are fees alone enough?</strong></p>
+          <p>When the block reward approaches zero in the next century, miners will depend entirely on fees. Whether fees will be enough to maintain high hashrate is one of the most important and genuinely unanswered questions in Bitcoin economics. Some argue that as adoption grows, transaction volume and total fees per block will naturally increase. Others argue that the fee per transaction may not be high enough to replace the block reward, especially if layer-2 solutions take many transactions away from layer-1. No one can answer this with certainty today because it depends on many unpredictable variables.</p>
+
+          <p><strong>What can be known now</strong></p>
+          <p>The proportion of fees in the total security budget slowly rises with each halving, not because fees spike drastically, but because the block reward keeps shrinking. Whether this trend will continue at a sufficient pace is a question only time and future data can answer.</p>
+
+          <div class="p-callout">
+            <p>The block reward will approach zero around the year 2140, more than 100 years from now. Many aspects of the Bitcoin ecosystem in 2140 can’t be predicted from 2025. What’s certain: the halving mechanism is a consensus rule that can’t be changed without the agreement of the entire network, and the question of the long-term security budget will remain relevant with each subsequent halving.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Halving Timeline & Security Budget Calculator</div>
+          <div class="b19-s193-desc">
+            First tab: the halving timeline and a security budget calculator — set the BTC price and average fee to see the current miner revenue composition. Second tab: the open question about the long-term security budget and the two existing viewpoints.
+          </div>
+
+          <div class="b19-s193-tabs">
+            <button class="b19-s193-tab s193-act" id="b19-s193-t1">Timeline & Security Budget</button>
+            <button class="b19-s193-tab" id="b19-s193-t2">Open Question</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b19-s193-pane show" id="b19-s193-p1">
+            <div class="b19-s193-hint">The block reward is cut in half every 210,000 blocks. Security budget = total miner revenue, which determines how expensive an attack is. Adjust the slider to see the current composition.</div>
+            <div id="b19-s193-tl"></div>
+            <div class="b19-s193-calc-wrap">
+              <div class="b19-s193-calc-row">
+                <div class="b19-s193-calc-label">BTC price (USD):</div>
+                <div class="b19-s193-slider-row">
+                  <span class="b19-s193-mm">$10k</span>
+                  <input type="range" class="b19-s193-slider" id="b19-s193-price-sl" min="10000" max="200000" value="65000" step="1000">
+                  <span class="b19-s193-mm">$200k</span>
+                  <div class="b19-s193-slider-val" id="b19-s193-price-val">$65,000</div>
+                </div>
+              </div>
+              <div class="b19-s193-calc-row">
+                <div class="b19-s193-calc-label">Average fee per block (BTC):</div>
+                <div class="b19-s193-slider-row">
+                  <span class="b19-s193-mm">0.05</span>
+                  <input type="range" class="b19-s193-slider" id="b19-s193-fee-sl" min="5" max="200" value="15" step="1">
+                  <span class="b19-s193-mm">2.00</span>
+                  <div class="b19-s193-slider-val" id="b19-s193-fee-val">0.15 BTC</div>
+                </div>
+              </div>
+            </div>
+            <div class="b19-s193-results">
+              <div class="b19-s193-result s193-r-reward">
+                <div class="b19-s193-result-label">Block reward revenue / block</div>
+                <div class="b19-s193-result-val" id="b19-s193-reward-usd">$203,125</div>
+                <div class="b19-s193-result-sub" id="b19-s193-reward-sub">3.125 BTC × price</div>
+              </div>
+              <div class="b19-s193-result s193-r-fee">
+                <div class="b19-s193-result-label">Fee revenue / block</div>
+                <div class="b19-s193-result-val" id="b19-s193-fee-usd">$9,750</div>
+                <div class="b19-s193-result-sub">average fee × price</div>
+              </div>
+              <div class="b19-s193-result s193-r-total">
+                <div class="b19-s193-result-label">Total security budget / year</div>
+                <div class="b19-s193-result-val" id="b19-s193-total-usd">~$11.1 B</div>
+                <div class="b19-s193-result-sub">~52,560 blocks/year</div>
+              </div>
+            </div>
+            <div class="b19-s193-prop-label">Proportion of block reward vs fee:</div>
+            <div class="b19-s193-prop-track">
+              <div class="b19-s193-prop-reward" id="b19-s193-prop-r"><span class="b19-s193-prop-txt" id="b19-s193-prop-r-txt">Block Reward</span></div>
+              <div class="b19-s193-prop-fee"    id="b19-s193-prop-f"><span class="b19-s193-prop-txt" id="b19-s193-prop-f-txt"></span></div>
+            </div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b19-s193-pane" id="b19-s193-p2">
+            <div class="b19-s193-hint">When the block reward approaches zero, miners depend entirely on fees. This is a genuinely open question that can’t be answered today.</div>
+            <div class="b19-s193-open-card">
+              <div class="b19-s193-open-label">Open question: are fees alone enough for the long-term security budget?</div>
+              <div class="b19-s193-open-text">No one can answer this with certainty because it depends on adoption, price, transaction volume, and the structure of the Bitcoin ecosystem in the future.</div>
+              <div class="b19-s193-views">
+                <div class="b19-s193-view s193-v-a">
+                  <div class="b19-s193-view-label">Viewpoint A</div>
+                  <div class="b19-s193-view-text">As adoption grows, transaction volume and total fees per block will increase naturally. The security budget can stay maintained even as the block reward falls, if demand for block space remains high.</div>
+                </div>
+                <div class="b19-s193-view s193-v-b">
+                  <div class="b19-s193-view-label">Viewpoint B</div>
+                  <div class="b19-s193-view-text">The fee per transaction may not be high enough to replace the block reward, especially if layer-2 solutions take many transactions away from layer-1. The security budget could come under pressure without a clear solution.</div>
+                </div>
+              </div>
+            </div>
+            <div class="b19-s193-info-cards">
+              <div class="b19-s193-info-card s193-ic-purple">
+                <div class="b19-s193-ic-label">What can be known now:</div>
+                <div class="b19-s193-ic-text">The proportion of fees in the total security budget slowly rises with each halving, not because fees spike drastically, but because the block reward keeps shrinking. Whether this trend continues at a sufficient pace can only be answered by future data.</div>
+              </div>
+              <div class="b19-s193-info-card s193-ic-gray">
+                <div class="b19-s193-ic-label">Important context:</div>
+                <div class="b19-s193-ic-text">The block reward will approach zero around the year 2140, more than 100 years from now. What’s certain: the halving mechanism is a consensus rule that can’t be changed without the agreement of the entire network.</div>
+              </div>
+            </div>
+            <div class="b19-s193-horizon-label">Block reward per halving (logarithmic scale):</div>
+            <div id="b19-s193-horizon-rows"></div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-19-2" data-sb="sb-19-2">
+            ← 19.2 — Difficulty Adjustment
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-19-4" data-sb="sb-19-4">
+            19.4 — Mining Pool Economics →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 19.3 -->
+
+      <!-- ==============================
+           SECTION 19.4 · Mining Pool Economics
+      ============================== -->
+      <div class="p-section" id="section-19-4">
+        <div class="p-eyebrow">Chapter 19 · 19.4</div>
+        <div class="p-heading">Solo mining is nearly impossible for a small miner today — pools exist to solve the variance problem, not to reduce total income</div>
+        <div class="p-title">Mining Pool Economics — Why Do Miners Join a Pool?</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Solo mining Bitcoin today is statistically almost impossible for a small miner. With network hashrate reaching hundreds of exahash per second, a miner with one modern ASIC producing 100 terahash per second has a probability of finding a block once every few hundred years. Mining pools solve this problem by combining the hashrate of many miners and splitting the reward proportionally.</p>
+
+          <p><strong>How a mining pool works</strong></p>
+          <p>The pool operator runs a full node and prepares the block template. Miners who join receive work from the pool: they’re asked to find a hash that meets a target far easier than the actual network target. A hash that meets this easier target is called a share, as proof that the miner is genuinely working. When one of the miners finds a hash that meets the actual network target, the pool gets the block reward and distributes it to all members based on how many shares each contributed.</p>
+
+          <p><strong>Payment schemes: PPS, PPLNS, and FPPS</strong></p>
+          <p>PPS (Pay Per Share) pays a miner for every valid share, regardless of whether the pool actually finds a block. The pool bears all the variance risk. More stable for the miner but the pool usually takes a higher fee. PPLNS (Pay Per Last N Shares) pays a miner based on the shares contributed within a certain window before a block is found. The miner shares the variance, the pool fee is lower, and it’s more profitable for consistent miners. FPPS (Full Pay Per Share) is like PPS but includes an estimate of transaction fees, not just the block reward.</p>
+
+          <p><strong>Pool fee and its implications</strong></p>
+          <p>The pool takes a small percentage of the total reward as an operational fee, usually 1-3%. The long-term total income between solo mining and pool mining is theoretically the same if the hashrate is the same, but a pool provides far more consistent and predictable income because of the far lower variance.</p>
+
+          <p><strong>Implications for decentralization</strong></p>
+          <p>Mining pools improve the efficiency and income stability of small miners, but the pool operator who manages the block template has influence over which transactions get included in a block. Miners who join a pool delegate this decision to the pool operator. The concentration of hashrate in large pools is something the community watches from the perspective of network decentralization.</p>
+
+          <div class="p-callout">
+            <p>A pool doesn’t increase miners’ total income in aggregate, the total reward from the network stays the same. What a pool does is redistribute the reward from an irregular pattern (solo) into a consistent, predictable stream. This is a trade-off between variance and a slight centralization at the block template level.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Mining Pool Visualizer — Variance & Payment Schemes</div>
+          <div class="b19-s194-desc">
+            First tab: drag the hashrate slider to see how the variance of solo mining vs pool mining differs visually. Second tab: a comparison of the PPS, PPLNS, and FPPS payment schemes with concrete example numbers.
+          </div>
+
+          <div class="b19-s194-tabs">
+            <button class="b19-s194-tab s194-act" id="b19-s194-t1">Solo vs Pool — Variance</button>
+            <button class="b19-s194-tab" id="b19-s194-t2">Pool Payment Schemes</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b19-s194-pane show" id="b19-s194-p1">
+            <div class="b19-s194-hint">Solo mining produces a large reward but very irregularly. A pool produces a small but consistent income every day. The long-term total is the same, the variance is different.</div>
+            <div class="b19-s194-analogy">
+              <div class="b19-s194-analogy-label">Analogy</div>
+              <div class="b19-s194-analogy-text"><strong>Solo mining:</strong> like buying one lottery ticket per day. The prize is very large, but the chance of winning is very small and you can’t predict when.<br><br><strong>Pool mining:</strong> like chipping in to buy thousands of lottery tickets together with thousands of people. You win more often, but the prize is split. Statistically the total income is the same, but far more consistent.</div>
+            </div>
+            <div class="b19-s194-slider-wrap">
+              <div class="b19-s194-slider-label">Your miner’s hashrate:</div>
+              <div class="b19-s194-slider-row">
+                <span class="b19-s194-mm">100 TH/s</span>
+                <input type="range" class="b19-s194-slider" id="b19-s194-hr-sl" min="1" max="100" value="10" step="1">
+                <span class="b19-s194-mm">10 PH/s</span>
+                <div class="b19-s194-slider-val" id="b19-s194-hr-val">1 PH/s (1,000 TH/s)</div>
+              </div>
+            </div>
+            <div class="b19-s194-stats">
+              <div class="b19-s194-stat s194-s-solo">
+                <div class="b19-s194-stat-label">Solo Mining</div>
+                <div class="b19-s194-stat-val" id="b19-s194-solo-time">~8.5 years</div>
+                <div class="b19-s194-stat-sub">average time to find 1 block<br>could be sooner or far longer</div>
+              </div>
+              <div class="b19-s194-stat s194-s-pool">
+                <div class="b19-s194-stat-label">Pool Mining (1% pool fee)</div>
+                <div class="b19-s194-stat-val" id="b19-s194-pool-income">~0.00031 BTC/day</div>
+                <div class="b19-s194-stat-sub">consistent income every day<br>proportional to hashrate</div>
+              </div>
+            </div>
+            <div class="b19-s194-tl-label">12-week income simulation — solo vs pool (same hashrate):</div>
+            <div class="b19-s194-tl-heads">
+              <div class="b19-s194-tl-week-lbl"></div>
+              <div class="b19-s194-tl-head h-solo">Solo Mining</div>
+              <div class="b19-s194-tl-head h-pool">Pool Mining</div>
+            </div>
+            <div id="b19-s194-tl-rows"></div>
+            <div class="b19-s194-note" id="b19-s194-note"></div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b19-s194-pane" id="b19-s194-p2">
+            <div class="b19-s194-hint">Pools use various payment schemes that differ in how they distribute the reward. The key difference: who bears the variance risk.</div>
+            <div class="b19-s194-schemes">
+              <div class="b19-s194-scheme s194-sc-pps">
+                <div class="b19-s194-scheme-label">PPS — PAY PER SHARE</div>
+                <div class="b19-s194-scheme-title">Paid per valid share, regardless of whether the pool finds a block</div>
+                <div class="b19-s194-scheme-desc">The pool bears all the variance risk. The miner gets a fixed payment for every share.</div>
+                <div class="b19-s194-scheme-item">The most stable and predictable income for the miner</div>
+                <div class="b19-s194-scheme-item">The pool fee is usually higher (2-3%) because the pool bears the risk</div>
+                <div class="b19-s194-scheme-item">Suitable for miners who need consistent cash flow</div>
+                <div class="b19-s194-scheme-analogy">Like an employee with a fixed salary — no matter whether the company profits or loses this month, your salary stays the same.</div>
+              </div>
+              <div class="b19-s194-scheme s194-sc-pplns">
+                <div class="b19-s194-scheme-label">PPLNS — PAY PER LAST N SHARES</div>
+                <div class="b19-s194-scheme-title">Paid based on shares within a certain window before a block is found</div>
+                <div class="b19-s194-scheme-desc">The miner shares the variance with the pool. There’s a reward only if the pool finds a block.</div>
+                <div class="b19-s194-scheme-item">The pool fee is lower (0-1%) because the miner shares the risk</div>
+                <div class="b19-s194-scheme-item">More profitable for consistent, loyal miners</div>
+                <div class="b19-s194-scheme-item">New miners don’t immediately get a full share</div>
+                <div class="b19-s194-scheme-analogy">Like profit-sharing in a business — if there’s profit this month, everyone gets a share. If there’s no block, there’s no distribution.</div>
+              </div>
+              <div class="b19-s194-scheme s194-sc-fpps">
+                <div class="b19-s194-scheme-label">FPPS — FULL PAY PER SHARE</div>
+                <div class="b19-s194-scheme-title">Like PPS but includes an estimate of transaction fees, not just the block reward</div>
+                <div class="b19-s194-scheme-desc">The miner gets a share of the block reward AND an estimate of transaction fees. The pool bears the total variance risk including fee fluctuation.</div>
+                <div class="b19-s194-scheme-item">More profitable than PPS in a high-fee era</div>
+                <div class="b19-s194-scheme-item">The pool bears the fee fluctuation risk</div>
+                <div class="b19-s194-scheme-item">Used by several large pools today</div>
+                <div class="b19-s194-scheme-analogy">Like PPS but your salary also includes an estimate of customer tips — more profitable during busy times.</div>
+              </div>
+            </div>
+            <div class="b19-s194-example-wrap">
+              <div class="b19-s194-example-label">Example: a miner with 1% of the pool’s hashrate, the pool finds 6 blocks today (3.125 BTC + ~0.15 BTC fee):</div>
+              <div class="b19-s194-example-rows">
+                <div class="b19-s194-example-row" style="background:#EEEDFE;">
+                  <div class="b19-s194-ex-name" style="color:#534AB7;font-weight:500;">PPS</div>
+                  <div class="b19-s194-ex-val" style="color:#534AB7;">~0,03125 BTC</div>
+                  <div class="b19-s194-ex-note">1% × 3.125 BTC × 6 blocks. Consistent every day if shares are consistent.</div>
+                </div>
+                <div class="b19-s194-example-row" style="background:#EAF3DE;">
+                  <div class="b19-s194-ex-name" style="color:#0F6E56;font-weight:500;">PPLNS</div>
+                  <div class="b19-s194-ex-val" style="color:#0F6E56;">~0.03125 BTC</div>
+                  <div class="b19-s194-ex-note">The same if consistent. But if the pool only finds 3 blocks, you only get half.</div>
+                </div>
+                <div class="b19-s194-example-row" style="background:#FAEEDA;">
+                  <div class="b19-s194-ex-name" style="color:#854F0B;font-weight:500;">FPPS</div>
+                  <div class="b19-s194-ex-val" style="color:#854F0B;">~0.03215 BTC</div>
+                  <div class="b19-s194-ex-note">1% × (3.125 + 0.15) × 6 blocks. Higher because it includes transaction fees.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-19-3" data-sb="sb-19-3">
+            ← 19.3 — Halving & Security Budget
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-19-5" data-sb="sb-19-5">
+            19.5 — Selfish Mining →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 19.4 -->
+
+      <!-- ==============================
+           SECTION 19.5 · Selfish Mining & Miner Behavior
+      ============================== -->
+      <div class="p-section" id="section-19-5">
+        <div class="p-eyebrow">Chapter 19 · 19.5</div>
+        <div class="p-heading">Does a rational miner always follow the protocol? Selfish mining shows that under certain conditions, the answer is no</div>
+        <div class="p-title">Selfish Mining & Miner Behavior — When Does a Rational Miner Deviate from the Protocol?</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Bitcoin’s basic assumption is that a rational miner will always follow the protocol because that’s what’s most profitable. But is this always true? Selfish mining is a strategy that shows that under certain conditions, a miner can gain more by deviating from the honest mining protocol.</p>
+
+          <p><strong>Honest mining vs selfish mining</strong></p>
+          <p>Honest mining is the default strategy: when a miner finds a new block, they immediately propagate it to the entire network. All miners start working on top of the latest block simultaneously and the probability of getting a reward is proportional to each one’s hashrate. Selfish mining, first formally analyzed by Eyal and Sirer in 2013, is a strategy in which a miner with significant hashrate hides a newly found block instead of immediately propagating it. The miner keeps working secretly on top of this hidden block while the rest of the network is still working on the old block.</p>
+
+          <p><strong>Why selfish mining can be profitable</strong></p>
+          <p>If the selfish miner can find a second block before the network finds one block, they have a two-block lead. When the longer chain is finally published, all the work of the rest of the network is orphaned and the selfish miner gets more than their proportional share. Eyal and Sirer’s analysis shows that selfish mining can be profitable if a miner has more than about 33% of the network hashrate, depending on network connectivity.</p>
+
+          <p><strong>Mitigation: fast propagation shifts the threshold</strong></p>
+          <p>The faster a block spreads across the network, the smaller the window for a selfish miner to exploit their lead. Compact blocks and fast propagation technologies like FIBRE directly raise the hashrate threshold needed for selfish mining to be profitable. Besides that, unusual block patterns can be detected by nodes and researchers monitoring the network, and a large pool caught doing selfish mining can lose the trust of the miners who join it.</p>
+
+          <p><strong>Fee sniping: another form of miner behavior</strong></p>
+          <p>Fee sniping is another scenario: a miner with large hashrate can try to reorganize the last block to grab a very high transaction fee in that block. This is more relevant in the future when fees become the dominant component of miner revenue. Bitcoin Core has already implemented a default locktime to reduce the incentive for fee sniping by making transactions invalid in blocks before a certain height.</p>
+
+          <div class="p-callout">
+            <p>Selfish mining isn’t just academic theory, but a reminder that Bitcoin’s incentive design must keep being analyzed as network conditions change. The larger the proportion of fees in total revenue, the more important it is to understand how miner incentives can shift. What keeps Bitcoin healthy isn’t just cryptography, but the economic design that makes honest behavior the most rational strategy.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Selfish Mining Visualizer</div>
+          <div class="b19-s195-desc">
+            First tab: follow step by step how the selfish mining strategy works, visually. Second tab: a hashrate slider to see when selfish mining is profitable vs unprofitable. Third tab: the solutions and mitigations that limit the effectiveness of selfish mining.
+          </div>
+
+          <div class="b19-s195-tabs">
+            <button class="b19-s195-tab s195-act" id="b19-s195-t1">Selfish vs Honest Strategy</button>
+            <button class="b19-s195-tab" id="b19-s195-t2">Threshold & Revenue</button>
+            <button class="b19-s195-tab" id="b19-s195-t3">Mitigation & Solutions</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b19-s195-pane show" id="b19-s195-p1">
+            <div class="b19-s195-hint">Selfish mining: hiding a found block to gain a chain lead. Click each step to see how this strategy works.</div>
+            <div class="b19-s195-step-btns">
+              <button class="b19-s195-step-btn s195-act" data-step="0">Start</button>
+              <button class="b19-s195-step-btn" data-step="1">Step 1</button>
+              <button class="b19-s195-step-btn" data-step="2">Step 2</button>
+              <button class="b19-s195-step-btn" data-step="3">Step 3</button>
+              <button class="b19-s195-step-btn" data-step="4">Result</button>
+            </div>
+            <div class="b19-s195-chain-label">Chain visualization:</div>
+            <div id="b19-s195-chains"></div>
+            <div class="b19-s195-detail s195-d-idle" id="b19-s195-detail"></div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b19-s195-pane" id="b19-s195-p2">
+            <div class="b19-s195-hint">Selfish mining is only profitable above the ~33% hashrate threshold. Below it, the risk cost outweighs the potential gain.</div>
+            <div class="b19-s195-slider-wrap">
+              <div class="b19-s195-slider-label">Miner hashrate (% of the network):</div>
+              <div class="b19-s195-slider-row">
+                <span class="b19-s195-mm">5%</span>
+                <input type="range" class="b19-s195-slider" id="b19-s195-hr-sl" min="5" max="49" value="35" step="1">
+                <span class="b19-s195-mm">49%</span>
+                <div class="b19-s195-slider-val" id="b19-s195-hr-val">35%</div>
+              </div>
+            </div>
+            <div class="b19-s195-rev-cards">
+              <div class="b19-s195-rev-card s195-rc-honest">
+                <div class="b19-s195-rev-label">Expected revenue — Honest Mining</div>
+                <div class="b19-s195-rev-val" id="b19-s195-honest-rev">35% of total</div>
+                <div class="b19-s195-rev-sub">always proportional to hashrate</div>
+              </div>
+              <div class="b19-s195-rev-card s195-rc-selfish">
+                <div class="b19-s195-rev-label">Expected revenue — Selfish Mining</div>
+                <div class="b19-s195-rev-val" id="b19-s195-selfish-rev">~39,5%</div>
+                <div class="b19-s195-rev-sub" id="b19-s195-selfish-sub">higher than the hashrate share</div>
+              </div>
+            </div>
+            <div class="b19-s195-verdict" id="b19-s195-verdict">
+              <div class="b19-s195-verdict-label" id="b19-s195-verdict-label"></div>
+              <div id="b19-s195-verdict-text"></div>
+            </div>
+          </div>
+
+          <!-- PANE 3 -->
+          <div class="b19-s195-pane" id="b19-s195-p3">
+            <div class="b19-s195-hint">There are several mechanisms that naturally limit or prevent selfish mining — both technical and economic.</div>
+            <div class="b19-s195-cms">
+              <div class="b19-s195-cm s195-cm-propagation">
+                <div class="b19-s195-cm-label">TECHNICAL SOLUTION #1 — FASTER PROPAGATION</div>
+                <div class="b19-s195-cm-title">Compact blocks & FIBRE narrow the selfish mining window</div>
+                <div class="b19-s195-cm-text">The faster a block spreads across the network, the smaller the window for a selfish miner to exploit their lead. Compact blocks and fast propagation technology directly raise the hashrate threshold needed.</div>
+                <div class="b19-s195-cm-analogy">Like gossip that spreads very fast — there’s no longer any advantage to withholding information because everyone already knows within seconds.</div>
+              </div>
+              <div class="b19-s195-cm s195-cm-awareness">
+                <div class="b19-s195-cm-label">TECHNICAL SOLUTION #2 — ANOMALY PATTERN DETECTION</div>
+                <div class="b19-s195-cm-title">Nodes and researchers can detect unusual block patterns</div>
+                <div class="b19-s195-cm-text">Selfish mining leaves a statistical trail: a higher orphan rate, blocks arriving in bursts after quiet periods, and suspicious timestamp patterns. The community monitoring the network can identify suspected pools.</div>
+                <div class="b19-s195-cm-analogy">Like traffic police detecting a cheating racer from camera footage — the trail remains even if they aren’t caught directly.</div>
+              </div>
+              <div class="b19-s195-cm s195-cm-reputation">
+                <div class="b19-s195-cm-label">ECONOMIC SOLUTION — REPUTATION AND SOCIAL INCENTIVES</div>
+                <div class="b19-s195-cm-title">A pool that gets caught loses miners and all its income</div>
+                <div class="b19-s195-cm-text">A large pool depends on the trust of the thousands of miners who join it. If caught doing selfish mining, miners can move to another pool. Losing hashrate is far more expensive than the short-term gain from selfish mining.</div>
+                <div class="b19-s195-cm-analogy">Like a business that cheats — it might profit once in a while, but losing customers is far more expensive than the gain from the cheating itself.</div>
+              </div>
+              <div class="b19-s195-cm s195-cm-variance">
+                <div class="b19-s195-cm-label">LIMITING FACTOR — HIGH VARIANCE</div>
+                <div class="b19-s195-cm-title">Selfish mining increases the variance of the miner’s own income</div>
+                <div class="b19-s195-cm-text">There are periods where the hidden block is orphaned by the network before it can be published. The selfish miner loses the reward in that period. High variance makes income more unpredictable even for the perpetrator.</div>
+                <div class="b19-s195-cm-analogy">Like a speculator vs a long-term investor — the former might profit big once in a while, but can also lose big.</div>
+              </div>
+            </div>
+            <div class="b19-s195-prop-wrap">
+              <div class="b19-s195-prop-label">Simulation: how propagation speed shifts the selfish mining threshold</div>
+              <div class="b19-s195-prop-slider-row">
+                <span class="b19-s195-mm" style="min-width:50px;">Slow</span>
+                <input type="range" class="b19-s195-slider" id="b19-s195-prop-sl" min="0" max="100" value="70" step="5">
+                <span class="b19-s195-mm">Fast</span>
+                <div class="b19-s195-slider-val" id="b19-s195-prop-val">70%</div>
+              </div>
+              <div class="b19-s195-prop-result" id="b19-s195-prop-result"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-19-4" data-sb="sb-19-4">
+            ← 19.4 — Mining Pool Economics
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-19-6" data-sb="sb-19-6">
+            19.6 — The Mining Ecosystem →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 19.5 -->
+
+      <!-- ==============================
+           SECTION 19.6 · Ekosistem Mining
+      ============================== -->
+      <div class="p-section" id="section-19-6">
+        <div class="p-eyebrow">Chapter 19 · 19.6</div>
+        <div class="p-heading">Bitcoin mining is a global industry that follows cheap energy, depends on highly specialized hardware, and operates through a protocol that determines who controls the contents of a block</div>
+        <div class="p-title">The Mining Ecosystem — Hardware, Energy, and Protocol</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Bitcoin mining in the real world is an industry very different from the simple picture of "computers guessing numbers." It involves specialized hardware designed for one purpose, highly economic energy decisions, geographic distribution that follows electricity prices, and a communication protocol that determines who has control over block content.</p>
+
+          <p><strong>ASIC: hardware born from one purpose</strong></p>
+          <p>An ASIC (Application-Specific Integrated Circuit) is a chip designed specifically to run one operation: the SHA256 double hash as fast as possible with as little energy as possible. The key efficiency metric of an ASIC is joules per terahash (J/TH): how much energy is needed to produce one terahash. The first generation of Bitcoin ASICs around 2013 needed more than 1,000 J/TH. The best modern hardware today is already in the range of 15-20 J/TH, an efficiency improvement of more than 50-fold in a decade. Miners with old hardware are economically forced out when the Bitcoin price falls or difficulty rises, because the electricity cost exceeds the income.</p>
+
+          <p><strong>Energy and geographic distribution</strong></p>
+          <p>Bitcoin mining is a competition in energy efficiency. The miners who survive are those who can get the cheapest electricity: hydro plants with excess capacity, geothermal energy, flare gas from oil fields, or solar energy in remote areas. The global hashrate distribution changes significantly with regulation. After China banned mining in 2021, the hashrate that was once dominant in China migrated to the United States, Kazakhstan, Russia, and elsewhere within months. This shows that mining is very geographically mobile and the Bitcoin network is resistant to local regulation because hashrate can move to another jurisdiction.</p>
+
+          <p><strong>The Stratum protocol: who controls the block template</strong></p>
+          <p>Stratum is the communication protocol between the pool server and the mining hardware. In Stratum v1, still dominant today, the pool operator assembles the block template and decides which transactions are included. The miner only receives work in the form of a header to hash, without control over the block content. Stratum v2 introduces job negotiation: an individual miner can choose their own transactions and only ask the pool to validate their work. This significantly improves decentralization because control of the block template is no longer centralized in the pool operator.</p>
+
+          <div class="p-callout">
+            <p>These three aspects are interconnected: hardware efficiency determines where a miner can operate economically, geographic distribution determines the network’s resistance to regulation, and the communication protocol determines how decentralized the decisions about block content are. Understanding all three together gives a far more complete picture of how Bitcoin mining really works in the real world.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Mining Ecosystem Visualizer</div>
+          <div class="b19-s196-desc">
+            Three tabs: the evolution of ASIC hardware efficiency from 2013-2024, the geographic hashrate distribution before and after the 2021 China ban, and a comparison of Stratum v1 vs v2 in controlling the block template.
+          </div>
+
+          <div class="b19-s196-tabs">
+            <button class="b19-s196-tab s196-act" id="b19-s196-t1">ASIC & Energy Efficiency</button>
+            <button class="b19-s196-tab" id="b19-s196-t2">Geographic Distribution</button>
+            <button class="b19-s196-tab" id="b19-s196-t3">Stratum v1 vs v2</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b19-s196-pane show" id="b19-s196-p1">
+            <div class="b19-s196-hint">An ASIC is designed specifically for SHA256. Efficiency is measured in J/TH — the lower the more efficient. Old hardware can’t compete economically with the new generation.</div>
+            <div class="b19-s196-analogy">
+              <div class="b19-s196-analogy-label">Analogy</div>
+              <div class="b19-s196-analogy-text">Imagine a water-drinking contest: in 2013, miners used a big bucket — a lot of energy wasted. Each hardware generation is like finding a more efficient vessel. The 2024 hardware is like a precision pipette — almost nothing wasted. Those still using a bucket can no longer compete economically.</div>
+            </div>
+            <div class="b19-s196-asic-label">Evolution of Bitcoin ASIC efficiency — J/TH (lower = more efficient):</div>
+            <div id="b19-s196-asic-rows"></div>
+            <div class="b19-s196-asic-cards">
+              <div class="b19-s196-asic-card s196-ac-old">
+                <div class="b19-s196-ac-label">First-Generation ASIC (2013)</div>
+                <div class="b19-s196-ac-val">~1.000+ J/TH</div>
+                <div class="b19-s196-ac-sub">Energy-hungry, no longer economically competitive</div>
+              </div>
+              <div class="b19-s196-asic-card s196-ac-now">
+                <div class="b19-s196-ac-label">Best ASIC Today (2024)</div>
+                <div class="b19-s196-ac-val">~15-20 J/TH</div>
+                <div class="b19-s196-ac-sub">Approaching the physical efficiency limit of modern silicon</div>
+              </div>
+              <div class="b19-s196-asic-card s196-ac-info">
+                <div class="b19-s196-ac-label">Why does J/TH matter?</div>
+                <div class="b19-s196-ac-val">Electricity cost</div>
+                <div class="b19-s196-ac-sub">The lower the J/TH, the cheaper the cost per hash, the more competitive</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b19-s196-pane" id="b19-s196-p2">
+            <div class="b19-s196-hint">Mining follows cheap energy. Global hashrate is very mobile — when one country bans it, miners move to another country within months.</div>
+            <div class="b19-s196-analogy">
+              <div class="b19-s196-analogy-label">Analogy</div>
+              <div class="b19-s196-analogy-text">Bitcoin mining is like a factory that can be dismantled and reassembled within weeks. When one country bans it, the factory doesn’t close — it moves to another country offering cheap electricity or friendlier regulation. Mining hardware is a physical asset that can be shipped anywhere in the world.</div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+              <div class="b19-s196-geo-label">Choose a period:</div>
+              <div class="b19-s196-geo-toggle">
+                <button class="b19-s196-geo-btn" data-period="before">Before the China Ban (2020)</button>
+                <button class="b19-s196-geo-btn s196-geo-act" data-period="after">After the China Ban (2022+)</button>
+              </div>
+            </div>
+            <div id="b19-s196-geo-rows"></div>
+            <div class="b19-s196-geo-note" id="b19-s196-geo-note"></div>
+            <div class="b19-s196-geo-card">
+              <div class="b19-s196-geo-card-label">Implications for network resilience:</div>
+              <div class="b19-s196-geo-card-text">After the 2021 China ban, global hashrate dropped ~50% within a few weeks, then fully recovered within a few months. This proves that no single government can shut down Bitcoin permanently with local regulation alone.</div>
+            </div>
+          </div>
+
+          <!-- PANE 3 -->
+          <div class="b19-s196-pane" id="b19-s196-p3">
+            <div class="b19-s196-hint">Stratum is the communication protocol between the pool and the hardware. Its version determines who has control over block content.</div>
+            <div class="b19-s196-analogy">
+              <div class="b19-s196-analogy-label">Analogy</div>
+              <div class="b19-s196-analogy-text"><strong>Stratum v1:</strong> like a contractor receiving orders from the boss, where the boss decides what gets built and the contractor just does the work. The pool decides which transactions go into the block.<br><br><strong>Stratum v2:</strong> like a contractor who has the right to choose their own materials, who may propose a design while the boss only validates quality. The miner can choose their own transactions.</div>
+            </div>
+            <div class="b19-s196-stratum-cards">
+              <div class="b19-s196-stratum-card s196-sc-v1">
+                <div class="b19-s196-stratum-label">STRATUM V1 — DOMINANT TODAY</div>
+                <div class="b19-s196-stratum-title">The pool controls the block template</div>
+                <div class="b19-s196-stratum-item">The pool assembles the complete block template with the chosen transactions</div>
+                <div class="b19-s196-stratum-item">The miner only receives work in the form of a header to hash</div>
+                <div class="b19-s196-stratum-item">The miner doesn’t know or can’t choose the transactions included</div>
+                <div class="b19-s196-stratum-item">Communication isn’t encrypted — vulnerable to man-in-the-middle</div>
+                <div class="b19-s196-stratum-analogy">A contractor who only knows "dig a hole here" without knowing what for.</div>
+              </div>
+              <div class="b19-s196-stratum-card s196-sc-v2">
+                <div class="b19-s196-stratum-label">STRATUM V2 — NEW GENERATION</div>
+                <div class="b19-s196-stratum-title">The miner can choose their own transactions</div>
+                <div class="b19-s196-stratum-item">Job negotiation: the miner can assemble their own block template</div>
+                <div class="b19-s196-stratum-item">The pool only validates that the hash work is correct</div>
+                <div class="b19-s196-stratum-item">Communication is encrypted — safer from interception</div>
+                <div class="b19-s196-stratum-item">Significantly improves decentralization of the block template</div>
+                <div class="b19-s196-stratum-analogy">A contractor who can choose their own materials and design — the boss only checks the final quality.</div>
+              </div>
+            </div>
+            <div class="b19-s196-flow-wrap">
+              <div class="b19-s196-flow-label">Communication flow comparison:</div>
+              <div class="b19-s196-flow-grid">
+                <div class="b19-s196-flow-col s196-fc-v1">
+                  <div class="b19-s196-flow-title">Stratum v1:</div>
+                  <div class="b19-s196-flow-step s196-highlight">Pool assembles block template</div>
+                  <div class="b19-s196-flow-step">Pool sends job to miner</div>
+                  <div class="b19-s196-flow-step">Miner hashes header</div>
+                  <div class="b19-s196-flow-step">Miner sends share to pool</div>
+                  <div class="b19-s196-flow-step s196-highlight">Pool submits block</div>
+                </div>
+                <div class="b19-s196-flow-col s196-fc-v2">
+                  <div class="b19-s196-flow-title">Stratum v2 (job negotiation):</div>
+                  <div class="b19-s196-flow-step s196-highlight">Miner assembles block template</div>
+                  <div class="b19-s196-flow-step">Miner sends template to pool</div>
+                  <div class="b19-s196-flow-step">Pool validates template</div>
+                  <div class="b19-s196-flow-step">Miner hashes header</div>
+                  <div class="b19-s196-flow-step">Miner sends share to pool</div>
+                  <div class="b19-s196-flow-step s196-highlight">Miner/pool submits block</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-19-5" data-sb="sb-19-5">
+            ← 19.5 — Selfish Mining
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 19.6 -->
+
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 22 · BAB 19 -->
+
+

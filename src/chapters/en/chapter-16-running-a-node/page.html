@@ -1,0 +1,702 @@
+<!-- ============================================================
+     PAGE 19 · BAB 16 · Menjalankan Node: IBD, Chainstate, dan Verifikasi dari Dalam
+     |-- 16.1 · Initial Block Download [DONE]
+     |-- 16.2 · [LOCKED]
+     |-- 16.3 · [LOCKED]
+     |-- 16.4 · [LOCKED]
+     |-- 16.5 · [LOCKED]
+     |-- 16.6 · [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab16">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b16">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b16">← Chapter List</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab16">
+      <div class="sidebar-heading">Chapter 16</div>
+      <div class="sidebar-title">Running a Node</div>
+
+      <div class="sidebar-item active" id="sb-16-1">
+        <div class="sb-num">16.1</div>
+        <div class="sb-label">Initial Block Download — How a New Node Gets to Know Bitcoin</div>
+      </div>
+      <div class="sidebar-item" id="sb-16-2">
+        <div class="sb-num">16.2</div>
+        <div class="sb-label">Block Verification — What a Node Checks Every Time a New Block Arrives</div>
+      </div>
+      <div class="sidebar-item" id="sb-16-3">
+        <div class="sb-num">16.3</div>
+        <div class="sb-label">The Chainstate Database — The Heart of Bitcoin State</div>
+      </div>
+      <div class="sidebar-item" id="sb-16-4">
+        <div class="sb-num">16.4</div>
+        <div class="sb-label">Pruning — Discard Old Blocks, Stay Fully Validating</div>
+      </div>
+      <div class="sidebar-item" id="sb-16-5">
+        <div class="sb-num">16.5</div>
+        <div class="sb-label">assumevalid and assumeUTXO — Faster Sync Without Sacrificing Trustlessness</div>
+      </div>
+      <div class="sidebar-item" id="sb-16-6">
+        <div class="sb-num">16.6</div>
+        <div class="sb-label">Why Run Your Own Node — and 10 Daily Commands</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab16-content">
+
+      <!-- ==============================
+           SECTION 16.1 · Initial Block Download
+      ============================== -->
+      <div class="p-section active" id="section-16-1">
+        <div class="p-eyebrow">Chapter 16 · 16.1</div>
+        <div class="p-heading">Before it can be trusted, a node must read all of Bitcoin’s history from the start</div>
+        <div class="p-title">Initial Block Download — How a New Node Gets to Know Bitcoin</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Imagine you just moved to a new city and have to read all the newspapers from the last 15 years before you can follow today’s news. That’s what a new Bitcoin node does: it must validate every block since the genesis block before it can be considered synced and trusted.</p>
+
+          <p>This process is called Initial Block Download (IBD). For a new node today, this means validating hundreds of thousands of blocks containing hundreds of millions of transactions. Depending on hardware, this process can take from a few hours to several days.</p>
+
+          <p><strong>Headers-first: a clever strategy</strong></p>
+          <p>Bitcoin client software (like Bitcoin Core or Bitcoin Knots) doesn’t immediately download all blocks from the start. It first downloads all the block headers, 80 bytes per block, from peers. For the entire blockchain, this is only about 70MB. From the headers, a node can verify the chain of proof-of-work without needing any transaction data at all.</p>
+
+          <p>After knowing which is the longest valid chain, only then does the node download blocks in parallel from many peers at once. This is far more efficient than the old approach of downloading just one block from one peer sequentially.</p>
+
+          <p><strong>What is verified during IBD?</strong></p>
+          <p>For each block, the node verifies: the proof-of-work is valid, the timestamp is within the allowed range, the block size doesn’t exceed the limit, all transactions are cryptographically valid, there’s no double spend, and the total coinbase output doesn’t exceed the allowed reward. This isn’t a light process, which is why IBD requires significant time and CPU.</p>
+
+          <p><strong>assumevalid: a safe shortcut</strong></p>
+          <p>Many Bitcoin client implementations include the hash of a particular block that has been verified by the broad community as a "safe point assumed valid." For blocks before this point, the node still downloads and executes all transactions to build the UTXO set, but no longer verifies the cryptographic signatures, which is the most CPU-intensive part. This shortens IBD significantly without sacrificing the security of the UTXO set.</p>
+
+          <p>Important: assumevalid isn’t blind trust. The node still verifies the entire block structure and the UTXO set. What’s skipped is only the signature verification for old blocks that have already been proven valid by millions of other nodes.</p>
+
+          <div class="p-callout">
+            <p>While IBD is in progress, the node should not be used to verify payments. It doesn’t yet have a full picture of the blockchain and can be tricked into accepting a transaction that has already been double-spent in a block it hasn’t validated. Check the "initialblockdownload" field via RPC to make sure the node is ready.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">RPC Terminal — Monitoring IBD</div>
+          <div class="b16-s161-desc">
+            The commands below are real Bitcoin client RPCs for monitoring the IBD process. Choose a command and click "Run" to see the JSON output with an explanation of each field.
+          </div>
+
+          <div class="b16-s161-cmds-label">Choose a command to run:</div>
+          <div class="b16-s161-cmds" id="b16-s161-cmds">
+            <div class="b16-s161-cmd-btn s161-act" data-cmd="getblockchaininfo">
+              <div class="b16-s161-cmd-code">bitcoin-cli getblockchaininfo</div>
+              <div class="b16-s161-cmd-desc">Full node sync status</div>
+            </div>
+            <div class="b16-s161-cmd-btn" data-cmd="getinfo">
+              <div class="b16-s161-cmd-code">bitcoin-cli -getinfo</div>
+              <div class="b16-s161-cmd-desc">Node status summary (fast)</div>
+            </div>
+            <div class="b16-s161-cmd-btn" data-cmd="getpeerinfo_sync">
+              <div class="b16-s161-cmd-code">bitcoin-cli getpeerinfo | grep synced_blocks</div>
+              <div class="b16-s161-cmd-desc">Monitor the peers used for IBD</div>
+            </div>
+            <div class="b16-s161-cmd-btn" data-cmd="getnetworkinfo">
+              <div class="b16-s161-cmd-code">bitcoin-cli getnetworkinfo</div>
+              <div class="b16-s161-cmd-desc">Node network connection info</div>
+            </div>
+          </div>
+
+          <button class="b16-s161-run-btn" id="b16-s161-run">▶ Run</button>
+
+          <div class="b16-s161-terminal">
+            <div class="b16-s161-terminal-bar">
+              <div class="b16-s161-dot" style="background:#FF5F57;"></div>
+              <div class="b16-s161-dot" style="background:#FEBC2E;"></div>
+              <div class="b16-s161-dot" style="background:#28C840;"></div>
+              <div class="b16-s161-terminal-title">bitcoin-cli — Terminal</div>
+            </div>
+            <div class="b16-s161-terminal-body" id="b16-s161-body">
+              <div class="b16-s161-prompt"><span class="b16-s161-prompt-user">satoshi@node</span>:~$ <span class="b16-s161-prompt-cursor">_</span></div>
+            </div>
+          </div>
+
+          <div class="b16-s161-explain" id="b16-s161-explain" style="display:none;">
+            <div class="b16-s161-explain-label">Output explanation:</div>
+            <div id="b16-s161-fields"></div>
+          </div>
+
+          <div class="b16-s161-note" id="b16-s161-note" style="display:none;"></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-16-2" data-sb="sb-16-2">
+            16.2 — Block Verification →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 16.1 -->
+
+      <!-- ==============================
+           SECTION 16.2 · Verifikasi Block
+      ============================== -->
+      <div class="p-section" id="section-16-2">
+        <div class="p-eyebrow">Chapter 16 · 16.2</div>
+        <div class="p-heading">A node trusts no one — it verifies everything itself</div>
+        <div class="p-title">Block Verification — What a Node Checks Every Time a New Block Arrives</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Every time a new block arrives from the network, a node doesn’t just accept it. It runs a long, strict series of checks before deciding whether the block is valid or not. This process is what makes Bitcoin trustless: you don’t need to trust anyone because your own node verifies everything.</p>
+
+          <p><strong>Two layers of verification</strong></p>
+          <p>Block verification happens in two layers. The first is header verification: the node checks the proof-of-work, timestamp, and basic block structure without needing to look at the transactions inside. This is fast and light. The second is full verification: the node checks every transaction one by one, ensuring there’s no double spend, all signatures are valid, and all consensus rules are met.</p>
+
+          <p><strong>What gets checked?</strong></p>
+          <p>Proof-of-work: the hash of the block header must be below the current difficulty target. This can’t be faked without expending real energy. Timestamp: no more than 2 hours in the future from the node’s time, and must be greater than the Median Time Past (MTP). Block size: total weight doesn’t exceed 4 million weight units. Coinbase transaction: the reward claimed by the miner doesn’t exceed the block subsidy plus total transaction fees. Every transaction: all inputs refer to a UTXO that exists and hasn’t been spent, all signatures are cryptographically valid, no transaction spends more than it receives.</p>
+
+          <p><strong>Script validation: the most complex layer</strong></p>
+          <p>For every transaction input, the node must run the Bitcoin script and verify that the locking script conditions are met by the provided unlocking script. This involves executing a stack-based virtual machine for every input in every transaction in every block. This is the most CPU-intensive part of the entire verification process.</p>
+
+          <p><strong>Parallel verification</strong></p>
+          <p>Modern Bitcoin client software verifies signatures in parallel using all available CPU cores. This is one reason better hardware speeds up IBD significantly. The more cores, the faster the signature validation process, which can number in the tens of thousands per block.</p>
+
+          <div class="p-callout">
+            <p>Every node that runs this verification is one independent vote that enforces Bitcoin’s consensus rules. No single entity can force these nodes to accept a block that violates the rules, even if that block has a valid proof-of-work.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Block Inspector — Verification Checklist & RPC</div>
+          <div class="b16-s162-desc">
+            First tab: follow the 8 checks a node performs when it receives a new block. Second tab: RPC commands to inspect a block directly from the node — click a command to execute it immediately.
+          </div>
+
+          <div class="b16-s162-tabs">
+            <button class="b16-s162-tab s162-act" id="b16-s162-t1">Block Verification Checklist</button>
+            <button class="b16-s162-tab" id="b16-s162-t2">RPC — Inspect Block</button>
+          </div>
+
+          <!-- PANE 1: CHECKLIST -->
+          <div class="b16-s162-pane show" id="b16-s162-p1">
+            <div class="b16-s162-hint">Every time a new block arrives, the node runs 8 checks in sequence. Click "Next Verification" to see each check exactly in the order the node performs them.</div>
+            <div class="b16-s162-checklist" id="b16-s162-checklist"></div>
+            <div class="b16-s162-ctrl">
+              <button class="b16-s162-btn-primary" id="b16-s162-next">Next Verification →</button>
+              <button class="b16-s162-btn-sec" id="b16-s162-rst">Reset</button>
+              <div class="b16-s162-step-ind" id="b16-s162-ind">0 / 8 checks</div>
+            </div>
+            <div class="b16-s162-verdict s162-idle" id="b16-s162-verdict">Click "Next Verification" — the node just received block #870,142 from a peer.</div>
+          </div>
+
+          <!-- PANE 2: RPC -->
+          <div class="b16-s162-pane" id="b16-s162-p2">
+            <div class="b16-s162-hint">Click a command to execute it immediately and see the output along with an explanation of each field.</div>
+            <div class="b16-s162-cmds-label">Click a command to execute:</div>
+            <div class="b16-s162-cmds" id="b16-s162-cmds"></div>
+            <div class="b16-s162-terminal">
+              <div class="b16-s162-term-bar">
+                <div class="b16-s162-dot" style="background:#FF5F57;"></div>
+                <div class="b16-s162-dot" style="background:#FEBC2E;"></div>
+                <div class="b16-s162-dot" style="background:#28C840;"></div>
+                <div class="b16-s162-term-lbl">bitcoin-cli — Block Inspector</div>
+              </div>
+              <div class="b16-s162-term-body" id="b16-s162-term-body"></div>
+            </div>
+            <div class="b16-s162-fe" id="b16-s162-fe" style="display:none;">
+              <div class="b16-s162-fe-label">Explanation of key fields:</div>
+              <div id="b16-s162-fe-inner"></div>
+            </div>
+            <div class="b16-s162-note" id="b16-s162-note" style="display:none;"></div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-16-1" data-sb="sb-16-1">
+            ← 16.1 — Initial Block Download
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-16-3" data-sb="sb-16-3">
+            16.3 — The Chainstate Database →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 16.2 -->
+
+      <!-- ==============================
+           SECTION 16.3 · Chainstate Database
+      ============================== -->
+      <div class="p-section" id="section-16-3">
+        <div class="p-eyebrow">Chapter 16 · 16.3</div>
+        <div class="p-heading">If you could keep only one folder from all of Bitcoin — keep the chainstate</div>
+        <div class="p-title">The Chainstate Database — The Heart of Bitcoin State</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>If you delete all the blocks from your node’s hard drive but keep one small folder called chainstate, your node can still verify whether a new transaction is valid or not. That folder holds the entire "current state" of Bitcoin, all the UTXOs that exist right now, who owns them, and how much they’re worth.</p>
+
+          <p><strong>What is chainstate?</strong></p>
+          <p>Chainstate is the database that holds the UTXO set: the collection of all transaction outputs that have never been spent. Every time a new block is validated, the node updates the chainstate, new outputs are added, spent outputs are removed. This is a snapshot of current Bitcoin ownership.</p>
+
+          <p><strong>LevelDB: A Very Organized Filing Cabinet</strong></p>
+          <p>On disk, the chainstate is stored using LevelDB, a key-value database created by Google that’s very efficient for fast access. Imagine you have 184 million sheets of documents, where each sheet is one UTXO. If those documents were piled up haphazardly, finding one document could take a long time. LevelDB organizes those documents in order by their key, so a lookup can be done in milliseconds even with hundreds of millions of entries. That’s why a node can verify a new transaction very quickly without traversing the entire blockchain.</p>
+
+          <p>The key is the outpoint (txid + output index), the value is information about that UTXO: the value in satoshi, the locking script, whether it’s coinbase, and in which block it was confirmed.</p>
+
+          <p><strong>Why does the UTXO set size matter?</strong></p>
+          <p>Currently the UTXO set contains about 184 million entries and is about 11 GB on disk after LevelDB compression. The larger the UTXO set, the more RAM a node needs for efficient operation. This is one reason the Bitcoin community pays close attention to "UTXO bloat", the practice of creating many small, inefficient outputs.</p>
+
+          <p><strong>dbcache: The Size of the Desk in RAM</strong></p>
+          <p>One of the most important configuration parameters in bitcoin.conf is dbcache, the cache size for the chainstate database in MB. Imagine LevelDB as a physical filing cabinet in a warehouse (the hard disk). Every time the node needs to check a UTXO, it has to walk to the warehouse, open the drawer, grab the document, read it, then put it back. dbcache is the desk in front of the warehouse, the bigger the desk, the more documents can be accessed directly without going back and forth to disk. The default is only 450 MB, but with enough RAM, raising it to 4-8 GB can speed up IBD dramatically.</p>
+
+          <p><strong>Undo data: how a node can roll back</strong></p>
+          <p>Besides chainstate, the node also stores undo data for each block, the data needed to reverse that block’s effects in case of a reorg. Undo data contains all the UTXOs spent in that block, so if that block has to be disconnected, the node can return those UTXOs to the chainstate.</p>
+
+          <div class="p-callout">
+            <p>The total of all UTXOs in the chainstate must exactly match the total circulating Bitcoin supply. This can be verified by anyone at any time by running gettxoutsetinfo. There’s no central bank, no external audit needed, mathematics proves it.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Chainstate Explorer — UTXO Set & LevelDB</div>
+          <div class="b16-s163-desc">
+            First tab: UTXO set statistics, a LevelDB visualization, and a dbcache simulator. Second tab: RPC commands to access the chainstate — click a command to execute it immediately.
+          </div>
+
+          <div class="b16-s163-tabs">
+            <button class="b16-s163-tab s163-act" id="b16-s163-t1">UTXO Set & LevelDB</button>
+            <button class="b16-s163-tab" id="b16-s163-t2">RPC — Chainstate</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b16-s163-pane show" id="b16-s163-p1">
+            <div class="b16-s163-stats">
+              <div class="b16-s163-stat s163-purple">
+                <div class="b16-s163-stat-label">Total UTXO</div>
+                <div class="b16-s163-stat-val">184.2 million</div>
+                <div class="b16-s163-stat-sub">Entries in the chainstate database right now</div>
+              </div>
+              <div class="b16-s163-stat s163-green">
+                <div class="b16-s163-stat-label">Verified Total Supply</div>
+                <div class="b16-s163-stat-val">19.72 million BTC</div>
+                <div class="b16-s163-stat-sub">The sum of all UTXOs = total BTC in existence</div>
+              </div>
+              <div class="b16-s163-stat s163-amber">
+                <div class="b16-s163-stat-label">Size on Disk</div>
+                <div class="b16-s163-stat-val">~11 GB</div>
+                <div class="b16-s163-stat-sub">After LevelDB compression</div>
+              </div>
+              <div class="b16-s163-stat s163-gray">
+                <div class="b16-s163-stat-label">Unique Transactions</div>
+                <div class="b16-s163-stat-val">~152 million</div>
+                <div class="b16-s163-stat-sub">Transactions with an unspent output</div>
+              </div>
+            </div>
+
+            <div class="b16-s163-bar-wrap">
+              <div class="b16-s163-bar-label">Chainstate vs Full Blockchain:</div>
+              <div class="b16-s163-bar-track">
+                <div class="b16-s163-bar-fill" id="b16-s163-bar">
+                  <div class="b16-s163-bar-text" id="b16-s163-bar-text"></div>
+                </div>
+              </div>
+              <div class="b16-s163-bar-desc">The chainstate (~11 GB) is far smaller than the full blockchain (~650 GB). A node can verify a new transaction with just the chainstate, without needing all the old blocks.</div>
+            </div>
+
+            <div class="b16-s163-ldb-label">LevelDB key-value structure for a UTXO:</div>
+            <div class="b16-s163-ldb-row">
+              <div class="b16-s163-ldb-key">KEY (outpoint)</div>
+              <div class="b16-s163-ldb-val">txid + output index — example: a1b2c3...0001</div>
+            </div>
+            <div class="b16-s163-ldb-row">
+              <div class="b16-s163-ldb-key">VALUE (utxo)</div>
+              <div class="b16-s163-ldb-val">value (satoshi) + locking script + block height + whether coinbase</div>
+            </div>
+            <div class="b16-s163-ldb-note">
+              <strong>Filing cabinet analogy:</strong> LevelDB is like a giant filing cabinet with 184 million drawers, each given a unique label (outpoint). Because these drawers are sorted by their label, finding one drawer out of 184 million takes only a few milliseconds, without having to check them one by one.
+            </div>
+
+            <div class="b16-s163-cache-wrap">
+              <div class="b16-s163-cache-label">dbcache — The size of the "desk" in RAM</div>
+              <div class="b16-s163-cache-sub">The larger the dbcache, the more UTXOs can be accessed directly from RAM without going back and forth to disk. Drag to see the impact.</div>
+              <div class="b16-s163-cache-row">
+                <span class="b16-s163-cache-minmax">450 MB</span>
+                <input type="range" class="b16-s163-cache-slider" id="b16-s163-cache-sl" min="450" max="8000" value="450" step="50">
+                <span class="b16-s163-cache-minmax">8 GB</span>
+                <div class="b16-s163-cache-val" id="b16-s163-cache-val">450 MB</div>
+              </div>
+              <div class="b16-s163-cache-result s163-bad" id="b16-s163-cache-result">
+                <strong>Default (450 MB):</strong> A very small desk. The node often goes back and forth to disk during IBD, the sync process is slower. Suitable only if RAM is limited.
+              </div>
+            </div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b16-s163-pane" id="b16-s163-p2">
+            <div class="b16-s163-hint">Click a command to execute it immediately and see the output along with an explanation of each field.</div>
+            <div class="b16-s163-cmds-label">Click a command to execute:</div>
+            <div class="b16-s163-cmds" id="b16-s163-cmds"></div>
+            <div class="b16-s163-terminal">
+              <div class="b16-s163-term-bar">
+                <div class="b16-s163-dot" style="background:#FF5F57;"></div>
+                <div class="b16-s163-dot" style="background:#FEBC2E;"></div>
+                <div class="b16-s163-dot" style="background:#28C840;"></div>
+                <div class="b16-s163-term-lbl">bitcoin-cli — Chainstate</div>
+              </div>
+              <div class="b16-s163-term-body" id="b16-s163-term-body"></div>
+            </div>
+            <div class="b16-s163-fe" id="b16-s163-fe" style="display:none;">
+              <div class="b16-s163-fe-lbl">Explanation of key fields:</div>
+              <div id="b16-s163-fe-inner"></div>
+            </div>
+            <div class="b16-s163-note" id="b16-s163-note" style="display:none;"></div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-16-2" data-sb="sb-16-2">
+            ← 16.2 — Block Verification
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-16-4" data-sb="sb-16-4">
+            16.4 — Pruning →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 16.3 -->
+
+      <!-- ==============================
+           SECTION 16.4 · Pruning
+      ============================== -->
+      <div class="p-section" id="section-16-4">
+        <div class="p-eyebrow">Chapter 16 · 16.4</div>
+        <div class="p-heading">A node that saves storage but doesn’t compromise on verification security</div>
+        <div class="p-title">Pruning — Discard Old Blocks, Stay Fully Validating</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>There’s a common misconception about running a Bitcoin node: that you need hundreds of gigabytes of storage to do it. This isn’t entirely true. Bitcoin has a feature called pruning that lets a node discard old blocks from disk after validating them, while still being able to fully verify new transactions.</p>
+
+          <p><strong>What is a pruned node?</strong></p>
+          <p>A node running in pruning mode still downloads and validates every block since the genesis block during IBD, there’s no shortcut. But after a block is validated and the UTXO set is updated, that block can be deleted from disk. What remains is only the chainstate (UTXO set) and a few recent blocks as a buffer. The result: a node that needs a minimum of about 550 MB of storage instead of 700+ GB for a full archival node.</p>
+
+          <p><strong>What you lose with pruning</strong></p>
+          <p>A pruned node can’t serve old blocks to other peers doing IBD. This means a pruned node doesn’t contribute fully as a relay for the network. Besides that, there are several RPC commands that can’t be run on a pruned node because the data they need is no longer on disk. This is what most often confuses new users.</p>
+
+          <p><strong>But the most important thing remains</strong></p>
+          <p>A pruned node is a fully validating node, not a light client and not an SPV node. The ability to verify new transactions, validate new blocks, reject invalid transactions and blocks, and maintain an accurate UTXO set all remain. Verification security isn’t reduced at all.</p>
+
+          <p><strong>Configuring pruning</strong></p>
+          <p>In bitcoin.conf, pruning is configured with the prune parameter in MB, with a minimum of 550 MB. A value of 0 means pruning is off. There are two modes: automatic, where the node manages itself based on a target size, and manual, where pruning is done via RPC to a particular block height.</p>
+
+          <div class="p-callout">
+            <p>A pruned node is very suitable for users who want to verify their own transactions without depending on a third party, but have limited storage. If storage is sufficient, running a full archival node is better for the health of the network because it can help new nodes doing IBD.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Pruning Visualizer — Timeline & RPC</div>
+          <div class="b16-s164-desc">
+            First tab: a visualization of the blockchain timeline with a prune target slider. Second tab: RPC commands for pruning — including commands that CANNOT be used on a pruned node along with their error messages.
+          </div>
+
+          <div class="b16-s164-tabs">
+            <button class="b16-s164-tab s164-act" id="b16-s164-t1">Pruning Visualizer</button>
+            <button class="b16-s164-tab" id="b16-s164-t2">RPC — Pruning</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b16-s164-pane show" id="b16-s164-p1">
+            <div class="b16-s164-hint">A pruned node still validates EVERY block since genesis. After validation, old blocks may be deleted. Drag the slider to set the prune target size.</div>
+
+            <div class="b16-s164-tl-label">Blockchain timeline — blocks still present vs already pruned:</div>
+            <div class="b16-s164-tl-track" id="b16-s164-tl"></div>
+            <div class="b16-s164-tl-markers">
+              <span>Genesis #0</span>
+              <span id="b16-s164-prune-marker">Prune height</span>
+              <span>Tip #870,142</span>
+            </div>
+
+            <div class="b16-s164-legend">
+              <div class="b16-s164-leg"><div class="b16-s164-leg-dot" style="background:#F0EEF8;border:0.5px solid rgba(124,58,237,0.2);"></div>Block validated then deleted</div>
+              <div class="b16-s164-leg"><div class="b16-s164-leg-dot" style="background:#534AB7;"></div>Block still on disk (buffer)</div>
+              <div class="b16-s164-leg"><div class="b16-s164-leg-dot" style="background:#7C3AED;"></div>Latest block (always present)</div>
+            </div>
+
+            <div class="b16-s164-ctrl-wrap">
+              <div class="b16-s164-ctrl-label">prune = ? (target size in bitcoin.conf, in MB)</div>
+              <div class="b16-s164-ctrl-sub">Minimum 550 MB. A value of 0 = pruning off (full archival ~650 GB).</div>
+              <div class="b16-s164-ctrl-row">
+                <span class="b16-s164-ctrl-mm">550 MB</span>
+                <input type="range" class="b16-s164-slider" id="b16-s164-sl" min="550" max="100000" value="550" step="50">
+                <span class="b16-s164-ctrl-mm">~100 GB</span>
+                <div class="b16-s164-ctrl-val" id="b16-s164-sl-val">550 MB</div>
+              </div>
+            </div>
+
+            <div class="b16-s164-stats">
+              <div class="b16-s164-stat s164-red">
+                <div class="b16-s164-stat-lbl">Blocks deleted</div>
+                <div class="b16-s164-stat-val" id="b16-s164-pruned-blocks">~869,000</div>
+                <div class="b16-s164-stat-sub">Already validated, no longer needed</div>
+              </div>
+              <div class="b16-s164-stat s164-green">
+                <div class="b16-s164-stat-lbl">Storage saved</div>
+                <div class="b16-s164-stat-val" id="b16-s164-saved">~649 GB</div>
+                <div class="b16-s164-stat-sub">Out of ~650 GB total blockchain</div>
+              </div>
+              <div class="b16-s164-stat s164-purple">
+                <div class="b16-s164-stat-lbl">Storage needed</div>
+                <div class="b16-s164-stat-val" id="b16-s164-needed">~550 MB</div>
+                <div class="b16-s164-stat-sub">Chainstate + buffer blocks</div>
+              </div>
+            </div>
+
+            <div class="b16-s164-tradeoffs">
+              <div class="b16-s164-to s164-good">
+                <div class="b16-s164-to-label">A pruned node CAN still:</div>
+                <div class="b16-s164-to-item">Validate all new transactions</div>
+                <div class="b16-s164-to-item">Validate all new blocks</div>
+                <div class="b16-s164-to-item">Maintain an accurate UTXO set</div>
+                <div class="b16-s164-to-item">Reject invalid transactions</div>
+                <div class="b16-s164-to-item">Accept inbound connections</div>
+              </div>
+              <div class="b16-s164-to s164-bad">
+                <div class="b16-s164-to-label">A pruned node CANNOT:</div>
+                <div class="b16-s164-to-item">Serve old blocks to IBD peers</div>
+                <div class="b16-s164-to-item">getblock for a pruned block</div>
+                <div class="b16-s164-to-item">getrawtransaction without txindex</div>
+                <div class="b16-s164-to-item">Run txindex/blockfilterindex</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b16-s164-pane" id="b16-s164-p2">
+            <div class="b16-s164-hint">Click a command to execute it immediately. Commands with the ERROR label show what happens if you try an RPC that isn’t supported on a pruned node.</div>
+            <div class="b16-s164-cmds-label">Click a command to execute:</div>
+            <div class="b16-s164-cmds" id="b16-s164-cmds"></div>
+            <div class="b16-s164-terminal">
+              <div class="b16-s164-term-bar">
+                <div class="b16-s164-dot" style="background:#FF5F57;"></div>
+                <div class="b16-s164-dot" style="background:#FEBC2E;"></div>
+                <div class="b16-s164-dot" style="background:#28C840;"></div>
+                <div class="b16-s164-term-lbl">bitcoin-cli — Pruning</div>
+              </div>
+              <div class="b16-s164-term-body" id="b16-s164-term-body"></div>
+            </div>
+            <div class="b16-s164-fe" id="b16-s164-fe" style="display:none;">
+              <div class="b16-s164-fe-lbl">Explanation:</div>
+              <div id="b16-s164-fe-inner"></div>
+            </div>
+            <div class="b16-s164-note" id="b16-s164-note" style="display:none;"></div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-16-3" data-sb="sb-16-3">
+            ← 16.3 — Chainstate Database
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-16-5" data-sb="sb-16-5">
+            16.5 — assumevalid & assumeUTXO →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 16.4 -->
+
+      <!-- ==============================
+           SECTION 16.5 · assumevalid dan assumeUTXO
+      ============================== -->
+      <div class="p-section" id="section-16-5">
+        <div class="p-eyebrow">Chapter 16 · 16.5</div>
+        <div class="p-heading">Faster sync doesn’t mean less secure — if designed correctly</div>
+        <div class="p-title">assumevalid and assumeUTXO — Faster Sync Without Sacrificing Trustlessness</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>We touched on assumevalid in 16.1 as one reason IBD can be shortened. This section explains how it actually works, along with its sibling assumeUTXO, and answers the objection that comes up most often: does this mean we are back to trusting the developers?</p>
+          <p>IBD can take hours or even days. Two Bitcoin features, assumevalid and assumeUTXO, are designed to speed up this process significantly. But both are often misunderstood: they’re not blind trust in the developers, but very carefully designed choices with verification mechanisms that remain strong.</p>
+
+          <p><strong>assumevalid: Skip Signature Verification for Old Blocks</strong></p>
+          <p>During IBD, the most CPU-consuming part is the cryptographic signature verification for every transaction input. For a blockchain hundreds of thousands of blocks long with hundreds of millions of transactions, this is very heavy work and can take dozens of hours.</p>
+
+          <p>assumevalid is the hash of a particular block hardcoded into the Bitcoin client software. For all blocks before this hash, the node still downloads all the data, validates the block structure, and builds the UTXO set fully, but doesn’t verify the cryptographic signatures. The logic: if millions of other nodes have already validated these signatures and the blockchain keeps running normally, the signatures must be valid.</p>
+
+          <p>Important: you can override this anytime. By running the flag -assumevalid=0, the node will verify every signature from block 0 without exception. This takes far longer but provides the most thorough verification.</p>
+
+          <p><strong>assumeUTXO: Start from a UTXO Set Snapshot</strong></p>
+          <p>assumeUTXO is a newer and more radical feature. Instead of building the UTXO set from the genesis block, the node can load a ready-made UTXO set snapshot from an external file. The node can immediately be used to verify new transactions while verifying the historical blockchain in the background.</p>
+
+          <p>The analogy: imagine you just joined a company. Rather than reading all the emails from 15 years ago before you can start working, you read a summary of the current situation first (the UTXO snapshot), start working right away, while slowly reading the historical archive in your free time.</p>
+
+          <p><strong>Is this safe?</strong></p>
+          <p>For assumevalid: if a malicious developer inserted the wrong block hash, the node would build a UTXO set that conflicts with the network and would be caught immediately. The thousands of developers and users who audit the source code become a strong layer of social verification.</p>
+
+          <p>For assumeUTXO: the snapshot hash is hardcoded and can be audited by anyone. If the snapshot contains the wrong UTXO, the background historical verification will eventually find the inconsistency. The design ensures that even if the snapshot is wrong, the node will self-correct.</p>
+
+          <div class="p-callout">
+            <p>assumevalid and assumeUTXO aren’t shortcuts that sacrifice security, but rather both are very carefully designed optimizations. Bitcoin’s security doesn’t depend on one node verifying everything, but on thousands of independent nodes all running the same consensus rules.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulation — Comparing Sync Methods</div>
+          <div class="b16-s165-desc">
+            First tab: choose a sync method and see the comparison of time, the phases run, and the trust analysis. Second tab: RPC commands to control and monitor sync.
+          </div>
+
+          <div class="b16-s165-tabs">
+            <button class="b16-s165-tab s165-act" id="b16-s165-t1">Comparing Sync Methods</button>
+            <button class="b16-s165-tab" id="b16-s165-t2">RPC — assumevalid & assumeUTXO</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b16-s165-pane show" id="b16-s165-p1">
+            <div class="b16-s165-hint">Choose a sync method to see the comparison of time, the phases run, and the trust trade-off.</div>
+
+            <div class="b16-s165-modes" id="b16-s165-modes">
+              <div class="b16-s165-mode-btn s165-act" data-mode="full" style="--mc:#A32D2D;--mb:#FCEBEB;">
+                <div class="b16-s165-mode-title">Full IBD — Verify Everything from Genesis</div>
+                <div class="b16-s165-mode-desc">Every signature is verified, every block is validated. Slowest, most thorough. Flag: -assumevalid=0</div>
+              </div>
+              <div class="b16-s165-mode-btn" data-mode="assumevalid" style="--mc:#854F0B;--mb:#FAEEDA;">
+                <div class="b16-s165-mode-title">IBD + assumevalid — Skip Old Signatures</div>
+                <div class="b16-s165-mode-desc">Blocks are still downloaded and the UTXO set is still built fully — but signatures for old blocks are skipped. The default in all major implementations.</div>
+              </div>
+              <div class="b16-s165-mode-btn" data-mode="assumeutxo" style="--mc:#0F6E56;--mb:#EAF3DE;">
+                <div class="b16-s165-mode-title">assumeUTXO — Use a Snapshot Directly</div>
+                <div class="b16-s165-mode-desc">Load a ready-made UTXO set snapshot. The node can operate immediately while historical verification runs in the background.</div>
+              </div>
+            </div>
+
+            <div class="b16-s165-tl-label">Sync time comparison (estimate, average hardware + SSD):</div>
+            <div class="b16-s165-tl-row">
+              <div class="b16-s165-tl-name">Full IBD</div>
+              <div class="b16-s165-tl-bar-wrap"><div class="b16-s165-tl-bar" style="width:100%;background:#A32D2D;"><div class="b16-s165-tl-bar-txt">~24-72 hours</div></div></div>
+              <div class="b16-s165-tl-time">~24-72h</div>
+            </div>
+            <div class="b16-s165-tl-row">
+              <div class="b16-s165-tl-name">+ assumevalid</div>
+              <div class="b16-s165-tl-bar-wrap"><div class="b16-s165-tl-bar" style="width:40%;background:#854F0B;"><div class="b16-s165-tl-bar-txt">~4-8 hours</div></div></div>
+              <div class="b16-s165-tl-time">~4-8h</div>
+            </div>
+            <div class="b16-s165-tl-row">
+              <div class="b16-s165-tl-name">assumeUTXO</div>
+              <div class="b16-s165-tl-bar-wrap"><div class="b16-s165-tl-bar" style="width:8%;background:#0F6E56;"><div class="b16-s165-tl-bar-txt">~10m</div></div></div>
+              <div class="b16-s165-tl-time">~10 minutes</div>
+            </div>
+
+            <div class="b16-s165-phases" id="b16-s165-phases"></div>
+            <div class="b16-s165-trust" id="b16-s165-trust"></div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b16-s165-pane" id="b16-s165-p2">
+            <div class="b16-s165-hint">RPC commands to control and monitor sync methods. Click a command to execute it immediately.</div>
+            <div class="b16-s165-cmds-label">Click a command to execute:</div>
+            <div class="b16-s165-cmds" id="b16-s165-cmds"></div>
+            <div class="b16-s165-terminal">
+              <div class="b16-s165-term-bar">
+                <div class="b16-s165-dot" style="background:#FF5F57;"></div>
+                <div class="b16-s165-dot" style="background:#FEBC2E;"></div>
+                <div class="b16-s165-dot" style="background:#28C840;"></div>
+                <div class="b16-s165-term-lbl">bitcoin-cli — assumevalid & assumeUTXO</div>
+              </div>
+              <div class="b16-s165-term-body" id="b16-s165-term-body"></div>
+            </div>
+            <div class="b16-s165-fe" id="b16-s165-fe" style="display:none;">
+              <div class="b16-s165-fe-lbl">Explanation of key fields:</div>
+              <div id="b16-s165-fe-inner"></div>
+            </div>
+            <div class="b16-s165-note" id="b16-s165-note" style="display:none;"></div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-16-4" data-sb="sb-16-4">
+            ← 16.4 — Pruning
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-16-6" data-sb="sb-16-6">
+            16.6 — Why Nodes Matter →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 16.5 -->
+
+      <!-- ==============================
+           SECTION 16.6 · Mengapa Menjalankan Node Sendiri
+      ============================== -->
+      <div class="p-section" id="section-16-6">
+        <div class="p-eyebrow">Chapter 16 · 16.6</div>
+        <div class="p-heading">Without your own node, you have to trust someone — and that contradicts the entire idea of Bitcoin</div>
+        <div class="p-title">Why Run Your Own Node — and 10 Daily Commands</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>After understanding IBD, chainstate, block verification, pruning, and assumevalid, it’s time to answer the most fundamental question: why should you bother running your own node?</p>
+
+          <p><strong>"Don’t trust, verify": Not an Empty Slogan</strong></p>
+          <p>If you don’t run your own node, you have to trust someone. Maybe the exchange where you bought bitcoin. Maybe the block explorer you use to view transactions. Maybe the wallet connected to someone else’s node. Every time you trust a third party to verify a Bitcoin transaction, you create a point of failure that can be manipulated, hacked, or can lie.</p>
+
+          <p>Your own node removes all that dependence. You verify for yourself that the transaction you received really is on the blockchain, that there’s no hidden inflation, that the consensus rules you agreed to are actually enforced.</p>
+
+          <p><strong>What does your node verify every day?</strong></p>
+          <p>Every new block: the proof-of-work is valid, no transaction spends a UTXO that doesn’t exist, no miner claims more reward than they should, all consensus rules are met. Every transaction you receive: it really is on the blockchain, confirmed as many times as you see, with no data manipulation from a third party.</p>
+
+          <p><strong>A node is your voice in the network</strong></p>
+          <p>If one day there’s a proposal to change Bitcoin’s consensus rules, for example raising the supply limit or changing the mining algorithm, your node is what determines whether you follow that change or not. A node that isn’t upgraded will automatically reject blocks that violate the old rules. This is the mechanism that makes consensus changes in Bitcoin very hard to do without broad agreement from the users.</p>
+
+          <p><strong>Contributing to the network</strong></p>
+          <p>Every node that runs strengthens the Bitcoin network. An archival node helps new nodes doing IBD. A node that accepts inbound connections helps new peers find the network. The more independent nodes that run, the harder it is for anyone to censor transactions or manipulate data.</p>
+
+          <div class="p-callout">
+            <p>Running your own node is the most fundamental form of participation in Bitcoin. Not because it gives a direct financial benefit, but because it’s how you truly own and verify the bitcoin you hold, without trusting anyone.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">10 Daily RPC Commands — A Complete Reference</div>
+          <div class="b16-s166-desc">
+            The 10 most useful commands for monitoring and operating a node day to day. Click a command to see realistic output, when to use it, and an explanation of key fields.
+          </div>
+
+          <div class="b16-s166-label">Click a command to execute:</div>
+          <div class="b16-s166-grid" id="b16-s166-grid"></div>
+
+          <div class="b16-s166-terminal">
+            <div class="b16-s166-term-bar">
+              <div class="b16-s166-dot" style="background:#FF5F57;"></div>
+              <div class="b16-s166-dot" style="background:#FEBC2E;"></div>
+              <div class="b16-s166-dot" style="background:#28C840;"></div>
+              <div class="b16-s166-term-lbl">bitcoin-cli — Daily Commands</div>
+              <div class="b16-s166-term-cmd" id="b16-s166-term-cmd"></div>
+            </div>
+            <div class="b16-s166-term-body" id="b16-s166-term-body"></div>
+          </div>
+
+          <div class="b16-s166-explain" id="b16-s166-explain"></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-16-5" data-sb="sb-16-5">
+            ← 16.5 — assumevalid & assumeUTXO
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 16.6 -->
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 19 · BAB 16 -->
+
+

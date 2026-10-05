@@ -1,0 +1,9 @@
+
+/* ============================================================
+   GLOBAL
+============================================================ */
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#FAFAF8; font-family:'Sora',sans-serif; font-weight:100; }
+.page { display:none; min-height:100vh; flex-direction:column; }
+.page.active { display:flex; }
+

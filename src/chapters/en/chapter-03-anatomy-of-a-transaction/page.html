@@ -1,0 +1,630 @@
+<!-- ============================================================
+     PAGE 6 · BAB 3 · Anatomi Sebuah Transaksi
+     |-- 3.1 · Apa itu transaksi? [DONE]
+     |-- 3.2 · UTXO [LOCKED]
+     |-- 3.3 · Input dan Output [LOCKED]
+     |-- 3.4 · Transaction Fee [LOCKED]
+     |-- 3.5 · Mempool [LOCKED]
+     |-- 3.6 · Lifecycle sebuah transaksi [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab3">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b3">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b3">← Chapter List</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-heading">Chapter 3</div>
+      <div class="sidebar-title">Anatomy of a Transaction</div>
+
+      <!-- 3.1 · DONE -->
+      <div class="sidebar-item active" id="sb-3-1">
+        <div class="sb-num">3.1</div>
+        <div class="sb-label">What is a transaction?</div>
+      </div>
+      <!-- 3.2 · DONE -->
+      <div class="sidebar-item" id="sb-3-2">
+        <div class="sb-num">3.2</div>
+        <div class="sb-label">UTXO</div>
+      </div>
+      <!-- 3.3 · DONE -->
+      <div class="sidebar-item" id="sb-3-3">
+        <div class="sb-num">3.3</div>
+        <div class="sb-label">Inputs and Outputs</div>
+      </div>
+      <!-- 3.4 · DONE -->
+      <div class="sidebar-item" id="sb-3-4">
+        <div class="sb-num">3.4</div>
+        <div class="sb-label">Transaction fee</div>
+      </div>
+      <!-- 3.5 · DONE -->
+      <div class="sidebar-item" id="sb-3-5">
+        <div class="sb-num">3.5</div>
+        <div class="sb-label">Mempool</div>
+      </div>
+      <!-- 3.6 · DONE -->
+      <div class="sidebar-item" id="sb-3-6">
+        <div class="sb-num">3.6</div>
+        <div class="sb-label">Transaction lifecycle</div>
+      </div>
+    </div>
+    <!-- END SIDEBAR -->
+
+    <!-- CONTENT AREA -->
+    <div class="prologue-content" id="bab3-content">
+
+      <!-- ==============================
+           SECTION 3.1 · Apa itu transaksi?
+      ============================== -->
+      <div class="p-section active" id="section-3-1">
+        <div class="p-eyebrow">Chapter 3 · 3.1</div>
+        <div class="p-heading">Not a balance transfer, but a cryptographic chain</div>
+        <div class="p-title">What is a Transaction?</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>If you’ve ever transferred money through a bank, you’re used to a simple model: a balance decreases in one account, increases in another. The bank records the change. Done.</p>
+          <p>Bitcoin doesn’t work that way.</p>
+          <p>In Bitcoin, there’s no such thing as a "balance." There is no number stored somewhere that reads "you have 1 BTC." What exists is a history of transactions, and from that history is calculated how much Bitcoin you can use right now.</p>
+
+          <p><strong>A transaction is a transfer instruction</strong></p>
+          <p>Every Bitcoin transaction is a cryptographically signed message containing two main things: where this Bitcoin comes from, and where this Bitcoin is going.</p>
+          <p>"Where it comes from" is a reference to a previous transaction that gave Bitcoin to you. "Where it goes" is an instruction for whom this Bitcoin is sent to and how much.</p>
+          <p>The network verifies that you really have the right to move the Bitcoin you reference, then broadcasts the transaction to all nodes. If it’s valid, it enters a block and becomes a permanent part of the blockchain.</p>
+
+          <p><strong>Not a number, but a chain</strong></p>
+          <p>This is what makes Bitcoin fundamentally different from conventional financial systems. Your ownership isn’t a number in a database. It’s a cryptographic chain that can be traced all the way back to the first block, the Genesis Block, mined by Satoshi in January 2009.</p>
+          <p>Every Bitcoin in this world can have its origin traced. Nothing can appear out of nothing.</p>
+
+          <div class="p-callout">
+            <p>In Bitcoin, "owning" Bitcoin means having the ability to sign a transaction that references an unspent output. Not a number in a database, but a key that unlocks an output. This concept will become much clearer in 3.2.</p>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-3-2" data-sb="sb-3-2">
+            3.2 — UTXO →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 3.1 -->
+
+      <!-- ==============================
+           SECTION 3.2 · UTXO
+      ============================== -->
+      <div class="p-section" id="section-3-2">
+        <div class="p-eyebrow">Chapter 3 · 3.2</div>
+        <div class="p-heading">Digital banknotes that can’t be cut</div>
+        <div class="p-title">UTXO — Unspent Transaction Output</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>UTXO stands for Unspent Transaction Output. This is the most important concept in Chapter 3, and perhaps one of the most frequently misunderstood concepts in Bitcoin.</p>
+
+          <p><strong>Forget the concept of a balance</strong></p>
+          <p>In the banking system, your ownership is represented as a number: a balance. The bank stores that number in their database and changes it every time there’s a transaction.</p>
+          <p>Bitcoin has no balance. What Bitcoin has is a collection of unspent transaction outputs. Each output has a certain value and can only be used once, by the person who has the right key. That is a UTXO.</p>
+
+          <p><strong>The banknote analogy</strong></p>
+          <p>The easiest way to understand a UTXO is to imagine physical banknotes. If you have a Rp 100.000 note, you don’t have "a balance of Rp 100.000." You have a single piece of paper worth Rp 100.000 that physically sits in your hand.</p>
+          <p>If you want to pay Rp 30.000, you can’t cut the banknote. You hand over the entire Rp 100.000, the merchant takes Rp 30.000, and returns Rp 70.000 to you. A UTXO works exactly like that. You can’t spend a portion. You have to spend the whole thing, and the remainder comes back to you as a new UTXO.</p>
+
+          <p><strong>What a Bitcoin "balance" really is</strong></p>
+          <p>If your wallet shows "0.55 BTC," that’s not one number in one place. It might be the sum of several UTXOs: for example one UTXO worth 0.05 BTC from Alice, one worth 0.12 BTC from Bob, one worth 0.08 BTC from a mining reward, and one worth 0.30 BTC from Charlie. Your wallet adds up all the UTXOs you can sign for, and displays them as a single number.</p>
+
+          <p><strong>Why UTXO?</strong></p>
+          <p>The UTXO model has several advantages. First, it makes verification easy: to check whether a transaction is valid, a node only needs to make sure the referenced UTXO exists and hasn’t been used. Second, it prevents double-spending naturally: once a UTXO is used, it disappears from the active UTXO set and can’t be used again.</p>
+
+          <div class="p-callout">
+            <p>The entire state of Bitcoin can be summarized in one set of data: the UTXO set. This is the list of all unspent transaction outputs across the whole network. As of mid-2026 its size is around 11 GB, holding more than 170 million UTXOs. Every full node stores it and uses it to validate every new transaction.</p>
+
+          <p><strong>Who picks the UTXOs for you?</strong></p>
+          <p>In the simulation above you chose which UTXOs to spend yourself. In everyday use you never do that. You type an amount and an address, then press send. But the decision still has to be made by someone, and that someone is your wallet. The process is called <strong>coin selection</strong>, and it explains a lot of the things that feel strange to new users.</p>
+          <p>Why does it matter? Because as we saw in 3.4, the cost of a transaction is set by its <strong>shape</strong>, not its value. Every UTXO drawn in adds one input, and every input adds size. Picking three small UTXOs instead of one large one can multiply the fee for a payment of exactly the same amount.</p>
+          <p>A wallet is juggling goals that pull against each other. It wants the fee as low as possible, which argues for using as few inputs as it can. It also wants to avoid leaving change that is too small, because tiny change today becomes an expensive UTXO to spend tomorrow. And ideally it leaks no more information than necessary, because every pair of UTXOs combined in one transaction tells the world they belong to the same person. We look at the privacy consequences in Chapter 10.</p>
+          <p>The ideal outcome is finding a combination that adds up <strong>exactly</strong>, so no change output is needed at all. The transaction comes out smaller, cheaper, and leaves no change trail to analyse. Bitcoin Core calls this search <em>branch and bound</em>, and it does try for that exact match first. The trouble is such matches are rare, so when the search fails the wallet falls back to methods that accept change.</p>
+          <p>This is where several things that puzzle new users start to make sense. Why is sending a small amount sometimes far more expensive than usual? Because your funds are scattered across many tiny UTXOs and the wallet is forced to combine a lot of inputs. Why can the fee differ when the amount sent is identical? Because the shape of the transaction differs, even though the value does not.</p>
+          <p>It is also why many wallets offer a way to pick UTXOs by hand, usually called <em>coin control</em>. For ordinary use, letting the wallet decide is fine. But once you care about privacy, or you are facing high fees, taking that decision back can matter a great deal. And if your funds are already scattered across many small UTXOs, there is a specific way to tidy them up that we cover in 10.4.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Interactive simulation — UTXO and Transactions</div>
+
+          <div class="b03-s32-desc">
+            Set the amount you want to send, then choose the UTXOs to use. Each UTXO must be used in full. The remainder comes back as a new UTXO.
+          </div>
+
+          <div class="utxo-send-wrap">
+            <div class="utxo-section-label">Amount you want to send</div>
+            <div class="utxo-send-row">
+              <label>Send</label>
+              <input type="range" id="b03-s32-slider" min="1" max="200" step="1" value="50">
+              <span class="utxo-send-val" id="b03-s32-slider-val">0.050 BTC</span>
+            </div>
+          </div>
+
+          <div class="utxo-section-label">UTXOs in your wallet</div>
+          <div class="utxo-coins-grid" id="b03-s32-coins"></div>
+
+          <div class="utxo-summary">
+            <div class="utxo-stat">
+              <div class="utxo-stat-label">UTXOs selected</div>
+              <div class="utxo-stat-val" id="b03-s32-sel-count">0 UTXO</div>
+            </div>
+            <div class="utxo-stat">
+              <div class="utxo-stat-label">Total input</div>
+              <div class="utxo-stat-val" id="b03-s32-sel-total">0.000 BTC</div>
+            </div>
+            <div class="utxo-stat">
+              <div class="utxo-stat-label">Change</div>
+              <div class="utxo-stat-val" id="b03-s32-change">0.000 BTC</div>
+            </div>
+          </div>
+
+          <div class="utxo-btn-row">
+            <button class="kp-btn kp-btn-gen" id="b03-s32-auto">Auto-select ↗</button>
+            <button class="kp-btn kp-btn-gen" id="b03-s32-send" disabled>Send transaction ↗</button>
+            <button class="kp-btn kp-btn-reset" id="b03-s32-reset">Reset</button>
+          </div>
+
+          <div class="utxo-result" id="b03-s32-result">
+            <div class="utxo-result-head">Transaction result</div>
+            <div class="utxo-result-body" id="b03-s32-result-body"></div>
+          </div>
+
+          <div class="utxo-note" id="b03-s32-note">
+            Choose UTXOs manually or click "Auto-select". Each UTXO must be used in full. The remainder comes back as a new UTXO (change).
+          </div>
+
+          <div class="raw-toggle-row">
+            <button class="raw-toggle-btn" id="b03-s32-raw-btn">
+              <span class="raw-toggle-icon">{}</span> View Raw Data
+            </button>
+            <span class="raw-toggle-hint">Native UTXO format as in Bitcoin Core — the <code>address</code> field is computed by the node from the scriptPubKey, not on-chain data</span>
+          </div>
+
+          <div class="raw-panel" id="b03-s32-raw-panel">
+            <div class="raw-panel-head">
+              <span>UTXO · Raw Format</span>
+              <span class="raw-panel-src">bitcoin-cli listunspent</span>
+            </div>
+            <pre class="raw-panel-body" id="b03-s32-raw-body">Send a transaction first to see the raw data of the consumed UTXOs.</pre>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-3-1" data-sb="sb-3-1">
+            ← 3.1 — What is a Transaction?
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-3-3" data-sb="sb-3-3">
+            3.3 — Inputs and Outputs →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 3.2 -->
+
+      <!-- ==============================
+           SECTION 3.3 · Input dan Output
+      ============================== -->
+      <div class="p-section" id="section-3-3">
+        <div class="p-eyebrow">Chapter 3 · 3.3</div>
+        <div class="p-heading">The anatomy inside a transaction</div>
+        <div class="p-title">Inputs and Outputs</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Every Bitcoin transaction has two main parts: inputs and outputs. An input is a reference to a UTXO you consume. An output is an instruction for where Bitcoin goes after this transaction.</p>
+
+          <p><strong>Input</strong></p>
+          <p>An input isn’t a number. An input is a pointer to an unspent output of a previous transaction. It contains two things: a reference to which UTXO is consumed, and proof that you have the right to use it in the form of a cryptographic signature from your private key.</p>
+          <p>A single transaction can have many inputs. This happens when you need to combine several small UTXOs to pay a larger amount, like combining several small banknotes to pay for something more expensive.</p>
+
+          <p><strong>Output</strong></p>
+          <p>An output determines where Bitcoin goes. Each output contains two things: the amount of BTC sent, and the condition that must be met to spend this output in the future. That condition is usually simple: anyone who can prove they hold the private key matching this address may spend this output.</p>
+          <p>A single transaction can also have many outputs. You can send to several addresses at once in one transaction, and the change output back to yourself also counts as a separate output.</p>
+
+          <p><strong>The hidden fee</strong></p>
+          <p>There’s one interesting thing: the miner fee isn’t written explicitly inside the transaction. The fee is the difference between the total input value and the total output value. If you have inputs worth 0.1 BTC and create outputs worth 0.099 BTC, then the remaining 0.001 BTC automatically becomes the fee for the miner who includes your transaction in a block.</p>
+
+          <p>This is why it’s so important to always check the total output before signing a transaction. If you forget to create a change output and only create one output to the recipient, the entire difference becomes the miner fee. There are real cases where someone paid thousands of dollars in fees because they forgot to add a change output.</p>
+
+          <p>Beyond amounts and destinations, a transaction can also carry conditions about time: the earliest it may enter a block, or how long a UTXO must wait before it can be spent. Bitcoin has four mechanisms for this, and we take all of them apart in Chapter 15.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Interactive simulation — Transaction Anatomy</div>
+          <div class="b03-s33-desc">
+            Choose a transaction scenario and click each element to see its explanation.
+          </div>
+
+          <div class="tx-preset-row" id="b03-s33-presets"></div>
+
+          <div class="tx-anatomy">
+            <div>
+              <div class="tx-col-label">Input</div>
+              <div class="tx-items" id="b03-s33-inputs"></div>
+            </div>
+            <div class="tx-middle">
+              <div class="tx-box">
+                <div class="tx-box-label">TRANSACTION</div>
+              </div>
+            </div>
+            <div>
+              <div class="tx-col-label">Output</div>
+              <div class="tx-items" id="b03-s33-outputs"></div>
+            </div>
+          </div>
+
+          <div class="tx-detail" id="b03-s33-detail">
+            <div class="tx-detail-head" id="b03-s33-detail-head"></div>
+            <div class="tx-detail-body" id="b03-s33-detail-body"></div>
+          </div>
+
+          <div class="tx-balance" id="b03-s33-balance"></div>
+
+          <div class="raw-toggle-row">
+            <button class="raw-toggle-btn" id="b03-s33-raw-btn">
+              <span class="raw-toggle-icon">{}</span> View Raw Data
+            </button>
+            <span class="raw-toggle-hint">Native transaction format as in Bitcoin Core — the <code>address</code> field is computed by the node from the scriptPubKey, not on-chain data</span>
+          </div>
+
+          <div class="raw-panel" id="b03-s33-raw-panel">
+            <div class="raw-panel-head">
+              <span>Transaction · Raw Format</span>
+              <span class="raw-panel-src">bitcoin-cli getrawtransaction</span>
+            </div>
+            <pre class="raw-panel-body" id="b03-s33-raw-body">Choose a transaction scenario to see its raw data.</pre>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-3-2" data-sb="sb-3-2">
+            ← 3.2 — UTXO
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-3-4" data-sb="sb-3-4">
+            3.4 — Transaction Fee →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 3.3 -->
+
+      <!-- ==============================
+           SECTION 3.4 · Transaction fee
+      ============================== -->
+      <div class="p-section" id="section-3-4">
+        <div class="p-eyebrow">Chapter 3 · 3.4</div>
+        <div class="p-heading">Not a tariff, but an offer to miners</div>
+        <div class="p-title">Transaction Fee</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Fees in Bitcoin don’t work like a bank’s transfer fee. There’s no fixed tariff, no percentage of the amount sent, and nothing sets it centrally.</p>
+          <p>Fees in Bitcoin are determined by the market.</p>
+
+          <p><strong>How fees are calculated</strong></p>
+          <p>In Bitcoin, fees are calculated based on the size of the transaction in bytes, not based on the value of the Bitcoin sent. Sending 1 BTC and sending 0.00001 BTC can have exactly the same fee if the transaction size is the same.</p>
+          <p>The unit used is satoshis per vbyte (sat/vB). One satoshi is the smallest unit of Bitcoin: 0.00000001 BTC. One vbyte is the transaction size in virtual bytes, a unit that accounts for the efficiency of modern transaction formats.</p>
+
+          <p><strong>Why fees rise and fall</strong></p>
+          <p>Each Bitcoin block has limited capacity, about 1-4 MB per block, and a new block appears on average every 10 minutes. When many people want to transact at once, the space in a block becomes contested.</p>
+          <p>Miners choose which transactions go into their block. They’ll prioritize transactions offering the highest fee per vbyte because that maximizes their revenue. Transactions with low fees will wait longer, or even not make it into a block at all if the network is very busy.</p>
+
+          <p><strong>The relationship between fees and UTXOs</strong></p>
+          <p>The more inputs in a transaction, the larger the transaction size in bytes, the higher the fee that needs to be paid. This is why modern wallets try to manage UTXOs efficiently, consolidating small UTXOs when fees are cheap, so they don’t need to use many inputs when fees are expensive.</p>
+
+          <p><strong>RBF (Replace by Fee)</strong></p>
+          <p>If your transaction has already been broadcast to the network but hasn’t entered a block and its fee is too low, there’s a mechanism called RBF, or Replace by Fee. You can resend the same transaction with a higher fee, and miners will prioritize the new version. One condition is easy to miss: the original transaction must have been marked as replaceable when it was created. If it wasn’t marked, many nodes will reject the replacement. The details of the mechanism, including what to do if you are the recipient rather than the sender, we cover in 9.3.</p>
+
+          <div class="p-callout">
+            <p>Fees aren’t a charge taken by "Bitcoin." A fee is an incentive you offer to miners so they prioritize your transaction. No company, no platform, no third party receives it. The fee goes directly to the miner who finds your block.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Interactive simulation — Fee Calculator</div>
+
+          <div class="b03-s34-desc">
+            Adjust the number of inputs and outputs to see the transaction size, then choose a fee rate for the confirmation estimate.
+          </div>
+
+          <div class="fee-controls">
+            <div class="fee-ctrl-row">
+              <label class="fee-ctrl-label">Number of inputs</label>
+              <input type="range" id="b03-s34-inputs" min="1" max="10" step="1" value="2">
+              <span class="fee-ctrl-val" id="b03-s34-inputs-val">2 input</span>
+            </div>
+            <div class="fee-ctrl-row">
+              <label class="fee-ctrl-label">Number of outputs</label>
+              <input type="range" id="b03-s34-outputs" min="1" max="5" step="1" value="2">
+              <span class="fee-ctrl-val" id="b03-s34-outputs-val">2 output</span>
+            </div>
+          </div>
+
+          <div class="fee-size-box">
+            <div class="fee-size-head">
+              <span>Transaction size</span>
+              <span class="fee-size-total" id="b03-s34-size-total">0 vB</span>
+            </div>
+            <div class="fee-size-body">
+              <div class="fee-size-bar-row" id="b03-s34-size-bar"></div>
+              <div class="fee-size-row">
+                <span class="fee-size-name">🟣 Overhead (header, version, locktime)</span>
+                <span class="fee-size-bytes" id="b03-s34-overhead-bytes">10 vB</span>
+              </div>
+              <div class="fee-size-row">
+                <span class="fee-size-name">🔴 Input (± 68 vB per input)</span>
+                <span class="fee-size-bytes" id="b03-s34-input-bytes">136 vB</span>
+              </div>
+              <div class="fee-size-row">
+                <span class="fee-size-name">🟢 Output (± 31 vB per output)</span>
+                <span class="fee-size-bytes" id="b03-s34-output-bytes">62 vB</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="fee-rates">
+            <div class="fee-rate-card" id="b03-s34-rate-low">
+              <div class="fee-rate-label">Economy</div>
+              <div class="fee-rate-val">5 sat/vB</div>
+              <div class="fee-rate-time">~1-6 hours</div>
+            </div>
+            <div class="fee-rate-card active" id="b03-s34-rate-med">
+              <div class="fee-rate-label">Normal</div>
+              <div class="fee-rate-val">20 sat/vB</div>
+              <div class="fee-rate-time">~10-30 minutes</div>
+            </div>
+            <div class="fee-rate-card" id="b03-s34-rate-high">
+              <div class="fee-rate-label">Priority</div>
+              <div class="fee-rate-val">100 sat/vB</div>
+              <div class="fee-rate-time">~next block</div>
+            </div>
+          </div>
+
+          <div class="fee-result">
+            <div class="fee-stat">
+              <div class="fee-stat-label">Total fee</div>
+              <div class="fee-stat-val" id="b03-s34-total-sat">0 sat</div>
+              <div class="fee-stat-sub" id="b03-s34-total-btc">0.000000 BTC</div>
+            </div>
+            <div class="fee-stat">
+              <div class="fee-stat-label">Rate chosen</div>
+              <div class="fee-stat-val" id="b03-s34-rate-chosen">20 sat/vB</div>
+              <div class="fee-stat-sub" id="b03-s34-conf-time">~10-30 minutes</div>
+            </div>
+            <div class="fee-stat">
+              <div class="fee-stat-label">Confirmation estimate</div>
+              <div class="fee-stat-val" id="b03-s34-conf-blocks">~2 block</div>
+              <div class="fee-stat-sub">1 block ≈ 10 minutes</div>
+            </div>
+          </div>
+
+          <div class="fee-mempool">
+            <div class="fee-mempool-label">Your position in the mempool queue</div>
+            <div class="fee-mempool-bar" id="b03-s34-mempool-bar"></div>
+            <div class="fee-mempool-legend">
+              <div class="fee-mempool-leg-item"><div class="fee-mempool-dot" style="background:#534AB7"></div> High fee (priority)</div>
+              <div class="fee-mempool-leg-item"><div class="fee-mempool-dot" style="background:#A58AE8"></div> Medium fee</div>
+              <div class="fee-mempool-leg-item"><div class="fee-mempool-dot" style="background:#C4B5FD"></div> Low fee</div>
+              <div class="fee-mempool-leg-item"><div class="fee-mempool-dot" style="background:#3B6D11;border:1px solid #1A1A18"></div> Your transaction</div>
+            </div>
+          </div>
+
+          <div class="raw-toggle-row">
+            <button class="raw-toggle-btn" id="b03-s34-raw-btn">
+              <span class="raw-toggle-icon">{}</span> View Raw Data
+            </button>
+            <span class="raw-toggle-hint">Fee data format as in Bitcoin Core — <code>getmempoolentry</code></span>
+          </div>
+
+          <div class="raw-panel" id="b03-s34-raw-panel">
+            <div class="raw-panel-head">
+              <span>Fee & Mempool Entry · Raw Format</span>
+              <span class="raw-panel-src">bitcoin-cli getmempoolentry</span>
+            </div>
+            <pre class="raw-panel-body" id="b03-s34-raw-body">Adjust the sliders and choose a fee rate to see its raw data.</pre>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-3-3" data-sb="sb-3-3">
+            ← 3.3 — Inputs and Outputs
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-3-5" data-sb="sb-3-5">
+            3.5 — Mempool →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 3.4 -->
+
+      <!-- ==============================
+           SECTION 3.5 · Mempool
+      ============================== -->
+      <div class="p-section" id="section-3-5">
+        <div class="p-eyebrow">Chapter 3 · 3.5</div>
+        <div class="p-heading">The queue before entering the blockchain</div>
+        <div class="p-title">Mempool</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>When you send a Bitcoin transaction, it doesn’t go straight into the blockchain. It goes into a queue first.</p>
+          <p>That queue is called the mempool, short for memory pool. Every node in the Bitcoin network keeps its own mempool, a list of transactions that have been broadcast, validated, but not yet confirmed into a block.</p>
+
+          <p><strong>The journey of a transaction</strong></p>
+          <p>Once you sign and broadcast a transaction, it spreads to all nodes in the network within seconds through a process called gossiping. Each node forwards valid transactions to its neighboring nodes. But entering the mempool doesn’t mean it’s done. Your transaction still waits there until a miner decides to include it in the block they’re mining.</p>
+
+          <p><strong>Miners choose transactions</strong></p>
+          <p>Miners aren’t required to include every transaction in the mempool. They choose which transactions yield the highest total fee for their block. The most common strategy is to pick the transactions with the highest fee per vbyte first until the block’s capacity is full. This is why the fee rate you choose determines how quickly your transaction is confirmed.</p>
+
+          <p><strong>The mempool can fill up</strong></p>
+          <p>When the network is very busy, the mempool can swell to hundreds of megabytes. Transactions with fees that are too low can get stuck there for hours, even days. Some nodes will even drop transactions with very low fees from their mempool when memory is full.</p>
+
+          <p><strong>Confirmation</strong></p>
+          <p>Once your transaction enters a block, it gets one confirmation. Each new block mined on top of that block adds one more confirmation. The more confirmations, the harder it is to reverse that transaction, the more final your transaction. For small everyday transactions, one confirmation is usually enough. For large transactions, most people wait for 6 confirmations before considering a transaction truly final.</p>
+
+          <div class="p-callout">
+            <p>The mempool isn’t one global queue that’s the same for everyone. Each node has its own mempool with rules and capacity that can differ. But because nodes share transactions with one another, in practice most nodes have similar mempool contents.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Interactive simulation — From Broadcast to Confirmation</div>
+
+          <div class="b03-s35-desc">
+            Choose a fee rate then click Broadcast. The simulation runs automatically until your transaction gets 6 confirmations.
+          </div>
+
+          <div class="mp-pills" id="b03-s35-pills">
+            <div class="mp-pill" id="b03-s35-pill-low"><div class="mp-pill-label">Economy</div><div class="mp-pill-val">5 sat/vB</div><div class="mp-pill-sub">risk of a long wait</div></div>
+            <div class="mp-pill active" id="b03-s35-pill-med"><div class="mp-pill-label">Normal</div><div class="mp-pill-val">20 sat/vB</div><div class="mp-pill-sub">~2 block</div></div>
+            <div class="mp-pill" id="b03-s35-pill-high"><div class="mp-pill-label">Priority</div><div class="mp-pill-val">100 sat/vB</div><div class="mp-pill-sub">next block</div></div>
+          </div>
+
+          <div class="mp-status" id="b03-s35-status">
+            <div class="mp-status-step">Step 1</div>
+            Choose a fee rate, then click "Broadcast". The simulation will run automatically until your transaction is confirmed.
+          </div>
+
+          <div class="mp-stage">
+            <div class="mp-col"><div class="mp-col-head">Broadcast</div><div class="mp-col-body" id="b03-s35-broadcast"></div></div>
+            <div class="mp-col"><div class="mp-col-head">Mempool</div><div class="mp-col-body" id="b03-s35-mempool"></div></div>
+            <div class="mp-col"><div class="mp-col-head">Blockchain</div><div class="mp-col-body" id="b03-s35-blockchain"></div></div>
+          </div>
+
+          <div class="mp-conf" id="b03-s35-conf">
+            <div class="mp-conf-lbl">Your transaction’s confirmations</div>
+            <div class="mp-dots" id="b03-s35-dots"></div>
+            <div class="mp-conf-note" id="b03-s35-conf-note"></div>
+            <div class="mp-conf-caveat">The number of confirmations considered "safe" has no fixed standard. 6 confirmations is a commonly used convention, not a protocol rule. Small everyday transactions can be considered enough with 1 confirmation. Large exchanges may require more than 6.</div>
+          </div>
+
+          <div class="mp-btns">
+            <button class="kp-btn kp-btn-gen" id="b03-s35-bc-btn">Broadcast transaction ↗</button>
+            <button class="kp-btn kp-btn-reset" id="b03-s35-reset-btn">Reset</button>
+          </div>
+
+          <div class="raw-toggle-row">
+            <button class="raw-toggle-btn" id="b03-s35-raw-btn">
+              <span class="raw-toggle-icon">{}</span> Lihat Raw Data
+            </button>
+            <span class="raw-toggle-hint">Transaction status from the mempool until confirmed</span>
+          </div>
+
+          <div class="raw-panel" id="b03-s35-raw-panel">
+            <div class="raw-panel-head">
+              <span>Transaction Status · Raw Format</span>
+              <span class="raw-panel-src">bitcoin-cli getmempoolentry / getrawtransaction</span>
+            </div>
+            <pre class="raw-panel-body" id="b03-s35-raw-body">Broadcast a transaction first to see its raw data.</pre>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-3-4" data-sb="sb-3-4">
+            ← 3.4 — Transaction Fee
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-3-6" data-sb="sb-3-6">
+            3.6 — Transaction Lifecycle →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 3.5 -->
+
+      <!-- ==============================
+           SECTION 3.6 · Lifecycle transaksi
+      ============================== -->
+      <div class="p-section" id="section-3-6">
+        <div class="p-eyebrow">Chapter 3 · 3.6</div>
+        <div class="p-heading">From creation to final</div>
+        <div class="p-title">The Lifecycle of a Transaction</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>We’ve learned all the components: UTXO, inputs, outputs, fees, the mempool, confirmation. Now let’s put it all together in one complete picture.</p>
+          <p>This is the full journey of a Bitcoin transaction, from beginning to end.</p>
+
+          <p><strong>1. Creation</strong></p>
+          <p>The wallet chooses UTXOs sufficient to cover the amount to be sent plus the fee. It assembles a transaction with inputs referencing those UTXOs, an output to the recipient, and a change output back to the sender if there’s a remainder.</p>
+
+          <p><strong>2. Signing</strong></p>
+          <p>The sender’s private key is used to create a cryptographic signature that proves ownership of the referenced UTXO. This signature is unique to this transaction and can’t be reused for another transaction.</p>
+
+          <p><strong>3. Broadcast</strong></p>
+          <p>The signed transaction is broadcast to the network. The first node that receives it validates: do its UTXOs exist and are they unspent? Is the signature valid? If yes, it forwards it to its neighboring nodes.</p>
+
+          <p><strong>4. Mempool</strong></p>
+          <p>The transaction enters the mempool on every node that receives it. It waits there alongside thousands of other transactions. The fee rate determines how quickly a miner picks it.</p>
+
+          <p><strong>5. Miner selection</strong></p>
+          <p>When a miner is assembling a new block, it chooses transactions from the mempool based on the highest fee per vbyte. Your transaction enters the candidate block being mined.</p>
+
+          <p><strong>6. Block found</strong></p>
+          <p>The miner finds a valid proof of work and broadcasts the block to the network. Other nodes verify it and add it to the blockchain. The referenced UTXOs are marked spent. The new outputs become fresh UTXOs belonging to the recipient.</p>
+
+          <p><strong>7. Confirmations accumulate</strong></p>
+          <p>Each new block mined on top of that block adds one confirmation. The more confirmations, the deeper the transaction is embedded in the blockchain, the more impossible it is to reverse.</p>
+
+          <p><strong>PSBT: Partially Signed Bitcoin Transaction</strong></p>
+          <p>The lifecycle above describes a transaction signed by one party. But what if a transaction needs to be signed by several parties, for example a 2-of-3 multisig, or if signing is done on a hardware wallet separate from the wallet that assembles the transaction?</p>
+
+          <p>PSBT (BIP 174) is a standard format for a transaction that is "in the process" of being signed. It separates two roles that were previously always combined: the role of the transaction assembler (who chooses the UTXOs, determines the outputs, and computes the fee) and the role of the signer (who has the private key). With PSBT, these two roles can be performed by different devices or parties.</p>
+
+          <p>The flow: the wallet software assembles the transaction and exports it as a PSBT file. This file contains all the information needed to sign: which inputs need to be signed, the script that must be satisfied, and additional metadata. A hardware wallet or another signer reads the PSBT file, verifies its details, adds its signature, and returns the partially signed PSBT. Once all signatures are collected, the PSBT is combined and finalized into a transaction ready to broadcast.</p>
+
+          <div class="p-callout">
+            <p>This entire process, from creation to the first confirmation, can finish in 10 minutes if the network isn’t busy and your fee is sufficient. No bank, no permission, no business hours, no holidays. Anywhere in the world, anytime.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Interactive simulation — Transaction Lifecycle</div>
+
+          <div class="b03-s36-desc">
+            Click "Start simulation" to see the journey of a transaction from creation to confirmation. Click each stage to read its explanation.
+          </div>
+
+          <div class="lc-timeline" id="b03-s36-timeline"></div>
+
+          <div class="lc-controls">
+            <button class="kp-btn kp-btn-gen" id="b03-s36-start">Start simulation ↗</button>
+            <button class="kp-btn kp-btn-reset" id="b03-s36-reset">Reset</button>
+          </div>
+        
+          <div class="lab-link"><span class="kode">F1</span><span class="isi"><span class="hd">Continue in the Laboratory</span>What a transaction actually looks like in bytes, including where txid and wtxid part ways, is dissected in Laboratory F1.</span></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-3-5" data-sb="sb-3-5">
+            ← 3.5 — Mempool
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 3.6 -->
+
+    </div>
+    <!-- END CONTENT AREA -->
+
+  </div>
+
+</div>
+<!-- END PAGE 6 · BAB 3 -->
+
+

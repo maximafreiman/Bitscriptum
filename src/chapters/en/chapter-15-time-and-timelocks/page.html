@@ -1,0 +1,609 @@
+<!-- ============================================================
+     PAGE 18 · BAB 15 · Waktu di Bitcoin
+     |-- 15.1 · Waktu di Bitcoin — Bukan Jam Dinding [DONE]
+     |-- 15.2 · [LOCKED]
+     |-- 15.3 · [LOCKED]
+     |-- 15.4 · [LOCKED]
+     |-- 15.5 · [LOCKED]
+     |-- 15.6 · [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab15">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b15">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b15">← Chapter List</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab15">
+      <div class="sidebar-heading">Chapter 15</div>
+      <div class="sidebar-title">Time in Bitcoin</div>
+
+      <div class="sidebar-item active" id="sb-15-1">
+        <div class="sb-num">15.1</div>
+        <div class="sb-label">Time in Bitcoin — Not a Wall Clock</div>
+      </div>
+      <div class="sidebar-item" id="sb-15-2">
+        <div class="sb-num">15.2</div>
+        <div class="sb-label">nLockTime — A Check That Can’t Be Cashed Yet</div>
+      </div>
+      <div class="sidebar-item" id="sb-15-3">
+        <div class="sb-num">15.3</div>
+        <div class="sb-label">nSequence — From a Failed Idea to Relative Timelock</div>
+      </div>
+      <div class="sidebar-item" id="sb-15-4">
+        <div class="sb-num">15.4</div>
+        <div class="sb-label">CLTV — When the Script Itself Guards Time</div>
+      </div>
+      <div class="sidebar-item" id="sb-15-5">
+        <div class="sb-num">15.5</div>
+        <div class="sb-label">CSV — The Relative Timelock That Powers Lightning</div>
+      </div>
+      <div class="sidebar-item" id="sb-15-6">
+        <div class="sb-num">15.6</div>
+        <div class="sb-label">Timelock in Practice — from Inheritance to Vaulting</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab15-content">
+
+      <!-- ==============================
+           SECTION 15.1 · Waktu di Bitcoin — Bukan Jam Dinding
+      ============================== -->
+      <div class="p-section active" id="section-15-1">
+        <div class="p-eyebrow">Chapter 15 · 15.1</div>
+        <div class="p-heading">No server clock, no time authority — yet the whole network still agrees</div>
+        <div class="p-title">Time in Bitcoin — Not a Wall Clock</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>If you’ve ever wondered how Bitcoin "knows" when a transaction may or may not be processed, the answer is in how Bitcoin defines time. And this way is very different from the clock you use every day.</p>
+
+          <p><strong>The problem: who do you trust to know the time?</strong></p>
+          <p>In the real world, you trust the clock on your phone, or a globally synchronized time server. But Bitcoin is a system without a central authority. There’s no time server everyone can trust. If you let one party determine "the current time," you’ve just created a centralized point of failure that can be attacked or manipulated.</p>
+
+          <p>Bitcoin’s solution: don’t rely on a wall clock at all. Use two ways of measuring time that can be verified by all nodes independently.</p>
+
+          <p><strong>First way: Block Height</strong></p>
+          <p>Block height is the sequential number of a block in the blockchain. The first block is block #0, the next is #1, and so on. Every new block found adds one number. The analogy is like the pages of a book: if you want to refer to "chapter 5", you don’t need to know when the book was written, just "page 120". Block height works the same: "after block 800,000" is a specific point in time that anyone with a copy of the blockchain can verify.</p>
+
+          <p>The advantage: very simple and can’t be manipulated. The disadvantage: it isn’t directly related to real time because blocks don’t always arrive exactly every 10 minutes (it could be 2 minutes, could be 25 minutes).</p>
+
+          <p><strong>Second way: Median Time Past (MTP)</strong></p>
+          <p>Every Bitcoin block contains a timestamp, a number showing when that block was mined. But miners can lie a little about this timestamp within the limits allowed by the protocol. If Bitcoin directly trusted the timestamp of a single block, miners could manipulate "time" for their own benefit.</p>
+
+          <p>The solution: take the last 11 blocks, take the middle value (median) of their timestamps. This is Median Time Past (MTP). The analogy is like measuring the average temperature of the last week rather than trusting today’s thermometer that might be broken. One wrong reading doesn’t ruin the overall picture. By using the median of 11 blocks, one miner lying about their timestamp can’t shift the MTP significantly.</p>
+
+          <p><strong>Why does this matter?</strong></p>
+          <p>From these two ways of measuring time, Bitcoin can build time-based contracts that take effect automatically without needing a judge, notary, or third party. You can say to the Bitcoin network: "this money can’t be touched until block 900,000" or "this transaction is only valid after 6 months from now" and the whole network will enforce it automatically.</p>
+
+          <div class="p-callout">
+            <p>Bitcoin defines time by consensus, not based on a server clock. This isn’t a limitation, but a design choice that keeps the system decentralized. The result is a time mechanism that can be trusted by all parties without having to trust anyone in particular.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualization — Two ways Bitcoin measures time</div>
+          <div class="b15-s151-desc">
+            First tab: block height as a timeline — add blocks and mark a reference point. Second tab: Median Time Past — drag the slider to fake one timestamp and see why MTP is hard to manipulate.
+          </div>
+
+          <div class="b15-s151-tabs">
+            <button class="b15-s151-tab s151-act" id="b15-s151-t1">Block Height — Time as Sequence</button>
+            <button class="b15-s151-tab" id="b15-s151-t2">Median Time Past — Manipulation-resistant</button>
+          </div>
+
+          <!-- PANE 1: BLOCK HEIGHT -->
+          <div class="b15-s151-pane show" id="b15-s151-p1">
+            <div class="b15-s151-hint">Block height is the simplest way Bitcoin measures time. Like a book’s page number: "after page 800,000" is a specific point that can’t be faked. Click "Add New Block" to see the chain grow.</div>
+            <div class="b15-s151-chain-track" id="b15-s151-track"></div>
+            <div class="b15-s151-chain-info" id="b15-s151-info">
+              <div class="b15-s151-info-label">Latest block</div>
+              <div class="b15-s151-info-val" id="b15-s151-val">—</div>
+              <div class="b15-s151-info-desc" id="b15-s151-desc2">Click "Add New Block" to start.</div>
+            </div>
+            <div class="b15-s151-ctrl">
+              <button class="b15-s151-btn-primary" id="b15-s151-add">+ Add New Block</button>
+              <button class="b15-s151-btn-sec" id="b15-s151-mark">Mark as Time Reference</button>
+              <button class="b15-s151-btn-sec" id="b15-s151-rst1">Reset</button>
+            </div>
+            <div class="b15-s151-note">The advantage of block height: deterministic and can’t be faked. Its weakness: it isn’t directly related to real time because a block can arrive in 2 minutes or 25 minutes.</div>
+          </div>
+
+          <!-- PANE 2: MTP -->
+          <div class="b15-s151-pane" id="b15-s151-p2">
+            <div class="b15-s151-hint">Every block has a timestamp set by the miner. But miners can lie a little. Bitcoin’s solution: take the last 11 blocks, use the MIDDLE value (median). Drag the slider to fake one block’s timestamp and see how much the MTP shifts.</div>
+            <div class="b15-s151-mtp-label">Last 11 blocks — bar height = timestamp value. Red bar = the manipulated block. Green line = MTP.</div>
+            <div class="b15-s151-mtp-blocks" id="b15-s151-mtp-blocks"></div>
+            <div class="b15-s151-mtp-ctrl">
+              <div class="b15-s151-mtp-ctrl-label">Manipulate the timestamp of block #6:</div>
+              <input type="range" class="b15-s151-slider" id="b15-s151-slider" min="-120" max="120" value="0">
+              <div class="b15-s151-offset" id="b15-s151-offset">+0 minutes</div>
+            </div>
+            <div class="b15-s151-mtp-result" id="b15-s151-mtp-result">
+              <div class="b15-s151-mtp-result-label" id="b15-s151-mtp-rlabel">Current Median Time Past (MTP)</div>
+              <div class="b15-s151-mtp-result-val" id="b15-s151-mtp-val">—</div>
+              <div class="b15-s151-mtp-result-desc" id="b15-s151-mtp-desc">—</div>
+            </div>
+            <div class="b15-s151-note">MTP is used for time-based timelocks. Because it uses the median of 11 blocks, one miner lying about their timestamp can’t change the MTP significantly.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-15-2" data-sb="sb-15-2">
+            15.2 — nLockTime: A Check That Can’t Be Cashed Yet →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 15.1 -->
+
+      <!-- ==============================
+           SECTION 15.2 · nLockTime — Cek yang Belum Bisa Dicairkan
+      ============================== -->
+      <div class="p-section" id="section-15-2">
+        <div class="p-eyebrow">Chapter 15 · 15.2</div>
+        <div class="p-heading">For thousands of years humans needed a notary to manage time in contracts — Bitcoin doesn’t</div>
+        <div class="p-title">nLockTime — A Check That Can’t Be Cashed Yet</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Imagine you write a check but you write next month’s date in the top right corner. The bank won’t process that check until that date arrives. nLockTime works exactly like that, but it isn’t a bank that enforces the rule, it’s the entire Bitcoin network automatically, without anyone being able to intervene. Even the sender themselves can’t cancel or speed it up after the transaction is created.</p>
+
+          <p>For thousands of years, humans needed a third party to manage time in contracts: notaries, banks, lawyers, or judges. They’re the ones who ensure "this check can only be cashed next month" or "this escrow fund is returned if no one claims it within 6 months." nLockTime removes that need. Trust in humans is replaced by mathematics.</p>
+
+          <p><strong>What is nLockTime?</strong></p>
+          <p>nLockTime is a 4-byte field that has been in every Bitcoin transaction since day one. Its value determines when that transaction may be included in a block. If a miner tries to include a transaction with an nLockTime that hasn’t been reached, every node in the network will reject that block automatically.</p>
+
+          <p><strong>Two modes: block or time</strong></p>
+          <p>This is one of Satoshi’s early design decisions that still holds today. The way Bitcoin distinguishes whether you’re talking about "which block number" or "what time" is just by looking at the number. If the nLockTime value is below 500,000,000, it’s interpreted as a block height. A value of 800,000 means "this transaction isn’t valid before block #800,000." If the value is at or above 500,000,000, it’s interpreted as a Unix timestamp, the number of seconds since January 1, 1970. The number 500,000,000 in Unix time is around the year 1985, long before Bitcoin existed, so it’s safe to use as a dividing line.</p>
+
+          <p><strong>One important condition that’s often forgotten</strong></p>
+          <p>nLockTime is only effective if at least one transaction input has an nSequence other than 0xFFFFFFFF (the maximum value). This is a technical detail that often surprises new developers. If all inputs have nSequence 0xFFFFFFFF, the node will ignore nLockTime entirely and the transaction can be included at any time. In the simulation below, you can try turning off nSequence and see what happens.</p>
+
+          <p><strong>Why is this powerful?</strong></p>
+          <p>Scheduled payment: you can make a transaction that can only be confirmed starting next month. There’s no risk of a contractor not wanting to work after being paid, no risk of you not wanting to pay after the work is done. Escrow with a time limit: until now, escrow needed a third party you trust. With nLockTime, that trust is replaced by mathematics. The funds can’t go anywhere until the time condition is met. Dead man’s switch: a digital inheritance that can’t be blocked by anyone, not by a bank, not by a government, not even by the person who made the contract.</p>
+
+          <div class="p-callout">
+            <p>nLockTime is the simplest feature of Bitcoin’s timelock arsenal. It has existed since day one and is proven to work. But its power is limited because it only works at the transaction level. For more complex conditions like "Alice can claim anytime OR Bob can claim after 6 months", we need CLTV, which will be discussed in 15.4.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulation — nLockTime Builder</div>
+          <div class="b15-s152-desc">
+            Choose a real scenario or set the parameters yourself. Every change immediately shows what it means in plain language, the hex value in the transaction, and the effect of nSequence.
+          </div>
+
+          <div class="b15-s152-usecase-label">Try a real scenario:</div>
+          <div class="b15-s152-usecase-btns">
+            <button class="b15-s152-uc-btn" id="b15-s152-uc-gaji">Salary next month</button>
+            <button class="b15-s152-uc-btn" id="b15-s152-uc-escrow">6-month escrow</button>
+            <button class="b15-s152-uc-btn" id="b15-s152-uc-warisan">1-year inheritance</button>
+            <button class="b15-s152-uc-btn" id="b15-s152-uc-block">Lock until a certain block</button>
+          </div>
+
+          <div class="b15-s152-mode-label">nLockTime mode:</div>
+          <div class="b15-s152-mode-sub">Bitcoin distinguishes the two modes just from the number: below 500 million = block height, above 500 million = time (Unix timestamp).</div>
+          <div class="b15-s152-mode">
+            <button class="b15-s152-mode-btn s152-act" id="b15-s152-m-ts">Time (a specific date)</button>
+            <button class="b15-s152-mode-btn" id="b15-s152-m-bh">Block Height (a specific block)</button>
+          </div>
+
+          <div id="b15-s152-input-area"></div>
+
+          <div class="b15-s152-meaning" id="b15-s152-meaning">
+            <div class="b15-s152-meaning-label">What it means in plain language:</div>
+            <div class="b15-s152-meaning-text" id="b15-s152-meaning-text">—</div>
+            <div class="b15-s152-meaning-sub" id="b15-s152-meaning-sub">—</div>
+          </div>
+
+          <div class="b15-s152-hex-wrap">
+            <div class="b15-s152-hex-label">The nLockTime field in the transaction (4 bytes, little-endian):</div>
+            <div class="b15-s152-hex-val" id="b15-s152-hex-val">—</div>
+            <div class="b15-s152-hex-explain" id="b15-s152-hex-explain">—</div>
+          </div>
+
+          <div class="b15-s152-seq-wrap s152-ok" id="b15-s152-seq-wrap">
+            <div class="b15-s152-seq-label" id="b15-s152-seq-label">nSequence: nLockTime ACTIVE</div>
+            <div class="b15-s152-seq-toggle" id="b15-s152-seq-toggle">
+              <div class="b15-s152-seq-track s152-on" id="b15-s152-seq-track">
+                <div class="b15-s152-seq-thumb"></div>
+              </div>
+              <div class="b15-s152-seq-ttext" id="b15-s152-seq-ttext">input nSequence = 0xFFFFFFFE (nLockTime active)</div>
+            </div>
+            <div class="b15-s152-seq-desc" id="b15-s152-seq-desc">nLockTime will be enforced. The transaction can’t enter a block before the specified time.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-15-1" data-sb="sb-15-1">
+            ← 15.1 — Time in Bitcoin: Not a Wall Clock
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-15-3" data-sb="sb-15-3">
+            15.3 — nSequence →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 15.2 -->
+
+      <!-- ==============================
+           SECTION 15.3 · nSequence — Dari Ide yang Gagal ke Relative Timelock
+      ============================== -->
+      <div class="p-section" id="section-15-3">
+        <div class="p-eyebrow">Chapter 15 · 15.3</div>
+        <div class="p-heading">A field designed for one purpose, failed, then became the foundation of the Lightning Network</div>
+        <div class="p-title">nSequence — From a Failed Idea to Relative Timelock</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>There’s one field in every Bitcoin transaction input that has the most winding history of all the fields in the protocol. Its name is nSequence. It was designed for one purpose, failed to achieve it, then was recycled into something far more useful.</p>
+
+          <p><strong>The original idea that didn’t work</strong></p>
+          <p>Satoshi designed nSequence as a mechanism to update unconfirmed transactions. The idea: if two parties are negotiating, they can keep updating the transaction by raising the nSequence value. Miners were supposed to only include the version with the highest nSequence. The problem: there was no incentive for miners to follow this rule. A miner could just include the first version of the transaction if the fee was attractive enough. Without an enforcement mechanism, this idea couldn’t work. nSequence then became an almost useless field for years.</p>
+
+          <p><strong>The difference from nLockTime</strong></p>
+          <p>Before going further, it’s important to understand the fundamental difference between nLockTime and nSequence. Imagine you have two kinds of "dated checks." The first check reads: "valid starting January 1, 2026", this is nLockTime, an absolute time that doesn’t depend on when the check is held. The second check reads: "valid 30 days after being handed to the bank", this is nSequence, a relative time that only starts running after the transaction is confirmed. This difference sounds small, but it’s crucial for building more flexible contracts.</p>
+
+          <p><strong>BIP 68: nSequence gets a new meaning</strong></p>
+          <p>In 2016, BIP 68 — activated together with BIP 112 and BIP 113 in the CSV soft fork — gave nSequence a new meaning: relative timelock. Instead of creating a new field that would have required a hard fork, the Bitcoin community recycled an old, almost unused field.</p>
+
+          <p><strong>Three "buttons" in nSequence</strong></p>
+          <p>nSequence is a 32-bit number, but the way to read it is like a device with three buttons. The first button is on/off: a single bit that determines whether nSequence has any timelock meaning at all. If this button is off, the rest is ignored. The second button is the unit choice: whether the time delay is measured in blocks (about 10 minutes per block) or in time units (512 seconds per unit). The third button is the value: a 16-bit number that determines how long the delay is, maximum 65,535 units.</p>
+
+          <p>The analogy is like setting a phone alarm: choose on/off, choose AM/PM, fill in the hour. You don’t need to understand binary to use the concept.</p>
+
+          <p><strong>Why is relative timelock powerful?</strong></p>
+          <p>nLockTime can’t depend on when a UTXO is confirmed, it only knows absolute time. nSequence can. This is very important for the Lightning Network: when a channel is force-closed, there’s an nSequence-based waiting period that starts running from when the commitment transaction is confirmed, not from an unpredictable absolute time. This period gives the other party time to detect cheating and submit a penalty transaction.</p>
+
+          <div class="p-callout">
+            <p>nSequence is a beautiful example of recycling what already exists. Rather than adding a new field to the transaction format (which would need a hard fork), BIP 68 recycled an old, almost unused field and gave it a very useful new function. This is how Bitcoin evolves: carefully, backward-compatible, and without discarding the existing legacy.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulation — nSequence: Set and Understand</div>
+          <div class="b15-s153-desc">
+            Set the three "buttons" of nSequence and see what it means directly. Choose a common scenario or explore yourself. The bit visualizer below shows its technical representation.
+          </div>
+
+          <div class="b15-s153-preset-label">Try a common scenario:</div>
+          <div class="b15-s153-presets">
+            <button class="b15-s153-preset-btn" id="b15-s153-pr-ln">Lightning force close (~1 day)</button>
+            <button class="b15-s153-preset-btn" id="b15-s153-pr-vault">1-week vault</button>
+            <button class="b15-s153-preset-btn" id="b15-s153-pr-escrow">1-month escrow</button>
+            <button class="b15-s153-preset-btn" id="b15-s153-pr-off">Disable timelock</button>
+            <button class="b15-s153-preset-btn" id="b15-s153-pr-max">Maximum value (RBF)</button>
+          </div>
+
+          <div class="b15-s153-controls">
+            <div class="b15-s153-ctrl-card">
+              <div class="b15-s153-ctrl-label">Button 1 — Enable relative timelock?</div>
+              <div class="b15-s153-ctrl-sub">If turned off, nSequence has no timelock meaning. A value of 0xFFFFFFFF also disables nLockTime at the transaction level.</div>
+              <div class="b15-s153-toggle-row" id="b15-s153-tog1">
+                <div class="b15-s153-toggle-track s153-on" id="b15-s153-tog1-track"><div class="b15-s153-toggle-thumb"></div></div>
+                <div class="b15-s153-toggle-label" id="b15-s153-tog1-label">Timelock ACTIVE</div>
+                <div class="b15-s153-toggle-state" id="b15-s153-tog1-state">(bit 31 = 0)</div>
+              </div>
+            </div>
+
+            <div class="b15-s153-ctrl-card" id="b15-s153-unit-card">
+              <div class="b15-s153-ctrl-label">Button 2 — Time unit</div>
+              <div class="b15-s153-ctrl-sub">Choose whether the time delay is measured in blocks (~10 minutes per block) or in units of 512 seconds (~8.5 minutes).</div>
+              <div class="b15-s153-unit-row">
+                <button class="b15-s153-unit-btn s153-act" id="b15-s153-u-block">Block (~10 minutes per block)</button>
+                <button class="b15-s153-unit-btn" id="b15-s153-u-time">Time (512 seconds per unit)</button>
+              </div>
+            </div>
+
+            <div class="b15-s153-ctrl-card" id="b15-s153-val-card">
+              <div class="b15-s153-ctrl-label">Button 3 — How long is the delay?</div>
+              <div class="b15-s153-ctrl-sub">Maximum 65,535 units. For most use cases, a value of 144 blocks (1 day) to 4,032 blocks (28 days) is sufficient.</div>
+              <div class="b15-s153-slider-wrap">
+                <input type="range" class="b15-s153-slider" id="b15-s153-slider" min="1" max="4032" value="144">
+                <div class="b15-s153-slider-labels">
+                  <span>1</span><span>144 (~1 day)</span><span>1,008 (~1 week)</span><span>4,032 (~28 days)</span>
+                </div>
+              </div>
+              <div class="b15-s153-slider-val" id="b15-s153-slider-val">144 blocks</div>
+            </div>
+          </div>
+
+          <div class="b15-s153-meaning s153-active" id="b15-s153-meaning">
+            <div class="b15-s153-meaning-label" id="b15-s153-meaning-label">What it means in plain language:</div>
+            <div class="b15-s153-meaning-text" id="b15-s153-meaning-text">—</div>
+            <div class="b15-s153-meaning-sub" id="b15-s153-meaning-sub">—</div>
+          </div>
+
+          <div class="b15-s153-hex-row">
+            <div class="b15-s153-hex-label">nSequence value (hex) and bit representation:</div>
+            <div class="b15-s153-hex-val" id="b15-s153-hex-val">—</div>
+            <div class="b15-s153-hex-bits" id="b15-s153-hex-bits"></div>
+            <div class="b15-s153-bit-labels" id="b15-s153-bit-labels"></div>
+          </div>
+
+          <div class="b15-s153-usecase" id="b15-s153-usecase"></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-15-2" data-sb="sb-15-2">
+            ← 15.2 — nLockTime: A Check That Can’t Be Cashed Yet
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-15-4" data-sb="sb-15-4">
+            15.4 — CLTV →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 15.3 -->
+
+      <!-- ==============================
+           SECTION 15.4 · CLTV — Ketika Script Sendiri yang Menjaga Waktu
+      ============================== -->
+      <div class="p-section" id="section-15-4">
+        <div class="p-eyebrow">Chapter 15 · 15.4</div>
+        <div class="p-heading">Time is no longer an external limit, but becomes part of the contract logic itself</div>
+        <div class="p-title">CLTV — When the Script Itself Guards Time</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>So far we’ve seen two timelock mechanisms: nLockTime which works at the transaction level, and nSequence which works at the input level. Both are limits outside the script. But what if we want time to be part of the script condition itself? What if we want to say: "Alice can take these funds anytime, OR Bob can take them after 6 months"? For that we need OP_CHECKLOCKTIMEVERIFY.</p>
+
+          <p><strong>Analogy: a security guard vs a safe</strong></p>
+          <p>nLockTime is like a security guard at a building’s entrance: they check whether you may enter based on the time. But once you’re in, anyone can take the things inside. CLTV is like a safe inside the building that has its own time-combination lock. No matter when you enter the building, that safe won’t open before its time. And what’s more powerful: that safe can have different rules for different people.</p>
+
+          <p><strong>How CLTV works</strong></p>
+          <p>OP_CHECKLOCKTIMEVERIFY is an opcode added to Bitcoin Script through BIP 65 in 2015. When executed, it compares the value on the stack with the nLockTime value of the transaction being verified. If the stack value is greater than the transaction’s nLockTime, the script fails. This means: anyone who wants to spend a UTXO with CLTV must create a transaction that commits "I won’t spend this before time X."</p>
+
+          <p><strong>Why is this powerful for real life?</strong></p>
+          <p>Imagine this scenario: you send funds to your child who’s still in college, but you don’t want them to be able to access it until they graduate 4 years from now. With CLTV you can make a script: "my child can take this after block X (about 4 years), OR I can take it back anytime with an emergency key." No bank, no lawyer, no trustee. Mathematics enforces it.</p>
+
+          <p>Or imagine milestone payments for a contractor: "the contractor can claim payment after the agreed delivery date, but if the contractor doesn’t show up within 6 months, the client can refund." Automatic escrow without an escrow agent.</p>
+
+          <p><strong>HTLC: the CLTV that powers the Lightning Network</strong></p>
+          <p>A Hash Time Lock Contract (HTLC) is a combination of CLTV with a hash preimage. The recipient can claim the funds by revealing a secret that was hashed beforehand. If the secret isn’t revealed before the timeout, the sender can refund. This simple mechanism, without a third party, is the foundation of every payment that crosses the Lightning Network.</p>
+
+          <div class="p-callout">
+            <p>CLTV is a big leap from "when a transaction can be created" to "when a UTXO can be spent." This difference opens up room for far more expressive contracts. With CLTV, time is no longer an external limit, but becomes part of the contract logic itself.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulation — CLTV Script Builder</div>
+          <div class="b15-s154-desc">
+            Choose a scenario and see the resulting script along with an explanation of each line. The timeline below shows who can claim when.
+          </div>
+
+          <div class="b15-s154-scenarios" id="b15-s154-scenarios">
+            <button class="b15-s154-scenario-btn s154-act" data-sc="simple">
+              <div class="b15-s154-scenario-title">1. Simple: Funds locked until a certain time</div>
+              <div class="b15-s154-scenario-desc">Only one person can claim, and only after the specified time. Like a time deposit.</div>
+            </button>
+            <button class="b15-s154-scenario-btn" data-sc="branch">
+              <div class="b15-s154-scenario-title">2. Two branches: Alice anytime, Bob after 6 months</div>
+              <div class="b15-s154-scenario-desc">Alice can take the funds anytime. But if Alice doesn’t show up within 6 months, Bob can claim them. The basis of escrow and inheritance planning.</div>
+            </button>
+            <button class="b15-s154-scenario-btn" data-sc="htlc">
+              <div class="b15-s154-scenario-title">3. Primitive HTLC: The foundation of the Lightning Network</div>
+              <div class="b15-s154-scenario-desc">The recipient claims by revealing a secret. If it fails, the sender refunds after the timeout. This is the mechanism behind every Lightning payment.</div>
+            </button>
+          </div>
+
+          <div class="b15-s154-tl-label">Who can claim when:</div>
+          <div class="b15-s154-tl-track" id="b15-s154-tl-track"></div>
+
+          <div class="b15-s154-claimers" id="b15-s154-claimers"></div>
+
+          <div class="b15-s154-script-label">Bitcoin Script (locking script / scriptPubKey):</div>
+          <div class="b15-s154-script-lines" id="b15-s154-script-lines"></div>
+
+          <div class="b15-s154-note" id="b15-s154-note"></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-15-3" data-sb="sb-15-3">
+            ← 15.3 — nSequence: From a Failed Idea to Relative Timelock
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-15-5" data-sb="sb-15-5">
+            15.5 — CSV →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 15.4 -->
+
+      <!-- ==============================
+           SECTION 15.5 · CSV — Relative Timelock yang Menggerakkan Lightning
+      ============================== -->
+      <div class="p-section" id="section-15-5">
+        <div class="p-eyebrow">Chapter 15 · 15.5</div>
+        <div class="p-heading">Without CSV, the Lightning Network in its current form couldn’t exist</div>
+        <div class="p-title">CSV — The Relative Timelock That Powers Lightning</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>If CLTV is "not before date X", then CSV is "not before X days after this is confirmed." This difference that sounds small turns out to be very crucial for building a secure payment system without trust.</p>
+
+          <p><strong>The analogy of two kinds of contracts</strong></p>
+          <p>Imagine two kinds of apartment lease contracts. The first contract: "you may move out starting January 1, 2026." This is like CLTV, an absolute date that doesn’t depend on when the contract was signed. The second contract: "you may move out 30 days after giving notice." This is like CSV, a relative period that only starts running after a certain action happens. This difference sounds small, but it’s very important for contracts that can’t predict when their action will happen.</p>
+
+          <p><strong>OP_CHECKSEQUENCEVERIFY</strong></p>
+          <p>BIP 112 added the CSV opcode to Bitcoin Script, activated together with BIP 68 in 2016. CSV works similarly to CLTV but uses nSequence: it verifies that the nSequence of the input spending this UTXO has reached the specified minimum value. In other words, CSV forces the party who wants to claim a UTXO to wait at least X blocks or X time since that UTXO was confirmed.</p>
+
+          <p><strong>Why CSV is the heart of the Lightning Network</strong></p>
+          <p>The Lightning Network lets two parties do many off-chain transactions with only two on-chain transactions: opening and closing the channel. The security of this system depends on the ability to punish a party who tries to cheat with an old commitment transaction.</p>
+
+          <p>Here’s how it works: when Alice and Bob open a payment channel, they create a commitment transaction that represents the latest state. Every time the state is updated, the old commitment must be revoked by providing a revocation key. If Bob tries to close the channel with an old commitment that’s more favorable to him, Alice has time to detect the cheating and submit a penalty transaction that takes all the channel funds.</p>
+
+          <p>The time Alice has to detect cheating is what CSV controls. Usually 144 blocks (about 1 day). During this period, Bob’s funds are locked in an output that Alice can take if Bob is proven to be cheating. Without CSV, Bob could claim immediately before Alice had a chance to react.</p>
+
+          <p><strong>CSV beyond Lightning</strong></p>
+          <p>Beyond Lightning, CSV is useful for vaults with a cooldown period before funds can be moved, escrow that automatically refunds after a relative waiting period, and multisig systems with a backup key that only activates after a certain period of inactivity.</p>
+
+          <div class="p-callout">
+            <p>CSV provides a fairness mechanism that lets two parties who don’t trust each other transact repeatedly without needing to trust one another. It’s enough to trust mathematics and the Bitcoin protocol. Without CSV, the Lightning Network in its current form couldn’t exist.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualization — CSV in Lightning: Honest vs Cheating</div>
+          <div class="b15-s155-desc">
+            First tab: an honest force close — CSV as a verification period. Second tab: Bob tries to cheat with an old commitment — CSV gives Alice time to detect and punish.
+          </div>
+
+          <div class="b15-s155-tabs">
+            <button class="b15-s155-tab s155-act" id="b15-s155-t1">Honest Scenario — Normal Force Close</button>
+            <button class="b15-s155-tab" id="b15-s155-t2">Cheating Scenario — Bob Tries to Trick Alice</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b15-s155-pane show" id="b15-s155-p1">
+            <div class="b15-s155-hint">When a channel is force-closed honestly, CSV provides a waiting period before the funds can be taken. This isn’t a punishment — it’s time the system gives to ensure all parties are safe.</div>
+            <div class="b15-s155-steps" id="b15-s155-honest-steps"></div>
+            <div class="b15-s155-window-wrap">
+              <div class="b15-s155-window-label">CSV Window (144 blocks = ~1 day)</div>
+              <div class="b15-s155-window-bar-bg">
+                <div class="b15-s155-window-bar-fill" id="b15-s155-h-bar" style="width:0%;background:#854F0B;">
+                  <div class="b15-s155-window-bar-label" id="b15-s155-h-bar-label"></div>
+                </div>
+              </div>
+              <div class="b15-s155-window-desc" id="b15-s155-h-bar-desc">Starts after the commitment transaction is confirmed.</div>
+            </div>
+            <div class="b15-s155-ctrl">
+              <button class="b15-s155-btn-primary" id="b15-s155-h-next">Next Step →</button>
+              <button class="b15-s155-btn-sec" id="b15-s155-h-rst">Reset</button>
+              <div class="b15-s155-step-ind" id="b15-s155-h-ind">Step 0 / 4</div>
+            </div>
+            <div class="b15-s155-result s155-idle" id="b15-s155-h-result">Click "Next Step" to see the honest force close process.</div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b15-s155-pane" id="b15-s155-p2">
+            <div class="b15-s155-hint">Bob tries to close the channel with an OLD commitment transaction that’s more favorable to him. CSV gives Alice time to detect and submit a penalty transaction.</div>
+            <div class="b15-s155-steps" id="b15-s155-cheat-steps"></div>
+            <div class="b15-s155-window-wrap">
+              <div class="b15-s155-window-label">CSV Window — Alice’s Time to Act</div>
+              <div class="b15-s155-window-bar-bg">
+                <div class="b15-s155-window-bar-fill" id="b15-s155-c-bar" style="width:0%;background:#A32D2D;">
+                  <div class="b15-s155-window-bar-label" id="b15-s155-c-bar-label"></div>
+                </div>
+              </div>
+              <div class="b15-s155-window-desc" id="b15-s155-c-bar-desc">Alice must act before the window runs out.</div>
+            </div>
+            <div class="b15-s155-ctrl">
+              <button class="b15-s155-btn-primary" id="b15-s155-c-next">Next Step →</button>
+              <button class="b15-s155-btn-sec" id="b15-s155-c-rst">Reset</button>
+              <div class="b15-s155-step-ind" id="b15-s155-c-ind">Step 0 / 5</div>
+            </div>
+            <div class="b15-s155-result s155-idle" id="b15-s155-c-result">Click "Next Step" to see what happens when Bob tries to cheat.</div>
+            <div class="b15-s155-script">
+              <div class="b15-s155-script-label">The to_local output script in a Lightning commitment transaction:</div>
+              <div class="b15-s155-script-lines">
+                <div class="b15-s155-script-line s155-neu"><div class="b15-s155-script-code">OP_IF</div><div class="b15-s155-script-note">First branch choice (the revocation path)</div></div>
+                <div class="b15-s155-script-line s155-rev"><div class="b15-s155-script-code">  &lt;revocation_pubkey&gt;</div><div class="b15-s155-script-note">Alice can claim NOW if she has the revocation key — proof Bob cheated</div></div>
+                <div class="b15-s155-script-line s155-neu"><div class="b15-s155-script-code">OP_ELSE</div><div class="b15-s155-script-note">The normal path for Bob</div></div>
+                <div class="b15-s155-script-line s155-csv"><div class="b15-s155-script-code">  &lt;144&gt; OP_CSV</div><div class="b15-s155-script-note">Bob must wait 144 blocks — this is what gives Alice time</div></div>
+                <div class="b15-s155-script-line s155-neu"><div class="b15-s155-script-code">  OP_DROP</div><div class="b15-s155-script-note">Discard the value from the stack</div></div>
+                <div class="b15-s155-script-line s155-sig"><div class="b15-s155-script-code">  &lt;bob_pubkey&gt; OP_CHECKSIG</div><div class="b15-s155-script-note">Bob can claim with his signature — after 144 blocks</div></div>
+                <div class="b15-s155-script-line s155-neu"><div class="b15-s155-script-code">OP_ENDIF</div><div class="b15-s155-script-note">Close the branching</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-15-4" data-sb="sb-15-4">
+            ← 15.4 — CLTV: When the Script Itself Guards Time
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-15-6" data-sb="sb-15-6">
+            15.6 — Timelock in Practice →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 15.5 -->
+
+      <!-- ==============================
+           SECTION 15.6 · Timelock dalam Praktik — dari Warisan hingga Vaulting
+      ============================== -->
+      <div class="p-section" id="section-15-6">
+        <div class="p-eyebrow">Chapter 15 · 15.6</div>
+        <div class="p-heading">Timelock isn’t an exotic feature — it’s the foundation of a financial system that’s truly trustless</div>
+        <div class="p-title">Timelock in Practice — from Inheritance to Vaulting</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>After understanding nLockTime, nSequence, CLTV, and CSV, it’s time to see how all these mechanisms can be combined to build powerful real use cases. Timelock isn’t an exotic feature for cryptography developers, but the foundation of many things that make Bitcoin more than just a simple payment system.</p>
+
+          <p><strong>Dead man’s switch: a digital inheritance that can’t be blocked</strong></p>
+          <p>Imagine you want to ensure that if you’re inactive for 1 year, your bitcoin can be accessed by someone you trust. In the traditional banking system, this needs a will, a notary, a legal process, and potential family conflict. In Bitcoin, this can be implemented with a script: "the main key can move the funds anytime, OR the backup key can claim after 52,560 blocks since the UTXO was last touched." The owner just needs to periodically move the funds to reset the clock. If inactive for 1 year, the backup key held by the heir can claim the funds automatically.</p>
+
+          <p><strong>Vault: an extra security layer</strong></p>
+          <p>A vault is a pattern where funds can’t simply be moved right away. There’s a cooldown period that provides time to cancel if a private key is compromised. The simple pattern: to spend funds from a vault, you must first create an "unvault transaction" that’s CSV-locked for 144 blocks. During those 144 blocks, you can still cancel with an emergency key and send the funds back to cold storage. If a hacker steals the private key, you have about 1 day to notice and cancel.</p>
+
+          <p><strong>Escrow and milestone payments</strong></p>
+          <p>With a combination of nLockTime, multisig, and CLTV, you can build an escrow system that’s truly trustless. No need to trust an arbiter, a platform, or anyone. Milestone payments let a contractor receive automatic payment after the agreed date without having to wait for the client’s "approval" which could be denied.</p>
+
+          <p><strong>Limitations to understand</strong></p>
+          <p>Bitcoin Script can’t see conditions outside the chain. It doesn’t know whether goods have been delivered or work has been completed. Timelock can only manage time, not real-world conditions. To connect off-chain conditions to on-chain, an oracle or minimal trust in a third party is needed. Besides that, complex scripts tend to be larger and require higher fees, although Taproot already helps hide this complexity.</p>
+
+          <div class="p-callout">
+            <p>Timelock is proof that Bitcoin isn’t just a "send and receive" system. It’s a programming language for expressing complex ownership conditions, without needing a lawyer, a bank, or a third party that must be trusted. Every use case built on top of timelock is one step further toward a financial system that’s truly trustless.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Use Case Explorer — Timelock in Practice</div>
+          <div class="b15-s156-desc">
+            Click each card to see the use case details, the timelock components used, who can do what when, and its limitations.
+          </div>
+
+          <div class="b15-s156-grid">
+            <div class="b15-s156-card s156-act" data-uc="dms" style="--ac:#0F6E56;--ab:#EAF3DE;">
+              <div class="b15-s156-card-icon">🔐</div>
+              <div class="b15-s156-card-title">Dead Man’s Switch</div>
+              <div class="b15-s156-card-sub">A digital inheritance that automatically transfers if you’re inactive for a year</div>
+            </div>
+            <div class="b15-s156-card" data-uc="vault" style="--ac:#534AB7;--ab:#EEEDFE;">
+              <div class="b15-s156-card-icon">🏦</div>
+              <div class="b15-s156-card-title">Vault with Cooldown</div>
+              <div class="b15-s156-card-sub">Funds can’t be stolen instantly — there’s a time delay you can use to cancel</div>
+            </div>
+            <div class="b15-s156-card" data-uc="escrow" style="--ac:#854F0B;--ab:#FAEEDA;">
+              <div class="b15-s156-card-icon">🤝</div>
+              <div class="b15-s156-card-title">Trustless Escrow</div>
+              <div class="b15-s156-card-sub">A payment that automatically completes or refunds — without needing to trust anyone</div>
+            </div>
+            <div class="b15-s156-card" data-uc="milestone" style="--ac:#A32D2D;--ab:#FCEBEB;">
+              <div class="b15-s156-card-icon">📅</div>
+              <div class="b15-s156-card-title">Milestone Payment</div>
+              <div class="b15-s156-card-sub">Pay in stages according to achievement — guaranteed by the protocol, not by trust</div>
+            </div>
+          </div>
+
+          <div class="b15-s156-detail" id="b15-s156-detail"></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-15-5" data-sb="sb-15-5">
+            ← 15.5 — CSV: The Relative Timelock That Powers Lightning
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 15.6 -->
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 18 · BAB 15 -->
+
+

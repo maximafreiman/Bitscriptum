@@ -1,0 +1,647 @@
+<!-- ============================================================
+     PAGE 10 · BAB 7 · Lightning Network
+     |-- 7.1 · Masalah Skalabilitas [DONE]
+     |-- 7.2 · Payment Channel [LOCKED]
+     |-- 7.3 · Routing dan HTLC [LOCKED]
+     |-- 7.4 · Membuka dan Menutup Channel [LOCKED]
+     |-- 7.5 · Invoice dan Pembayaran [LOCKED]
+     |-- 7.6 · Keterbatasan dan Trade-off [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab7">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b7">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b7">← Chapter List</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab7">
+      <div class="sidebar-heading">Chapter 7</div>
+      <div class="sidebar-title">Lightning Network</div>
+
+      <div class="sidebar-item active" id="sb-7-1">
+        <div class="sb-num">7.1</div>
+        <div class="sb-label">The Scalability Problem</div>
+      </div>
+      <div class="sidebar-item" id="sb-7-2">
+        <div class="sb-num">7.2</div>
+        <div class="sb-label">Payment Channel</div>
+      </div>
+      <div class="sidebar-item" id="sb-7-3">
+        <div class="sb-num">7.3</div>
+        <div class="sb-label">Routing and HTLC</div>
+      </div>
+      <div class="sidebar-item" id="sb-7-4">
+        <div class="sb-num">7.4</div>
+        <div class="sb-label">Opening and Closing Channels</div>
+      </div>
+      <div class="sidebar-item" id="sb-7-5">
+        <div class="sb-num">7.5</div>
+        <div class="sb-label">Invoices and Payments</div>
+      </div>
+      <div class="sidebar-item" id="sb-7-6">
+        <div class="sb-num">7.6</div>
+        <div class="sb-label">Limitations and Trade-offs</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab7-content">
+
+      <!-- ==============================
+           SECTION 7.1 · Masalah Skalabilitas
+      ============================== -->
+      <div class="p-section active" id="section-7-1">
+        <div class="p-eyebrow">Chapter 7 · 7.1</div>
+        <div class="p-heading">Why can’t Bitcoin handle millions of transactions per second?</div>
+        <div class="p-title">The Scalability Problem</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Bitcoin is by design slow and expensive for small transactions. Every transaction has to be confirmed on the blockchain, waiting 10 minutes per block, and competing with other transactions for limited block space. When the network is busy, fees can reach tens of dollars for a transaction worth a few cents.</p>
+
+          <p>This isn’t a bug. It’s a deliberate trade-off.</p>
+
+          <p><strong>Why is the block limited?</strong></p>
+          <p>A large block size means nodes have to store and process more data. The bigger the block, the more expensive it is to run a node. The more expensive a node is, the fewer people are willing to run one. The fewer nodes, the more centralized the network. Centralization is Bitcoin’s main enemy.</p>
+          <p>Satoshi understood this. Bitcoin was designed to be a secure settlement layer, not a retail payment system. Every transaction that enters the blockchain is a final, immutable transaction, like settlement between banks, not like swiping a card at a checkout.</p>
+
+          <p><strong>The scalability trilemma</strong></p>
+          <p>There are three desirable properties of a payment system: decentralized, secure, and scalable. Simultaneously, all three cannot be fully achieved in one layer. Bitcoin chooses decentralization and security. Scalability is solved in another layer.</p>
+
+          <p><strong>Layer 2 as the answer</strong></p>
+          <p>The solution isn’t to make blocks bigger, but to build a layer on top of Bitcoin that can handle transactions quickly and cheaply, while still inheriting Bitcoin’s security as the final settlement layer. The Lightning Network is the most mature implementation of this idea.</p>
+
+          <div class="p-callout">
+            <p>This debate is not a theoretical one. It split the Bitcoin community in 2017 and ended with a hard fork that gave birth to Bitcoin Cash, a separate network with much larger blocks.</p>
+          <p>Both are still running today, so you can see the consequences of the two choices for yourself. Bitcoin Cash does deliver far cheaper fees, exactly as promised. What also happened: the hash rate securing it is a small fraction of Bitcoin’s, and its adoption is far narrower. A chain with lower hash rate is cheaper to attack, and that is arithmetic, not opinion.</p>
+          <p>Whether that price is worth the cheaper fees is a question still argued in earnest by people who know exactly what they are talking about. What matters for this chapter is not who won, but why making blocks bigger is never a free choice. Every bit of added capacity is paid for with a higher cost of running a node, and nodes are what make Bitcoin’s rules enforceable without trusting anyone.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualization — The scalability trilemma</div>
+          <div class="b07-s71-desc">
+            Choose a scenario to see how each approach picks a different trade-off among the three desirable properties.
+          </div>
+
+          <div class="b07-s71-tabs" id="b07-s71-tabs"></div>
+          <canvas id="b07-s71-canvas" height="340"></canvas>
+          <div class="b07-s71-note" id="b07-s71-note"></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-7-2" data-sb="sb-7-2">
+            7.2 — Payment Channel →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 7.1 -->
+
+      <!-- ==============================
+           SECTION 7.2 · Payment Channel
+      ============================== -->
+      <div class="p-section" id="section-7-2">
+        <div class="p-eyebrow">Chapter 7 · 7.2</div>
+        <div class="p-heading">Transact thousands of times with two on-chain transactions</div>
+        <div class="p-title">Payment Channel</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>The Lightning Network is built on one simple concept: not all transactions need to be recorded on the blockchain. Only two things need to be recorded: when the channel is opened and when the channel is closed.</p>
+
+          <p><strong>The basic idea</strong></p>
+          <p>Imagine two people, Alice and Bob, who frequently transact with each other. Instead of every transaction going onto the blockchain, they can open a payment channel: locking some bitcoin in a shared multisig address, then transacting between themselves off-chain as much as they like, and only settling the final balance to the blockchain when done. While the channel is open, Alice and Bob can send each other bitcoin thousands of times without a single transaction touching the blockchain. Only two on-chain transactions happen: one to open the channel, one to close it.</p>
+
+          <p><strong>Multisig 2-of-2: the foundation of a channel</strong></p>
+          <p>Behind every payment channel is a 2-of-2 multisig. Unlike a regular multisig like in P2SH that can be 2-of-3 or 3-of-5 with tolerance for one party being absent, Lightning’s multisig has no tolerance at all. Both parties must sign to close the channel cooperatively. This isn’t a weakness, it’s a deliberate design. No single party can unilaterally take the funds except through a previously agreed mechanism.</p>
+
+          <p><strong>Commitment transaction</strong></p>
+          <p>Every time the balance changes within the channel, Alice and Bob exchange commitment transactions: unbroadcast transactions representing the current balance distribution. If one party wants to exit the channel, they can broadcast the latest commitment transaction to the blockchain.</p>
+
+          <p><strong>Three channel-closing scenarios</strong></p>
+          <p>First, cooperative close: both parties agree, sign a closing transaction together, the funds are split immediately according to the final balance. This is the most efficient. Second, force close: one party disappears or won’t cooperate. The honest party can unilaterally broadcast the latest commitment transaction, but has to wait for a time-lock to finish before they can take their funds. Third, penalty for cheating: if someone tries to broadcast an old commitment transaction that’s more favorable to themselves, the other party has a time window to detect it and broadcast the revocation key. The result: the cheating party loses all of their funds in the channel.</p>
+
+          <p><strong>The incentive that makes cheating irrational</strong></p>
+          <p>If Alice tries to cheat by broadcasting an old state, Bob can take all the funds in the channel as a penalty, not just his own. Alice loses everything. This makes cheating very expensive and economically irrational.</p>
+
+          <p><strong>But what if Bob is asleep?</strong></p>
+          <p>This is where the whole penalty mechanism has a condition we have not named yet. Bob can only punish Alice if he <strong>sees</strong> that old state appear on the blockchain, and he has to see it before Alice’s timelock expires, usually about a day. If Bob’s node is down, his phone is out of battery, or he is away for a week, Alice can cheat and simply get away with it.</p>
+          <p>This is not a theoretical gap. It is the clearest difference between on-chain Bitcoin and Lightning. Ordinary Bitcoin asks nothing of you once a transaction is confirmed: you can disappear for ten years and the coins are still yours. Lightning demands <strong>presence</strong>, because its security rests on someone watching within a fixed window of time.</p>
+          <p>The answer is a <strong>watchtower</strong>, a service that watches the blockchain on your behalf. You hand it a small encrypted blob for every state you revoke. That blob tells the watchtower nothing about who you are, what your balance is, or which channels you hold. It only becomes useful if a matching old state actually shows up on the blockchain, and at that moment the watchtower can assemble the penalty transaction and broadcast it for you.</p>
+          <p>The interesting part is that you do not have to trust it. A watchtower cannot steal your funds, cannot open your channels, and learns nothing at all as long as nobody cheats. Its worst failure mode is simply doing nothing, which leaves you exactly where you would have been without one. That is why many users register with several watchtowers at once.
+          </p>
+          <p>So the earlier claim that cheating is irrational needs one honest addition: cheating is irrational <strong>as long as someone is watching</strong>. Providing that watcher, whether through an always-on node or through a watchtower, is the price Lightning pays for its speed.</p>
+
+          <div class="p-callout">
+            <p>Payment channels weren’t a Lightning Network invention. The seed of it was already in the earliest Bitcoin code: Satoshi included an nSequence-based transaction replacement mechanism that he explained in correspondence, not in the whitepaper. The idea was then developed further by several researchers before Lightning. Why that early mechanism failed to work is something we cover in 15.3. What Lightning did was connect many channels into a network that can route payments between parties that don’t have a direct channel.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Interactive simulation — Channel lifecycle and the Penalty Transaction</div>
+          <div class="b07-s72-desc">
+            Click each phase to see the transaction details. Notice how many off-chain transactions happen with only two on-chain transactions.
+          </div>
+
+          <div class="b07-s72-phases" id="b07-s72-phases-wrap">
+            <div class="b07-s72-phase active" id="b07-s72-ph1">
+              <div class="b07-s72-ph-head on-chain-open">
+                <span>Phase 1</span><span class="b07-s72-ph-badge">on-chain</span>
+              </div>
+              <div class="b07-s72-ph-body">
+                <div class="b07-s72-ph-title">Open Channel</div>
+                <div class="b07-s72-ph-sub">Funding transaction locked in a 2-of-2 multisig</div>
+                <div class="b07-s72-bal">
+                  <div class="b07-s72-bal-row"><span class="b07-s72-bal-name">Alice</span><span class="b07-s72-bal-val alice-val">0.05 BTC</span></div>
+                  <div class="b07-s72-bar-bg"><div class="b07-s72-bar-fill alice-fill" style="width:50%"></div></div>
+                  <div class="b07-s72-bal-row"><span class="b07-s72-bal-name">Bob</span><span class="b07-s72-bal-val bob-val">0.05 BTC</span></div>
+                  <div class="b07-s72-bar-bg"><div class="b07-s72-bar-fill bob-fill" style="width:50%"></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="b07-s72-arrow">→</div>
+            <div class="b07-s72-phase" id="b07-s72-ph2">
+              <div class="b07-s72-ph-head off-chain">
+                <span>Phase 2</span><span class="b07-s72-ph-badge">off-chain</span>
+              </div>
+              <div class="b07-s72-ph-body">
+                <div class="b07-s72-ph-title">Transactions within the Channel</div>
+                <div class="b07-s72-ph-sub">Balance changes, nothing on-chain</div>
+                <div class="b07-s72-bal">
+                  <div class="b07-s72-bal-row"><span class="b07-s72-bal-name">Alice</span><span class="b07-s72-bal-val alice-val">0.03 BTC</span></div>
+                  <div class="b07-s72-bar-bg"><div class="b07-s72-bar-fill alice-fill" style="width:30%"></div></div>
+                  <div class="b07-s72-bal-row"><span class="b07-s72-bal-name">Bob</span><span class="b07-s72-bal-val bob-val">0.07 BTC</span></div>
+                  <div class="b07-s72-bar-bg"><div class="b07-s72-bar-fill bob-fill" style="width:70%"></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="b07-s72-arrow">→</div>
+            <div class="b07-s72-phase" id="b07-s72-ph3">
+              <div class="b07-s72-ph-head on-chain-close">
+                <span>Phase 3</span><span class="b07-s72-ph-badge">on-chain</span>
+              </div>
+              <div class="b07-s72-ph-body">
+                <div class="b07-s72-ph-title">Close Channel</div>
+                <div class="b07-s72-ph-sub">Settlement transaction records the final balance</div>
+                <div class="b07-s72-bal">
+                  <div class="b07-s72-bal-row"><span class="b07-s72-bal-name">Alice</span><span class="b07-s72-bal-val alice-val">0.03 BTC</span></div>
+                  <div class="b07-s72-bar-bg"><div class="b07-s72-bar-fill alice-fill" style="width:30%"></div></div>
+                  <div class="b07-s72-bal-row"><span class="b07-s72-bal-name">Bob</span><span class="b07-s72-bal-val bob-val">0.07 BTC</span></div>
+                  <div class="b07-s72-bar-bg"><div class="b07-s72-bar-fill bob-fill" style="width:70%"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b07-s72-detail">
+            <div class="b07-s72-detail-head" id="b07-s72-detail-head">Phase 1 · Open Channel</div>
+            <div class="b07-s72-detail-body" id="b07-s72-detail-body"></div>
+          </div>
+
+          <div class="b07-s72-note info-note" id="b07-s72-note">Click each phase to see the transaction details and its explanation.</div>
+
+          <div class="b07-s72-cheat">
+            <div class="b07-s72-cheat-head">
+              <span>Try cheating</span><span id="b07-s72-cheat-state">latest state: Alice 0.03 / Bob 0.07</span>
+            </div>
+            <div class="b07-s72-cheat-body">
+              <div class="b07-s72-cheat-q" id="b07-s72-cheat-q">
+                Alice’s balance has dropped from 0.05 to 0.03 BTC. Her computer still holds the old state from when she had 0.05. Why doesn’t she just broadcast that one instead? Go ahead and try, and see what happens.
+              </div>
+              <div class="b07-s72-cheat-btns">
+                <button class="b07-s72-btn danger" id="b07-s72-btn-cheat">Alice broadcasts the old state (0.05 / 0.05)</button>
+                <button class="b07-s72-btn" id="b07-s72-btn-honest">Close honestly (0.03 / 0.07)</button>
+                <button class="b07-s72-btn" id="b07-s72-btn-reset">Try again</button>
+              </div>
+              <div class="b07-s72-steps" id="b07-s72-steps"></div>
+              <div class="b07-s72-outcome" id="b07-s72-outcome" style="display:none"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-7-1" data-sb="sb-7-1">
+            ← 7.1 — The Scalability Problem
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-7-3" data-sb="sb-7-3">
+            7.3 — Routing and HTLC →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 7.2 -->
+
+      <!-- ==============================
+           SECTION 7.3 · Routing dan HTLC
+      ============================== -->
+      <div class="p-section" id="section-7-3">
+        <div class="p-eyebrow">Chapter 7 · 7.3</div>
+        <div class="p-heading">Pay anyone, through anyone, without trust</div>
+        <div class="p-title">Routing and HTLC</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>A payment channel between two parties is already powerful. But imagine this: Alice wants to pay Carol, but Alice and Carol don’t have a direct channel. Should they open a new channel just for one transaction? Of course not. Lightning has a more elegant way.</p>
+
+          <p><strong>Pay through an intermediary</strong></p>
+          <p>If Alice has a channel to Bob, and Bob has a channel to Carol, Alice can pay Carol through Bob. Bob becomes the intermediary. No new channel needed, no on-chain interaction at all. But this immediately raises a very natural question: why should Alice trust Bob? What if Bob takes Alice’s money but doesn’t forward it to Carol? The answer: Alice doesn’t need to trust Bob at all. This is what makes Lightning extraordinary.</p>
+
+          <p><strong>Key and secret</strong></p>
+          <p>Imagine a padlock with a unique key. Carol made that padlock, and only Carol has its key. Carol gives a photo of that padlock to Alice, but keeps the key for herself. Alice says to Bob: "I’ll give you 0.01 BTC, but only if you can show the key that opens this padlock. If within 24 hours you can’t show it, the money comes back to me." Bob knows that Carol has the key. So Bob says to Carol: "I’ll give you 0.01 BTC, but only if you show me that key. If within 12 hours there’s none, the money comes back to me." Carol shows her key to Bob, takes 0.01 BTC. Bob now has that key, shows it to Alice, takes 0.01 BTC. Done.</p>
+
+          <p><strong>In technical terms: HTLC</strong></p>
+          <p>This "padlock and key" mechanism in the Bitcoin world is called an HTLC, short for Hash Time-Locked Contract. The "padlock" is the hash of a secret. The "key" is the secret itself. HTLC isn’t new technology. It’s ordinary Bitcoin Script, a combination of OP_HASH160 which we learned in Chapter 6 and OP_CHECKLOCKTIMEVERIFY which is covered in full in Chapter 15. Lightning doesn’t change Bitcoin, it just makes use of what already exists.</p>
+
+          <p><strong>Why is Bob’s timelock shorter than Alice’s?</strong></p>
+          <p>Alice gives Bob 24 hours, but Bob gives Carol 12 hours. This isn’t a coincidence. Bob needs enough time to react after Carol reveals her key. If the times were the same, Bob might not have time to claim from Alice before the time-lock expires. The longer the chain of intermediaries, the more tiered the time-locks become.</p>
+
+          <p><strong>Privacy through onion routing</strong></p>
+          <p>Each intermediary only knows one thing: where the payment came from and where to forward it. Bob knows he received from Alice and must forward to Carol, but Bob doesn’t know whether Alice is the original sender or whether Carol is the final recipient. This technique is called onion routing, the same as what Tor uses.</p>
+
+          <div class="p-callout">
+            <p>HTLC is one of the most elegant cryptographic constructions in Bitcoin. It allows a payment to pass through many intermediaries that don’t trust each other, without any single intermediary being able to steal the funds. Everything is guaranteed by mathematics, not trust.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualization — HTLC payment flow</div>
+          <div class="b07-s73-desc">
+            Five steps of how Alice pays Carol through Bob without trust. Click each step to see what happens at each node.
+          </div>
+
+          <div class="b07-s73-steps" id="b07-s73-steps"></div>
+          <div class="b07-s73-nodes" id="b07-s73-nodes"></div>
+          <div class="b07-s73-arrows" id="b07-s73-arrows"></div>
+          <div class="b07-s73-det">
+            <div class="b07-s73-dh" id="b07-s73-dh"></div>
+            <div class="b07-s73-db" id="b07-s73-db"></div>
+          </div>
+          <div class="b07-s73-note" id="b07-s73-note"></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-7-2" data-sb="sb-7-2">
+            ← 7.2 — Payment Channel
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-7-4" data-sb="sb-7-4">
+            7.4 — Opening and Closing Channels →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 7.3 -->
+
+      <!-- ==============================
+           SECTION 7.4 · Membuka dan Menutup Channel
+      ============================== -->
+      <div class="p-section" id="section-7-4">
+        <div class="p-eyebrow">Chapter 7 · 7.4</div>
+        <div class="p-heading">What actually happens on-chain?</div>
+        <div class="p-title">Opening and Closing Channels</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>In 7.2 we saw the three channel-closing scenarios conceptually. Now we look at the technical side: which transactions actually get broadcast to the blockchain, in what order, and at what cost.</p>
+
+          <p><strong>Opening a channel: the funding transaction</strong></p>
+          <p>Opening a channel is a single ordinary Bitcoin transaction. Alice and Bob each contribute funds to a 2-of-2 multisig output. This output is called the funding output. Before the funding transaction is broadcast to the network, Alice and Bob must already have exchanged their first commitment transaction. This is important: if the funding transaction is broadcast without a valid commitment transaction and one party suddenly becomes uncooperative, the funds could be trapped forever. So the order is: create the commitment transaction first, then broadcast the funding transaction.</p>
+
+          <p><strong>Three ways to close a channel</strong></p>
+          <p>First, cooperative close: both parties agree to close the channel. They sign a closing transaction together that immediately splits the funds according to the final balance. This is the best way: fast, cheap, and no need to wait for a time-lock. Second, force close: one party can’t be reached or won’t cooperate. The honest party broadcasts the latest commitment transaction. There’s a time-lock that must be waited out before the funds can be taken, usually a few hundred blocks. This gives time for the other party to detect any cheating. Third, penalty close: if someone broadcasts an expired commitment transaction, the honest party can broadcast a justice transaction and take all the funds in the channel as a penalty.</p>
+
+          <p><strong>The cost of opening and closing a channel</strong></p>
+          <p>Every time a channel is opened, there’s one on-chain transaction. Every time a channel is closed, there’s one more on-chain transaction. So the on-chain cost is always two transaction fees, no matter how many transactions happen within the channel. This is what makes Lightning very economical for routine use: pay for thousands of transactions with only two on-chain fees.</p>
+
+          <p><strong>Channel capacity and liquidity</strong></p>
+          <p>A channel has limited capacity. If Alice opens a channel with 0.1 BTC, she can’t send more than 0.1 BTC through that channel in total. Liquidity is a resource that must be managed carefully in the Lightning Network.</p>
+
+          <div class="p-callout">
+            <p>Opening a channel is an economic decision: how long it will be used, how much capacity is needed, and how much on-chain fee one is willing to pay. For casual users, modern Lightning wallets manage this automatically through channels managed by service providers.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualization — Three ways to close a channel</div>
+          <div class="b07-s74-desc">
+            Click each card to see the details, steps, and differences in speed and cost of each way to close a channel.
+          </div>
+
+          <div class="b07-s74-grid">
+            <div class="b07-s74-card sel coop" id="b07-s74-c1">
+              <div class="b07-s74-head s74-coop">
+                <span>Cooperative close</span><span class="b07-s74-badge">best</span>
+              </div>
+              <div class="b07-s74-cbody">
+                <div class="b07-s74-stat"><div class="b07-s74-sl">Speed</div><div class="b07-s74-sv sv-g">1 confirmation</div></div>
+                <div class="b07-s74-stat"><div class="b07-s74-sl">On-chain transactions</div><div class="b07-s74-sv sv-g">1</div></div>
+                <div class="b07-s74-stat"><div class="b07-s74-sl">Time-lock</div><div class="b07-s74-sv sv-g">None</div></div>
+                <div class="b07-s74-stat"><div class="b07-s74-sl">Cost</div><div class="b07-s74-sv sv-g">Cheapest</div></div>
+              </div>
+            </div>
+            <div class="b07-s74-card" id="b07-s74-c2">
+              <div class="b07-s74-head s74-force">
+                <span>Force close</span><span class="b07-s74-badge">emergency</span>
+              </div>
+              <div class="b07-s74-cbody">
+                <div class="b07-s74-stat"><div class="b07-s74-sl">Speed</div><div class="b07-s74-sv sv-m">~144 blocks</div></div>
+                <div class="b07-s74-stat"><div class="b07-s74-sl">On-chain transactions</div><div class="b07-s74-sv sv-m">2</div></div>
+                <div class="b07-s74-stat"><div class="b07-s74-sl">Time-lock</div><div class="b07-s74-sv sv-m">Yes — must wait</div></div>
+                <div class="b07-s74-stat"><div class="b07-s74-sl">Cost</div><div class="b07-s74-sv sv-m">More expensive</div></div>
+              </div>
+            </div>
+            <div class="b07-s74-card" id="b07-s74-c3">
+              <div class="b07-s74-head s74-pen">
+                <span>Penalty close</span><span class="b07-s74-badge">penalty</span>
+              </div>
+              <div class="b07-s74-cbody">
+                <div class="b07-s74-stat"><div class="b07-s74-sl">Speed</div><div class="b07-s74-sv sv-r">Depends on detection</div></div>
+                <div class="b07-s74-stat"><div class="b07-s74-sl">On-chain transactions</div><div class="b07-s74-sv sv-r">2-3</div></div>
+                <div class="b07-s74-stat"><div class="b07-s74-sl">Time-lock</div><div class="b07-s74-sv sv-r">Limited time window</div></div>
+                <div class="b07-s74-stat"><div class="b07-s74-sl">Result</div><div class="b07-s74-sv sv-r">Attacker loses everything</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b07-s74-detail">
+            <div class="b07-s74-dhead" id="b07-s74-dhead"></div>
+            <div class="b07-s74-dbody" id="b07-s74-dbody"></div>
+          </div>
+
+          <div class="b07-s74-note" id="b07-s74-note"></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-7-3" data-sb="sb-7-3">
+            ← 7.3 — Routing and HTLC
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-7-5" data-sb="sb-7-5">
+            7.5 — Invoices and Payments →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 7.4 -->
+
+      <!-- ==============================
+           SECTION 7.5 · Invoice dan Pembayaran
+      ============================== -->
+      <div class="p-section" id="section-7-5">
+        <div class="p-eyebrow">Chapter 7 · 7.5</div>
+        <div class="p-heading">Scan, confirm, done — in one second</div>
+        <div class="p-title">Invoices and Payments</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>So far we’ve understood how channels work and how payments can be routed. But how does an everyday user actually make a payment on Lightning? The answer is the invoice.</p>
+
+          <p><strong>What is an invoice?</strong></p>
+          <p>An invoice is a payment request created by the recipient. It contains all the information the sender needs to complete the payment: the amount to be paid, the hash of the HTLC secret, the recipient’s node ID, and the invoice’s validity period. An invoice is usually represented as a long text string starting with <code>lnbc</code> (for mainnet) or a QR code that can be scanned. The format is called BOLT-11, one of the Lightning protocol standards.</p>
+
+          <p><strong>The payment flow</strong></p>
+          <p>Carol wants to receive 0.001 BTC from Alice. Carol creates an invoice. Behind the scenes, Carol creates a secret R and computes H = hash(R), then puts H into the invoice. Carol shares the invoice with Alice via QR code or copy-paste. Alice opens the invoice in her wallet. The wallet automatically finds the best route to Carol. Alice confirms. The wallet performs HTLC payment routing. Carol reveals R to claim the payment. From the user’s point of view: scan QR, confirm, done. Less than one second.</p>
+
+          <p><strong>Weaknesses of the classic invoice</strong></p>
+          <p>BOLT-11 invoices have some limitations. First, single-use: each invoice can only be paid once. Second, the recipient has to be online when the payment arrives to reveal R. Third, there’s no proof of payment that a third party can verify.</p>
+
+          <p><strong>BOLT-12: offers</strong></p>
+          <p>A new, developing standard, BOLT-12, introduces the concept of an "offer": a static code that can be used many times. When a sender wants to pay, their wallet contacts the recipient’s node to request a new, unique invoice. This solves the single-use problem and enables recurring payments like subscriptions.</p>
+
+          
+          <p><strong>LNURL: one address, used many times</strong></p>
+          <p>Outside the BOLT standard, there’s another approach already widely used: LNURL. Unlike the one-time BOLT-11 invoice, LNURL is an HTTP-based protocol that lets the sender’s wallet request a new invoice each time it wants to pay, from just one static address. This means the recipient can share a single code or address like <code>name@domain.com</code>, and the sender can pay repeatedly without the recipient needing to create a new invoice each time. Using lnbc (BOLT-11) is still far more common in everyday transactions, but LNURL exists as a practical solution for cases like donations, tips, or recurring payments.</p>
+
+          <div class="p-callout">
+            <p>A Lightning invoice is the interface between a complex protocol and a user who just wants to scan and pay. Behind that simple QR code hides the payment hash, routing hints, and a cryptographic signature. Good abstraction makes complicated technology feel like magic.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualization — Invoice structure and payment flow</div>
+          <div class="b07-s75-desc">
+            First tab: click each segment of the invoice to see what it means. Second tab: the payment flow from creating the invoice to completion.
+          </div>
+
+          <div class="b07-s75-tabs">
+            <button class="b07-s75-tab active" id="b07-s75-t1">Invoice structure</button>
+            <button class="b07-s75-tab" id="b07-s75-t2">Payment flow</button>
+          </div>
+
+          <!-- Pane 1: Struktur invoice -->
+          <div class="b07-s75-pane show" id="b07-s75-p1">
+            <div style="font-size:11px;color:#52524C;font-family:'Sora',sans-serif;margin-bottom:8px;">Click an invoice part or the legend to see its explanation:</div>
+            <div class="b07-s75-string" id="b07-s75-string">
+              <span class="b07-s75-seg seg-prefix" data-key="prefix">lnbc</span><span class="b07-s75-seg seg-amount" data-key="amount">1m</span><span class="b07-s75-seg seg-ts" data-key="timestamp">1pj</span><span class="b07-s75-seg seg-phash" data-key="phash">pp5kw5uzfmzk6wfcg9...</span><span class="b07-s75-seg seg-nodeid" data-key="nodeid">hz02a7pqfxpj9...</span><span class="b07-s75-seg seg-expiry" data-key="expiry">x3600</span><span class="b07-s75-seg seg-sig" data-key="sig">0n9rqsypp5...</span>
+            </div>
+            <div class="b07-s75-legend" id="b07-s75-legend">
+              <div class="b07-s75-leg" data-key="prefix"><div class="b07-s75-dot" style="background:#AFA9EC;"></div>Network prefix</div>
+              <div class="b07-s75-leg" data-key="amount"><div class="b07-s75-dot" style="background:#5DCAA5;"></div>Amount</div>
+              <div class="b07-s75-leg" data-key="timestamp"><div class="b07-s75-dot" style="background:#FAC775;"></div>Timestamp</div>
+              <div class="b07-s75-leg" data-key="phash"><div class="b07-s75-dot" style="background:#F09595;"></div>Payment hash</div>
+              <div class="b07-s75-leg" data-key="nodeid"><div class="b07-s75-dot" style="background:#85B7EB;"></div>Recipient node ID</div>
+              <div class="b07-s75-leg" data-key="expiry"><div class="b07-s75-dot" style="background:#97C459;"></div>Validity period</div>
+              <div class="b07-s75-leg" data-key="sig"><div class="b07-s75-dot" style="background:#888780;"></div>Signature</div>
+            </div>
+            <div class="b07-s75-detail">
+              <div class="b07-s75-dhead" id="b07-s75-dhead">Choose an invoice part to see the explanation</div>
+              <div class="b07-s75-dbody" id="b07-s75-dbody"></div>
+            </div>
+          </div>
+
+          <!-- Pane 2: Alur pembayaran -->
+          <div class="b07-s75-pane" id="b07-s75-p2">
+            <div class="b07-s75-flow">
+              <div class="b07-s75-fstep">
+                <div class="b07-s75-fnum fc">C</div>
+                <div class="b07-s75-fcontent">
+                  <div class="b07-s75-factor">Carol (recipient)</div>
+                  <div class="b07-s75-ftitle">Create secret and invoice</div>
+                  <div class="b07-s75-fdesc">Carol creates a secret R, computes H = hash(R), then creates a BOLT-11 invoice containing H, the amount, and routing information.</div>
+                  <div class="b07-s75-fcode">lnbc1m1pj...pp5kw5...hz02a7...0n9rq...</div>
+                </div>
+              </div>
+              <div class="b07-s75-fstep">
+                <div class="b07-s75-fnum fc">C</div>
+                <div class="b07-s75-fcontent">
+                  <div class="b07-s75-factor">Carol (recipient)</div>
+                  <div class="b07-s75-ftitle">Share the invoice with Alice</div>
+                  <div class="b07-s75-fdesc">Carol displays a QR code or sends the invoice string. Alice can scan or copy-paste it into her wallet.</div>
+                </div>
+              </div>
+              <div class="b07-s75-fstep">
+                <div class="b07-s75-fnum fa">A</div>
+                <div class="b07-s75-fcontent">
+                  <div class="b07-s75-factor">Alice (sender)</div>
+                  <div class="b07-s75-ftitle">Open the invoice and find a route</div>
+                  <div class="b07-s75-fdesc">Alice’s wallet decodes the invoice, reads the amount and payment hash, then finds the best route to Carol’s node in the Lightning network.</div>
+                </div>
+              </div>
+              <div class="b07-s75-fstep">
+                <div class="b07-s75-fnum fa">A</div>
+                <div class="b07-s75-fcontent">
+                  <div class="b07-s75-factor">Alice (sender)</div>
+                  <div class="b07-s75-ftitle">Confirm and send the HTLC</div>
+                  <div class="b07-s75-fdesc">Alice confirms the payment. The wallet starts HTLC routing using the payment hash H from the invoice. Funds are locked at each hop.</div>
+                </div>
+              </div>
+              <div class="b07-s75-fstep">
+                <div class="b07-s75-fnum fc">C</div>
+                <div class="b07-s75-fcontent">
+                  <div class="b07-s75-factor">Carol (recipient)</div>
+                  <div class="b07-s75-ftitle">Reveal R, claim the payment</div>
+                  <div class="b07-s75-fdesc">Carol reveals R to the last node. Funds flow back at each hop up to Alice. The payment is complete.</div>
+                </div>
+              </div>
+              <div class="b07-s75-fstep">
+                <div class="b07-s75-fnum fb">✓</div>
+                <div class="b07-s75-fcontent">
+                  <div class="b07-s75-factor">Done</div>
+                  <div class="b07-s75-ftitle">Payment confirmed in less than 1 second</div>
+                  <div class="b07-s75-fdesc">No on-chain transaction. No confirmation to wait for. The R that Carol revealed becomes a proof of payment that can’t be forged.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-7-4" data-sb="sb-7-4">
+            ← 7.4 — Opening and Closing Channels
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-7-6" data-sb="sb-7-6">
+            7.6 — Limitations and Trade-offs →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 7.5 -->
+
+      <!-- ==============================
+           SECTION 7.6 · Keterbatasan dan Trade-off
+      ============================== -->
+      <div class="p-section" id="section-7-6">
+        <div class="p-eyebrow">Chapter 7 · 7.6</div>
+        <div class="p-heading">There’s no perfect solution — only honest trade-offs</div>
+        <div class="p-title">Lightning’s Limitations and Trade-offs</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>The Lightning Network is an extraordinary technology, but not a perfect solution. Understanding its limitations is as important as understanding its strengths.</p>
+
+          <p><strong>Locked liquidity</strong></p>
+          <p>To open a channel, a user has to lock bitcoin inside it. This locked bitcoin can’t be used for anything else while the channel is open. For nodes that do routing, they have to lock liquidity in many channels at once. This is idle capital.</p>
+
+          <p><strong>The inbound liquidity problem</strong></p>
+          <p>If Alice opens a channel to Bob with 0.1 BTC, the entire capacity is on Alice’s side. Bob can’t send to Alice until Alice sends something to Bob first. To receive payments, a user needs inbound liquidity: a channel that has capacity on the recipient’s side. Getting inbound liquidity isn’t always easy and often costs money.</p>
+
+          <p><strong>The need to be online</strong></p>
+          <p>To receive payments on classic Lightning, the recipient’s node has to be online. If a phone is off when someone tries to pay, the payment fails. This differs from on-chain Bitcoin where the recipient doesn’t need to be online. BOLT-12 offers are starting to address this, but aren’t yet fully widespread.</p>
+
+          <p><strong>Watchtower: delegating monitoring</strong></p>
+          <p>To detect cheating, a user has to monitor the blockchain periodically. If a node is offline too long, a cheating party can broadcast an old state undetected. The solution is a watchtower: a third-party service that monitors the blockchain on the user’s behalf. But this introduces a new element of trust.</p>
+
+          <p><strong>Routing doesn’t always succeed</strong></p>
+          <p>Finding a route that has enough liquidity at every hop is a hard problem. Large payments often fail because there’s no route with enough capacity. Lightning works very well for small, routine payments, but is less suited for large value transfers.</p>
+
+          <p><strong>Honest trade-offs</strong></p>
+          <p>Lightning isn’t a replacement for on-chain Bitcoin. It’s a layer on top of it for frequent, small, and fast payments. For large, final payments that require maximum security, on-chain is still more appropriate. Both serve different needs.</p>
+
+          <div class="p-callout">
+            <p>Every technology has trade-offs. What matters is understanding those trade-offs and choosing the right tool for the right need. Lightning isn’t a better Bitcoin. Lightning is Bitcoin extended for a different use case.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Comparison — Lightning vs Bitcoin on-chain</div>
+          <div class="b07-s76-desc">
+            A comparison of nine dimensions to help choose which is right for a particular situation.
+          </div>
+
+          <div class="b07-s76-grid">
+            <div class="b07-s76-hcell s76-label">Dimension</div>
+            <div class="b07-s76-hcell s76-ln">Lightning Network</div>
+            <div class="b07-s76-hcell s76-oc">Bitcoin on-chain</div>
+
+            <div class="b07-s76-cell s76-label">Confirmation speed</div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill good">Less than 1 second</span><div class="b07-s76-sub">Instant once routing completes</div></div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill mid">10 minutes - a few hours</span><div class="b07-s76-sub">Depends on fee and mempool congestion</div></div>
+
+            <div class="b07-s76-cell s76-label">Transaction cost</div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill good">Very cheap</span><div class="b07-s76-sub">Fraction of a satoshi per transaction</div></div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill mid">Varies</span><div class="b07-s76-sub">Can be expensive when the network is busy</div></div>
+
+            <div class="b07-s76-cell s76-label">Payment finality</div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill mid">Probabilistic</span><div class="b07-s76-sub">Secure but needs an active channel</div></div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill good">Absolute</span><div class="b07-s76-sub">After a few confirmations, irreversible</div></div>
+
+            <div class="b07-s76-cell s76-label">Security</div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill mid">High, with conditions</span><div class="b07-s76-sub">Needs monitoring or a watchtower</div></div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill good">Maximum</span><div class="b07-s76-sub">Guaranteed directly by Proof of Work</div></div>
+
+            <div class="b07-s76-cell s76-label">Privacy</div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill good">Better</span><div class="b07-s76-sub">Onion routing, not everything recorded on-chain</div></div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill bad">Limited</span><div class="b07-s76-sub">All transactions public on the blockchain</div></div>
+
+            <div class="b07-s76-cell s76-label">Recipient must be online</div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill bad">Yes (BOLT-11)</span><div class="b07-s76-sub">BOLT-12 offers are starting to address this</div></div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill good">No</span><div class="b07-s76-sub">Funds can be sent anytime</div></div>
+
+            <div class="b07-s76-cell s76-label">Payment size</div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill good">Micro to medium</span><div class="b07-s76-sub">Ideal for small, routine payments</div></div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill good">All sizes</span><div class="b07-s76-sub">Suitable for large value transfers</div></div>
+
+            <div class="b07-s76-cell s76-label">User complexity</div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill bad">High</span><div class="b07-s76-sub">Channels, liquidity, routing — needs abstraction</div></div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill mid">Medium</span><div class="b07-s76-sub">Fee estimation, UTXO management</div></div>
+
+            <div class="b07-s76-cell s76-label">Capital required</div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill mid">Locked liquidity</span><div class="b07-s76-sub">Bitcoin locked in a channel</div></div>
+            <div class="b07-s76-cell"><span class="b07-s76-pill good">None</span><div class="b07-s76-sub">No special upfront capital needed</div></div>
+          </div>
+
+          <div class="b07-s76-use">
+            <div class="b07-s76-use-card">
+              <div class="b07-s76-use-head s76-ln-head">Use Lightning for...</div>
+              <div class="b07-s76-use-body">
+                <div class="b07-s76-use-item"><div class="b07-s76-dot s76-dot-ln"></div><span>Pay for coffee, food, or everyday shopping</span></div>
+                <div class="b07-s76-use-item"><div class="b07-s76-dot s76-dot-ln"></div><span>Micropayments: streaming sats per minute, content tips</span></div>
+                <div class="b07-s76-use-item"><div class="b07-s76-dot s76-dot-ln"></div><span>Recurring transactions with the same party</span></div>
+                <div class="b07-s76-use-item"><div class="b07-s76-dot s76-dot-ln"></div><span>Payments that need instant confirmation</span></div>
+              </div>
+            </div>
+            <div class="b07-s76-use-card">
+              <div class="b07-s76-use-head s76-oc-head">Use on-chain for...</div>
+              <div class="b07-s76-use-body">
+                <div class="b07-s76-use-item"><div class="b07-s76-dot s76-dot-oc"></div><span>Long-term savings (cold storage)</span></div>
+                <div class="b07-s76-use-item"><div class="b07-s76-dot s76-dot-oc"></div><span>Large value transfers that need absolute finality</span></div>
+                <div class="b07-s76-use-item"><div class="b07-s76-dot s76-dot-oc"></div><span>Sending to a recipient who doesn’t have Lightning</span></div>
+                <div class="b07-s76-use-item"><div class="b07-s76-dot s76-dot-oc"></div><span>Opening or closing a Lightning channel</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b07-s76-note">Lightning isn’t a replacement for on-chain Bitcoin. It’s a layer on top of it for frequent, small, and fast payments. Both serve different needs and complement each other.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-7-5" data-sb="sb-7-5">
+            ← 7.5 — Invoices and Payments
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 7.6 -->
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 10 · BAB 7 -->
+
+

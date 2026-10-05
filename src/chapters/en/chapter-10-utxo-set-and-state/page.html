@@ -1,0 +1,652 @@
+<!-- ============================================================
+     PAGE 13 · BAB 10 · UTXO Set dan State Bitcoin
+     |-- 10.1 · Apa itu UTXO Set? [DONE]
+     |-- 10.2 · [LOCKED]
+     |-- 10.3 · [LOCKED]
+     |-- 10.4 · [LOCKED]
+     |-- 10.5 · [LOCKED]
+     |-- 10.6 · [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab10">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b10">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b10">← Chapter List</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab10">
+      <div class="sidebar-heading">Chapter 10</div>
+      <div class="sidebar-title">The UTXO Set and Bitcoin State</div>
+
+      <div class="sidebar-item active" id="sb-10-1">
+        <div class="sb-num">10.1</div>
+        <div class="sb-label">What is the UTXO Set?</div>
+      </div>
+      <div class="sidebar-item" id="sb-10-2">
+        <div class="sb-num">10.2</div>
+        <div class="sb-label">How the UTXO Set is Updated</div>
+      </div>
+      <div class="sidebar-item" id="sb-10-3">
+        <div class="sb-num">10.3</div>
+        <div class="sb-label">The UTXO Set and Transaction Verification</div>
+      </div>
+      <div class="sidebar-item" id="sb-10-4">
+        <div class="sb-num">10.4</div>
+        <div class="sb-label">Size and Growth of the UTXO Set</div>
+      </div>
+      <div class="sidebar-item" id="sb-10-5">
+        <div class="sb-num">10.5</div>
+        <div class="sb-label">The UTXO Set and Privacy</div>
+      </div>
+      <div class="sidebar-item" id="sb-10-6">
+        <div class="sb-num">10.6</div>
+        <div class="sb-label">The Future of the UTXO Set</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab10-content">
+
+      <!-- ==============================
+           SECTION 10.1 · Apa itu UTXO Set?
+      ============================== -->
+      <div class="p-section active" id="section-10-1">
+        <div class="p-eyebrow">Chapter 10 · 10.1</div>
+        <div class="p-heading">Bitcoin doesn’t store balances — it stores outputs</div>
+        <div class="p-title">What is the UTXO Set?</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Bitcoin doesn’t store balances. This is one of the things most often misunderstood by people new to Bitcoin. Your wallet doesn’t have a "balance of 0.5 BTC" stored somewhere. What it has is a collection of unspent transaction outputs that, when added up, give the number we call the balance.</p>
+
+          <p><strong>UTXO recap</strong></p>
+          <p>Every Bitcoin transaction consumes existing UTXOs as inputs and creates new UTXOs as outputs. A UTXO that has been spent can’t be used again. A newly created UTXO waits to be used in a future transaction. The UTXO set is the collection of all UTXOs that currently exist across the entire Bitcoin network, that is, all the outputs that have been created but not yet spent. This is Bitcoin’s current "state".</p>
+
+          <p><strong>Why does the UTXO set matter?</strong></p>
+          <p>The UTXO set is the single source of truth about bitcoin ownership. Every full node stores a complete copy of the UTXO set and updates it each time there’s a new block. When you send a transaction, the node verifies that the UTXOs you claim as input really exist in the UTXO set and haven’t been spent. This is the mechanism that prevents double spending: if you try to use the same UTXO twice, the node will detect that the UTXO no longer exists in the UTXO set after the first transaction is confirmed.</p>
+
+          <p><strong>The size of the UTXO set</strong></p>
+          <p>The UTXO set is far smaller than the full blockchain. The blockchain stores the entire history of all transactions since the genesis block, which as of mid-2026 is already more than 700 GB. The UTXO set only stores unspent outputs, and its size is around 11 GB. This is what allows a full node to verify a new transaction very quickly without having to read the entire blockchain.</p>
+
+          <p><strong>The UTXO set and memory</strong></p>
+          <p>A full node stores the UTXO set in memory or a database optimized for fast access. Each time a new block comes in, the node removes spent UTXOs and adds new ones. This operation must be very efficient because it happens every 10 minutes.</p>
+
+          <div class="p-callout">
+            <p>The UTXO set is one of the most elegant designs in Bitcoin. By only storing "what exists now" rather than "everything that ever happened", Bitcoin enables fast and efficient transaction verification without having to read the entire blockchain history.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulation — UTXO Set</div>
+          <div class="b10-s101-desc">
+            See how UTXOs are consumed and new UTXOs are created when a transaction happens. The UTXO set always reflects the current state of bitcoin ownership.
+          </div>
+
+          <div class="b10-s101-top">
+            <button class="b10-s101-btn-primary" id="b10-s101-send">Send Transaction</button>
+            <button class="b10-s101-btn-sec" id="b10-s101-reset">Reset</button>
+          </div>
+
+          <div class="b10-s101-stat-row">
+            <div class="b10-s101-stat count" id="b10-s101-count">UTXO: 8 outputs</div>
+            <div class="b10-s101-stat size" id="b10-s101-size">Total: 4.850 BTC</div>
+          </div>
+
+          <div class="b10-s101-label">UTXO Set — all unspent outputs</div>
+          <div class="b10-s101-grid" id="b10-s101-grid"></div>
+
+          <div class="b10-s101-tx" id="b10-s101-tx" style="display:none;">
+            <div class="b10-s101-tx-head">Transaction being processed</div>
+            <div class="b10-s101-tx-body">
+              <div class="b10-s101-tx-col">
+                <div class="b10-s101-tx-col-label">Input (consumed)</div>
+                <div class="b10-s101-tx-item inp">utxo_a1: 1.500 BTC</div>
+                <div class="b10-s101-tx-item inp">utxo_a2: 0.300 BTC</div>
+              </div>
+              <div class="b10-s101-tx-arrow">→</div>
+              <div class="b10-s101-tx-col">
+                <div class="b10-s101-tx-col-label">Output (newly created)</div>
+                <div class="b10-s101-tx-item out">Bob: 1.200 BTC</div>
+                <div class="b10-s101-tx-item out">Alice (change): 0.585 BTC</div>
+                <div class="b10-s101-tx-item fee">Miner fee: 0.015 BTC</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b10-s101-note idle-note" id="b10-s101-note">Click "Send Transaction" to see how UTXOs are consumed and new UTXOs are created. The UTXO set always reflects the current state of bitcoin ownership.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-10-2" data-sb="sb-10-2">
+            10.2 — How the UTXO Set is Updated →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 10.1 -->
+
+      <!-- ==============================
+           SECTION 10.2 · Bagaimana UTXO Set Diperbarui
+      ============================== -->
+      <div class="p-section" id="section-10-2">
+        <div class="p-eyebrow">Chapter 10 · 10.2</div>
+        <div class="p-heading">Every block changes Bitcoin’s state deterministically</div>
+        <div class="p-title">How the UTXO Set is Updated</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Each time a new block is added to the blockchain, the UTXO set has to be updated. This is an operation that happens thousands of times a day at every full node across the network, and it must run very efficiently.</p>
+
+          <p><strong>Two basic operations</strong></p>
+          <p>There are two operations that happen when the UTXO set is updated: removal and addition. Every transaction in a block consumes some UTXOs as inputs, and these UTXOs are removed from the set. Every transaction also creates new UTXOs as outputs, and these UTXOs are added to the set. Once all transactions in the block are processed, the UTXO set reflects Bitcoin’s new state.</p>
+
+          <p><strong>Processing order</strong></p>
+          <p>The processing order within a block matters. The first transaction in every block is always the coinbase transaction: a special transaction that has no input and only outputs. This is how the miner gets the block reward plus all the transaction fees in that block. The UTXO from the coinbase transaction is added to the UTXO set, but there’s a special rule: a coinbase UTXO can’t be spent for the next 100 blocks. This is called coinbase maturity. The following transactions are processed in order. If transaction B uses the output of transaction A in the same block, A must appear first. This is called topological ordering.</p>
+
+          <p><strong>Rollback during reorganization</strong></p>
+          <p>Sometimes a chain reorganization happens: a node finds a longer chain that differs from the chain it’s currently following. When this happens, the node has to roll back the UTXO set to its previous state, then apply the blocks from the new chain. This is a complex operation and requires the node to store information about the UTXO set changes in each block so they can be undone.</p>
+
+          <p><strong>Database efficiency</strong></p>
+          <p>The UTXO set is stored in a key-value database optimized for fast lookup. The key is the pair (txid, output index) that uniquely identifies each UTXO. The value is the UTXO data: the amount of satoshi, the script that must be satisfied to spend it, and the block height when the UTXO was created. This lookup must complete within milliseconds because the node has to verify every input of every incoming transaction.</p>
+
+          <div class="p-callout">
+            <p>The UTXO set update process is the heart of full node operation. Every node around the world performs the exact same operation when processing the same block, and the result is always identical. From the same state, the same input always produces the same state.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulation — UTXO set update per block</div>
+          <div class="b10-s102-desc">
+            Process block #840,512 and see how each transaction updates the UTXO set in order, starting from the coinbase transaction.
+          </div>
+
+          <div class="b10-s102-top">
+            <button class="b10-s102-btn-primary" id="b10-s102-run">Process Block #840,512</button>
+            <button class="b10-s102-btn-sec" id="b10-s102-rst">Reset</button>
+          </div>
+
+          <div class="b10-s102-stats">
+            <div class="b10-s102-stat s102-before" id="b10-s102-bef">Before: 12 UTXO</div>
+            <div class="b10-s102-stat s102-delta"  id="b10-s102-dlt">Change: -</div>
+            <div class="b10-s102-stat s102-after"  id="b10-s102-aft">After: 12 UTXO</div>
+          </div>
+
+          <div class="b10-s102-block">
+            <div class="b10-s102-block-head"><span>Block #840,512</span><span>4 transactions</span></div>
+            <div class="b10-s102-block-body" id="b10-s102-blk"></div>
+          </div>
+
+          <div class="b10-s102-set-label">Current UTXO Set</div>
+          <div class="b10-s102-set" id="b10-s102-set"></div>
+
+          <div class="b10-s102-set-label">Change log</div>
+          <div class="b10-s102-log" id="b10-s102-log"></div>
+
+          <div class="b10-s102-note idle-note" id="b10-s102-note">Click "Process Block" to see how each transaction in the block updates the UTXO set in order, starting from the coinbase transaction.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-10-1" data-sb="sb-10-1">
+            ← 10.1 — What is the UTXO Set?
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-10-3" data-sb="sb-10-3">
+            10.3 — The UTXO Set and Transaction Verification →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 10.2 -->
+
+      <!-- ==============================
+           SECTION 10.3 · UTXO Set dan Verifikasi Transaksi
+      ============================== -->
+      <div class="p-section" id="section-10-3">
+        <div class="p-eyebrow">Chapter 10 · 10.3</div>
+        <div class="p-heading">A node verifies transactions with local data only</div>
+        <div class="p-title">The UTXO Set and Transaction Verification</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>One of the most critical functions of the UTXO set is enabling fast and reliable transaction verification. When a new transaction arrives at a node, the node doesn’t need to read the entire blockchain to verify it. It only needs to check the UTXO set.</p>
+
+          <p><strong>What gets verified?</strong></p>
+          <p>When a node receives a new transaction, several things are checked in order. First, does every UTXO claimed as input actually exist in the UTXO set? If not, the transaction is rejected because it’s trying to spend something that doesn’t exist. Second, is the total input value greater than or equal to the total output value? The difference is the fee for the miner. Third, is the locking script of each UTXO satisfied by the unlocking script the sender provided? This is cryptographic verification that the sender is indeed entitled to spend that UTXO.</p>
+
+          <p><strong>Verification speed</strong></p>
+          <p>Because the UTXO set is stored in a database optimized for fast lookup, this verification can complete within milliseconds even for transactions with many inputs. The node doesn’t need to trace the entire blockchain history, just query the UTXO set with the txid and output index as the key.</p>
+
+          <p><strong>Double spend detection</strong></p>
+          <p>A double spend is an attempt to use the same UTXO more than once. The UTXO set makes this impossible for confirmed transactions: once a UTXO is consumed and removed from the set, it can’t be used again. For unconfirmed transactions in the mempool, the node watches whether two transactions claim the same UTXO and rejects the one that comes later.</p>
+
+          <p><strong>Coinbase maturity</strong></p>
+          <p>There’s one special exception in verification: the coinbase UTXO. A UTXO originating from a coinbase transaction can’t be spent for 100 blocks after the block in which that coinbase exists. This is called coinbase maturity. The purpose is to provide a time buffer in case a chain reorganization removes that block. Before 100 blocks, the coinbase UTXO does exist in the UTXO set but the node rejects transactions that try to use it.</p>
+
+          <div class="p-callout">
+            <p>The UTXO set design that enables fast verification is one reason Bitcoin can operate as a decentralized system without a central server. Every node can verify every transaction independently, using only local data that’s far smaller than the full blockchain.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulation — Transaction verification and double spend detection</div>
+          <div class="b10-s103-desc">
+            First tab: see the valid transaction verification process step by step. Second tab: see how a double spend is detected when the UTXO no longer exists in the set.
+          </div>
+
+          <div class="b10-s103-tabs">
+            <button class="b10-s103-tab s103-act" id="b10-s103-t1">Valid Transaction</button>
+            <button class="b10-s103-tab" id="b10-s103-t2">Double Spend (Rejected)</button>
+          </div>
+
+          <!-- PANE 1: VALID -->
+          <div class="b10-s103-pane show" id="b10-s103-p1">
+            <div class="b10-s103-tx-card">
+              <div class="b10-s103-tx-head">
+                <span>tx_f1a2b3c4 — arrives at the node</span>
+                <span class="b10-s103-tx-badge s103-pending" id="b10-s103-badge1">awaiting verification</span>
+              </div>
+              <div class="b10-s103-tx-body">
+                <div class="b10-s103-tx-col">
+                  <div class="b10-s103-tx-col-label">Input</div>
+                  <div class="b10-s103-tx-item s103-inp" id="b10-s103-inp1a">u_A1 — 1.500 BTC</div>
+                  <div class="b10-s103-tx-item s103-inp" id="b10-s103-inp1b">u_B1 — 0.750 BTC</div>
+                </div>
+                <div class="b10-s103-tx-arrow">→</div>
+                <div class="b10-s103-tx-col">
+                  <div class="b10-s103-tx-col-label">Output</div>
+                  <div class="b10-s103-tx-item s103-out">Carol: 2.100 BTC</div>
+                  <div class="b10-s103-tx-item s103-out">Alice (change): 0.135 BTC</div>
+                  <div class="b10-s103-tx-item s103-fee">Fee: 0.015 BTC</div>
+                </div>
+              </div>
+            </div>
+            <div class="b10-s103-steps" id="b10-s103-steps1"></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="b10-s103-btn-primary" id="b10-s103-run1">Verify Transaction</button>
+              <button class="b10-s103-btn-sec" id="b10-s103-rst1">Reset</button>
+            </div>
+            <div class="b10-s103-note s103-idle" id="b10-s103-note1">Click "Verify Transaction" to see how the node checks this transaction step by step using the UTXO set.</div>
+          </div>
+
+          <!-- PANE 2: DOUBLE SPEND -->
+          <div class="b10-s103-pane" id="b10-s103-p2">
+            <div class="b10-s103-tx-card">
+              <div class="b10-s103-tx-head">
+                <span>tx_9x8y7z6w — arrives at the node</span>
+                <span class="b10-s103-tx-badge s103-pending" id="b10-s103-badge2">awaiting verification</span>
+              </div>
+              <div class="b10-s103-tx-body">
+                <div class="b10-s103-tx-col">
+                  <div class="b10-s103-tx-col-label">Input</div>
+                  <div class="b10-s103-tx-item s103-inp" id="b10-s103-inp2a">u_A1 — 1.500 BTC</div>
+                  <div class="b10-s103-tx-item s103-inp" id="b10-s103-inp2b">u_C1 — 0.650 BTC</div>
+                </div>
+                <div class="b10-s103-tx-arrow">→</div>
+                <div class="b10-s103-tx-col">
+                  <div class="b10-s103-tx-col-label">Output</div>
+                  <div class="b10-s103-tx-item s103-out">Eve: 2.100 BTC</div>
+                  <div class="b10-s103-tx-item s103-fee">Fee: 0.050 BTC</div>
+                </div>
+              </div>
+            </div>
+            <div class="b10-s103-ctx">Context: u_A1 was already consumed by tx_f1a2b3c4 earlier and no longer exists in the UTXO set.</div>
+            <div class="b10-s103-steps" id="b10-s103-steps2"></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="b10-s103-btn-primary" id="b10-s103-run2">Verify Transaction</button>
+              <button class="b10-s103-btn-sec" id="b10-s103-rst2">Reset</button>
+            </div>
+            <div class="b10-s103-note s103-idle" id="b10-s103-note2">Click "Verify Transaction" to see how the node detects a double spend when u_A1 no longer exists in the UTXO set.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-10-2" data-sb="sb-10-2">
+            ← 10.2 — How the UTXO Set is Updated
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-10-4" data-sb="sb-10-4">
+            10.4 — Size and Growth of the UTXO Set →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 10.3 -->
+
+      <!-- ==============================
+           SECTION 10.4 · Ukuran dan Pertumbuhan UTXO Set
+      ============================== -->
+      <div class="p-section" id="section-10-4">
+        <div class="p-eyebrow">Chapter 10 · 10.4</div>
+        <div class="p-heading">Every unneeded UTXO is a small burden carried by the whole network</div>
+        <div class="p-title">Size and Growth of the UTXO Set</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>The UTXO set isn’t a static number. It keeps changing with network activity. Understanding how the UTXO set size grows and how that affects nodes is an important part of understanding the long-term economics and technicals of Bitcoin.</p>
+
+          <p><strong>How big is the UTXO set right now?</strong></p>
+          <p>As of mid-2026, the Bitcoin UTXO set contains more than 170 million UTXOs with a total size of around 11 GB. This is far smaller than the full blockchain, which is already more than 700 GB. But that doesn’t mean the UTXO set can’t become a problem in the future.</p>
+
+          <p><strong>What makes the UTXO set grow?</strong></p>
+          <p>The UTXO set grows when more UTXOs are created than consumed. This happens in several situations: transactions that produce many small outputs without good batching, dust outputs that aren’t economical to spend because their fee is larger than their own value, and lost coins, that is, UTXOs whose private key is already lost and will never be consumed but remain in the UTXO set forever.</p>
+
+          <p><strong>UTXO bloat and dust</strong></p>
+          <p>Dust is a UTXO with a very small satoshi value, often below 546 satoshi for a P2PKH transaction. These outputs appear in the UTXO set but might never be economically spendable. Every node has to store these entries in their database. Over time, accumulated dust contributes to unproductive growth of the UTXO set.</p>
+
+          <p><strong>Why does the UTXO set size matter?</strong></p>
+          <p>The UTXO set has to be accessible quickly, ideally entirely in RAM or fast SSD. If the UTXO set grows too large, nodes with limited hardware will struggle. This is one reason there’s pressure to keep the UTXO set lean: the smaller the UTXO set, the easier it is to run a full node, and the stronger the network’s decentralization.</p>
+
+          <p><strong>UTXO consolidation</strong></p>
+          <p>When mempool fees are low, users can do UTXO consolidation: sending many small UTXOs to themselves in a single transaction to combine them into one larger UTXO. This reduces the number of UTXOs in the set and prepares for more efficient fees in the future when the mempool is busy.</p>
+
+          <div class="p-callout">
+            <p>A lean UTXO set is in the common interest of the whole network. Every unnecessary UTXO created is a small burden that every full node in the world has to carry. Practices like transaction batching and UTXO consolidation aren’t just personal efficiency, but a real contribution to the network’s health.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualization — UTXO set growth and consolidation</div>
+          <div class="b10-s104-desc">
+            See the UTXO set at various sizes and its growth trend. Click "Consolidate Small UTXOs" to combine small UTXOs and dust into one more efficient UTXO.
+          </div>
+
+          <div class="b10-s104-top">
+            <button class="b10-s104-btn-primary" id="b10-s104-consolidate">Consolidate Small UTXOs</button>
+            <button class="b10-s104-btn-sec" id="b10-s104-reset">Reset</button>
+          </div>
+
+          <div class="b10-s104-stat-row">
+            <div class="b10-s104-stat s104-count" id="b10-s104-count">20 UTXO</div>
+            <div class="b10-s104-stat s104-total" id="b10-s104-total">Total: 12.845 BTC</div>
+            <div class="b10-s104-stat s104-dust"  id="b10-s104-dust">Dust: 6 UTXO</div>
+          </div>
+
+          <div class="b10-s104-legend">
+            <div class="b10-s104-leg"><div class="b10-s104-leg-box" style="width:14px;height:14px;background:#EEEDFE;border:0.5px solid rgba(83,74,183,0.25);border-radius:3px;"></div>Large (&gt;0.5 BTC)</div>
+            <div class="b10-s104-leg"><div class="b10-s104-leg-box" style="width:12px;height:12px;background:#EAF3DE;border:0.5px solid rgba(15,110,86,0.25);border-radius:3px;"></div>Medium (0.01-0.5 BTC)</div>
+            <div class="b10-s104-leg"><div class="b10-s104-leg-box" style="width:10px;height:10px;background:#FAEEDA;border:0.5px solid rgba(133,79,11,0.25);border-radius:3px;"></div>Small (&lt;0.01 BTC)</div>
+            <div class="b10-s104-leg"><div class="b10-s104-leg-box" style="width:8px;height:8px;background:#FCEBEB;border:0.5px solid rgba(163,45,45,0.2);border-radius:3px;"></div>Dust (&lt;546 sat)</div>
+          </div>
+
+          <div class="b10-s104-grid">
+            <div class="b10-s104-panel">
+              <div class="b10-s104-panel-label">Your UTXO Set</div>
+              <div class="b10-s104-set" id="b10-s104-set"></div>
+            </div>
+            <div class="b10-s104-panel">
+              <div class="b10-s104-panel-label">Network UTXO set size trend</div>
+              <div class="b10-s104-chart-label">Number of UTXOs (millions)</div>
+              <div class="b10-s104-bars" id="b10-s104-bars"></div>
+            </div>
+          </div>
+
+          <div class="b10-s104-note s104-idle" id="b10-s104-note">Small UTXOs and dust add a burden to every full node. Click "Consolidate Small UTXOs" to combine small UTXOs into one when fees are low.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-10-3" data-sb="sb-10-3">
+            ← 10.3 — The UTXO Set and Transaction Verification
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-10-5" data-sb="sb-10-5">
+            10.5 — The UTXO Set and Privacy →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 10.4 -->
+
+      <!-- ==============================
+           SECTION 10.5 · UTXO Set dan Privacy
+      ============================== -->
+      <div class="p-section" id="section-10-5">
+        <div class="p-eyebrow">Chapter 10 · 10.5</div>
+        <div class="p-heading">The way you manage your UTXOs can reveal more than you realize</div>
+        <div class="p-title">The UTXO Set and Privacy</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>The UTXO set isn’t just about technicals and efficiency. There’s a privacy dimension important to understand. Because the UTXO set is public data that anyone can analyze, the way you manage your UTXOs can reveal more information about your finances than you realize.</p>
+
+          <p><strong>UTXO as a trail</strong></p>
+          <p>Every UTXO has a traceable history. Where it came from, what transaction created it, and who might be involved. Blockchain analysis can link different UTXOs to the same owner with several heuristics. The most common heuristic is common input ownership: if two UTXOs are used as inputs in the same transaction, blockchain analysts assume both are owned by the same person. This makes sense because to use a UTXO, you have to prove ownership by signing.</p>
+
+          <p><strong>Change output and privacy</strong></p>
+          <p>When you send Bitcoin and there’s change, that change creates a new UTXO at your address. Which address is the change and which is the payment can often be guessed by analysts: the change is usually the output with a non-round value, while the payment is a rounder number.</p>
+
+          <p><strong>Address reuse</strong></p>
+          <p>One of the most common privacy mistakes is using the same address repeatedly. If you receive Bitcoin at the same address twice, analysts can link both receipts and start building a picture of how much bitcoin you own in total. Modern wallets use HD wallets that generate a new address for every transaction, but not all users understand why this matters.</p>
+
+          <p><strong>UTXO consolidation and privacy</strong></p>
+          <p>The UTXO consolidation we discussed in 10.4 is very useful technically, but has a privacy trade-off. When you combine many UTXOs in one transaction, you confirm to analysts that all those UTXOs belong to the same person. If those UTXOs came from different sources, consolidation can reveal a pattern you didn’t want to reveal.</p>
+
+          <p><strong>CoinJoin as a solution</strong></p>
+          <p>CoinJoin is a technique where several users combine their transactions into one shared transaction. The result is a transaction with many inputs from many different users and many outputs with the same value. Analysts can no longer use the common input ownership heuristic because the inputs really do come from many people. This will be discussed in more depth in Chapter 12.</p>
+
+          <div class="p-callout">
+            <p>Privacy in Bitcoin isn’t about hiding something illegal. It’s about the basic right to manage your own financial information. Just as you don’t want everyone to know your bank account balance, you also have the right to choose who knows how much bitcoin you own and where it came from.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualization — UTXO analysis and privacy heuristics</div>
+          <div class="b10-s105-desc">
+            First tab: see how analysts link UTXOs via the common input heuristic. Second tab: compare address reuse vs a new address every transaction.
+          </div>
+
+          <div class="b10-s105-tabs">
+            <button class="b10-s105-tab s105-act" id="b10-s105-t1">Common Input Heuristic</button>
+            <button class="b10-s105-tab" id="b10-s105-t2">Address Reuse</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b10-s105-pane show" id="b10-s105-p1">
+            <div class="b10-s105-hint">Four UTXOs from different addresses. The analyst doesn’t know who owns them yet. Click "Send Transaction" to combine two UTXOs as input and see how the analyst immediately links them.</div>
+            <div class="b10-s105-graph" id="b10-s105-graph">
+              <svg id="b10-s105-svg" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;"></svg>
+            </div>
+            <div class="b10-s105-legend">
+              <div class="b10-s105-leg"><div class="b10-s105-leg-dot" style="background:#F4F4F0;border:1.5px solid rgba(124,58,237,0.2);"></div>Unknown</div>
+              <div class="b10-s105-leg"><div class="b10-s105-leg-dot" style="background:#FCEBEB;border:1.5px solid rgba(163,45,45,0.4);"></div>Identified as same</div>
+              <div class="b10-s105-leg"><div class="b10-s105-leg-dot" style="background:#534AB7;"></div>Transaction</div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="b10-s105-btn-primary" id="b10-s105-send">Send Transaction (combine 2 inputs)</button>
+              <button class="b10-s105-btn-sec" id="b10-s105-rst1">Reset</button>
+            </div>
+            <div class="b10-s105-note s105-idle" id="b10-s105-note1">UTXO A and B have no known relationship yet. As soon as they’re used together in one transaction, blockchain analysts will immediately link them.</div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b10-s105-pane" id="b10-s105-p2">
+            <div class="b10-s105-hint">Compare two approaches: the same address used repeatedly vs a new address every transaction.</div>
+            <div class="b10-s105-addr-list">
+              <div class="b10-s105-addr-section-label">Bad approach — address reused</div>
+              <div class="b10-s105-addr-item s105-reused"><span class="b10-s105-addr-badge s105-reused-badge">reused</span>1A2B3C...xyz<span class="b10-s105-addr-count">received 4x — analyst knows total balance</span></div>
+              <div class="b10-s105-addr-item s105-reused"><span class="b10-s105-addr-badge s105-reused-badge">reused</span>1A2B3C...xyz<span class="b10-s105-addr-count">2nd transaction — linked to the others</span></div>
+              <div class="b10-s105-addr-item s105-reused"><span class="b10-s105-addr-badge s105-reused-badge">reused</span>1A2B3C...xyz<span class="b10-s105-addr-count">3rd transaction — pattern clearly visible</span></div>
+              <div class="b10-s105-addr-item s105-reused"><span class="b10-s105-addr-badge s105-reused-badge">reused</span>1A2B3C...xyz<span class="b10-s105-addr-count">4th transaction — total: 2.350 BTC traced</span></div>
+            </div>
+            <div class="b10-s105-addr-list">
+              <div class="b10-s105-addr-section-label">Good approach — new address every transaction (HD wallet)</div>
+              <div class="b10-s105-addr-item s105-fresh"><span class="b10-s105-addr-badge s105-fresh-badge">fresh</span>bc1q...a1b2<span class="b10-s105-addr-count">1st transaction — unique address</span></div>
+              <div class="b10-s105-addr-item s105-fresh"><span class="b10-s105-addr-badge s105-fresh-badge">fresh</span>bc1q...c3d4<span class="b10-s105-addr-count">2nd transaction — different address</span></div>
+              <div class="b10-s105-addr-item s105-fresh"><span class="b10-s105-addr-badge s105-fresh-badge">fresh</span>bc1q...e5f6<span class="b10-s105-addr-count">3rd transaction — not linked</span></div>
+              <div class="b10-s105-addr-item s105-fresh"><span class="b10-s105-addr-badge s105-fresh-badge">fresh</span>bc1q...g7h8<span class="b10-s105-addr-count">4th transaction — analyst can’t combine</span></div>
+            </div>
+            <div class="b10-s105-note s105-info">Modern wallets (HD wallets) automatically generate a new address for every transaction. This doesn’t make usage harder — the wallet still tracks all of your addresses — but it makes it harder for analysts to link your transactions.</div>
+          </div>
+        
+          <div class="lab-link"><span class="kode">D2</span><span class="isi"><span class="hd">Continue in the Laboratory</span>How much Bitcoin has its public key exposed because of this habit is quantified in Laboratory D2.</span></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-10-4" data-sb="sb-10-4">
+            ← 10.4 — Size and Growth of the UTXO Set
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-10-6" data-sb="sb-10-6">
+            10.6 — The Future of the UTXO Set →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 10.5 -->
+
+      <!-- ==============================
+           SECTION 10.6 · Masa Depan UTXO Set
+      ============================== -->
+      <div class="p-section" id="section-10-6">
+        <div class="p-eyebrow">Chapter 10 · 10.6</div>
+        <div class="p-heading">Challenges and solutions for the long-term UTXO set</div>
+        <div class="p-title">The Future of the UTXO Set</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>The UTXO set is a component that will keep evolving as Bitcoin develops. There are several challenges and solutions being discussed or developed regarding how the UTXO set is managed in the future.</p>
+
+          <p><strong>Long-term growth</strong></p>
+          <p>Imagine a ledger that has to be copied out by everyone who wants to verify Bitcoin transactions. The thicker that book, the longer the copying process and the more space needed. That’s the analogy for the UTXO set. If Bitcoin keeps being adopted massively, the number of UTXOs will keep growing. The UTXO set could reach tens of gigabytes within a few decades. This is still far smaller than the full blockchain, but enough to become a barrier for nodes with limited hardware, especially in developing countries where hardware is expensive and internet connections are slow.</p>
+
+          <p><strong>Stateless validation and UTXO commitments</strong></p>
+          <p>Currently, to verify a transaction, a node has to have a complete copy of the UTXO set on its own computer. This is like a cashier who has to memorize the entire list of goods in the warehouse before being able to serve a customer. There’s an idea being discussed called stateless validation: instead of the node storing the UTXO set, the transaction sender proves that their UTXOs really exist and are valid. This proof is called a UTXO commitment, a kind of cryptographic certificate that can be verified without checking a local database. The analogy: instead of the cashier memorizing all the stock, the customer brings an official receipt from the warehouse proving the goods exist. The cashier just verifies the receipt. This is still in the research stage and requires significant changes to the Bitcoin protocol.</p>
+
+          <p><strong>Assumevalid and assumeutxo</strong></p>
+          <p>Bitcoin already has a few ways to speed up a new node joining the network without having to re-verify the entire history from the start. Assumevalid is the first optimization: a new node can skip cryptographic signature verification for very old blocks. The reasoning is economically sound: if millions of nodes already agree that those old blocks are valid, it’s almost impossible they’re all wrong. Assumeutxo is a newer and more sophisticated optimization: a new node can directly use a previously verified UTXO set snapshot, and start operating normally within minutes. Meanwhile, in the background, the node slowly verifies the entire blockchain history from the start to make sure that snapshot is indeed correct.</p>
+
+          <p><strong>Archival node vs pruned node</strong></p>
+          <p>Not all nodes store the entire history of Bitcoin. An archival node stores everything from the genesis block to today, and this is what truly supports the network: without enough archival nodes, new nodes can’t join because no one provides the historical data. A pruned node only stores the UTXO set and a few hundred of the latest blocks. It can verify transactions for itself, but can’t help other nodes that are newly syncing. A pruned node is useful for personal verification purposes, not a replacement for an archival node.</p>
+
+          <p><strong>The UTXO set as a health measure</strong></p>
+          <p>The size and composition of the UTXO set is one of the network health indicators that can be monitored. A UTXO set that grows too fast can indicate spam or inefficient activity. A UTXO set that’s stable or even shrinking shows users who are efficient at managing their outputs. The dust limit, the minimum value of a UTXO accepted by a node as part of mempool policy, is one mechanism to prevent the UTXO set from being flooded with useless outputs.</p>
+
+          <div class="p-callout">
+            <p>The UTXO set is one of the most concrete resource constraints in Bitcoin. Unlike the blockchain which only needs to be stored, the UTXO set has to be quickly accessible and queryable. This creates a natural pressure to stay efficient, a pressure that ultimately benefits every user of the network.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualization — Comparison of node types</div>
+          <div class="b10-s106-desc">
+            Click each card to see the storage details, capabilities, and role of each node type in the Bitcoin network. Notice the fundamental difference between archival and pruned nodes.
+          </div>
+
+          <div class="b10-s106-cards" id="b10-s106-cards">
+
+            <div class="b10-s106-card active" id="b10-s106-c1">
+              <div class="b10-s106-card-head">
+                <div class="b10-s106-icon archival-icon">🗄️</div>
+                <div>
+                  <div class="b10-s106-card-title">Archival Node</div>
+                  <div class="b10-s106-card-sub">Stores everything — the backbone of the network</div>
+                </div>
+                <div class="b10-s106-chevron">›</div>
+              </div>
+              <div class="b10-s106-card-body">
+                <div class="b10-s106-metrics">
+                  <div class="b10-s106-metric"><div class="b10-s106-metric-label">Storage needed</div><div class="b10-s106-metric-val s106-bad">600+ GB</div><div class="b10-s106-metric-bar"><div class="b10-s106-metric-bar-fill" style="width:100%;background:#A32D2D;"></div></div></div>
+                  <div class="b10-s106-metric"><div class="b10-s106-metric-label">First sync time</div><div class="b10-s106-metric-val s106-bad">2-5 days</div><div class="b10-s106-metric-bar"><div class="b10-s106-metric-bar-fill" style="width:100%;background:#A32D2D;"></div></div></div>
+                  <div class="b10-s106-metric"><div class="b10-s106-metric-label">Self-verification</div><div class="b10-s106-metric-val s106-good">Full</div></div>
+                  <div class="b10-s106-metric"><div class="b10-s106-metric-label">Supports the network</div><div class="b10-s106-metric-val s106-good">Yes, fully</div></div>
+                </div>
+                <div class="b10-s106-caps">
+                  <div class="b10-s106-caps-label">Capabilities:</div>
+                  <div class="b10-s106-cap"><span class="b10-s106-cap-icon">✓</span>Verifies all new transactions independently</div>
+                  <div class="b10-s106-cap"><span class="b10-s106-cap-icon">✓</span>Provides historical data to other syncing nodes</div>
+                  <div class="b10-s106-cap"><span class="b10-s106-cap-icon">✓</span>Helps new nodes join the network</div>
+                  <div class="b10-s106-cap"><span class="b10-s106-cap-icon">✓</span>Supports research, audits, and block explorers</div>
+                </div>
+                <div class="b10-s106-desc-box">An archival node stores the entire history of Bitcoin since the first block in 2009. Large storage and a long sync, but this is a real contribution to the network. Without enough archival nodes, new nodes can’t join and the network weakens.</div>
+              </div>
+            </div>
+
+            <div class="b10-s106-card" id="b10-s106-c2">
+              <div class="b10-s106-card-head">
+                <div class="b10-s106-icon pruned-icon">✂️</div>
+                <div>
+                  <div class="b10-s106-card-title">Pruned Node</div>
+                  <div class="b10-s106-card-sub">Self-verifies, but doesn’t support the network</div>
+                </div>
+                <div class="b10-s106-chevron">›</div>
+              </div>
+              <div class="b10-s106-card-body">
+                <div class="b10-s106-metrics">
+                  <div class="b10-s106-metric"><div class="b10-s106-metric-label">Storage needed</div><div class="b10-s106-metric-val s106-good">10-15 GB</div><div class="b10-s106-metric-bar"><div class="b10-s106-metric-bar-fill" style="width:22%;background:#0F6E56;"></div></div></div>
+                  <div class="b10-s106-metric"><div class="b10-s106-metric-label">First sync time</div><div class="b10-s106-metric-val s106-warn">1-2 days</div><div class="b10-s106-metric-bar"><div class="b10-s106-metric-bar-fill" style="width:50%;background:#854F0B;"></div></div></div>
+                  <div class="b10-s106-metric"><div class="b10-s106-metric-label">Self-verification</div><div class="b10-s106-metric-val s106-warn">For itself</div></div>
+                  <div class="b10-s106-metric"><div class="b10-s106-metric-label">Supports the network</div><div class="b10-s106-metric-val s106-bad">No</div></div>
+                </div>
+                <div class="b10-s106-caps">
+                  <div class="b10-s106-caps-label">Capabilities:</div>
+                  <div class="b10-s106-cap"><span class="b10-s106-cap-icon">✓</span>Verifies new transactions for itself</div>
+                  <div class="b10-s106-cap"><span class="b10-s106-cap-icon">✓</span>Stores the complete UTXO set</div>
+                  <div class="b10-s106-cap"><span class="b10-s106-cap-icon">✗</span>Can’t help new nodes sync to the network</div>
+                  <div class="b10-s106-cap"><span class="b10-s106-cap-icon">✗</span>Doesn’t provide historical data to other nodes</div>
+                </div>
+                <div class="b10-s106-desc-box">A pruned node verifies the entire blockchain during the initial sync, but then discards old historical data. It can verify transactions for itself, but can’t help other nodes that are newly joining.</div>
+                <div class="b10-s106-warn-box">⚠️ A pruned node isn’t a replacement for an archival node. If everyone only runs pruned nodes, the network will struggle to accept new members because no one can provide historical data. A pruned node is useful for personal verification, not for supporting the network.</div>
+              </div>
+            </div>
+
+            <div class="b10-s106-card" id="b10-s106-c3">
+              <div class="b10-s106-card-head">
+                <div class="b10-s106-icon assume-icon">⚡</div>
+                <div>
+                  <div class="b10-s106-card-title">AssumeUTXO</div>
+                  <div class="b10-s106-card-sub">A startup optimization — not a node type of its own</div>
+                </div>
+                <div class="b10-s106-chevron">›</div>
+              </div>
+              <div class="b10-s106-card-body">
+                <div class="b10-s106-metrics">
+                  <div class="b10-s106-metric"><div class="b10-s106-metric-label">Storage needed</div><div class="b10-s106-metric-val s106-good">10-15 GB+</div><div class="b10-s106-metric-bar"><div class="b10-s106-metric-bar-fill" style="width:22%;background:#0F6E56;"></div></div></div>
+                  <div class="b10-s106-metric"><div class="b10-s106-metric-label">Starts operating</div><div class="b10-s106-metric-val s106-good">Within minutes</div><div class="b10-s106-metric-bar"><div class="b10-s106-metric-bar-fill" style="width:5%;background:#0F6E56;"></div></div></div>
+                  <div class="b10-s106-metric"><div class="b10-s106-metric-label">Self-verification</div><div class="b10-s106-metric-val s106-warn">Full (gradual)</div></div>
+                  <div class="b10-s106-metric"><div class="b10-s106-metric-label">Supports the network</div><div class="b10-s106-metric-val s106-warn">Depends on configuration</div></div>
+                </div>
+                <div class="b10-s106-caps">
+                  <div class="b10-s106-caps-label">How it works:</div>
+                  <div class="b10-s106-cap"><span class="b10-s106-cap-icon">✓</span>Can immediately verify new transactions from the snapshot</div>
+                  <div class="b10-s106-cap"><span class="b10-s106-cap-icon">✓</span>Full history verification runs in the background</div>
+                  <div class="b10-s106-cap"><span class="b10-s106-cap-icon">~</span>Full trust after the background verification completes</div>
+                  <div class="b10-s106-cap"><span class="b10-s106-cap-icon">~</span>Can be combined with archival or pruned</div>
+                </div>
+                <div class="b10-s106-desc-box">AssumeUTXO is an optimization of how a new node starts, not a standalone node category. A node using AssumeUTXO can immediately operate within minutes using a UTXO set snapshot, while verifying the full history in the background. Whether it supports the network or not depends on whether it’s archival or pruned.</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="b10-s106-table-label">Quick comparison</div>
+          <table class="b10-s106-table">
+            <thead>
+              <tr><th>Type</th><th>Storage</th><th>Self-verification</th><th>Supports the network</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>🗄️ Archival</td><td class="b10-s106-bad">600+ GB</td><td class="b10-s106-good">Full</td><td class="b10-s106-good">Yes</td></tr>
+              <tr><td>✂️ Pruned</td><td class="b10-s106-good">10-15 GB</td><td class="b10-s106-warn">For itself</td><td class="b10-s106-bad">No</td></tr>
+              <tr><td>⚡ AssumeUTXO</td><td class="b10-s106-good">10-15 GB+</td><td class="b10-s106-warn">Gradual</td><td class="b10-s106-warn">Depends on configuration</td></tr>
+            </tbody>
+          </table>
+
+          <div class="b10-s106-callout">The Bitcoin network needs enough archival nodes so new nodes can join. If everyone only runs pruned nodes, the network will struggle to accept new members. Running an archival node is one of the most concrete contributions a person can make to Bitcoin.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-10-5" data-sb="sb-10-5">
+            ← 10.5 — The UTXO Set and Privacy
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 10.6 -->
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 13 · BAB 10 -->
+
+

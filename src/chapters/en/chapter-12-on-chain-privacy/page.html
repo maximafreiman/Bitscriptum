@@ -1,0 +1,673 @@
+<!-- ============================================================
+     PAGE 15 · BAB 12 · Privasi On-chain: CoinJoin dan Teknik Lainnya
+     |-- 12.1 · Mengapa Privasi di Bitcoin Itu Sulit [DONE]
+     |-- 12.2 · [LOCKED]
+     |-- 12.3 · [LOCKED]
+     |-- 12.4 · [LOCKED]
+     |-- 12.5 · [LOCKED]
+     |-- 12.6 · [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab12">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b12">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b12">← Chapter List</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab12">
+      <div class="sidebar-heading">Chapter 12</div>
+      <div class="sidebar-title">On-chain Privacy: CoinJoin and Other Techniques</div>
+
+      <div class="sidebar-item active" id="sb-12-1">
+        <div class="sb-num">12.1</div>
+        <div class="sb-label">Why Privacy in Bitcoin is Hard</div>
+      </div>
+      <div class="sidebar-item" id="sb-12-2">
+        <div class="sb-num">12.2</div>
+        <div class="sb-label">CoinJoin — Mixing without Trust</div>
+      </div>
+      <div class="sidebar-item" id="sb-12-3">
+        <div class="sb-num">12.3</div>
+        <div class="sb-label">Payjoin — Invisible Privacy</div>
+      </div>
+      <div class="sidebar-item" id="sb-12-4">
+        <div class="sb-num">12.4</div>
+        <div class="sb-label">Silent Payments — Privacy without Coordination</div>
+      </div>
+      <div class="sidebar-item" id="sb-12-5">
+        <div class="sb-num">12.5</div>
+        <div class="sb-label">The Lightning Network and Privacy</div>
+      </div>
+      <div class="sidebar-item" id="sb-12-6">
+        <div class="sb-num">12.6</div>
+        <div class="sb-label">Privacy is a Spectrum, Not an On/Off Switch</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab12-content">
+
+      <!-- ==============================
+           SECTION 12.1 · Mengapa Privasi di Bitcoin Itu Sulit
+      ============================== -->
+      <div class="p-section active" id="section-12-1">
+        <div class="p-eyebrow">Chapter 12 · 12.1</div>
+        <div class="p-heading">Bitcoin isn’t anonymous, it’s pseudonymous — and the difference is enormous</div>
+        <div class="p-title">Why Privacy in Bitcoin is Hard</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Bitcoin is often called an anonymous currency. This is a fairly serious misunderstanding. Bitcoin isn’t anonymous, it’s pseudonymous. Every transaction is recorded permanently on the blockchain that anyone can read. What’s hidden is only the identity behind the address, not the transaction itself.</p>
+
+          <p><strong>Transparency as a feature, not a bug</strong></p>
+          <p>The full transparency of the blockchain is a deliberate design choice. Without this transparency, nodes can’t verify that no bitcoin was created from nothing or spent twice. Transparency is the price paid for decentralization and trustless verification. But this transparency has serious privacy consequences. If someone knows one of your addresses, they can see all the transactions going in and out of that address. And with heuristic analysis like we discussed in Chapter 10, they can start linking other addresses that are likely yours too.</p>
+
+          <p><strong>Blockchain analysis heuristics</strong></p>
+          <p>There are several heuristics blockchain analysts use to link addresses and identify owners. Common input ownership: if two UTXOs are used together as inputs, both are most likely owned by the same person. Change output detection: a transaction’s change can usually be identified from the non-round value or from the same script type as the sender. Address reuse: if the same address appears more than once, all its transactions are linked.</p>
+
+          <p><strong>Why this matters</strong></p>
+          <p>Financial privacy isn’t about hiding something illegal. It’s about a basic right: you don’t want your employer to know how much you earn from a side job, you don’t want your competitor to know who you transact with, you don’t want an attacker to know how much bitcoin you own. In countries with unstable governments, financial privacy can become a real safety issue.</p>
+
+          <div class="p-callout">
+            <p>The Bitcoin blockchain is a permanent public ledger. Every privacy mistake you make today can be re-analyzed years later with more sophisticated tools. Good privacy must be built from the start, not patched on afterward.</p>
+
+          <p><strong>What leaks is not only who, but what you use</strong></p>
+          <p>The heuristics above try to answer the question of who owns a given UTXO. There is another, subtler layer that is rarely noticed: your transactions also reveal <strong>which wallet you use</strong>. It is called <em>wallet fingerprinting</em>.</p>
+          <p>The cause is simple. The Bitcoin protocol leaves a lot of freedom in how a transaction is assembled, and every wallet makes slightly different choices. Those choices are consistent, and that consistency is the fingerprint.</p>
+          <p>Some of the easiest to read: <strong>output ordering</strong>, whether change always sits first or is shuffled. The <strong>transaction version number</strong>, some use 1, others 2. The <strong>nSequence value</strong> we cover in 15.3, whether the wallet flags its transactions as replaceable. <strong>How the fee is rounded</strong>, whether it is always a round number or the raw result of a calculation. And most visible of all, <strong>address types</strong>: a wallet that spends from bc1q and sends change to bc1q too has already narrowed the field.</p>
+          <p>Any single trait means little. Combined, though, the pattern is often enough to guess which wallet was used, and sometimes which version. To an observer that is valuable. If they know which wallet you run, they know your change patterns, they know whether you might be using certain privacy features, and they can filter the blockchain for other transactions carrying the same fingerprint.</p>
+          <p>There is a more uncomfortable consequence. Fingerprints can be used to unpick the CoinJoin we cover in 12.2. If only one of ten participants in a CoinJoin uses a wallet with a distinctive trait, the anonymity that was supposed to come from blending in with nine others thins out considerably.</p>
+          <p>What you can do about it is limited, and honestly not much. Using a popular wallet means blending in with more people. Using the same address type as most of the network helps too. But fundamentally this is not something a user can fix alone: what needs to change is the wallets themselves, and some developers are indeed converging on shared behaviour so that the fingerprints dissolve.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualization — Blockchain analysis heuristics</div>
+          <div class="b12-s121-desc">
+            Choose one of the heuristics to see how blockchain analysts identify address owners and link transactions.
+          </div>
+
+          <div class="b12-s121-heur">
+            <div class="b12-s121-heur-label">Choose an analysis heuristic:</div>
+            <div class="b12-s121-heur-btns">
+              <button class="b12-s121-heur-btn s121-act" id="b12-s121-h1">Common Input Ownership</button>
+              <button class="b12-s121-heur-btn" id="b12-s121-h2">Change Output Detection</button>
+              <button class="b12-s121-heur-btn" id="b12-s121-h3">Address Reuse</button>
+            </div>
+          </div>
+
+          <div class="b12-s121-graph" id="b12-s121-graph">
+            <svg id="b12-s121-svg" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;"></svg>
+          </div>
+
+          <div class="b12-s121-findings" id="b12-s121-findings"></div>
+          <div class="b12-s121-note s121-warn" id="b12-s121-note">Choose one of the heuristics above to see how blockchain analysts identify address owners.</div>
+        
+          <div class="lab-link"><span class="kode">D2</span><span class="isi"><span class="hd">Continue in the Laboratory</span>The distribution of address types across the network, and why counting by UTXO and by value give opposite conclusions, is in Laboratory D2.</span></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-12-2" data-sb="sb-12-2">
+            12.2 — CoinJoin: Mixing without Trust →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 12.1 -->
+
+      <!-- ==============================
+           SECTION 12.2 · CoinJoin — Mencampur tanpa Kepercayaan
+      ============================== -->
+      <div class="p-section" id="section-12-2">
+        <div class="p-eyebrow">Chapter 12 · 12.2</div>
+        <div class="p-heading">Privacy without trust — several users, one transaction</div>
+        <div class="p-title">CoinJoin — Mixing without Trust</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>CoinJoin is the most fundamental privacy technique in Bitcoin. The basic idea is simple but powerful: several users combine their transactions into one shared transaction with many inputs from many users and many outputs with the same value.</p>
+
+          <p><strong>How CoinJoin works</strong></p>
+          <p>Imagine Alice wants to send 0.1 BTC and Bob also wants to send 0.1 BTC. Instead of making two separate transactions, they join into one transaction: two inputs from Alice and Bob, two 0.1 BTC outputs to their respective recipients. Blockchain analysts can no longer use the common input ownership heuristic because the inputs really are from two different people. And because the outputs are the same value, it can’t be determined which output is Alice’s and which is Bob’s.</p>
+
+          <p><strong>Without trust</strong></p>
+          <p>What makes CoinJoin elegant is that no one needs to be trusted. Each participant signs the transaction only after verifying that their output is in that transaction. If someone tries to manipulate an output, the signature is invalid and the transaction is voided. No party can steal another participant’s funds.</p>
+
+          <p><strong>CoinJoin implementations</strong></p>
+          <p>There are several different CoinJoin implementations. Wasabi Wallet uses WabiSabi, a CoinJoin protocol that allows outputs with varying values, not just one denomination. JoinMarket is a marketplace where market makers provide liquidity for CoinJoin in exchange for a small fee. Whirlpool from Samourai Wallet uses fixed denominations and allows users to perform multiple mixing rounds.</p>
+
+          <p><strong>CoinJoin’s limitations</strong></p>
+          <p>CoinJoin isn’t a perfect solution. First, it needs coordination between several users willing to join at the same time. Second, if a user later combines a CoinJoin output with another UTXO that wasn’t CoinJoined, the privacy that was built can leak. Third, some exchanges and services are starting to reject bitcoin that originates from CoinJoin, creating a serious fungibility problem.</p>
+
+          <p><strong>A note on Samourai Wallet</strong></p>
+          <p>In April 2024, the founders of Samourai Wallet were arrested by US authorities on charges of money laundering and operating an unlicensed money transmitting service. This is a real example of how Bitcoin privacy tools sit in a legally contested area. Whirlpool is no longer active as a centralized service since then, although its protocol can still be run independently.</p>
+
+          <div class="p-callout">
+            <p>CoinJoin is proof that privacy can be built on top of Bitcoin without changing its underlying protocol. But the Samourai case shows that the line between privacy tools and financial services that need regulation is still an active debate across various jurisdictions.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualization — Without CoinJoin vs With CoinJoin</div>
+          <div class="b12-s122-desc">
+            First tab: Alice and Bob transact separately, everything clearly traceable. Second tab: both join in one CoinJoin, the analyst can no longer determine which output belongs to whom.
+          </div>
+
+          <div class="b12-s122-tabs">
+            <button class="b12-s122-tab s122-act" id="b12-s122-t1">Without CoinJoin</button>
+            <button class="b12-s122-tab" id="b12-s122-t2">With CoinJoin</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b12-s122-pane show" id="b12-s122-p1">
+            <div class="b12-s122-hint">Alice and Bob each make a separate transaction. The analyst can trace each transaction clearly.</div>
+            <div class="b12-s122-txs">
+              <div class="b12-s122-tx">
+                <div class="b12-s122-tx-head s122-alice">Alice · TX_a1b2</div>
+                <div class="b12-s122-tx-body">
+                  <div class="b12-s122-tx-row"><div class="b12-s122-tx-label">Input</div><div class="b12-s122-tx-val s122-inp">0.15 BTC</div></div>
+                  <div class="b12-s122-tx-divider"></div>
+                  <div class="b12-s122-tx-row"><div class="b12-s122-tx-label">Output (Carol)</div><div class="b12-s122-tx-val s122-out">0.10 BTC</div></div>
+                  <div class="b12-s122-tx-row"><div class="b12-s122-tx-label">Change</div><div class="b12-s122-tx-val s122-out">0.04 BTC</div></div>
+                  <div class="b12-s122-tx-row"><div class="b12-s122-tx-label">Fee</div><div class="b12-s122-tx-val s122-fee">0.01 BTC</div></div>
+                </div>
+              </div>
+              <div class="b12-s122-tx">
+                <div class="b12-s122-tx-head s122-bob">Bob · TX_c3d4</div>
+                <div class="b12-s122-tx-body">
+                  <div class="b12-s122-tx-row"><div class="b12-s122-tx-label">Input</div><div class="b12-s122-tx-val s122-inp">0.12 BTC</div></div>
+                  <div class="b12-s122-tx-divider"></div>
+                  <div class="b12-s122-tx-row"><div class="b12-s122-tx-label">Output (Dave)</div><div class="b12-s122-tx-val s122-out">0.10 BTC</div></div>
+                  <div class="b12-s122-tx-row"><div class="b12-s122-tx-label">Change</div><div class="b12-s122-tx-val s122-out">0.01 BTC</div></div>
+                  <div class="b12-s122-tx-row"><div class="b12-s122-tx-label">Fee</div><div class="b12-s122-tx-val s122-fee">0.01 BTC</div></div>
+                </div>
+              </div>
+            </div>
+            <div class="b12-s122-analysis">
+              <div class="b12-s122-analysis-head">What the blockchain analyst can see</div>
+              <div class="b12-s122-analysis-body">
+                <div class="b12-s122-analysis-row s122-fail">✗ TX_a1b2: Alice’s input clearly belongs to one person, the change is identified, Carol as the recipient is traced</div>
+                <div class="b12-s122-analysis-row s122-fail">✗ TX_c3d4: Bob’s input clearly belongs to one person, the change is identified, Dave as the recipient is traced</div>
+                <div class="b12-s122-analysis-row s122-fail">✗ Both transactions can be traced independently and completely</div>
+              </div>
+            </div>
+            <div class="b12-s122-note s122-warn">Without CoinJoin, every transaction is an open window into its user’s financial activity. The analyst can easily determine who paid whom.</div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b12-s122-pane" id="b12-s122-p2">
+            <div class="b12-s122-hint">Alice and Bob combine their transactions into one CoinJoin. The outputs are made the same value so the analyst can’t determine which belongs to whom.</div>
+            <div class="b12-s122-combined">
+              <div class="b12-s122-combined-head">
+                <span>CoinJoin TX_e5f6 — Alice + Bob</span>
+                <span class="b12-s122-combined-badge">2 participants</span>
+              </div>
+              <div class="b12-s122-combined-body">
+                <div class="b12-s122-combined-col">
+                  <div class="b12-s122-combined-col-label">Input</div>
+                  <div class="b12-s122-combined-item s122-inp-a">Alice: 0.15 BTC</div>
+                  <div class="b12-s122-combined-item s122-inp-b">Bob: 0.12 BTC</div>
+                </div>
+                <div class="b12-s122-combined-arrow">→</div>
+                <div class="b12-s122-combined-col">
+                  <div class="b12-s122-combined-col-label">Output (same value)</div>
+                  <div class="b12-s122-combined-item s122-out-eq">0.10 BTC (whose?)</div>
+                  <div class="b12-s122-combined-item s122-out-eq">0.10 BTC (whose?)</div>
+                  <div class="b12-s122-combined-item s122-out-eq">0.04 BTC (change?)</div>
+                  <div class="b12-s122-combined-item s122-out-eq">0.01 BTC (change?)</div>
+                </div>
+              </div>
+            </div>
+            <div class="b12-s122-analysis">
+              <div class="b12-s122-analysis-head">What the blockchain analyst can see</div>
+              <div class="b12-s122-analysis-body">
+                <div class="b12-s122-analysis-row s122-fail">✗ The common input ownership heuristic fails: the inputs really are from two different people</div>
+                <div class="b12-s122-analysis-row s122-fail">✗ It can’t be determined which 0.10 BTC output belongs to Alice and which to Bob</div>
+                <div class="b12-s122-analysis-row s122-fail">✗ It can’t be determined which change returns to Alice and which to Bob</div>
+                <div class="b12-s122-analysis-row s122-pass">✓ No funds are stolen: each participant signs only after verifying their output is present</div>
+              </div>
+            </div>
+            <div class="b12-s122-note s122-info">CoinJoin breaks the chain of traceability without requiring trust in a third party. The validity of the transaction can still be verified by all nodes, but the origin of the funds becomes far harder to determine.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-12-1" data-sb="sb-12-1">
+            ← 12.1 — Why Privacy in Bitcoin is Hard
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-12-3" data-sb="sb-12-3">
+            12.3 — Payjoin: Invisible Privacy →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 12.2 -->
+
+      <!-- ==============================
+           SECTION 12.3 · Payjoin — Privasi yang Tidak Terlihat
+      ============================== -->
+      <div class="p-section" id="section-12-3">
+        <div class="p-eyebrow">Chapter 12 · 12.3</div>
+        <div class="p-heading">Privacy that leaves no recognizable trace</div>
+        <div class="p-title">Payjoin — Invisible Privacy</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>CoinJoin requires coordination between several users who don’t know each other. Payjoin takes a different approach: privacy is built directly into an ordinary payment transaction between sender and recipient.</p>
+
+          <p><strong>What is Payjoin?</strong></p>
+          <p>Payjoin (also called P2EP or Pay-to-End-Point) is a protocol where the payment recipient also contributes input to the transaction. In an ordinary transaction, only the sender provides input. In Payjoin, the recipient also adds one or more UTXOs as additional input. The result: the transaction looks like an ordinary transaction from the outside, but the common input ownership heuristic now gives the wrong conclusion. An analyst looking at this transaction will assume all inputs belong to one person, when in fact the inputs come from two different parties.</p>
+
+          <p><strong>Why is this better than ordinary CoinJoin?</strong></p>
+          <p>CoinJoin is easy for blockchain analysts to identify because its transaction pattern is distinctive: many inputs from many addresses and many outputs with exactly the same value. Although the contents of the transaction can’t be deobfuscated, the existence of a CoinJoin itself can be detected and flagged. Some exchanges reject bitcoin that has been through CoinJoin even without being able to prove the funds are linked to illegal activity. Payjoin has no identifiable pattern. From the outside, a Payjoin transaction looks exactly like an ordinary payment transaction.</p>
+
+          <p><strong>How Payjoin works technically</strong></p>
+          <p>The process starts with a sender who wants to pay. The sender contacts the recipient through a special endpoint, usually a URL the recipient’s wallet provides. The recipient responds by adding their own UTXO to the transaction being constructed. The sender then verifies and signs the complete transaction. The result is one transaction that looks normal but contains input from both parties.</p>
+
+          <p><strong>Payjoin’s limitations</strong></p>
+          <p>Payjoin requires a recipient who supports this protocol. If the merchant or recipient’s wallet doesn’t support Payjoin, the transaction is done as usual without the privacy benefit. Adoption is still limited: BIP 78 defines the standard Payjoin protocol, and several wallets like BTCPay Server, Wasabi Wallet, and JoinMarket already support it, but it’s still far from universal.</p>
+
+          <div class="p-callout">
+            <p>Payjoin is an elegant privacy technique because it leaves no identifiable trace. If its adoption is widespread, it can improve the privacy of all Bitcoin users even those who don’t actively use it, because analysts can no longer assume all inputs in one transaction belong to one person.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualization — Ordinary transaction vs Payjoin</div>
+          <div class="b12-s123-desc">
+            Two transactions that look almost identical from the outside. Click "Apply Heuristic" to see why the analyst reaches the right conclusion on the ordinary transaction but the wrong one on Payjoin.
+          </div>
+
+          <div class="b12-s123-legend">
+            <div class="b12-s123-leg"><div class="b12-s123-leg-dot" style="background:#EEEDFE;border:1px solid rgba(83,74,183,0.3);"></div>UTXO owned by Sender A</div>
+            <div class="b12-s123-leg"><div class="b12-s123-leg-dot" style="background:#EAF3DE;border:1px solid rgba(15,110,86,0.3);"></div>UTXO owned by Recipient B</div>
+            <div class="b12-s123-leg"><div class="b12-s123-leg-dot" style="background:#FAEEDA;border:1px solid rgba(133,79,11,0.2);"></div>Change</div>
+          </div>
+
+          <div class="b12-s123-grid">
+            <div class="b12-s123-col">
+              <div class="b12-s123-col-head s123-normal">
+                <div class="b12-s123-col-head-title" style="color:#1A1A18;">Ordinary Transaction</div>
+                <div class="b12-s123-col-head-sub" style="color:#3A3A35;">only Sender A has input</div>
+              </div>
+              <div class="b12-s123-tx">
+                <div class="b12-s123-tx-section">
+                  <div class="b12-s123-tx-section-label">Input</div>
+                  <div class="b12-s123-tx-item s123-inp-a1">UTXO A1: 0.800 BTC</div>
+                  <div class="b12-s123-tx-item s123-inp-a2">UTXO A2: 0.350 BTC</div>
+                  <div class="b12-s123-tx-owner">both owned by Sender A</div>
+                </div>
+                <div class="b12-s123-tx-divider"></div>
+                <div class="b12-s123-tx-section">
+                  <div class="b12-s123-tx-section-label">Output</div>
+                  <div class="b12-s123-tx-item s123-out">Recipient B: 1.100 BTC</div>
+                  <div class="b12-s123-tx-item s123-out-change">Change A: 0.040 BTC</div>
+                </div>
+              </div>
+              <div class="b12-s123-analyst s123-correct" id="b12-s123-a-normal" style="display:none;">
+                <div class="b12-s123-analyst-label">Analyst conclusion — CORRECT</div>
+                <div class="b12-s123-analyst-text">UTXO A1 and A2 are used together, likely owned by one person. Change of 0.040 BTC to Sender A. Payment of 1.100 BTC to Recipient B. Accurate analysis.</div>
+              </div>
+            </div>
+
+            <div class="b12-s123-col">
+              <div class="b12-s123-col-head s123-payjoin">
+                <div class="b12-s123-col-head-title">Payjoin</div>
+                <div class="b12-s123-col-head-sub">Sender A and Recipient B both have input</div>
+              </div>
+              <div class="b12-s123-tx">
+                <div class="b12-s123-tx-section">
+                  <div class="b12-s123-tx-section-label">Input</div>
+                  <div class="b12-s123-tx-item s123-inp-a1">UTXO A1: 0.800 BTC</div>
+                  <div class="b12-s123-tx-item s123-inp-b">UTXO B1: 0.350 BTC</div>
+                  <div class="b12-s123-tx-owner">A1 owned by Sender A, B1 owned by Recipient B</div>
+                </div>
+                <div class="b12-s123-tx-divider"></div>
+                <div class="b12-s123-tx-section">
+                  <div class="b12-s123-tx-section-label">Output</div>
+                  <div class="b12-s123-tx-item s123-out">Recipient B: 1.100 BTC</div>
+                  <div class="b12-s123-tx-item s123-out-change">Change A: 0.040 BTC</div>
+                </div>
+              </div>
+              <div class="b12-s123-analyst s123-wrong" id="b12-s123-a-payjoin" style="display:none;">
+                <div class="b12-s123-analyst-label">Analyst conclusion — WRONG</div>
+                <div class="b12-s123-analyst-text">UTXO A1 and B1 are used together, the analyst assumes they belong to one person. But B1 actually belongs to Recipient B who contributed input. Misleading analysis.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b12-s123-btn-wrap">
+            <button class="b12-s123-btn-primary" id="b12-s123-apply">Apply Common Input Heuristic</button>
+            <button class="b12-s123-btn-sec" id="b12-s123-rst">Reset</button>
+          </div>
+
+          <div class="b12-s123-verdict" id="b12-s123-verdict" style="display:none;">
+            <div class="b12-s123-verdict-card s123-v-correct">
+              <div class="b12-s123-verdict-icon">✓</div>
+              <div class="b12-s123-verdict-label">Ordinary transaction: analysis correct</div>
+              <div class="b12-s123-verdict-text">The two inputs really do belong to one person. The heuristic works correctly.</div>
+            </div>
+            <div class="b12-s123-verdict-card s123-v-wrong">
+              <div class="b12-s123-verdict-icon">✗</div>
+              <div class="b12-s123-verdict-label">Payjoin: analysis wrong</div>
+              <div class="b12-s123-verdict-text">Two inputs from two different people, but the analyst can’t tell. From the outside, the two transactions look identical.</div>
+            </div>
+          </div>
+
+          <div class="b12-s123-note s123-idle" id="b12-s123-note">Click "Apply Common Input Heuristic" to see why the analyst reaches a different conclusion from two transactions that look almost the same.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-12-2" data-sb="sb-12-2">
+            ← 12.2 — CoinJoin: Mixing without Trust
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-12-4" data-sb="sb-12-4">
+            12.4 — Silent Payments: Privacy without Coordination →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 12.3 -->
+
+      <!-- ==============================
+           SECTION 12.4 · Silent Payments — Privasi tanpa Koordinasi
+      ============================== -->
+      <div class="p-section" id="section-12-4">
+        <div class="p-eyebrow">Chapter 12 · 12.4</div>
+        <div class="p-heading">One static address, unlimited payments, nothing that can link them</div>
+        <div class="p-title">Silent Payments — Privacy without Coordination</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>CoinJoin needs coordination between users. Payjoin needs a recipient who supports the protocol. Silent Payments takes a more radical approach: privacy that needs no coordination at all from the sender or recipient.</p>
+
+          <p><strong>What are Silent Payments?</strong></p>
+          <p>Silent Payments (BIP 352) is a protocol that lets someone publish a single static address that anyone can use to send payments, but every payment received goes to a different on-chain address that can’t be linked to one another just by looking at the blockchain. The analogy: imagine you have one bank account number you share with everyone, but every time someone transfers to that number, the money goes into a different sub-account that can’t be seen relative to each other from the outside.</p>
+
+          <p><strong>How does it work?</strong></p>
+          <p>The sender uses the recipient’s public key from the static address together with the sender’s private key to generate a unique payment address through a cryptographic operation called Elliptic Curve Diffie-Hellman. This address is unique for each sender and can’t be linked to the payment address of another sender, even by someone who knows the recipient’s static address. The recipient then scans the blockchain using their private key to find the payments addressed to them.</p>
+
+          <p><strong>Advantages of Silent Payments</strong></p>
+          <p>No coordination needed: the sender just needs to know the recipient’s static address, no additional communication required. No address reuse: every payment produces a unique on-chain address, even from the same static address. No third-party server that needs to be trusted. The static address can be published openly like an email address, but is safer privacy-wise because it doesn’t expose transaction history.</p>
+
+          <p><strong>Limitations</strong></p>
+          <p>Scanning the blockchain to find payments is more computationally heavy. A light wallet that relies on a third-party server will struggle to implement Silent Payments without losing privacy. Still fairly new: implemented in Cake Wallet and a few other wallets, but not yet available in the majority of popular wallets.</p>
+
+          <div class="p-callout">
+            <p>Silent Payments is one of the most interesting privacy innovations in the Bitcoin ecosystem lately. It addresses one fundamental problem: how can you receive a payment from anyone without revealing your transaction history, and without having to coordinate with the sender first.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulation — How Silent Payments works</div>
+          <div class="b12-s124-desc">
+            One static address, three different senders. See how each sender generates a unique on-chain address, and why the analyst can’t link them, but the recipient can find them all.
+          </div>
+
+          <div style="font-size:11px;font-weight:500;color:#1A1A18;font-family:'Sora',sans-serif;margin-bottom:6px;">Recipient’s static address (published once, used forever):</div>
+          <div class="b12-s124-static">
+            <div class="b12-s124-static-label">Silent Payment Address</div>
+            <div class="b12-s124-static-addr">sp1qqgste7k9hx0qx9gqd3d5hmfyj2xzakvka6yh3dkqvgzr4k5q3...</div>
+            <div class="b12-s124-static-sub">Can be published on a website, profile, business card — safe</div>
+          </div>
+
+          <div class="b12-s124-flow-label">Three different senders send to the same static address:</div>
+          <div class="b12-s124-senders">
+            <div class="b12-s124-sender">
+              <div class="b12-s124-sender-box s124-alice">Alice<br><span style="font-size:9px;font-weight:400;">0.05 BTC</span></div>
+              <div class="b12-s124-sender-arrow">↓</div>
+              <div class="b12-s124-sender-result s124-alice" id="b12-s124-res-alice">
+                <div class="b12-s124-sender-result-label">Unique on-chain address:</div>
+                bc1p...a3f7
+              </div>
+            </div>
+            <div class="b12-s124-sender">
+              <div class="b12-s124-sender-box s124-bob">Bob<br><span style="font-size:9px;font-weight:400;">0.12 BTC</span></div>
+              <div class="b12-s124-sender-arrow">↓</div>
+              <div class="b12-s124-sender-result s124-bob" id="b12-s124-res-bob">
+                <div class="b12-s124-sender-result-label">Unique on-chain address:</div>
+                bc1p...9k2m
+              </div>
+            </div>
+            <div class="b12-s124-sender">
+              <div class="b12-s124-sender-box s124-carol">Carol<br><span style="font-size:9px;font-weight:400;">0.03 BTC</span></div>
+              <div class="b12-s124-sender-arrow">↓</div>
+              <div class="b12-s124-sender-result s124-carol" id="b12-s124-res-carol">
+                <div class="b12-s124-sender-result-label">Unique on-chain address:</div>
+                bc1p...x8r1
+              </div>
+            </div>
+          </div>
+
+          <div class="b12-s124-blockchain" id="b12-s124-blockchain">
+            <div class="b12-s124-blockchain-head">What’s visible on the blockchain (to anyone)</div>
+            <div class="b12-s124-blockchain-body">
+              <div class="b12-s124-chain-item" id="b12-s124-chain-1"><div class="b12-s124-chain-item-label">Transaction #1</div>bc1p...a3f7 receives 0.05 BTC <span class="b12-s124-chain-badge">owner unknown</span></div>
+              <div class="b12-s124-chain-item" id="b12-s124-chain-2"><div class="b12-s124-chain-item-label">Transaction #2</div>bc1p...9k2m receives 0.12 BTC <span class="b12-s124-chain-badge">owner unknown</span></div>
+              <div class="b12-s124-chain-item" id="b12-s124-chain-3"><div class="b12-s124-chain-item-label">Transaction #3</div>bc1p...x8r1 receives 0.03 BTC <span class="b12-s124-chain-badge">owner unknown</span></div>
+              <div class="b12-s124-link-note" id="b12-s124-link-note">The three on-chain addresses can’t be linked to one another. The analyst doesn’t know all three belong to the same person.</div>
+            </div>
+          </div>
+
+          <div class="b12-s124-scan" id="b12-s124-scan">
+            <div class="b12-s124-scan-head">What the recipient finds when scanning with their private key</div>
+            <div class="b12-s124-scan-body">
+              <div class="b12-s124-scan-item" id="b12-s124-scan-1">bc1p...a3f7 — 0.05 BTC from Alice <span class="b12-s124-scan-badge">mine</span></div>
+              <div class="b12-s124-scan-item" id="b12-s124-scan-2">bc1p...9k2m — 0.12 BTC from Bob <span class="b12-s124-scan-badge">mine</span></div>
+              <div class="b12-s124-scan-item" id="b12-s124-scan-3">bc1p...x8r1 — 0.03 BTC from Carol <span class="b12-s124-scan-badge">mine</span></div>
+            </div>
+          </div>
+
+          <div class="b12-s124-btn-wrap">
+            <button class="b12-s124-btn-primary" id="b12-s124-run">Simulate Sending</button>
+            <button class="b12-s124-btn-sec" id="b12-s124-rst">Reset</button>
+          </div>
+
+          <div class="b12-s124-note s124-idle" id="b12-s124-note">Click "Simulate Sending" to see how three different senders generate different on-chain addresses from the same single static address.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-12-3" data-sb="sb-12-3">
+            ← 12.3 — Payjoin: Invisible Privacy
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-12-5" data-sb="sb-12-5">
+            12.5 — The Lightning Network and Privacy →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 12.4 -->
+
+      <!-- ==============================
+           SECTION 12.5 · Lightning Network dan Privasi
+      ============================== -->
+      <div class="p-section" id="section-12-5">
+        <div class="p-eyebrow">Chapter 12 · 12.5</div>
+        <div class="p-heading">Lightning isn’t just faster and cheaper — it’s also more private</div>
+        <div class="p-title">The Lightning Network and Privacy</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>The Lightning Network isn’t just a scalability solution. It also brings privacy characteristics very different from on-chain transactions. Understanding this difference is important for making the right decision about when to use Lightning and when to use on-chain.</p>
+
+          <p><strong>Lightning privacy vs on-chain</strong></p>
+          <p>On-chain transactions are recorded permanently on the blockchain that anyone can read. Lightning transactions aren’t recorded on the blockchain at all. What’s recorded is only the opening and closing of the channel. All the payments that happen inside the channel stay private from the public. If Alice and Bob have a Lightning channel and do thousands of transactions, what’s visible on the blockchain is only two transactions, not thousands of individual transactions.</p>
+
+          <p><strong>Onion routing in Lightning</strong></p>
+          <p>Lightning uses onion routing similar to Tor: each node in the payment path only knows where the payment came from and where it should be forwarded, but doesn’t know the whole path. The first node knows the sender but not the final recipient. The last node knows the recipient but not the original sender. This provides better privacy than an ordinary on-chain transaction, but isn’t perfect.</p>
+
+          <p><strong>Lightning privacy challenges</strong></p>
+          <p>There are several privacy challenges specific to Lightning. Channel balance visibility: a node connected to you can see the channel balance you hold together with them. Invoice reuse: if you use the same invoice to receive several payments, the payers can become aware of each other. Routing node surveillance: a large node routing many payments can collect data about payment patterns in the network.</p>
+
+          <p><strong>BOLT 12 and Offers</strong></p>
+          <p>BOLT 12 is a new standard that introduces the concept of offers, a more private replacement for the Lightning invoice. Offers let a recipient publish one code that can be used many times to receive payments, similar to Silent Payments but at the Lightning layer. Every payment generates a cryptographically unique invoice, preventing correlation between payments.</p>
+
+          <div class="p-callout">
+            <p>Lightning provides better privacy than on-chain for most everyday transactions, but isn’t without weaknesses. The best choice depends on context: for large values that need on-chain finality, use on-chain. For small, frequent transactions, Lightning offers better privacy along with lower fees.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualization — Lightning vs on-chain privacy</div>
+          <div class="b12-s125-desc">
+            First tab: compare what’s visible on the blockchain when Alice sends 10 payments to Bob via on-chain vs Lightning. Second tab: see how onion routing hides the payment path from intermediary nodes.
+          </div>
+
+          <div class="b12-s125-tabs">
+            <button class="b12-s125-tab s125-act" id="b12-s125-t1">On-chain vs Lightning</button>
+            <button class="b12-s125-tab" id="b12-s125-t2">Onion Routing</button>
+          </div>
+
+          <!-- PANE 1 -->
+          <div class="b12-s125-pane show" id="b12-s125-p1">
+            <div class="b12-s125-scenario-label">Alice sends 10 payments to Bob. Compare what’s visible on the blockchain with each method.</div>
+            <div class="b12-s125-grid">
+              <div class="b12-s125-col">
+                <div class="b12-s125-col-head s125-onchain">On-chain<div class="b12-s125-col-head-sub">all transactions public</div></div>
+                <div class="b12-s125-ledger">
+                  <div class="b12-s125-ledger-head">Blockchain — visible to everyone</div>
+                  <div class="b12-s125-ledger-body">
+                    <div class="b12-s125-tx-row s125-pub" id="b12-s125-oc1"><div class="b12-s125-tx-dot s125-pub"></div>TX #1 — 0.01 BTC</div>
+                    <div class="b12-s125-tx-row s125-pub" id="b12-s125-oc2"><div class="b12-s125-tx-dot s125-pub"></div>TX #2 — 0.05 BTC</div>
+                    <div class="b12-s125-tx-row s125-pub" id="b12-s125-oc3"><div class="b12-s125-tx-dot s125-pub"></div>TX #3 — 0.02 BTC</div>
+                    <div class="b12-s125-tx-row s125-pub" id="b12-s125-oc4"><div class="b12-s125-tx-dot s125-pub"></div>TX #4 — 0.03 BTC</div>
+                    <div class="b12-s125-tx-row s125-pub" id="b12-s125-oc5"><div class="b12-s125-tx-dot s125-pub"></div>TX #5 — 0.01 BTC</div>
+                    <div class="b12-s125-tx-row s125-pub" id="b12-s125-oc6"><div class="b12-s125-tx-dot s125-pub"></div>TX #6 — 0.08 BTC</div>
+                    <div class="b12-s125-tx-row s125-pub" id="b12-s125-oc7"><div class="b12-s125-tx-dot s125-pub"></div>TX #7 — 0.02 BTC</div>
+                    <div class="b12-s125-tx-row s125-pub" id="b12-s125-oc8"><div class="b12-s125-tx-dot s125-pub"></div>TX #8 — 0.04 BTC</div>
+                    <div class="b12-s125-tx-row s125-pub" id="b12-s125-oc9"><div class="b12-s125-tx-dot s125-pub"></div>TX #9 — 0.01 BTC</div>
+                    <div class="b12-s125-tx-row s125-pub" id="b12-s125-oc10"><div class="b12-s125-tx-dot s125-pub"></div>TX #10 — 0.03 BTC</div>
+                  </div>
+                </div>
+              </div>
+              <div class="b12-s125-col">
+                <div class="b12-s125-col-head s125-lightning">Lightning<div class="b12-s125-col-head-sub">only channel open/close is public</div></div>
+                <div class="b12-s125-ledger">
+                  <div class="b12-s125-ledger-head">Blockchain — visible to everyone</div>
+                  <div class="b12-s125-ledger-body">
+                    <div class="b12-s125-tx-row s125-neutral" id="b12-s125-ln-open"><div class="b12-s125-tx-dot s125-neutral"></div>Channel open — 0.5 BTC</div>
+                    <div class="b12-s125-tx-row s125-priv" id="b12-s125-ln-p1"><div class="b12-s125-tx-dot s125-priv"></div>10 payments — private</div>
+                    <div class="b12-s125-tx-row s125-neutral" id="b12-s125-ln-close"><div class="b12-s125-tx-dot s125-neutral"></div>Channel close — settlement</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="b12-s125-btn-wrap">
+              <button class="b12-s125-btn-primary" id="b12-s125-run1">Simulate 10 Payments</button>
+              <button class="b12-s125-btn-sec" id="b12-s125-rst1">Reset</button>
+            </div>
+            <div class="b12-s125-summary" id="b12-s125-summary" style="display:none;">
+              <div class="b12-s125-summary-card s125-bad"><div class="b12-s125-summary-label">On-chain: publicly visible</div><div class="b12-s125-summary-val">10 TX</div><div class="b12-s125-summary-sub">Alice’s number, value, and payment pattern to Bob are all clearly readable</div></div>
+              <div class="b12-s125-summary-card s125-good"><div class="b12-s125-summary-label">Lightning: private</div><div class="b12-s125-summary-val">2 TX</div><div class="b12-s125-summary-sub">Only channel open and close are recorded. The 10 payments inside are not visible</div></div>
+            </div>
+            <div class="b12-s125-note s125-idle" id="b12-s125-note1">Click "Simulate 10 Payments" to see the difference in visibility between on-chain and Lightning payments.</div>
+          </div>
+
+          <!-- PANE 2 -->
+          <div class="b12-s125-pane" id="b12-s125-p2">
+            <div class="b12-s125-scenario-label">Lightning uses onion routing: each intermediary node only knows one step before and after it, not the whole path.</div>
+            <div class="b12-s125-nodes">
+              <div class="b12-s125-node"><div class="b12-s125-node-circle s125-sender">Alice</div><div class="b12-s125-node-label">Sender</div><div class="b12-s125-node-knows s125-good">Knows:<br>final destination (Bob)</div></div>
+              <div class="b12-s125-arrow-wrap"><div class="b12-s125-arrow-line"></div><div class="b12-s125-arrow-head">→</div></div>
+              <div class="b12-s125-node"><div class="b12-s125-node-circle s125-relay">Node 1</div><div class="b12-s125-node-label">Intermediary</div><div class="b12-s125-node-knows s125-warn">Knows:<br>from Alice<br>to Node 2</div></div>
+              <div class="b12-s125-arrow-wrap"><div class="b12-s125-arrow-line"></div><div class="b12-s125-arrow-head">→</div></div>
+              <div class="b12-s125-node"><div class="b12-s125-node-circle s125-relay">Node 2</div><div class="b12-s125-node-label">Intermediary</div><div class="b12-s125-node-knows s125-warn">Knows:<br>from Node 1<br>to Bob</div></div>
+              <div class="b12-s125-arrow-wrap"><div class="b12-s125-arrow-line"></div><div class="b12-s125-arrow-head">→</div></div>
+              <div class="b12-s125-node"><div class="b12-s125-node-circle s125-receiver">Bob</div><div class="b12-s125-node-label">Recipient</div><div class="b12-s125-node-knows s125-good">Knows:<br>receives from<br>someone</div></div>
+            </div>
+            <div class="b12-s125-knows-table">
+              <div class="b12-s125-knows-head">What each node knows about this payment</div>
+              <div class="b12-s125-knows-body">
+                <div class="b12-s125-knows-row s125-header"><div>Node</div><div>Knows sender?</div><div>Knows recipient?</div><div>Knows real amount?</div></div>
+                <div class="b12-s125-knows-row"><div class="b12-s125-knows-cell">Alice (sender)</div><div class="b12-s125-knows-cell s125-yes">Yes (herself)</div><div class="b12-s125-knows-cell s125-yes">Yes (Bob)</div><div class="b12-s125-knows-cell s125-yes">Yes</div></div>
+                <div class="b12-s125-knows-row"><div class="b12-s125-knows-cell">Node 1</div><div class="b12-s125-knows-cell s125-yes">Yes (Alice)</div><div class="b12-s125-knows-cell s125-no">No</div><div class="b12-s125-knows-cell s125-no">Not certain</div></div>
+                <div class="b12-s125-knows-row"><div class="b12-s125-knows-cell">Node 2</div><div class="b12-s125-knows-cell s125-no">No</div><div class="b12-s125-knows-cell s125-yes">Yes (Bob)</div><div class="b12-s125-knows-cell s125-no">Not certain</div></div>
+                <div class="b12-s125-knows-row"><div class="b12-s125-knows-cell">Bob (recipient)</div><div class="b12-s125-knows-cell s125-no">Doesn’t know who</div><div class="b12-s125-knows-cell s125-yes">Yes (himself)</div><div class="b12-s125-knows-cell s125-yes">Yes</div></div>
+              </div>
+            </div>
+            <div class="b12-s125-note s125-run">An intermediary node only knows one step before and after it. No single node has a complete picture of who paid whom, except the sender and recipient themselves.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-12-4" data-sb="sb-12-4">
+            ← 12.4 — Silent Payments: Privacy without Coordination
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-12-6" data-sb="sb-12-6">
+            12.6 — Privacy is a Spectrum →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 12.5 -->
+
+      <!-- ==============================
+           SECTION 12.6 · Privasi adalah Spektrum, Bukan Tombol On/Off
+      ============================== -->
+      <div class="p-section" id="section-12-6">
+        <div class="p-eyebrow">Chapter 12 · 12.6</div>
+        <div class="p-heading">Privacy depends on your threat model, not one solution for everyone</div>
+        <div class="p-title">Privacy is a Spectrum, Not an On/Off Switch</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>After discussing various privacy techniques in this chapter, it’s important to understand one thing: privacy in Bitcoin isn’t something that can simply be turned on or off. It’s a spectrum that depends on many small decisions you make every time you transact.</p>
+
+          <p><strong>There’s no perfect solution</strong></p>
+          <p>Every technique we discussed has limitations. CoinJoin’s pattern can be identified and some exchanges reject it. Payjoin needs a recipient who supports the protocol. Silent Payments aren’t available in all wallets yet. Lightning has its own limitations for large transactions. No single technique can solve all privacy problems at once.</p>
+
+          <p><strong>Threat model: a threat from whom?</strong></p>
+          <p>The first question to answer before thinking about privacy is: who do you want to protect yourself from? From blockchain analytics companies tracking transaction patterns? From exchanges that might freeze funds because of tainted coins? From people around you who don’t need to know how much bitcoin you own? Different answers require different strategies.</p>
+
+          <p><strong>Basic practices everyone can do</strong></p>
+          <p>There are a few simple steps anyone can take without needing special tools. Use an HD wallet that automatically generates a new address for every transaction. Avoid combining UTXOs from different sources in one transaction if you don’t need to. Use Lightning for small, routine payments. Be careful about who you share information with about your address or transactions.</p>
+
+          <p><strong>Privacy and fungibility</strong></p>
+          <p>There’s a close relationship between privacy and Bitcoin’s fungibility. Fungibility means every satoshi of bitcoin should be treated the same, regardless of its history. If some bitcoin can be tainted because it was once used in suspected activity and an exchange can reject that bitcoin, then bitcoin is no longer fully fungible. Good privacy helps maintain fungibility: if transaction history can’t be traced, no bitcoin can be tainted.</p>
+
+          <p><strong>The future of Bitcoin privacy</strong></p>
+          <p>The Bitcoin community keeps working on privacy improvements at the protocol level. Silent Payments are starting to be adopted. BOLT 12 is in the process of implementation. There’s discussion about cross-input signature aggregation that could make all transactions look more uniform. Bitcoin privacy in the future will likely be far better than today, but this is a slow and careful process because every protocol change requires broad community consensus.</p>
+
+          <div class="p-callout">
+            <p>Privacy isn’t about being a criminal. It’s about maintaining the basic right to manage your own financial information. Just as you don’t publish your bank account to everyone, you also don’t need to publish your entire Bitcoin transaction history. Good privacy is the foundation of true financial freedom.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Guide — Threat model and privacy recommendations</div>
+          <div class="b12-s126-desc">
+            Choose the profile that best fits your situation to see relevant privacy technique recommendations based on each threat model.
+          </div>
+
+          <div class="b12-s126-profiles">
+            <div class="b12-s126-profile active" data-profile="0"><div class="b12-s126-profile-icon">👤</div><div class="b12-s126-profile-title">Casual User</div><div class="b12-s126-profile-sub">Wants basic privacy, doesn’t want hassle</div></div>
+            <div class="b12-s126-profile" data-profile="1"><div class="b12-s126-profile-icon">🏪</div><div class="b12-s126-profile-title">Merchant</div><div class="b12-s126-profile-sub">Receives payments from customers</div></div>
+            <div class="b12-s126-profile" data-profile="2"><div class="b12-s126-profile-icon">📈</div><div class="b12-s126-profile-title">Long-term Investor</div><div class="b12-s126-profile-sub">Holds a significant amount of Bitcoin</div></div>
+            <div class="b12-s126-profile" data-profile="3"><div class="b12-s126-profile-icon">🛡️</div><div class="b12-s126-profile-title">High Privacy</div><div class="b12-s126-profile-sub">In a repressive country or needs strong privacy</div></div>
+          </div>
+
+          <div class="b12-s126-detail" id="b12-s126-detail"></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-12-5" data-sb="sb-12-5">
+            ← 12.5 — The Lightning Network and Privacy
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 12.6 -->
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 15 · BAB 12 -->
+
+

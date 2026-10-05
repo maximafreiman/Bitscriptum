@@ -1,0 +1,537 @@
+<!-- ============================================================
+     PAGE 11 · BAB 8 · Node dan Jaringan P2P
+     |-- 8.1 · Apa itu Node Bitcoin? [DONE]
+     |-- 8.2 · Jaringan P2P [LOCKED]
+     |-- 8.3 · Propagasi Transaksi [LOCKED]
+     |-- 8.4 · Propagasi Block [LOCKED]
+     |-- 8.5 · Koneksi dan Peer Discovery [LOCKED]
+     |-- 8.6 · Menjaga Jaringan Tetap Sehat [LOCKED]
+============================================================ -->
+<div class="page" id="page-bab8">
+
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo" id="back-home-b8">
+        <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+          <polygon points="26,2 47,13.5 47,38.5 26,50 5,38.5 5,13.5" fill="none" stroke="#7C3AED" stroke-width="1"/>
+          <polygon points="26,8 42,17.5 42,34.5 26,44 10,34.5 10,17.5" fill="none" stroke="#7C3AED" stroke-width="0.4" opacity="0.35"/>
+          <path d="M21 17h8.5c2.5 0 4 1.2 4 3.2 0 1.4-.8 2.4-2 2.9 1.6.4 2.7 1.6 2.7 3.3 0 2.4-1.8 3.7-4.7 3.7H21V17zm2.4 5.3h5.6c1.2 0 2-.6 2-1.7 0-1-.8-1.6-2-1.6h-5.6v3.3zm0 5.6h6c1.4 0 2.2-.7 2.2-1.9 0-1.1-.8-1.8-2.2-1.8h-6v3.7z" fill="#7C3AED"/>
+        </svg>
+        <div class="topbar-name">Bitscriptum</div>
+      </div>
+      <div class="topbar-sep"></div>
+      <div class="topbar-back" id="back-chapters-b8">← Chapter List</div>
+    </div>
+    <div class="topbar-block">BLK <span>#915,217</span></div>
+  </div>
+
+  <div class="prologue-body">
+
+    <div class="sidebar" id="sidebar-bab8">
+      <div class="sidebar-heading">Chapter 8</div>
+      <div class="sidebar-title">Nodes and the P2P Network</div>
+
+      <div class="sidebar-item active" id="sb-8-1">
+        <div class="sb-num">8.1</div>
+        <div class="sb-label">What is a Bitcoin Node?</div>
+      </div>
+      <div class="sidebar-item" id="sb-8-2">
+        <div class="sb-num">8.2</div>
+        <div class="sb-label">The P2P Network</div>
+      </div>
+      <div class="sidebar-item" id="sb-8-3">
+        <div class="sb-num">8.3</div>
+        <div class="sb-label">Transaction Propagation</div>
+      </div>
+      <div class="sidebar-item" id="sb-8-4">
+        <div class="sb-num">8.4</div>
+        <div class="sb-label">Block Propagation</div>
+      </div>
+      <div class="sidebar-item" id="sb-8-5">
+        <div class="sb-num">8.5</div>
+        <div class="sb-label">Connections and Peer Discovery</div>
+      </div>
+      <div class="sidebar-item" id="sb-8-6">
+        <div class="sb-num">8.6</div>
+        <div class="sb-label">Keeping the Network Healthy</div>
+      </div>
+    </div>
+
+    <div class="prologue-content" id="bab8-content">
+
+      <!-- ==============================
+           SECTION 8.1 · Apa itu Node Bitcoin?
+      ============================== -->
+      <div class="p-section active" id="section-8-1">
+        <div class="p-eyebrow">Chapter 8 · 8.1</div>
+        <div class="p-heading">Thousands of computers enforcing the rules without a leader</div>
+        <div class="p-title">What is a Bitcoin Node?</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>When people talk about "Bitcoin", they often only think about the price or the wallet. But behind all of that are thousands of computers around the world that keep running, verifying every transaction and storing a complete copy of the blockchain. These computers are called nodes.</p>
+
+          <p><strong>A node is the keeper of the rules</strong></p>
+          <p>A Bitcoin node isn’t just a database. It’s the keeper of the consensus rules. Every node independently verifies every transaction and every block using the same rules. No one can force it to accept an invalid block, even if that block comes from the largest miner. This is the heart of Bitcoin’s decentralization: there’s no central authority that decides what’s valid. Every node decides for itself, based on the same rules.</p>
+
+          <p><strong>Types of nodes</strong></p>
+          <p>A full node stores the entire blockchain from the genesis block to today, more than 700 GB as of mid-2026 and growing by tens of GB each year. It independently verifies every transaction and block. This is the node that provides the highest security. A pruned node is a full node that has deleted old data after verifying it. It still verifies all the rules, but only stores a few GB of the latest blocks. An SPV node only downloads block headers, it doesn’t fully verify transactions. A mining node is a full node that also actively mines new blocks.</p>
+
+          <p><strong>Why run your own node?</strong></p>
+          <p>Running your own full node means you don’t have to trust anyone. No SPV can deceive you with fake transactions if you have your own node. No exchange or wallet provider can hide information. This isn’t just about individual security. The more people run full nodes, the harder it is for anyone to change Bitcoin’s rules without majority agreement. A node is a vote in Bitcoin’s democracy.</p>
+
+          <div class="p-callout">
+            <p>Running a full node doesn’t require special hardware. A Raspberry Pi with an external hard drive is enough. The cost is less than a million rupiah, and its contribution to Bitcoin’s decentralization is real.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualization — Bitcoin’s P2P network</div>
+          <div class="b08-s81-desc">
+            Click any node to see the details: its type, the data it stores, how it verifies, and its function in the network.
+          </div>
+
+          <div class="b08-s81-legend">
+            <div class="b08-s81-leg"><div class="b08-s81-dot" style="background:#534AB7;"></div>Full node</div>
+            <div class="b08-s81-leg"><div class="b08-s81-dot" style="background:#0F6E56;"></div>Mining node</div>
+            <div class="b08-s81-leg"><div class="b08-s81-dot" style="background:#854F0B;"></div>Pruned node</div>
+            <div class="b08-s81-leg"><div class="b08-s81-dot" style="background:#52524C;"></div>SPV node</div>
+          </div>
+
+          <canvas id="b08-s81-canvas" height="300"></canvas>
+          <div class="b08-s81-hint" id="b08-s81-hint">Click any node to see the details</div>
+
+          <div class="b08-s81-detail" id="b08-s81-detail">
+            <div class="b08-s81-dhead" id="b08-s81-dhead"></div>
+            <div class="b08-s81-dbody" id="b08-s81-dbody"></div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn" style="visibility:hidden">placeholder</button>
+          <button class="p-nav-btn p-nav-active" data-target="section-8-2" data-sb="sb-8-2">
+            8.2 — The P2P Network →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 8.1 -->
+
+      <!-- ==============================
+           SECTION 8.2 · Jaringan P2P
+      ============================== -->
+      <div class="p-section" id="section-8-2">
+        <div class="p-eyebrow">Chapter 8 · 8.2</div>
+        <div class="p-heading">No center, no single point of failure</div>
+        <div class="p-title">The P2P Network</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Bitcoin has no central server. No headquarters, no data center that can be shut down, no single point that, if attacked, would destroy everything. What exists is a peer-to-peer network: thousands of nodes connected directly to each other.</p>
+
+          <p><strong>What is a P2P network?</strong></p>
+          <p>In a traditional network like a bank or social media, there is a central server that serves all clients. If the server goes down, no client can connect. If the server owner decides to block someone, there is nothing to be done. A P2P network is different. Every participant is equal, none more "central" than another. Information spreads from node to node like gossip. There is no single point of failure.</p>
+
+          <p><strong>How do nodes connect?</strong></p>
+          <p>When a Bitcoin node first starts up, it needs to find peers to connect to. There are several ways: DNS seeds (servers that provide a list of active nodes), hardcoded seed nodes (a list of IPs embedded in the software), and peer exchange (asking an already-connected node to introduce it to other peers). Once connected, the node maintains about 8 regular outbound connections plus 2 block-only ones, and fills the rest with inbound connections. Bitcoin Core caps total connections at 125, which leaves roughly 115 slots for inbound.</p>
+
+          <p><strong>How does information spread?</strong></p>
+          <p>When Alice sends a transaction, her wallet broadcasts that transaction to its connected nodes. A node receives the transaction, verifies its validity, and forwards it to all its peers. Those peers do the same. Within seconds, the transaction has spread to thousands of nodes around the world. This process is called gossiping. Each node only forwards valid transactions.</p>
+
+          <p><strong>Why does P2P make Bitcoin strong?</strong></p>
+          <p>To censor Bitcoin, an attacker would have to block the connection to every node in the world. As long as there’s one accessible node, Bitcoin can be used. Bitcoin has been blocked in various countries, but users there continue to access the network through VPN, Tor, or satellite connections like Blockstream Satellite.</p>
+
+          <div class="p-callout">
+            <p>Decentralization isn’t a feature that can be added later. It’s Bitcoin’s fundamental architecture from day one. The P2P network isn’t just how Bitcoin operates, it’s the reason Bitcoin can’t be stopped.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulation — Resilience against attack</div>
+          <div class="b08-s82-desc">
+            Click a node to attack it, click again to restore it. In a P2P network, attacking one node does not affect the others. In a centralized network, attacking the central server paralyzes everything.
+          </div>
+
+          <div class="b08-s82-tabs">
+            <button class="b08-s82-tab active-p2p" id="b08-s82-t1">P2P — no center</button>
+            <button class="b08-s82-tab" id="b08-s82-t2">Centralized — central server</button>
+          </div>
+
+          <!-- P2P PANE -->
+          <div class="b08-s82-pane show" id="b08-s82-p1">
+            <div class="b08-s82-hint">Click a node to attack it. Click again to restore it.</div>
+            <canvas class="b08-s82-cv" id="b08-s82-c1" height="300"></canvas>
+            <div class="b08-s82-ctrl">
+              <button class="kp-btn kp-btn-reset" id="b08-s82-r1">Reset</button>
+              <div class="b08-s82-stat" id="b08-s82-s1">Active: 10 / 10</div>
+            </div>
+            <div class="b08-s82-note safe-note" id="b08-s82-n1">The P2P network is running fully. Try clicking a few nodes to attack them.</div>
+          </div>
+
+          <!-- CENTRAL PANE -->
+          <div class="b08-s82-pane" id="b08-s82-p2">
+            <div class="b08-s82-hint">Click a client node to attack one node. Click the server (center) to attack the center.</div>
+            <canvas class="b08-s82-cv" id="b08-s82-c2" height="300"></canvas>
+            <div class="b08-s82-ctrl">
+              <button class="kp-btn kp-btn-reset" id="b08-s82-r2">Reset</button>
+              <div class="b08-s82-stat" id="b08-s82-s2">Active: 10 / 10 &nbsp;|&nbsp; Server: online</div>
+            </div>
+            <div class="b08-s82-note safe-note" id="b08-s82-n2">The central server is online. Try attacking the central server (green in the center).</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-8-1" data-sb="sb-8-1">
+            ← 8.1 — What is a Bitcoin Node?
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-8-3" data-sb="sb-8-3">
+            8.3 — Transaction Propagation →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 8.2 -->
+
+      <!-- ==============================
+           SECTION 8.3 · Propagasi Transaksi
+      ============================== -->
+      <div class="p-section" id="section-8-3">
+        <div class="p-eyebrow">Chapter 8 · 8.3</div>
+        <div class="p-heading">From one wallet to thousands of nodes in seconds</div>
+        <div class="p-title">Transaction Propagation</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>You press send in your wallet. What happens next?</p>
+
+          <p><strong>From wallet to network</strong></p>
+          <p>The wallet creates a signed transaction and broadcasts it to one or several connected nodes. The first node to receive this transaction is called the origin node from the user’s point of view, even though the network doesn’t really record it that way.</p>
+
+          <p><strong>Verification before forwarding</strong></p>
+          <p>A node that receives a transaction doesn’t forward it right away. It performs a series of verifications first: is the transaction format valid, is the cryptographic signature correct, do the UTXOs being used really exist and are unspent, is the fee reasonable. If everything passes, the transaction enters that node’s mempool and is forwarded to all its peers. If verification fails, the transaction is discarded and not forwarded. This is a natural defense mechanism: spam and invalid transactions die at the first node that receives them.</p>
+
+          <p><strong>Node policy vs consensus rules</strong></p>
+          <p>There is an important distinction that is often misunderstood: consensus rules and node policy are two different things. Consensus rules are the rules that determine whether a transaction or block is valid by protocol. All nodes must agree on these, otherwise they will fork. Node policy is an individual node’s decision about which transactions it wants to accept into the mempool and forward to peers, regardless of whether the transaction is valid by consensus or not.</p>
+
+          <p>A concrete example: <span style="font-family:'Courier Prime',monospace;font-size:0.95em;">datacarrier</span> and <span style="font-family:'Courier Prime',monospace;font-size:0.95em;">datacarriersize</span> are two node policy settings available in node software such as Bitcoin Core and Bitcoin Knots. <span style="font-family:'Courier Prime',monospace;font-size:0.95em;">datacarrier</span> controls whether the node will forward transactions that use OP_RETURN to embed arbitrary data. <span style="font-family:'Courier Prime',monospace;font-size:0.95em;">datacarriersize</span> sets the maximum size of that data in bytes. That number is not a protocol rule — its default differs across implementations and has changed between versions. The long-standing convention was 83 bytes (80 bytes of data), and since 2025 it has been at the center of a major debate: one camp wants to relax relay limits, the other wants to keep the filters. Every node operator is free to set their own value. A node that turns off <span style="font-family:'Courier Prime',monospace;font-size:0.95em;">datacarrier</span> will not put OP_RETURN transactions into its mempool and will not forward them to other peers. But if a miner still includes that transaction in a block, the node still accepts the block because OP_RETURN transactions are valid by consensus. Policy stops at the mempool, not at block validation.</p>
+
+          <p>This is also the basis of the debate about Ocean Pool that we discuss in Chapter 11: that pool applies transaction filtering based on their own policy, not because the filtered transactions are invalid. A single node or pool can choose a different policy from the majority without violating consensus, but the consequence is that the transactions they reject still end up on the blockchain through miners or other nodes that don’t apply the same filtering.</p>
+
+          <p><strong>Flooding and deduplication</strong></p>
+          <p>Transaction propagation uses a flooding mechanism: every node that receives a valid transaction forwards it to all peers. But this creates a problem because a node can receive the same transaction from many peers at the same time. The solution is deduplication. Each node keeps a list of transactions it has already seen. If the same transaction comes again, it is immediately discarded without being reprocessed.</p>
+
+          <p><strong>How long until it reaches the whole network?</strong></p>
+          <p>Under normal conditions, a transaction spreads to most nodes around the world in less than 5 seconds. Reaching 90% of nodes usually takes about 10-15 seconds. This is well before the transaction is confirmed on the blockchain, which takes an average of 10 minutes.</p>
+
+          <p><strong>Privacy in propagation</strong></p>
+          <p>There is an interesting privacy issue: the first node to broadcast a transaction is most likely the original sender or directly connected to it. An observer monitoring many nodes can try to identify the transaction’s origin. The most widely discussed solution for this is Dandelion++: the transaction is first forwarded quietly along a single path (stem phase) before finally being spread to the whole network (fluff phase). This makes the transaction’s origin much harder to trace. Worth noting, Dandelion++ has not been merged into Bitcoin Core, and we cover why in 18.6.</p>
+
+          <div class="p-callout">
+            <p>Transaction propagation is one of the most elegant processes in Bitcoin. Thousands of nodes that don’t know each other, no central coordination, but within seconds the information has spread to every corner of the world. All because every node follows the same rules.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulation — Transaction propagation in the P2P network</div>
+          <div class="b08-s83-desc">
+            Click "Send Transaction" to start. Watch how the transaction spreads from node to node, including the verification log and duplicate detection.
+          </div>
+
+          <div class="b08-s83-top">
+            <button class="b08-s83-btn-primary" id="b08-s83-send">Send Transaction</button>
+            <button class="b08-s83-btn-reset" id="b08-s83-reset">Reset</button>
+            <div class="b08-s83-stat" id="b08-s83-stat">Nodes received: 0 / 12</div>
+            <div class="b08-s83-stat" id="b08-s83-timer">0.0 sec</div>
+          </div>
+          <canvas class="b08-s83-cv" id="b08-s83-cv" height="300"></canvas>
+          <div class="b08-s83-log" id="b08-s83-log">
+            <div class="b08-s83-log-row"><span class="b08-s83-log-t">—</span><span class="b08-s83-log-m">Click "Send Transaction" to start the simulation</span></div>
+          </div>
+          <div class="b08-s83-note idle-note" id="b08-s83-note">The transaction will spread from the sending node to the whole network through the gossiping mechanism. Each node verifies before forwarding.</div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-8-2" data-sb="sb-8-2">
+            ← 8.2 — The P2P Network
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-8-4" data-sb="sb-8-4">
+            8.4 — Block Propagation →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 8.3 -->
+
+      <!-- ==============================
+           SECTION 8.4 · Propagasi Block
+      ============================== -->
+      <div class="p-section" id="section-8-4">
+        <div class="p-eyebrow">Chapter 8 · 8.4</div>
+        <div class="p-heading">A new block must spread as fast as possible — milliseconds mean money</div>
+        <div class="p-title">Block Propagation</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>Transaction propagation and block propagation have the same goal: spreading information to the whole network as fast as possible. But a block is much larger than a transaction, and the stakes are much higher: a miner who finds a new block wants the whole network to recognize it as fast as possible before another miner finds the next block.</p>
+
+          <p><strong>From miner to network</strong></p>
+          <p>When a miner finds a valid nonce, it immediately broadcasts the new block to all its peers. Every node that receives the block performs full verification: is the proof of work valid, are all the transactions inside it valid, does the block header connect to the previous block correctly. If everything passes, the block is accepted, added to the local chain, and forwarded to all peers.</p>
+
+          <p><strong>The problem: blocks are too big</strong></p>
+          <p>A Bitcoin block can be up to 4 MB with SegWit weight. Spreading 4 MB to thousands of nodes requires significant bandwidth. In Bitcoin’s early days this wasn’t a problem because blocks were rarely full. But when the network is busy, propagation delay can cause serious problems.</p>
+
+          <p><strong>Compact Block and Header-First</strong></p>
+          <p>The main solution is Compact Block (BIP 152): instead of sending the entire block, a node sends the block header plus a list of shortened transaction IDs. The recipient most likely already has almost all of those transactions in its mempool. It only needs to request the transactions it doesn’t yet have. This reduces the data sent drastically, from megabytes to kilobytes. Header-First propagation is another technique: a node broadcasts the block header first before the entire block is ready, allowing proof of work validation to start earlier.</p>
+
+          <p><strong>Orphan blocks and why speed matters</strong></p>
+          <p>There is a phenomenon called an orphan block: two miners find a valid block at almost the same time. The network is temporarily split into two versions of the chain. Eventually the longer chain wins, and the block in the shorter chain becomes an orphan, valid but not recognized. The slower the propagation, the greater the chance of an orphan block. Compact Block has already significantly reduced the orphan rate.</p>
+
+          <div class="p-callout">
+            <p>Block propagation speed is one of the most important health metrics of the Bitcoin network. Thanks to Compact Block, a new block can reach most of the network within seconds. In the era before Compact Block, the same process took many times longer because the entire contents of a block had to be resent to every peer.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Simulation — Regular block vs Compact Block and Orphan Block</div>
+          <div class="b08-s84-desc">
+            First tab: compare the speed and bandwidth of a regular block vs Compact Block side by side. Second tab: a visualization of an orphan block when two miners find a block at almost the same time.
+          </div>
+
+          <div class="b08-s84-tabs">
+            <button class="b08-s84-tab s84-act" id="b08-s84-t1">Regular block vs Compact Block</button>
+            <button class="b08-s84-tab" id="b08-s84-t2">Orphan Block</button>
+          </div>
+
+          <!-- PANE 1: COMPARISON -->
+          <div class="b08-s84-pane show" id="b08-s84-p1">
+            <div class="b08-s84-compare">
+              <div class="b08-s84-col">
+                <div class="b08-s84-col-head s84-full">Regular block (Full)</div>
+                <canvas class="b08-s84-cv" id="b08-s84-c1" height="200"></canvas>
+                <div class="b08-s84-col-stat s84-full-stat">Data: <span id="b08-s84-data1">0 KB</span> | Time: <span id="b08-s84-time1">0.0 sec</span> | Done: <span id="b08-s84-done1">0/8</span></div>
+              </div>
+              <div class="b08-s84-col">
+                <div class="b08-s84-col-head s84-compact">Compact Block (BIP 152)</div>
+                <canvas class="b08-s84-cv" id="b08-s84-c2" height="200"></canvas>
+                <div class="b08-s84-col-stat s84-compact-stat">Data: <span id="b08-s84-data2">0 KB</span> | Time: <span id="b08-s84-time2">0.0 sec</span> | Done: <span id="b08-s84-done2">0/8</span></div>
+              </div>
+            </div>
+            <div class="b08-s84-ctrl">
+              <button class="b08-s84-btn-primary" id="b08-s84-run">Run Simulation</button>
+              <button class="b08-s84-btn-sec" id="b08-s84-reset">Reset</button>
+            </div>
+            <div class="b08-s84-note idle-note" id="b08-s84-note1">A regular block sends all the data. Compact Block only sends the header + transaction IDs because the receiving node already has the transactions in its mempool.</div>
+          </div>
+
+          <!-- PANE 2: ORPHAN -->
+          <div class="b08-s84-pane" id="b08-s84-p2">
+            <div class="b08-s84-chain-label">Situation: two miners find block #840,001 at almost the same time</div>
+            <div class="b08-s84-chain-row">
+              <div class="b08-s84-block s84-confirmed">840,000<br>✓</div>
+              <div class="b08-s84-arrow">→</div>
+              <div class="b08-s84-block s84-main">840,001A<br>Miner A</div>
+              <div class="b08-s84-arrow">→</div>
+              <div class="b08-s84-block s84-main">840,002<br>✓</div>
+              <div class="b08-s84-arrow">→</div>
+              <div class="b08-s84-block s84-main">840,003<br>✓</div>
+              <div class="b08-s84-chain-tag">longest chain, wins</div>
+            </div>
+            <div class="b08-s84-chain-row">
+              <div class="b08-s84-block s84-confirmed">840,000<br>✓</div>
+              <div class="b08-s84-arrow">→</div>
+              <div class="b08-s84-block s84-orphan">840,001B<br>Miner B</div>
+              <div class="b08-s84-chain-tag s84-tag-orphan">orphan: valid but abandoned</div>
+            </div>
+            <div class="b08-s84-orphan-note">⚠️ Block 840,001B is an orphan block. It’s cryptographically valid — its proof of work is correct, the transactions inside it are legitimate. But because the chain containing 840,001A is longer, the whole network chooses that chain. Miner B loses its entire block reward.</div>
+            <div class="b08-s84-sub-label">Why does Compact Block reduce the orphan rate?</div>
+            <div class="b08-s84-note idle-note">A regular block takes several seconds to spread to the whole network. During that window, other miners who haven’t received the new block keep mining on top of the old block, increasing orphan risk. Compact Block shortens this window to less than 1 second and the orphan risk drops drastically.</div>
+            <div class="b08-s84-sub-label">What happens to the transactions in an orphan block?</div>
+            <div class="b08-s84-note idle-note">The transactions in an orphan block are returned to the mempool and can be confirmed in the next block. No bitcoin is lost. The only one who loses is the miner who found the orphan block.</div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-8-3" data-sb="sb-8-3">
+            ← 8.3 — Transaction Propagation
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-8-5" data-sb="sb-8-5">
+            8.5 — Connections and Peer Discovery →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 8.4 -->
+
+      <!-- ==============================
+           SECTION 8.5 · Koneksi dan Peer Discovery
+      ============================== -->
+      <div class="p-section" id="section-8-5">
+        <div class="p-eyebrow">Chapter 8 · 8.5</div>
+        <div class="p-heading">How does a new node find its place in the network?</div>
+        <div class="p-title">Connections and Peer Discovery</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>In 8.2 we mentioned three ways a node finds peers. This section takes each of them apart, because this is where one of the answers lives to why Bitcoin is so hard to block.</p>
+          <p>A new Bitcoin node starting up for the first time faces one fundamental problem: how does it find other nodes to connect to? It doesn’t know anyone’s address. The P2P network has no centralized directory. But within minutes, that new node is already connected to dozens of peers around the world.</p>
+
+          <p><strong>DNS Seed</strong></p>
+          <p>The first and most common way is through a DNS seed. Bitcoin node software, like Bitcoin Core, Bitcoin Knots, or other implementations, generally embeds a few special domain names in its code. When a node first starts, it does a DNS query to these domains and gets a list of IP addresses of nodes that are currently active. DNS seeds are managed by trusted people in the Bitcoin community. This isn’t a dangerous trust point because the node only uses it to find initial peers, and after that all verification is done independently.</p>
+
+          <p><strong>Peer Exchange</strong></p>
+          <p>After connecting to the first few nodes, the new node can request a list of known peers through the <code>getaddr</code> message. A node that receives this request replies with an <code>addr</code> message containing a list of IP addresses of other nodes it knows. From here the network of connections grows organically without central coordination.</p>
+
+          <p><strong>Hardcoded Seeds</strong></p>
+          <p>If the DNS seed can’t be reached, there’s a fallback: a list of IP addresses embedded directly in the software code. These are nodes known to be stable and long-running. This list is updated every few releases by each development team.</p>
+
+          <p><strong>Maintaining connections</strong></p>
+          <p>A Bitcoin node generally maintains about 8 outbound connections that it chooses itself and accepts inbound connections from other peers. Connections are kept alive with periodic <code>ping</code> and <code>pong</code> messages. A node that doesn’t respond is disconnected and replaced. A node also stores a peer address database locally so that when it’s shut down and started again, it can connect directly to known peers without having to start peer discovery from scratch.</p>
+
+          <p><strong>Why is this important for decentralization?</strong></p>
+          <p>Bitcoin’s peer discovery system is designed not to depend on a single point. The DNS seed can fail or be blocked, but there are still hardcoded seeds. Hardcoded seeds can become outdated, but there’s still the peer database from previous sessions. And if all of that fails, the user can enter a peer address manually.</p>
+
+          <div class="p-callout">
+            <p>One of the most effective ways to support the Bitcoin network is to run a node with open inbound connections. A node like this helps new nodes find peers and strengthens the network’s resilience as a whole.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Visualization — The peer discovery process</div>
+          <div class="b08-s85-desc">
+            Five steps of how a new node joins the Bitcoin network, from isolated to fully connected.
+          </div>
+
+          <div class="b08-s85-steps" id="b08-s85-steps"></div>
+          <canvas class="b08-s85-cv" id="b08-s85-cv" height="300"></canvas>
+          <div class="b08-s85-detail">
+            <div class="b08-s85-dhead" id="b08-s85-dhead"></div>
+            <div class="b08-s85-dbody" id="b08-s85-dbody"></div>
+          </div>
+          <div class="b08-s85-note" id="b08-s85-note"></div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-8-4" data-sb="sb-8-4">
+            ← 8.4 — Block Propagation
+          </button>
+          <button class="p-nav-btn p-nav-active" data-target="section-8-6" data-sb="sb-8-6">
+            8.6 — Keeping the Network Healthy →
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 8.5 -->
+
+      <!-- ==============================
+           SECTION 8.6 · Menjaga Jaringan Tetap Sehat
+      ============================== -->
+      <div class="p-section" id="section-8-6">
+        <div class="p-eyebrow">Chapter 8 · 8.6</div>
+        <div class="p-heading">Technical and social, both equally important</div>
+        <div class="p-title">Keeping the Network Healthy</div>
+        <div class="p-divider"></div>
+
+        <div class="p-body">
+          <p>A healthy Bitcoin network isn’t just about the number of nodes. It’s about the quality of connections, diversity of locations, diversity of software, and the often-forgotten one: the diversity of the humans behind those nodes.</p>
+
+          <p><strong>The network’s technical health</strong></p>
+          <p>There are several technical health indicators that can be monitored. The number of reachable full nodes is the most basic indicator. The more there are, the stronger it is. The geographic distribution of nodes is also important: a network whose nodes are all concentrated in one country is far more vulnerable to regulation or an internet outage than a network spread evenly around the world. Software diversity is also crucial. If almost all nodes run the same implementation, a critical bug in that implementation could affect the network widely.</p>
+
+          <p><strong>What you can do as a node runner</strong></p>
+          <p>First, leave inbound connections open. A node that accepts inbound connections helps new nodes find peers and strengthens the network. Second, keep uptime up. A node that’s frequently offline doesn’t contribute much. A small device running 24 hours is far more valuable than a computer that only turns on occasionally. Third, update the software regularly, not because you follow one development team, but because security patches are important to protect yourself and the network.</p>
+
+          <p><strong>The network’s social health</strong></p>
+          <p>This is the part that is often ignored but just as important. Node runners are the people most committed to Bitcoin. They spend time, money, and energy running the infrastructure that makes Bitcoin work. And precisely because of that great commitment, debates among them can become very heated.</p>
+
+          <p>Debates about block size, mempool policy, soft forks, software choice, how to operate a node: all of these are legitimate and important debates. Disagreement is healthy. Disagreement is a sign that many people are thinking independently, not just following one leader.</p>
+
+          <p>But there’s a difference between disagreeing and being disrespectful. Someone can have a different opinion about mempool policy while still respecting that another person has spent time and energy running their own node. Someone can criticize a technical decision without attacking the person’s character.</p>
+
+          <p><strong>The ecosystem isn’t a monolith</strong></p>
+          <p>Bitcoin is an open protocol. No single entity can claim full authority over it. No single development team, no single software implementation, no single discussion forum holds the single truth. This isn’t a weakness. It’s one of Bitcoin’s greatest strengths. As long as people with different views can still find common ground in running the network, Bitcoin will keep surviving.</p>
+
+          <div class="p-callout">
+            <p>Running a node is a real action, not just an opinion on the internet. Whatever debate is happening out there, a node that stays on is a contribution that always matters. And treating fellow node runners with respect, even when you disagree, is part of keeping the network healthy.</p>
+          </div>
+        </div>
+
+        <div class="p-simulation">
+          <div class="sim-label">Dashboard — Bitcoin network health</div>
+          <div class="b08-s86-desc">
+            Technical metrics and social principles that together determine the long-term health of the Bitcoin network.
+          </div>
+
+          <div class="b08-s86-grid">
+            <div class="b08-s86-card">
+              <div class="b08-s86-card-head">Node reachable</div>
+              <div class="b08-s86-card-body">
+                <div class="b08-s86-metric">
+                  <div class="b08-s86-metric-val good-val">18,432</div>
+                  <div class="b08-s86-metric-sub">full nodes that accept inbound connections</div>
+                </div>
+                <div class="b08-s86-inds">
+                  <div class="b08-s86-ind"><div class="b08-s86-dot" style="background:#0F6E56;"></div><div class="b08-s86-ind-label">Nodes with open inbound</div><div class="b08-s86-ind-val good-val">18,432</div></div>
+                  <div class="b08-s86-ind"><div class="b08-s86-dot" style="background:#52524C;"></div><div class="b08-s86-ind-label">Outbound-only nodes</div><div class="b08-s86-ind-val" style="color:#52524C;">~40,000+</div></div>
+                </div>
+                <div class="b08-s86-footnote">Nodes with open inbound help new nodes join the network.</div>
+              </div>
+            </div>
+
+            <div class="b08-s86-card">
+              <div class="b08-s86-card-head">Software distribution</div>
+              <div class="b08-s86-card-body">
+                <div class="b08-s86-bars">
+                  <div class="b08-s86-bar-row"><div class="b08-s86-bar-label">Bitcoin Core</div><div class="b08-s86-bar-track"><div class="b08-s86-bar-fill" style="width:76%;background:#534AB7;"></div></div><div class="b08-s86-bar-pct">76%</div></div>
+                  <div class="b08-s86-bar-row"><div class="b08-s86-bar-label">Bitcoin Knots</div><div class="b08-s86-bar-track"><div class="b08-s86-bar-fill" style="width:14%;background:#7C3AED;"></div></div><div class="b08-s86-bar-pct">14%</div></div>
+                  <div class="b08-s86-bar-row"><div class="b08-s86-bar-label">btcd</div><div class="b08-s86-bar-track"><div class="b08-s86-bar-fill" style="width:4%;background:#0F6E56;"></div></div><div class="b08-s86-bar-pct">4%</div></div>
+                  <div class="b08-s86-bar-row"><div class="b08-s86-bar-label">Other</div><div class="b08-s86-bar-track"><div class="b08-s86-bar-fill" style="width:6%;background:#52524C;"></div></div><div class="b08-s86-bar-pct">6%</div></div>
+                </div>
+                <div class="b08-s86-footnote">Software diversity matters. One bug in one implementation must not affect the entire network.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b08-s86-grid">
+            <div class="b08-s86-card">
+              <div class="b08-s86-card-head">Geographic distribution</div>
+              <div class="b08-s86-card-body">
+                <canvas class="b08-s86-donut" id="b08-s86-donut" height="140"></canvas>
+                <div class="b08-s86-footnote">Concentration in one region makes the network vulnerable to regulation or a local internet outage.</div>
+              </div>
+            </div>
+
+            <div class="b08-s86-card">
+              <div class="b08-s86-card-head">Health indicators</div>
+              <div class="b08-s86-card-body">
+                <div class="b08-s86-inds">
+                  <div class="b08-s86-ind"><div class="b08-s86-dot" style="background:#0F6E56;"></div><div class="b08-s86-ind-label">Block propagation</div><div class="b08-s86-ind-val good-val">&lt;1 sec</div></div>
+                  <div class="b08-s86-ind"><div class="b08-s86-dot" style="background:#0F6E56;"></div><div class="b08-s86-ind-label">Orphan rate</div><div class="b08-s86-ind-val good-val">~0.1%</div></div>
+                  <div class="b08-s86-ind"><div class="b08-s86-dot" style="background:#0F6E56;"></div><div class="b08-s86-ind-label">Nodes active 30 days</div><div class="b08-s86-ind-val good-val">87%</div></div>
+                  <div class="b08-s86-ind"><div class="b08-s86-dot" style="background:#854F0B;"></div><div class="b08-s86-ind-label">Nodes with inbound</div><div class="b08-s86-ind-val warn-val">~31%</div></div>
+                  <div class="b08-s86-ind"><div class="b08-s86-dot" style="background:#0F6E56;"></div><div class="b08-s86-ind-label">Connections via Tor</div><div class="b08-s86-ind-val good-val">~28%</div></div>
+                  <div class="b08-s86-ind"><div class="b08-s86-dot" style="background:#0F6E56;"></div><div class="b08-s86-ind-label">Countries represented</div><div class="b08-s86-ind-val good-val">100+</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="b08-s86-social">
+            <div class="b08-s86-social-head">The network’s social health</div>
+            <div class="b08-s86-social-items">
+              <div class="b08-s86-social-item"><div class="b08-s86-social-icon">🤝</div><div class="b08-s86-social-text"><b>Disagreement is healthy.</b> Differing opinions about mempool policy, block size, or software choice are a sign that people think independently, not just follow one leader.</div></div>
+              <div class="b08-s86-social-item"><div class="b08-s86-social-icon">🗣️</div><div class="b08-s86-social-text"><b>Technical criticism isn’t a personal attack.</b> Someone can criticize a technical decision without attacking the person’s character. Good debate strengthens the ecosystem.</div></div>
+              <div class="b08-s86-social-item"><div class="b08-s86-social-icon">⚙️</div><div class="b08-s86-social-text"><b>A node that stays on matters more than an opinion on the internet.</b> Whatever debate is happening out there, the real contribution is infrastructure that keeps running.</div></div>
+              <div class="b08-s86-social-item"><div class="b08-s86-social-icon">🌐</div><div class="b08-s86-social-text"><b>Bitcoin doesn’t belong to one group.</b> There’s no single team, single software, or single forum that holds the single truth. The network is strongest when many different parties can still work together.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-nav">
+          <button class="p-nav-btn p-nav-active p-nav-prev" data-target="section-8-5" data-sb="sb-8-5">
+            ← 8.5 — Connections and Peer Discovery
+          </button>
+        </div>
+      </div>
+      <!-- END SECTION 8.6 -->
+
+    </div>
+  </div>
+</div>
+<!-- END PAGE 11 · BAB 8 -->
+
+
